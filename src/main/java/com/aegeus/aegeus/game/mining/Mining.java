@@ -22,6 +22,10 @@ import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
 
+/**
+ * TODO Comment everything
+ *
+ */
 public class Mining implements Listener	{
 	
 	private JavaPlugin parent;
@@ -96,8 +100,8 @@ public class Mining implements Listener	{
 		return base;
 	}
 	
-	private static void giveItem(Player p, Ore ore)	{
-			ItemStack item = new ItemStack(ore.getOre());
+	private static void giveItem(Player p, Ore ore, int count)	{
+			ItemStack item = new ItemStack(ore.getOre(), count);
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ore.getName());
 			item.setItemMeta(meta);
@@ -139,7 +143,7 @@ public class Mining implements Listener	{
 		switch(oreMined.getType())		{
 			case COAL_ORE: //Rutile Ore
 				if(getTier(pick.getType()) >= 3)	{
-					giveItem(p, Ore.RUTILE);
+					giveItem(p, Ore.RUTILE, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.RUTILE, p));
 				}
 				else	{
@@ -148,7 +152,7 @@ public class Mining implements Listener	{
 				break;
 			case REDSTONE_ORE: //Bauxite Ore
 				if(getTier(pick.getType()) >= 1)	{
-					giveItem(p, Ore.BAUXITE);
+					giveItem(p, Ore.BAUXITE, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.BAUXITE, p));
 				}
 				else	{
@@ -157,7 +161,7 @@ public class Mining implements Listener	{
 				break;
 			case IRON_ORE:
 				if(getTier(pick.getType()) >= 2)	{
-					giveItem(p, Ore.IRON);
+					giveItem(p, Ore.IRON, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.IRON, p));
 				}
 				else	{
@@ -166,7 +170,7 @@ public class Mining implements Listener	{
 				break;
 			case LAPIS_ORE: //Lazurite Ore
 				if(getTier(pick.getType()) >= 4)	{
-					giveItem(p, Ore.LAZURITE);
+					giveItem(p, Ore.LAZURITE, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.LAZURITE, p));
 				}
 				else	{
@@ -175,7 +179,7 @@ public class Mining implements Listener	{
 				break;
 			case DIAMOND_ORE: //Crystal Ore
 				if(getTier(pick.getType()) >= 3)	{
-					giveItem(p, Ore.CRYSTAL);
+					giveItem(p, Ore.CRYSTAL, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.CRYSTAL, p));
 				}
 				else	{
@@ -184,7 +188,7 @@ public class Mining implements Listener	{
 				break;
 			case EMERALD_ORE: //Veridium Ore
 				if(getTier(pick.getType()) == 5)	{
-					giveItem(p, Ore.VERIDIUM);
+					giveItem(p, Ore.VERIDIUM, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.VERIDIUM, p));
 				}
 				else	{
@@ -193,7 +197,7 @@ public class Mining implements Listener	{
 				break;
 			case GOLD_ORE: //Gold Ore
 				if(getTier(pick.getType()) >= 4)	{
-					giveItem(p, Ore.GOLD);
+					giveItem(p, Ore.GOLD, 1);
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.GOLD, p));
 				}
 				else	{
@@ -264,7 +268,7 @@ public class Mining implements Listener	{
 				xp += reward;
 				break;
 		}
-		p.sendMessage(ChatColor.YELLOW + "+" + reward + ChatColor.BOLD + " EXP " + ChatColor.GRAY + "[" + xp + " / " + xpreq + "]");
+		p.sendMessage(ChatColor.YELLOW + "		+" + reward + ChatColor.BOLD + " EXP " + ChatColor.GRAY + "[" + xp + " / " + xpreq + "]");
 		if(xp >= xpreq)	{
 			xp -= xpreq;
 			xpreq = getXPNeeded(level + 1);
