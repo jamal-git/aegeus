@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.aegeus.aegeus.common.Constants;
+
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
@@ -65,17 +67,27 @@ public class Mining implements Listener	{
 	public static int getXPNeeded(int target)	{
 		if(target < 1 || target > 100)	return -1;
 		int base = (int) (Math.pow(1.114, target) * 100);
-		if(target >= 80)	{
+		if(target > 80)	{
 			base += (target - 79) * 50000;
+			base += 20 * 15000;
+			base += 20 * 5000;
+			base += 20 * 1000;
+			base += 20 * 50;
 		}
-		else if(target >= 60)	{
+		else if(target > 60)	{
 			base += (target - 59) * 15000;
+			base += 20 * 5000;
+			base += 20 * 1000;
+			base += 20 * 50;
 		}
-		else if(target >= 40)	{
+		else if(target > 40)	{
 			base += (target - 39) * 5000;
+			base += 20 * 1000;
+			base += 20 * 50;
 		}
-		else if(target >= 20)	{
+		else if(target > 20)	{
 			base += (target - 19) * 1000;
+			base += 20 * 50;
 		}
 		else	{
 			base += target * 50;
@@ -128,6 +140,7 @@ public class Mining implements Listener	{
 			case COAL_ORE: //Rutile Ore
 				if(getTier(pick.getType()) >= 3)	{
 					giveItem(p, Ore.RUTILE);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.RUTILE, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -136,6 +149,7 @@ public class Mining implements Listener	{
 			case REDSTONE_ORE: //Bauxite Ore
 				if(getTier(pick.getType()) >= 1)	{
 					giveItem(p, Ore.BAUXITE);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.BAUXITE, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -144,6 +158,7 @@ public class Mining implements Listener	{
 			case IRON_ORE:
 				if(getTier(pick.getType()) >= 2)	{
 					giveItem(p, Ore.IRON);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.IRON, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -152,6 +167,7 @@ public class Mining implements Listener	{
 			case LAPIS_ORE: //Lazurite Ore
 				if(getTier(pick.getType()) >= 4)	{
 					giveItem(p, Ore.LAZURITE);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.LAZURITE, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -160,6 +176,7 @@ public class Mining implements Listener	{
 			case DIAMOND_ORE: //Crystal Ore
 				if(getTier(pick.getType()) >= 3)	{
 					giveItem(p, Ore.CRYSTAL);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.CRYSTAL, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -168,6 +185,7 @@ public class Mining implements Listener	{
 			case EMERALD_ORE: //Veridium Ore
 				if(getTier(pick.getType()) == 5)	{
 					giveItem(p, Ore.VERIDIUM);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.VERIDIUM, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -176,6 +194,7 @@ public class Mining implements Listener	{
 			case GOLD_ORE: //Gold Ore
 				if(getTier(pick.getType()) >= 4)	{
 					giveItem(p, Ore.GOLD);
+					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.GOLD, p));
 				}
 				else	{
 					p.sendMessage("Your drill is not strong enough to mine this ore!");
@@ -201,7 +220,91 @@ public class Mining implements Listener	{
 	
 	private int getLevel(ItemStack pickaxe)	{
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(pickaxe);
-		NBTTagCompound pickInfo = nmsStack.getTag().getCompound("pick");
+		NBTTagCompound pickInfo = nmsStack.getTag().getCompound("pickaxe");
 		return pickInfo.getInt("level");
+	}
+	
+	private ItemStack giveEXP(ItemStack stack, Ore ore, Player p)	{
+		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		Material targetItem = stack.getType();
+		String targetName = stack.getItemMeta().getDisplayName();
+		NBTTagCompound nbt = nmsStack.getTag();
+		NBTTagCompound pick = nbt.getCompound("pickaxe");
+		int xp = pick.getInt("xp");
+		int xpreq = pick.getInt("xpreq");
+		int level = pick.getInt("level");
+		int reward = 0;
+		switch(ore)	{
+			case RUTILE:
+				reward = rng.nextInt(Constants.RUTILE_RANGE * 2) + Constants.RUTILE_EXP - Constants.RUTILE_RANGE;
+				xp += reward;
+				break;
+			case BAUXITE:
+				reward = rng.nextInt(Constants.BAUXITE_RANGE * 2) + Constants.BAUXITE_EXP - Constants.BAUXITE_RANGE;
+				xp += reward;
+				break;
+			case IRON:
+				reward = rng.nextInt(Constants.IRON_RANGE * 2) + Constants.IRON_EXP - Constants.IRON_RANGE;
+				xp += reward;
+				break;
+			case LAZURITE:
+				reward = rng.nextInt(Constants.LAZURITE_RANGE * 2) + Constants.LAZURITE_EXP - Constants.LAZURITE_RANGE;
+				xp += reward;
+				break;
+			case CRYSTAL:
+				reward = rng.nextInt(Constants.CRYSTAL_RANGE * 2) + Constants.CRYSTAL_EXP - Constants.CRYSTAL_RANGE;
+				xp += reward;
+				break;
+			case VERIDIUM:
+				reward = rng.nextInt(Constants.VERIDIUM_RANGE * 2) + Constants.VERIDIUM_EXP - Constants.VERIDIUM_RANGE;
+				xp += reward;
+				break;
+			case GOLD:
+				reward = rng.nextInt(Constants.GOLD_RANGE * 2) + Constants.GOLD_EXP - Constants.GOLD_RANGE;
+				xp += reward;
+				break;
+		}
+		p.sendMessage(ChatColor.YELLOW + "+" + reward + ChatColor.BOLD + " EXP " + ChatColor.GRAY + "[" + xp + " / " + xpreq + "]");
+		if(xp >= xpreq)	{
+			xp -= xpreq;
+			xpreq = getXPNeeded(level + 1);
+			level++;
+			p.sendMessage(ChatColor.AQUA + "Your drill increased to level " + level);
+			if(level == 20)	{
+				targetItem = Material.STONE_PICKAXE;
+				targetName = ChatColor.RED + "Aluminium Mining Drill";
+			}
+			else if(level == 40)	{
+				targetItem = Material.IRON_PICKAXE;
+				targetName = ChatColor.GREEN + "Reinforced Steel Mining Drill";
+			}
+			else if(level == 60)	{
+				targetItem = Material.DIAMOND_PICKAXE;
+				targetName = ChatColor.AQUA + "Crystal-Enriched Reinforced Mining Drill";
+			}
+			else if(level == 80)	{
+				targetItem = Material.GOLD_PICKAXE;
+				targetName = ChatColor.YELLOW + "Gold-Enriched Ultimate Mining Drill";
+			}
+		}
+		pick.setInt("xp", xp);
+		pick.setInt("xpreq", xpreq);
+		pick.setInt("level", level);
+		nbt.set("pickaxe", pick);
+		nmsStack.setTag(nbt);
+		ItemStack target = CraftItemStack.asBukkitCopy(nmsStack);
+		if(!targetName.equals(target.getItemMeta().getDisplayName()))	{
+			target.getItemMeta().setDisplayName(targetName);
+		}
+		if(target.getType() != targetItem)	{
+			target.setType(targetItem);
+		}
+		ItemMeta meta = target.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>();
+		lore.add(ChatColor.GRAY + "Level: " + ChatColor.AQUA + level);
+		lore.add(ChatColor.GRAY + "EXP: " + xp + " / " + xpreq);
+		meta.setLore(lore);
+		target.setItemMeta(meta);
+		return target;
 	}
 }
