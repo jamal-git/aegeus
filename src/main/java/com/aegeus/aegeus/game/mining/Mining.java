@@ -44,14 +44,14 @@ public class Mining implements Listener	{
 		NBTTagCompound pick = new NBTTagCompound();
 		pick.set("level", new NBTTagInt(level));
 		pick.set("xp", new NBTTagInt(0));
-		pick.set("xpreq", new NBTTagInt(getXPNeeded(level)));
+		pick.set("xpreq", new NBTTagInt(getXPNeeded(level + 1)));
 		nbt.set("pickaxe", pick);
 		nmsStack.setTag(nbt);
 		pickaxe = CraftItemStack.asBukkitCopy(nmsStack);
 		ItemMeta meta = pickaxe.getItemMeta();
 		ArrayList<String> lore = new ArrayList<>();
-		lore.add(ChatColor.GRAY + "Level: " + ChatColor.AQUA + level);
-		lore.add(ChatColor.GRAY + "EXP: 0 / " + getXPNeeded(level));
+		lore.add(ChatColor.GRAY + "Level: " + ChatColor.AQUA + pick.getInt("level"));
+		lore.add(ChatColor.GRAY + "EXP: 0 / " + getXPNeeded(pick.getInt("level") + 1));
 		meta.setLore(lore);
 		if(level < 20)	meta.setDisplayName(ChatColor.WHITE + "Basic Mining Drill");
 		else if(level < 40) meta.setDisplayName(ChatColor.RED + "Aluminium Mining Drill");
@@ -64,7 +64,24 @@ public class Mining implements Listener	{
 	
 	public static int getXPNeeded(int target)	{
 		if(target < 1 || target > 100)	return -1;
-		return (int) (Math.pow(1.114, target) * 100);
+		int base = (int) (Math.pow(1.114, target) * 100);
+		if(target >= 80)	{
+			base += (target - 79) * 50000;
+		}
+		else if(target >= 60)	{
+			base += (target - 59) * 15000;
+		}
+		else if(target >= 40)	{
+			base += (target - 39) * 5000;
+		}
+		else if(target >= 20)	{
+			base += (target - 19) * 1000;
+		}
+		else	{
+			base += target * 50;
+		}
+		if(target == 9) base = 727; //727 pp Coookiezi
+		return base;
 	}
 	
 	private static void giveItem(Player p, Ore ore)	{
@@ -96,27 +113,75 @@ public class Mining implements Listener	{
 				case DIAMOND_ORE:
 				case EMERALD_ORE:
 				case GOLD_ORE:
-					calculateRewards(pickaxe, p, mined);
+					calculateRewards(pickaxe, p, mined); 
 					break;
 					
 					 
 			}
 		}
+		if(p.getGameMode() == GameMode.CREATIVE) e.setCancelled(false);
 	}
 	
 	private void calculateRewards(ItemStack pick, Player p, Block oreMined)	{
 		//TODO add rewards for drill upgrades.
 		switch(oreMined.getType())		{
-			case COAL_ORE:
-				if(getTier(pick.getType()) == 1)	{
-					int num = rng.nextInt(100);
-					if(num < 50 + getLevel(pick))	{
-						giveItem(p, Ore.RUTILE);
-					}
-				}
-				else if(getTier(pick.getType()) > 1)	{
+			case COAL_ORE: //Rutile Ore
+				if(getTier(pick.getType()) >= 3)	{
 					giveItem(p, Ore.RUTILE);
 				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case REDSTONE_ORE: //Bauxite Ore
+				if(getTier(pick.getType()) >= 1)	{
+					giveItem(p, Ore.BAUXITE);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case IRON_ORE:
+				if(getTier(pick.getType()) >= 2)	{
+					giveItem(p, Ore.IRON);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case LAPIS_ORE: //Lazurite Ore
+				if(getTier(pick.getType()) >= 4)	{
+					giveItem(p, Ore.LAZURITE);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case DIAMOND_ORE: //Crystal Ore
+				if(getTier(pick.getType()) >= 3)	{
+					giveItem(p, Ore.CRYSTAL);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case EMERALD_ORE: //Veridium Ore
+				if(getTier(pick.getType()) == 5)	{
+					giveItem(p, Ore.VERIDIUM);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+			case GOLD_ORE: //Gold Ore
+				if(getTier(pick.getType()) >= 4)	{
+					giveItem(p, Ore.GOLD);
+				}
+				else	{
+					p.sendMessage("Your drill is not strong enough to mine this ore!");
+				}
+				break;
+					
 		}
 	}
 	
@@ -136,7 +201,7 @@ public class Mining implements Listener	{
 	
 	private int getLevel(ItemStack pickaxe)	{
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(pickaxe);
-		NBTTagCompound pickInfo = nmsStack.getTag().getCompound("pickaxe");
+		NBTTagCompound pickInfo = nmsStack.getTag().getCompound("pick");
 		return pickInfo.getInt("level");
 	}
 }
