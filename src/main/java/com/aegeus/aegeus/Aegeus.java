@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.aegeus.aegeus.bot.AegeusBot;
 import com.aegeus.aegeus.game.Bank;
 import com.aegeus.aegeus.game.Combat;
 import com.aegeus.aegeus.game.Server;
@@ -21,9 +22,12 @@ import com.aegeus.aegeus.game.commands.test.CommandTestArmor;
 import com.aegeus.aegeus.game.commands.test.CommandTestWeapon;
 import com.aegeus.aegeus.game.mining.Mining;
 
+import sx.blah.discord.util.DiscordException;
+
 public class Aegeus extends JavaPlugin {
 	
-	private static final Logger log = Logger.getLogger(Aegeus.class.getName());
+	public static final Logger log = Logger.getLogger(Aegeus.class.getName());
+	public static AegeusBot bot;
 	
 	/**
 	 * 
@@ -37,6 +41,14 @@ public class Aegeus extends JavaPlugin {
 		// wooOOOOOOOOO, loading up!
 		log.log(Level.INFO, "Aegeus enabling...");
 		saveDefaultConfig();
+		
+		//INTIALIZE THE FUCKING BOT, AEGEUS.
+		try {
+			bot = new AegeusBot();
+		} catch (DiscordException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Register plugin events
 		// TODO Clean up a bit?

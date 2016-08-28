@@ -197,7 +197,7 @@ public class Mining implements Listener	{
 				break;
 			case GOLD_ORE: //Gold Ore
 				if(getTier(pick.getType()) >= 4)	{
-					giveItem(p, Ore.GOLD, 1);
+					giveItem(p, Ore.GOLD, 1 );
 					p.getInventory().setItemInMainHand(giveEXP(p.getInventory().getItemInMainHand(), Ore.GOLD, p));
 				}
 				else	{

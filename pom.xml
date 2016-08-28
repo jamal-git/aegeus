@@ -41,6 +41,11 @@
 			<id>elmakers-repo</id>
 			<url>http://maven.elmakers.com/repository/</url>
 		</repository>
+		<repository>
+        	<id>jitpack.io</id>
+        	<url>https://jitpack.io</url>
+  		</repository>
+		
 <!-- 		<repository> -->
 <!-- 			<id>sk89q-repo</id> -->
 <!-- 			<url>http://maven.sk89q.com/repo/</url> -->
@@ -64,5 +69,11 @@
 			<artifactId>mongodb-driver</artifactId>
 			<version>3.0.4</version>
 		</dependency>
+		<dependency>
+        <groupId>com.github.austinv11</groupId>
+        	<artifactId>Discord4j</artifactId>
+        	<version>2.5.4</version>
+   			<classifier>shaded</classifier>
+  		</dependency>
 	</dependencies>
 </project>

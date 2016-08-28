@@ -6,6 +6,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import com.aegeus.aegeus.Aegeus;
+import com.aegeus.aegeus.bot.AegeusBot;
 import com.aegeus.aegeus.player.PlayerData;
 import com.aegeus.aegeus.util.Helper;
 import com.aegeus.aegeus.util.exceptions.NoneNearbyException;
@@ -32,6 +34,7 @@ public class ChatManager {
 	public static void sendTradeChat(Player player, String msg) {
 		Bukkit.broadcastMessage(Helper.colorCodes(
 				"&a(&lT&a)&7 " + player.getDisplayName() + ": &f" + msg));
+		Aegeus.bot.sendTradeMessage(player.getDisplayName() + " - " + msg);
 	}
 	
 	public static void sendRecruitChat(Player player, String msg) {
@@ -41,7 +44,7 @@ public class ChatManager {
 	
 	public static void sendBroadcast(String msg){
 		Bukkit.broadcastMessage(Helper.colorCodes(
-				"&e&l»&e " + msg));
+				"&e&lï¿½&e " + msg));
 	}
 	
 	public static void sendLocalChat(Player player, String msg) {
