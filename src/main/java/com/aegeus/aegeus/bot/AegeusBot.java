@@ -43,6 +43,6 @@ public class AegeusBot {
 	
 	@EventSubscriber
 	public void onReady(ReadyEvent e)	{
-		Aegeus.log.log(Level.INFO, ChatColor.AQUA + "AEGEUS BOT INITIALIZED.");
+		Aegeus.log.log(Level.INFO, "AEGEUS BOT INITIALIZED.");
 	}
 }

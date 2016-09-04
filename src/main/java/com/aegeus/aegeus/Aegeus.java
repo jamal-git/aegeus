@@ -3,6 +3,8 @@ package com.aegeus.aegeus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aegeus.aegeus.bot.AegeusBot;
@@ -28,6 +30,7 @@ public class Aegeus extends JavaPlugin {
 	
 	public static final Logger log = Logger.getLogger(Aegeus.class.getName());
 	public static AegeusBot bot;
+	public static SimpleCommandMap cmdMap = new SimpleCommandMap(Bukkit.getServer());
 	
 	/**
 	 * 
@@ -43,12 +46,12 @@ public class Aegeus extends JavaPlugin {
 		saveDefaultConfig();
 		
 		//INTIALIZE THE FUCKING BOT, AEGEUS.
-		try {
-			bot = new AegeusBot();
-		} catch (DiscordException e) {
+		//try {
+			//bot = new AegeusBot();
+		//} catch (DiscordException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//e.printStackTrace();
+		//}
 		
 		// Register plugin events
 		// TODO Clean up a bit?

@@ -35,39 +35,6 @@ public class Mining implements Listener	{
 		this.parent = parent;
 	}
 	
-	public static ItemStack generatePickaxe(int level)	{
-		if(level < 1 || level > 99)	{
-			return null;
-		}
-		ItemStack pickaxe;
-		if(level < 20)	pickaxe = new ItemStack(Material.WOOD_PICKAXE);
-		else if(level < 40) pickaxe = new ItemStack(Material.STONE_PICKAXE);
-		else if(level < 60) pickaxe = new ItemStack(Material.IRON_PICKAXE);
-		else if(level < 80)	pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
-		else pickaxe = new ItemStack(Material.GOLD_PICKAXE);
-		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(pickaxe);
-		NBTTagCompound nbt = nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
-		NBTTagCompound pick = new NBTTagCompound();
-		pick.set("level", new NBTTagInt(level));
-		pick.set("xp", new NBTTagInt(0));
-		pick.set("xpreq", new NBTTagInt(getXPNeeded(level + 1)));
-		nbt.set("pickaxe", pick);
-		nmsStack.setTag(nbt);
-		pickaxe = CraftItemStack.asBukkitCopy(nmsStack);
-		ItemMeta meta = pickaxe.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>();
-		lore.add(ChatColor.GRAY + "Level: " + ChatColor.AQUA + pick.getInt("level"));
-		lore.add(ChatColor.GRAY + "EXP: 0 / " + getXPNeeded(pick.getInt("level") + 1));
-		meta.setLore(lore);
-		if(level < 20)	meta.setDisplayName(ChatColor.WHITE + "Basic Mining Drill");
-		else if(level < 40) meta.setDisplayName(ChatColor.RED + "Aluminium Mining Drill");
-		else if(level < 60) meta.setDisplayName(ChatColor.GREEN + "Reinforced Steel Mining Drill");
-		else if(level < 80)	meta.setDisplayName(ChatColor.AQUA + "Crystal-Enriched Reinforced Mining Drill");
-		else meta.setDisplayName(ChatColor.YELLOW + "Gold-Enriched Ultimate Mining Drill");
-		pickaxe.setItemMeta(meta);
-		return pickaxe;
-	}
-	
 	public static int getXPNeeded(int target)	{
 		if(target < 1 || target > 100)	return -1;
 		int base = (int) (Math.pow(1.114, target) * 100);

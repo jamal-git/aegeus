@@ -32,4 +32,4 @@ commands:
     spacecart:
       description: create spaceboats and shit.
     spawnpick:
-      description: Spawn a pick with a certain level.
+      description: Spawn a pick in for testing purposes
