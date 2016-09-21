@@ -1,6 +1,0 @@
-type: coal_ore
-minexp: 85
-maxexp: 150
-cooldown: 60
-tier: 1
-mininglevel: 1
