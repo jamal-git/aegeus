@@ -1,9 +1,5 @@
 package com.aegeus.discord;
 
-import java.util.logging.Level;
-
-import com.aegeus.game.Aegeus;
-
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -22,7 +18,7 @@ public class AegeusBot {
 		client.getDispatcher().registerListener(new EventHandler());
 		client.getDispatcher().registerListener(this);
 		client.login();
-		Aegeus.log.log(Level.INFO, "Logging in Aegeus Bot...");
+		System.out.println("Logging in Aegeus Bot...");
 	}
 	
 	
@@ -40,6 +36,6 @@ public class AegeusBot {
 	
 	@EventSubscriber
 	public void onReady(ReadyEvent e)	{
-		Aegeus.log.log(Level.INFO, "AEGEUS BOT INITIALIZED.");
+		System.out.println("AEGEUS BOT INITIALIZED.");
 	}
 }
