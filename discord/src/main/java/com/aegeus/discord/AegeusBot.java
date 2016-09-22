@@ -1,18 +1,15 @@
-package com.aegeus.aegeus.bot;
+package com.aegeus.discord;
 
 import java.util.logging.Level;
 
-import com.aegeus.aegeus.Aegeus;
+import com.aegeus.game.Aegeus;
 
-import net.md_5.bungee.api.ChatColor;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.RequestBuffer;
 
 public class AegeusBot {

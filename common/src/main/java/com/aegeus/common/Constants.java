@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.common;
+package com.aegeus.common;
 
 public class Constants {
 

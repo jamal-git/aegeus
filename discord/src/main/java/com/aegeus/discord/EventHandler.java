@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.bot;
+package com.aegeus.discord;
 
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
