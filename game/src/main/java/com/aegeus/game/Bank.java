@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game;
+package com.aegeus.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import com.aegeus.aegeus.player.PlayerData;
+import com.aegeus.game.player.PlayerData;
 
 public class Bank implements Listener{
 	private JavaPlugin parent;
@@ -37,7 +37,7 @@ public class Bank implements Listener{
 	@EventHandler
 	public void onOpenChest(InventoryOpenEvent e)	{
 		if(e.getInventory().getType() == InventoryType.ENDER_CHEST)	{
-			//The player has opened a vanilla ender chest.  Let's cancel it and give them our custom ender chest with more customizability.
+			//The player has opened a vanilla ender chest. Let's cancel it and give them our custom ender chest with more customizability.
 			e.setCancelled(true);
 			Player p = (Player) e.getPlayer();
 			Inventory inv = PlayerData.get(p).getBank() != null ? PlayerData.get(p).getBank() : generateEmptyBank(p);

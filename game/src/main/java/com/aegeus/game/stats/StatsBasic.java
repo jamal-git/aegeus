@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.stats;
+package com.aegeus.game.stats;
 
 public class StatsBasic implements Stats {
 

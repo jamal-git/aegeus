@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game;
+package com.aegeus.game;
 
 import org.bukkit.event.Listener;
 

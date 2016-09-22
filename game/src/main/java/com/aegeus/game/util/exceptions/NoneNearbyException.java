@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.util.exceptions;
+package com.aegeus.game.util.exceptions;
 
 public class NoneNearbyException extends RuntimeException {
 	private static final long serialVersionUID = -6999149451642569982L;

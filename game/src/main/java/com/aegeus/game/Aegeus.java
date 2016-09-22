@@ -1,4 +1,4 @@
-package com.aegeus.aegeus;
+package com.aegeus.game;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,29 +7,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.aegeus.bot.AegeusBot;
-import com.aegeus.aegeus.game.Bank;
-import com.aegeus.aegeus.game.Combat;
-import com.aegeus.aegeus.game.Server;
-import com.aegeus.aegeus.game.Statistics;
-import com.aegeus.aegeus.game.chat.Chat;
-import com.aegeus.aegeus.game.commands.CommandChatChannel;
-import com.aegeus.aegeus.game.commands.CommandGlobal;
-import com.aegeus.aegeus.game.commands.CommandMessage;
-import com.aegeus.aegeus.game.commands.CommandRoll;
-import com.aegeus.aegeus.game.commands.CommandSpaceCart;
-import com.aegeus.aegeus.game.commands.CommandSpawnPick;
-import com.aegeus.aegeus.game.commands.CommandPlanet;
-import com.aegeus.aegeus.game.commands.test.CommandTestArmor;
-import com.aegeus.aegeus.game.commands.test.CommandTestWeapon;
-import com.aegeus.aegeus.game.mining.Mining;
-
-import sx.blah.discord.util.DiscordException;
+import com.aegeus.common.Constants;
+import com.aegeus.game.chat.Chat;
+import com.aegeus.game.commands.*;
+import com.aegeus.game.commands.test.*;
+import com.aegeus.game.mining.Mining;
 
 public class Aegeus extends JavaPlugin {
 	
 	public static final Logger log = Logger.getLogger(Aegeus.class.getName());
-	public static AegeusBot bot;
 	public static SimpleCommandMap cmdMap = new SimpleCommandMap(Bukkit.getServer());
 	
 	/**
@@ -64,17 +50,21 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Statistics(this), this);
 		getServer().getPluginManager().registerEvents(new Bank(this), this);
 		
-		// Register plugin commands
+		// Register game commands
 		log.log(Level.INFO, "Registering commands...");
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());
 		getCommand("global").setExecutor(new CommandGlobal());
 		getCommand("message").setExecutor(new CommandMessage());
 		getCommand("planet").setExecutor(new CommandPlanet());
 		getCommand("roll").setExecutor(new CommandRoll());
-		getCommand("testarmor").setExecutor(new CommandTestArmor());
-		getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		getCommand("spacecart").setExecutor(new CommandSpaceCart());
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
+		
+		// Register test commands
+		if(Constants.debug) {
+			getCommand("testarmor").setExecutor(new CommandTestArmor());
+			getCommand("testweapon").setExecutor(new CommandTestWeapon());
+		}
 		
 		// Done, done, and done!
 		getLogger().log(Level.INFO, "Aegeus enabled.");

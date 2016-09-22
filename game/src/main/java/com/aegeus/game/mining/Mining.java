@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.mining;
+package com.aegeus.game.mining;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.aegeus.common.Constants;
+import com.aegeus.common.Constants;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;

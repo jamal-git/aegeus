@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.commands;
+package com.aegeus.game.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,9 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.aegeus.aegeus.Aegeus;
-import com.aegeus.aegeus.game.item.PickaxeBuilder;
-import com.aegeus.aegeus.game.mining.Mining;
+import com.aegeus.game.item.PickaxeBuilder;
 
 public class CommandSpawnPick implements CommandExecutor	{
 

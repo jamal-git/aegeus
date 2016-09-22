@@ -1,6 +1,6 @@
-package com.aegeus.aegeus.game.item;
+package com.aegeus.game.item;
 
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.util.Helper;
 
 public enum ItemRarity {
 	STARTER(-1, "&9&oStarter"),

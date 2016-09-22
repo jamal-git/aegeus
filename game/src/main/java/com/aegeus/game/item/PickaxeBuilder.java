@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.item;
+package com.aegeus.game.item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.aegeus.game.mining.Mining;
+import com.aegeus.game.mining.Mining;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;

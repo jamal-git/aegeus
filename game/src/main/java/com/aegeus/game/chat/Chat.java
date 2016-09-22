@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.chat;
+package com.aegeus.game.chat;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.aegeus.player.PlayerData;
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.util.Helper;
 
 public class Chat implements Listener {
 

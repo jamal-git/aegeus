@@ -1,12 +1,12 @@
-package com.aegeus.aegeus.game.mobs;
+package com.aegeus.game.mobs;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import com.aegeus.aegeus.game.planets.Planet;
-import com.aegeus.aegeus.game.stats.Stats;
+import com.aegeus.game.planets.Planet;
+import com.aegeus.game.stats.Stats;
 
 public interface Mob {
 	/*

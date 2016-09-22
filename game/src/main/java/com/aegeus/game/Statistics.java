@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game;
+package com.aegeus.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
-import com.aegeus.aegeus.player.PlayerData;
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.util.Helper;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 

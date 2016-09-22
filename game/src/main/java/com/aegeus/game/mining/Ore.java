@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.mining;
+package com.aegeus.game.mining;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -1,13 +1,13 @@
-package com.aegeus.aegeus.game.commands;
+package com.aegeus.game.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.aegeus.game.planets.PlanetManager;
-import com.aegeus.aegeus.game.planets.PlanetXylo;
-import com.aegeus.aegeus.game.planets.Terminal;
+import com.aegeus.game.planets.PlanetManager;
+import com.aegeus.game.planets.PlanetXylo;
+import com.aegeus.game.planets.Terminal;
 
 public class CommandPlanet implements CommandExecutor {
 

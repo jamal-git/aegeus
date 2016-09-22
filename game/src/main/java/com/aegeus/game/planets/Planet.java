@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.planets;
+package com.aegeus.game.planets;
 
 import org.bukkit.Location;
 import org.bukkit.World;

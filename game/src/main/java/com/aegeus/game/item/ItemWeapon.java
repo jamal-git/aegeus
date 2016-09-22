@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.item;
+package com.aegeus.game.item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.util.Helper;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagDouble;

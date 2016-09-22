@@ -1,6 +1,6 @@
-package com.aegeus.aegeus.game.stats;
+package com.aegeus.game.stats;
 
-import com.aegeus.aegeus.game.item.ItemArmor;
+import com.aegeus.game.item.ItemArmor;
 
 public interface Stats {
 	public String getName();

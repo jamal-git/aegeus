@@ -1,9 +1,9 @@
-package com.aegeus.aegeus.game.planets;
+package com.aegeus.game.planets;
 
 import org.bukkit.entity.Player;
 
-import com.aegeus.aegeus.player.PlayerData;
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.util.Helper;
 
 public class PlanetManager {
 	

@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game;
+package com.aegeus.game;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -21,9 +21,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.aegeus.aegeus.game.item.ItemWeapon;
-import com.aegeus.aegeus.player.PlayerData;
-import com.aegeus.aegeus.util.Helper;
+import com.aegeus.game.item.ItemWeapon;
+import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.util.Helper;
 
 public class Combat implements Listener {
 

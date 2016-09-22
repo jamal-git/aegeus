@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.mobs;
+package com.aegeus.game.mobs;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -6,10 +6,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
-import com.aegeus.aegeus.game.planets.Planet;
-import com.aegeus.aegeus.game.planets.PlanetXylo;
-import com.aegeus.aegeus.game.stats.Stats;
-import com.aegeus.aegeus.game.stats.StatsBasic;
+import com.aegeus.game.planets.Planet;
+import com.aegeus.game.planets.PlanetXylo;
+import com.aegeus.game.stats.Stats;
+import com.aegeus.game.stats.StatsBasic;
 
 public class MobXyloSkeleton implements Mob {
 
@@ -21,29 +21,15 @@ public class MobXyloSkeleton implements Mob {
 	private static EntityType type = EntityType.SKELETON;
 	
 	@Override
-	public String getName() {
-		return name;
-	}
-
+	public String getName() { return name; }
 	@Override
-	public String getDescription() {
-		return description;
-	}
-	
+	public String getDescription() { return description; }
 	@Override
-	public EntityType getType() {
-		return type;
-	}
-	
+	public EntityType getType() { return type; }
 	@Override
-	public Stats[] getStats() {
-		return stats;
-	}
-	
+	public Stats[] getStats() { return stats; }
 	@Override
-	public Planet[] getPlanets(){
-		return planets;
-	}
+	public Planet[] getPlanets(){ return planets; }
 
 	@Override
 	public Entity create(World world, Location loc) {

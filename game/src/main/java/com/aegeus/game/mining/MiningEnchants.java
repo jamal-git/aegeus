@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.mining;
+package com.aegeus.game.mining;
 
 public enum MiningEnchants {
 

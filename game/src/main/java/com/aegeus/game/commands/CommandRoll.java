@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.commands;
+package com.aegeus.game.commands;
 
 import java.util.Random;
 
@@ -8,9 +8,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.aegeus.game.chat.ChatManager;
-import com.aegeus.aegeus.util.Helper;
-import com.aegeus.aegeus.util.exceptions.NoneNearbyException;
+import com.aegeus.game.chat.ChatManager;
+import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.exceptions.NoneNearbyException;
 
 public class CommandRoll implements CommandExecutor {
 

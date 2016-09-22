@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.item;
+package com.aegeus.game.item;
 
 public enum ItemType {
 	WEAPON(0),

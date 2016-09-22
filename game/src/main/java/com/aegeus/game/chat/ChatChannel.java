@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.game.chat;
+package com.aegeus.game.chat;
 
 public enum ChatChannel {
 	LOCAL(0),

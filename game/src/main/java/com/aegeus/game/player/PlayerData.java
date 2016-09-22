@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.player;
+package com.aegeus.game.player;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -9,9 +9,9 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import com.aegeus.aegeus.game.chat.ChatChannel;
-import com.aegeus.aegeus.game.planets.Planet;
-import com.aegeus.aegeus.game.planets.Terminal;
+import com.aegeus.game.chat.ChatChannel;
+import com.aegeus.game.planets.Planet;
+import com.aegeus.game.planets.Terminal;
 
 public class PlayerData {
 	

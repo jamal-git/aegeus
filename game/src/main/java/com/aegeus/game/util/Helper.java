@@ -1,4 +1,4 @@
-package com.aegeus.aegeus.util;
+package com.aegeus.game.util;
 
 import java.util.ArrayList;
 import java.util.List;
