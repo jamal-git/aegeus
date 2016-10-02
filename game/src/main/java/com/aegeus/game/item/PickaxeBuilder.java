@@ -12,7 +12,6 @@ import com.aegeus.game.mining.Mining;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.NBTTagInt;
 
 public class PickaxeBuilder {
 	private Material itemType;

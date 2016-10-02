@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.common.Constants;
 import com.aegeus.game.item.ItemRarity;
 import com.aegeus.game.item.ItemWeapon;
 
