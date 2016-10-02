@@ -1,11 +1,10 @@
 package com.aegeus.game;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aegeus.common.Constants;
 import com.aegeus.game.chat.Chat;
@@ -13,9 +12,14 @@ import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.*;
 import com.aegeus.game.mining.Mining;
 
+/**
+ * AEGEUS Game
+ * @category MMORPG
+ * @since 2016/08/19
+ */
 public class Aegeus extends JavaPlugin {
 	
-	public static final Logger log = Logger.getLogger(Aegeus.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Aegeus.class);
 	public static SimpleCommandMap cmdMap = new SimpleCommandMap(Bukkit.getServer());
 	
 	/**
@@ -28,7 +32,7 @@ public class Aegeus extends JavaPlugin {
 	@Override
 	public void onEnable() {	
 		// wooOOOOOOOOO, loading up!
-		log.log(Level.INFO, "Aegeus enabling...");
+		LOGGER.info("AEGEUS enabling...");
 		saveDefaultConfig();
 		
 		//INTIALIZE THE FUCKING BOT, AEGEUS.
@@ -41,7 +45,7 @@ public class Aegeus extends JavaPlugin {
 		
 		// Register plugin events
 		// TODO Clean up a bit?
-		log.log(Level.INFO, "Registering events...");
+		LOGGER.info("Registering events...");
 		getServer().getPluginManager().registerEvents(new Server(this), this);
 		getServer().getPluginManager().registerEvents(new Combat(this), this);
 		getServer().getPluginManager().registerEvents(new Chat(this), this);
@@ -51,7 +55,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Bank(this), this);
 		
 		// Register game commands
-		log.log(Level.INFO, "Registering commands...");
+		LOGGER.info("Registering commands...");
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());
 		getCommand("global").setExecutor(new CommandGlobal());
 		getCommand("message").setExecutor(new CommandMessage());
@@ -61,17 +65,17 @@ public class Aegeus extends JavaPlugin {
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
 		
 		// Register test commands
-		if(Constants.debug) {
+		if(Constants.DEBUG) {
 			getCommand("testarmor").setExecutor(new CommandTestArmor());
 			getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		}
 		
 		// Done, done, and done!
-		getLogger().log(Level.INFO, "Aegeus enabled.");
+		LOGGER.info("AEGEUS enabled.");
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().log(Level.INFO, "Aegeus disabled.");
+		LOGGER.info("AEGEUS disabled.");
 	}
 }
