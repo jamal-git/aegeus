@@ -1,8 +1,7 @@
 package com.aegeus.common;
 
-public class Constants {
+public class Common {
 
-	public static final boolean DEBUG = false;
 	public static final String BUILD = "dev";
 	public static final String BUILD_NOTE = "ASCII boats.";
 	public static final String[] DEVELOPERS = new String[]{"oopsjpeg", "Silvre", "AkenoHimejima_"};
