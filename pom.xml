@@ -43,21 +43,11 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.21</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.21</version>
-		</dependency>
 	</dependencies>
 	
 	<modules>
-		<module>aegeus.game</module>
 		<module>aegeus.common</module>
-		<module>aegeus.bot</module>
+		<module>aegeus.discord</module>
+		<module>aegeus.game</module>
 	</modules>
 </project>

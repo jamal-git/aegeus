@@ -1,12 +1,11 @@
 package com.aegeus.game;
 
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.aegeus.common.Constants;
 import com.aegeus.game.chat.Chat;
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.*;
@@ -19,29 +18,15 @@ import com.aegeus.game.mining.Mining;
  */
 public class Aegeus extends JavaPlugin {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Aegeus.class);
+	private final Logger LOGGER = getLogger();
+	private final boolean DEBUG = true;
 	public static SimpleCommandMap cmdMap = new SimpleCommandMap(Bukkit.getServer());
 	
-	/**
-	 * 
-	 * Created by oopsjpeg and Silvre.
-	 * There's probably one or two boats in this project.
-	 * M 8, D 19, Y 2016
-	 * 
-	 */
 	@Override
 	public void onEnable() {	
 		// wooOOOOOOOOO, loading up!
 		LOGGER.info("AEGEUS enabling...");
 		saveDefaultConfig();
-		
-		//INTIALIZE THE FUCKING BOT, AEGEUS.
-		//try {
-			//bot = new AegeusBot();
-		//} catch (DiscordException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
 		
 		// Register plugin events
 		// TODO Clean up a bit?
@@ -65,7 +50,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
 		
 		// Register test commands
-		if(Constants.DEBUG) {
+		if(DEBUG) {
 			getCommand("testarmor").setExecutor(new CommandTestArmor());
 			getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		}
