@@ -18,13 +18,11 @@ public class CommandTestWeapon implements CommandExecutor {
 		Player player = (Player) sender;
 		
 		ItemWeapon wep = new ItemWeapon(Material.DIAMOND_AXE);
-		wep.setName("&dMordebit Axe of Ice Fire");
-		wep.setDmg(165, 213);
-		wep.setFireDmg(18);
-		wep.setIceDmg(12);
-		wep.setLifeSteal(0.09);
-		wep.setTier(4);
-		wep.setLevel(1);
+		wep.setName("&dMythripper");
+		wep.setDmg(152, 203);
+		wep.setFireDmg(34);
+		wep.setLifeSteal(0.34);
+		wep.setTier(5);
 		wep.setRarity(ItemRarity.RARE);
 		
 		player.getInventory().addItem(wep.build());

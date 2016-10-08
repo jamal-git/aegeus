@@ -17,12 +17,37 @@ public class CommandTestArmor implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		ItemArmor armor = new ItemArmor(Material.CHAINMAIL_LEGGINGS);
-		armor.setName("&dAgile Chain Leggings");
-		armor.setHp(245);
-		armor.setTier(2);
-		armor.setRarity(ItemRarity.UNIQUE);
-		player.getInventory().addItem(armor.build());
+		ItemArmor chelm = new ItemArmor(Material.DIAMOND_HELMET);
+		chelm.setName("&dAnti-Cthulhu Helmet");
+		chelm.setHp(325);
+		chelm.setTier(5);
+		chelm.setRarity(ItemRarity.UNIQUE);
+		chelm.addLore("A Piece Of Holy Armour That Once Defeated Cthulhu");
+		player.getInventory().addItem(chelm.build());
+		
+		ItemArmor cchest = new ItemArmor(Material.DIAMOND_CHESTPLATE);
+		cchest.setName("&dAnti-Cthulhu Chestplate");
+		cchest.setHp(375);
+		cchest.setTier(5);
+		cchest.setRarity(ItemRarity.UNIQUE);
+		cchest.addLore("A Piece Of Holy Armour That Once Defeated Cthulhu");
+		player.getInventory().addItem(cchest.build());
+		
+		ItemArmor cleggings = new ItemArmor(Material.DIAMOND_LEGGINGS);
+		cleggings.setName("&dAnti-Cthulhu Leggings");
+		cleggings.setHp(350);
+		cleggings.setTier(5);
+		cleggings.setRarity(ItemRarity.UNIQUE);
+		cleggings.addLore("A Piece Of Holy Armour That Once Defeated Cthulhu");
+		player.getInventory().addItem(cleggings.build());
+		
+		ItemArmor cboots = new ItemArmor(Material.DIAMOND_BOOTS);
+		cboots.setName("&dAnti-Cthulhu Boots");
+		cboots.setHp(325);
+		cboots.setTier(5);
+		cboots.setRarity(ItemRarity.UNIQUE);
+		cboots.addLore("A Piece Of Holy Armour That Once Defeated Cthulhu");
+		player.getInventory().addItem(cboots.build());
 		
 		return true;
 	}
