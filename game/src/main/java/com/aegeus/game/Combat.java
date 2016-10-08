@@ -71,6 +71,7 @@ public class Combat implements Listener {
 	}
 	
 	@EventHandler
+	private void onHit(EntityDamageEvent e) {
 		EntityDamageByEntityEvent ee = null;
 		if(e instanceof EntityDamageByEntityEvent) // Created DamageByEntity event incase needed
 			ee = (EntityDamageByEntityEvent) e;
