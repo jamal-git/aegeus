@@ -1,17 +1,16 @@
 package com.aegeus.game;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,7 +21,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.aegeus.game.item.ItemWeapon;
-import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.planets.Planet;
+import com.aegeus.game.player.EntityData;
 import com.aegeus.game.util.Helper;
 
 public class Combat implements Listener {
@@ -33,20 +33,22 @@ public class Combat implements Listener {
 		this.parent = parent;
 	}
 
-	private static HashMap<Entity, Entity> entityLastHitBy = new HashMap<>();
-
 	@EventHandler
-	private void onEntityDeath(EntityDeathEvent event){
-		if (entityLastHitBy.get(event.getEntity()) != null){
-			if(entityLastHitBy.get(event.getEntity()) instanceof Player){
-				Player player = (Player) entityLastHitBy.get(event.getEntity());
+	private void onEntityDeath(EntityDeathEvent e){
+		LivingEntity entity = e.getEntity();
+		EntityData data = EntityData.get(entity);
+		
+		if (data.getLastHitBy() != null){
+			LivingEntity lastHitBy = data.getLastHitBy();
+			if(lastHitBy instanceof Player){
+				Player player = (Player) lastHitBy;
 				if (player.getEquipment().getItemInMainHand() != null){
 					ItemStack item = player.getEquipment().getItemInMainHand();
 					ItemWeapon weapon = new ItemWeapon(item);
 					int Level = weapon.getLevel();
 					int XP = weapon.getXP();
 					if(Level >= 1){
-						XP += Math.ceil(event.getEntity().getMaxHealth() / 500);
+						XP += Math.ceil(entity.getMaxHealth() / 500);
 						if(XP >= Helper.calcMaxXP(Level)){
 							XP = 0;
 							Level += 1;
@@ -60,136 +62,93 @@ public class Combat implements Listener {
 					}
 				}
 			}
-			entityLastHitBy.remove(event.getEntity());
 		}
+		
+		// Clear entity's data if not player
+		if(!(entity instanceof Player))
+			EntityData.remove(entity);
+		
 	}
 	
 	@EventHandler
-	private void onEntityHit(EntityDamageByEntityEvent event) {
-		if (event.getEntity() instanceof LivingEntity
-		&& event.getDamager() instanceof LivingEntity){
-			LivingEntity victim = (LivingEntity) event.getEntity();
-			LivingEntity damager = (LivingEntity) event.getDamager();
-			
-			if(damager instanceof Player){
-				Player dp = (Player) damager;
-				PlayerData.get(dp).setInCombat(LocalDateTime.now());
-			}
-			
-			if(victim instanceof Player){
-				Player vp = (Player) victim;
-				PlayerData.get(vp).setInCombat(LocalDateTime.now());
-			}
-			
-//			if(!playerLastHitTick.containsKey((Player) victim)){
-//				playerLastHitTick.put((Player) victim, System.currentTimeMillis());
-//			}
-//			if(victim.getType().equals(EntityType.PLAYER)){
-//				Player player = (Player) victim;
-//				if(!playerLastHitTick.containsKey((Player) victim)){
-//					playerLastHitTick.put((Player) victim, System.currentTimeMillis());
-//				} else if(System.currentTimeMillis() - playerLastHitTick.get(player) <= 2){
-//					// This is probably impossible. Log them into anti-cheat system.
-//					// TODO make anti-cheat system :/
-//					event.setCancelled(true);
-//					return;
-//				}
-//				playerLastHitTick.put(player, System.currentTimeMillis());
-//			}
-			entityLastHitBy.put(victim, damager);
-			double dmg = (event.getDamage() >= 1) ? event.getDamage() : 1;
-			double basedmg = dmg;
-			
-			// Implement custom damage from weapon's lore
-			if(damager.getEquipment().getItemInMainHand() != null && damager.getEquipment().getItemInMainHand().getType() != org.bukkit.Material.AIR){
-				ItemStack item = damager.getEquipment().getItemInMainHand();
-				ItemWeapon weapon = new ItemWeapon(item);
-				int MinDmg = weapon.getMinDmg();
-				int MaxDmg = weapon.getMaxDmg();
-				int FireDmg = weapon.getFireDmg();
-				int IceDmg = weapon.getIceDmg();
-				double LifeSteal = weapon.getLifeSteal();
-				int Level = weapon.getLevel();
-				
-				// Normal damage
-				if(MinDmg + MaxDmg > 0){
-					if(MinDmg != MaxDmg) {
-						Random random = new Random();
-						dmg = random.nextInt(MaxDmg-MinDmg) + MinDmg;
-					} else dmg = MaxDmg;
-					if(Level >= 1){
-						dmg += Helper.calcWepLevelBuff(MinDmg, Level-1);
-					}
-					basedmg = dmg;
+		EntityDamageByEntityEvent ee = null;
+		if(e instanceof EntityDamageByEntityEvent) // Created DamageByEntity event incase needed
+			ee = (EntityDamageByEntityEvent) e;
+		
+		if(ee != null && ee.getDamager() instanceof LivingEntity && e.getEntity() instanceof LivingEntity) {
+			LivingEntity damager = (LivingEntity) ee.getDamager();
+			LivingEntity entity = (LivingEntity) e.getEntity();
+			if(damager.getEquipment().getItemInMainHand() != null
+					&& damager.getEquipment().getItemInMainHand().getItemMeta() != null) {
+				ItemWeapon weapon = new ItemWeapon(damager.getEquipment().getItemInMainHand());
+				Random random = new Random();
+				e.setDamage(random.nextInt(weapon.getMaxDmg() - weapon.getMinDmg()) + weapon.getMinDmg());
+				if(weapon.getIceDmg() > 0) {
+					e.setDamage(e.getDamage() + (weapon.getIceDmg() * 0.1));
+					entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (3 * weapon.getTier()), 2));
 				}
-				
-				// Fire damage
-				if(FireDmg > 0){
-					dmg += FireDmg;
-					victim.setFireTicks(16);
+				if(weapon.getFireDmg() > 0) {
+					e.setDamage(e.getDamage() + (weapon.getFireDmg() * 0.2));
+					entity.setFireTicks(16 + (3 * weapon.getTier()));
 				}
-				
-				// Ice damage
-				if(IceDmg > 0){
-					dmg += IceDmg;
-					victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 1));
-					victim.getWorld().playSound(victim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
-				}
-				
-				// Life steal
-				if(LifeSteal > 0
-						&& damager.getHealth() < damager.getMaxHealth()){
+				if(weapon.getLifeSteal() > 0) {
 					double hp = damager.getHealth();
-					double maxhp = damager.getMaxHealth();
-					hp += (basedmg * LifeSteal);
-					if(hp > maxhp){
-						hp = maxhp;
-					}
-					damager.setHealth(hp);
-					if(damager.getType().equals(EntityType.PLAYER)) Statistics.updateDisplay((Player) damager);
+					hp += (e.getDamage() * weapon.getLifeSteal());
+					damager.setHealth((hp > damager.getHealth()) ? damager.getHealth() : hp);
 				}
-				
 			}
-			
-			// TODO Still a bit a work here to be done.
-				
-			// Apply custom damage
-			event.setDamage(dmg);
-			damager.setMaximumNoDamageTicks(5);
-			victim.setMaximumNoDamageTicks(5);
-	
-			char shortenCause = event.getCause().name().charAt(0);
-			
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					// Send combat info to damager
-					if (damager.getType().equals(EntityType.PLAYER)) {
-						Player dp = (Player) damager;
-						if (victim.getType().equals(EntityType.PLAYER)) {
-							Player vp = (Player) victim;
-							dp.sendMessage(Helper.colorCodes(
-									"        &c" + Math.round(event.getDamage()) + " &l>&f " + vp.getDisplayName() + "&7 (" + Math.round(vp.getHealth()) + " &lHP&7)&8 [&l" + shortenCause + "&8]"));
-						} else if (victim.isCustomNameVisible()) {
-							dp.sendMessage(Helper.colorCodes(
-									"        &c" + Math.round(event.getDamage()) + " &l>&f " + victim.getCustomName() + "&7 (" + Math.round(victim.getHealth()) + " &lHP&7)&8 [&l" + shortenCause + "&8]"));
-						} else {
-							dp.sendMessage(Helper.colorCodes(
-									"        &c" + Math.round(event.getDamage()) + " &l>&f " + victim.getName() + "&7 (" + Math.round(victim.getHealth()) + " &lHP&7)&8 [&l" + shortenCause + "&8]"));
-						}
-						Statistics.updateDisplay(dp);
-					}
-	
-					// Send combat info to victim player
-					if (victim.getType().equals(EntityType.PLAYER)) {
-						Player vp = (Player) victim;
-						vp.sendMessage(Helper.colorCodes(
-								"        &6-" + Math.round(event.getDamage()) + " &l<&7 " + Math.round(victim.getHealth()) + " &lHP&8 [&l" + shortenCause + "&8]"));
-						Statistics.updateDisplay(vp);
+		}
+		
+		if(e.getDamage() < 1.0f) e.setDamage(1.0f); // Set minimum damage to 1
+		
+		switch(e.getCause()) {
+			case PROJECTILE:
+				// TODO Discuss this as this may not be final
+				ee.getDamager().remove();
+			case VOID:
+				// TODO When alignments are done, only teleport player to the terminal if lawful
+				if(e.getEntity() instanceof Player) {
+					Player p = (Player) e.getEntity();
+					p.teleport(Planet.TERMINAL.getLocation());
+				}
+			case ENTITY_ATTACK:
+				if(e.getEntity() instanceof Player) {
+					Player player = (Player) e.getEntity();
+					notifyAttacked(player, e.getDamage());
+				}
+				if(e.getEntity() instanceof LivingEntity
+						&& ee.getDamager() instanceof LivingEntity) {
+					LivingEntity attacker = (LivingEntity) ee.getDamager();
+					LivingEntity attacked = (LivingEntity) e.getEntity();
+					EntityData data = EntityData.get(attacked);
+					data.setLastHitBy(attacker);
+					if(attacker instanceof Player) {
+						Player player = (Player) attacker;
+						notifyAttack(player, attacked, e.getDamage());
 					}
 				}
-			}.runTaskLater(parent, 1);
+				
+			default:
+				if(e.getEntity() instanceof Player) {
+					Player player = (Player) e.getEntity();
+					notifyAttacked(player, e.getDamage());
+				}
 		}
+	}
+	
+	public void notifyAttack(Player player, LivingEntity attacked, double damage) {
+		String name = (attacked.getCustomName() != null) ? attacked.getCustomName() : attacked.getName();
+		long hp = Math.round(Math.ceil(attacked.getHealth()));
+		long maxHp = Math.round(Math.ceil(attacked.getMaxHealth()));
+		long dmg = Math.round(Math.ceil(damage));
+		player.sendMessage(Helper.colorCodes("          &e" + dmg + " &l>&f " + name + "&7 [" + hp + " / " + maxHp + "]"));
+	}
+	
+	public void notifyAttacked(Player player, double damage) {
+		long hp = Math.round(Math.ceil(player.getHealth()));
+		long maxHp = Math.round(Math.ceil(player.getMaxHealth()));
+		long dmg = Math.round(Math.ceil(damage));
+		player.sendMessage(Helper.colorCodes("            &c-" + dmg + "&7 [" + hp + " / " + maxHp + "]"));
 	}
 
 	@EventHandler
