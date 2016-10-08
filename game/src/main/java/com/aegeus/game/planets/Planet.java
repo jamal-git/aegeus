@@ -4,10 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 public interface Planet {
-	/*
-	 * Planets!
-	 * They should explain themselves.
-	 */
+	public static final Planet TERMINAL = new Terminal();
+	public static final Planet XYLO = new PlanetXylo();
+	
 	public World getWorld();
 	public String getName();
 	public int getType();

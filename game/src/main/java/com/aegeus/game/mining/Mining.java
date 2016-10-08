@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.common.Constants;
+import com.aegeus.common.Common;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
@@ -205,31 +205,31 @@ public class Mining implements Listener	{
 		int reward = 0;
 		switch(ore)	{
 			case RUTILE:
-				reward = rng.nextInt(Constants.RUTILE_RANGE * 2) + Constants.RUTILE_EXP - Constants.RUTILE_RANGE;
+				reward = rng.nextInt(Common.RUTILE_RANGE * 2) + Common.RUTILE_EXP - Common.RUTILE_RANGE;
 				xp += reward;
 				break;
 			case BAUXITE:
-				reward = rng.nextInt(Constants.BAUXITE_RANGE * 2) + Constants.BAUXITE_EXP - Constants.BAUXITE_RANGE;
+				reward = rng.nextInt(Common.BAUXITE_RANGE * 2) + Common.BAUXITE_EXP - Common.BAUXITE_RANGE;
 				xp += reward;
 				break;
 			case IRON:
-				reward = rng.nextInt(Constants.IRON_RANGE * 2) + Constants.IRON_EXP - Constants.IRON_RANGE;
+				reward = rng.nextInt(Common.IRON_RANGE * 2) + Common.IRON_EXP - Common.IRON_RANGE;
 				xp += reward;
 				break;
 			case LAZURITE:
-				reward = rng.nextInt(Constants.LAZURITE_RANGE * 2) + Constants.LAZURITE_EXP - Constants.LAZURITE_RANGE;
+				reward = rng.nextInt(Common.LAZURITE_RANGE * 2) + Common.LAZURITE_EXP - Common.LAZURITE_RANGE;
 				xp += reward;
 				break;
 			case CRYSTAL:
-				reward = rng.nextInt(Constants.CRYSTAL_RANGE * 2) + Constants.CRYSTAL_EXP - Constants.CRYSTAL_RANGE;
+				reward = rng.nextInt(Common.CRYSTAL_RANGE * 2) + Common.CRYSTAL_EXP - Common.CRYSTAL_RANGE;
 				xp += reward;
 				break;
 			case VERIDIUM:
-				reward = rng.nextInt(Constants.VERIDIUM_RANGE * 2) + Constants.VERIDIUM_EXP - Constants.VERIDIUM_RANGE;
+				reward = rng.nextInt(Common.VERIDIUM_RANGE * 2) + Common.VERIDIUM_EXP - Common.VERIDIUM_RANGE;
 				xp += reward;
 				break;
 			case GOLD:
-				reward = rng.nextInt(Constants.GOLD_RANGE * 2) + Constants.GOLD_EXP - Constants.GOLD_RANGE;
+				reward = rng.nextInt(Common.GOLD_RANGE * 2) + Common.GOLD_EXP - Common.GOLD_RANGE;
 				xp += reward;
 				break;
 		}

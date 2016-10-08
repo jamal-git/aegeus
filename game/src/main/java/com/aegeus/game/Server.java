@@ -15,7 +15,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.common.Constants;
+import com.aegeus.common.Common;
 import com.aegeus.game.player.PlayerData;
 import com.aegeus.game.util.Helper;
 
@@ -130,7 +130,7 @@ public class Server implements Listener {
 		player.setHealthScaled(true);
 		player.setHealthScale(20);
 		if (!player.hasPlayedBefore()) {
-			player.sendTitle("", Helper.colorCodes("&aWelcome."));
+			player.sendTitle("", Helper.colorCodes("&bWelcome."));
 		} else {
 			player.sendTitle("", Helper.colorCodes("&fWelcome back."));
 		}
@@ -138,9 +138,9 @@ public class Server implements Listener {
 			player.sendMessage(" ");
 		}
 		player.sendMessage(Helper.colorCodes(
-				"          &aAegeus &f&lMMORPG&f\n" +
-				"          &a� &7Build &a" + Constants.BUILD + " &7(&o" + Constants.BUILD_NOTE + "&7)\n" +
-				"          &7Modify game settings with &a/settings"));
+				"          &bAegeus &f&lMMORPG&f\n" +
+				"          &b� &7Build &b" + Common.BUILD + " &7(&o" + Common.BUILD_NOTE + "&7)\n" +
+				"          &7Modify game settings with &b/settings"));
 		for (int i = 0; i < 3; i++) {
 			player.sendMessage(" ");
 		}
@@ -158,15 +158,12 @@ public class Server implements Listener {
 	// Random, custom MOTDs
 	private void onServerListPingEvent(ServerListPingEvent event) {
 		Random random = new Random();
-		if(Bukkit.hasWhitelist()){
-			event.setMotd(Helper.colorCodes(
-					"&aAegeus &f&lMMORPG&7 - Build &a" + Constants.BUILD + "\n"
-					+ "&cUngergoing maintenance. Stay tuned!"));
-		} else {
-			event.setMotd(Helper.colorCodes(
-					"&aAegeus &f&lMMORPG&7 - Build &a" + Constants.BUILD + "\n"
-					+ motds[random.nextInt(motds.length)]));
-		}
+		if(Bukkit.hasWhitelist()) event.setMotd(Helper.colorCodes(
+			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n"
+			+ "&cUngergoing maintenance. Stay tuned!"));
+		else event.setMotd(Helper.colorCodes(
+			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n"
+			+ motds[random.nextInt(motds.length)]));
 	}
 
 	@EventHandler

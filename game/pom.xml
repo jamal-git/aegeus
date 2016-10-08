@@ -11,7 +11,7 @@
 	
 	<artifactId>game</artifactId>
 	<packaging>jar</packaging>
-	<name>game</name>
+	<name>AEGEUS</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

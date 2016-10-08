@@ -1,8 +1,8 @@
-name: Aegeus
+name: AEGEUS
 version: dev
-description: We need more than a weapon.
-authors: [oopsjpeg, Silvre, matt11matthew]
-main: com.aegeus.aegeus.Aegeus
+description: We need a boat.
+authors: [oopsjpeg, Silvre, AkenoHimejima_]
+main: com.aegeus.game.Aegeus
 
 commands:
     global:
