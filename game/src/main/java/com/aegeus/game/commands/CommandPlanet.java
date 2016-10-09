@@ -5,9 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.aegeus.game.planets.Planet;
 import com.aegeus.game.planets.PlanetManager;
-import com.aegeus.game.planets.PlanetXylo;
-import com.aegeus.game.planets.Terminal;
 
 public class CommandPlanet implements CommandExecutor {
 
@@ -21,9 +20,9 @@ public class CommandPlanet implements CommandExecutor {
 		String planetget = args[0];
 		
 		if(planetget.equalsIgnoreCase("terminal")) {
-			PlanetManager.warpPlayer(player, new Terminal());
+			PlanetManager.warpPlayer(player, Planet.Enum.TERMINAL);
 		} else if(planetget.equalsIgnoreCase("xylo")) {
-			PlanetManager.warpPlayer(player, new PlanetXylo());
+			PlanetManager.warpPlayer(player, Planet.Enum.XYLO);
 		} else {
 			return false;
 		}

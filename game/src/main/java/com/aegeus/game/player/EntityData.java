@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 public class EntityData {
 
@@ -53,7 +54,12 @@ public class EntityData {
 	
 	public static EntityData get(LivingEntity entity){
 		if(!data.containsKey(entity)){
-			data.put(entity, new EntityData(entity));
+			switch(entity.getType()) {
+				case PLAYER:
+					return PlayerData.get((Player) entity);
+				default:
+					data.put(entity, new EntityData(entity));
+			}
 		}
 		return data.get(entity);
 	}

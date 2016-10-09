@@ -23,6 +23,9 @@ commands:
     planet:
       description: Change planets.
       usage: /planet <planet>
+    codex:
+      description: Review known information about mobs, planets, runes, etc.
+      usage: /codex <type> <search>
     testweapon:
       description: Test weapons.
     testarmor:

@@ -13,22 +13,22 @@ import com.aegeus.game.util.Helper;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagDouble;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
-import net.minecraft.server.v1_10_R1.NBTTagString;
 
 public class ItemWeapon extends Item {
 	
-	private int MinDmg = 0;
-	private int MaxDmg = 0;
+	private int tier = 0;
 	
-	private int FireDmg = 0;
-	private int IceDmg = 0;
-	private double LifeSteal = 0;
+	private int minDmg = 0;
+	private int maxDmg = 0;
 	
-	private int Tier = 0;
-	private int Level = 0;
-	private int XP = 0;
+	private int fireDmg = 0;
+	private int iceDmg = 0;
+	private double lifeSteal = 0;
 	
-	private ItemRarity Rarity = null;
+	private int level = 0;
+	private int xp = 0;
+	
+	private ItemRarity rarity = ItemRarity.NONE;
 	
 	public ItemWeapon(Material material) {
 		super(material);
@@ -38,110 +38,114 @@ public class ItemWeapon extends Item {
 		super(item);
 		NBTTagCompound aegeus = Item.getAegeusInfo(item);
 		if(aegeus != null){
-			MinDmg = aegeus.getInt("MinDmg");
-			MaxDmg = aegeus.getInt("MaxDmg");
-			FireDmg = (aegeus.hasKey("FireDmg")) ? aegeus.getInt("FireDmg") : 0;
-			IceDmg = (aegeus.hasKey("IceDmg")) ? aegeus.getInt("IceDmg") : 0;
-			LifeSteal = (aegeus.hasKey("LifeSteal")) ? aegeus.getDouble("LifeSteal") : 0;
-			Tier = aegeus.getInt("Tier");
-			Level = (aegeus.hasKey("Level")) ? aegeus.getInt("Level") : 0;
-			XP = (aegeus.hasKey("XP")) ? aegeus.getInt("XP") : 0;
-			Rarity = (aegeus.hasKey("Rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("Rarity")) : null;
+			tier = aegeus.getInt("tier");
+			minDmg = aegeus.getInt("minDmg");
+			maxDmg = aegeus.getInt("maxDmg");
+			fireDmg = (aegeus.hasKey("fireDmg")) ? aegeus.getInt("fireDmg") : 0;
+			iceDmg = (aegeus.hasKey("iceDmg")) ? aegeus.getInt("iceDmg") : 0;
+			lifeSteal = (aegeus.hasKey("lifeSteal")) ? aegeus.getFloat("lifeSteal") : 0;
+			level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
+			xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
+			rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
 		}
 	}
 	
-	public void setDmg(int MinDmg, int MaxDmg){
-		this.MinDmg = MinDmg;
-		this.MaxDmg = MaxDmg;
-	}
-	
-	public int getMinDmg(){
-		return MinDmg;
-	}
-	
-	public int getMaxDmg(){
-		return MaxDmg;
-	}
-	
-	public void setFireDmg(int FireDmg){
-		this.FireDmg = FireDmg;
-	}
-	
-	public int getFireDmg(){
-		return FireDmg;
-	}
-	
-	public void setIceDmg(int IceDmg){
-		this.IceDmg = IceDmg;
-	}
-	
-	public int getIceDmg(){
-		return IceDmg;
-	}
-	
-	public void setLifeSteal(double LifeSteal){
-		this.LifeSteal = LifeSteal;
-	}
-	
-	public double getLifeSteal(){
-		return LifeSteal;
-	}
-	
-	public void setTier(int Tier){
-		this.Tier = Tier;
+	public void setTier(int tier){
+		this.tier = tier;
 	}
 	
 	public int getTier(){
-		return Tier;
+		return tier;
 	}
 	
-	public void setLevel(int Level){
-		this.Level = Level;
-		this.XP = 0;
+	public void setDmg(int minDmg, int maxDmg){
+		this.minDmg = minDmg;
+		this.maxDmg = maxDmg;
+	}
+	
+	public int getMinDmg(){
+		return minDmg;
+	}
+	
+	public int getMaxDmg(){
+		return maxDmg;
+	}
+	
+	public void setFireDmg(int fireDmg){
+		this.fireDmg = fireDmg;
+	}
+	
+	public int getFireDmg(){
+		return fireDmg;
+	}
+	
+	public void setIceDmg(int iceDmg){
+		this.iceDmg = iceDmg;
+	}
+	
+	public int getIceDmg(){
+		return iceDmg;
+	}
+	
+	public void setLifeSteal(double lifeSteal){
+		this.lifeSteal = lifeSteal;
+	}
+	
+	public double getLifeSteal(){
+		return lifeSteal;
+	}
+	
+	public void setLevel(int level){
+		this.level = level;
+		this.xp = 0;
 	}
 	
 	public int getLevel(){
-		return Level;
+		return level;
 	}
 	
-	public void setXP(int XP){
-		this.XP = XP;
+	public void setXp(int xp){
+		this.xp = xp;
 	}
 	
-	public int getXP(){
-		return XP;
+	public void addXp(int xp) {
+		this.xp += xp;
 	}
 	
-	public void setRarity(ItemRarity Rarity){
-		this.Rarity = Rarity;
+	public int getXp(){
+		return xp;
+	}
+	
+	public void setRarity(ItemRarity rarity){
+		this.rarity = rarity;
 	}
 	
 	public ItemRarity getRarity(){
-		return Rarity;
+		return rarity;
 	}
 	
 	public static List<String> getLore(ItemStack item){
 		NBTTagCompound aegeus = Item.getAegeusInfo(item);
 		if(aegeus != null){
-			int MinDmg = aegeus.getInt("MinDmg");
-			int MaxDmg = aegeus.getInt("MaxDmg");
-			int FireDmg = (aegeus.hasKey("FireDmg")) ? aegeus.getInt("FireDmg") : 0;
-			int IceDmg = (aegeus.hasKey("IceDmg")) ? aegeus.getInt("IceDmg") : 0;
-			int LifeSteal = (aegeus.hasKey("LifeSteal")) ? aegeus.getInt("LifeSteal") : 0;
-			int Level = (aegeus.hasKey("Level")) ? aegeus.getInt("Level") : 0;
-			int XP = (aegeus.hasKey("XP")) ? aegeus.getInt("XP") : 0;
-			String Rarity = (aegeus.hasKey("Rarity")) ? aegeus.getString("Rarity") : "";
+			int minDmg = aegeus.getInt("minDmg");
+			int maxDmg = aegeus.getInt("maxDmg");
+			int fireDmg = (aegeus.hasKey("fireDmg")) ? aegeus.getInt("fireDmg") : 0;
+			int iceDmg = (aegeus.hasKey("iceDmg")) ? aegeus.getInt("iceDmg") : 0;
+			int lifeSteal = (aegeus.hasKey("lifeSteal")) ? aegeus.getInt("lifeSteal") : 0;
+			int level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
+			int xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
+			ItemRarity rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
 			List<String> lore = new ArrayList<>();
-			if(Level >= 2) lore.add(Helper.colorCodes("&cDMG: " + MinDmg + " - " + MaxDmg + " &6(+" + Helper.calcWepLevelBuff(MinDmg, Level) + ")"));
-			else lore.add(Helper.colorCodes("&cDMG: " + MinDmg + " - " + MaxDmg));
-			if(FireDmg >= 1) lore.add(Helper.colorCodes("&cFIRE DMG: +" + FireDmg));
-			if(IceDmg >= 1) lore.add(Helper.colorCodes("&cICE DMG: +" + IceDmg));
-			if(LifeSteal >= 1) lore.add(Helper.colorCodes("&cLIFE STEAL: +" + (LifeSteal * 100) + "%"));
-			if(Level >= 1){
-				float MaxXP = Math.round(Helper.calcMaxXP(Level));
-				lore.add(Helper.colorCodes("&6&oLevel " + Level + " &7&o(" + Math.round((XP / MaxXP) * 100) + "%)"));
+			if(level >= 2) lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + " &6(+" + Helper.calcWepLevelBuff(minDmg, level) + ")"));
+			else lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
+			if(fireDmg >= 1) lore.add(Helper.colorCodes("&cFIRE DMG: +" + fireDmg));
+			if(iceDmg >= 1) lore.add(Helper.colorCodes("&cICE DMG: +" + iceDmg));
+			if(lifeSteal >= 1) lore.add(Helper.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
+			if(level >= 1){
+				int maxXp = Math.round(Helper.calcMaxXP(level));
+				lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
 			}
-			if(Rarity != "") lore.add(Helper.colorCodes(Rarity));
+			if(rarity != null) lore.add(Helper.colorCodes(rarity.getLore()));
 			return lore;
 		}
 		return null;
@@ -153,15 +157,15 @@ public class ItemWeapon extends Item {
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		NBTTagCompound aegeus = new NBTTagCompound();
-		aegeus.set("MinDmg", new NBTTagInt(MinDmg));
-		aegeus.set("MaxDmg", new NBTTagInt(MaxDmg));
-		aegeus.set("FireDmg", new NBTTagInt(FireDmg));
-		aegeus.set("IceDmg", new NBTTagInt(IceDmg));
-		aegeus.set("LifeSteal", new NBTTagDouble(LifeSteal));
-		aegeus.set("Tier", new NBTTagInt(Tier));
-		aegeus.set("Level", new NBTTagInt(Level));
-		aegeus.set("XP", new NBTTagInt(XP));
-		aegeus.set("Rarity", new NBTTagString(Rarity.getLore()));
+		aegeus.set("tier", new NBTTagInt(tier));
+		aegeus.set("minDmg", new NBTTagInt(minDmg));
+		aegeus.set("maxDmg", new NBTTagInt(maxDmg));
+		aegeus.set("fireDmg", new NBTTagInt(fireDmg));
+		aegeus.set("iceDmg", new NBTTagInt(iceDmg));
+		aegeus.set("lifeSteal", new NBTTagDouble(lifeSteal));
+		aegeus.set("level", new NBTTagInt(level));
+		aegeus.set("xp", new NBTTagInt(xp));
+		aegeus.set("rarity", new NBTTagInt(rarity.getTypeID()));
 		compound.set("AegeusInfo", aegeus);
 		nmsStack.setTag(compound);
 		item = CraftItemStack.asBukkitCopy(nmsStack);

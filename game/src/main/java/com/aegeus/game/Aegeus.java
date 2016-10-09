@@ -30,7 +30,7 @@ public class Aegeus extends JavaPlugin {
 		
 		// Register plugin events
 		// TODO Clean up a bit?
-		LOGGER.info("Registering events...");
+		LOGGER.info("Registering event listeners...");
 		getServer().getPluginManager().registerEvents(new Server(this), this);
 		getServer().getPluginManager().registerEvents(new Combat(this), this);
 		getServer().getPluginManager().registerEvents(new Chat(this), this);
@@ -48,11 +48,14 @@ public class Aegeus extends JavaPlugin {
 		getCommand("roll").setExecutor(new CommandRoll());
 		getCommand("spacecart").setExecutor(new CommandSpaceCart());
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
+		getCommand("codex").setExecutor(new CommandCodex());
 		
 		// Register test commands
 		if(DEBUG) {
+			LOGGER.info("Registering test commands...");
 			getCommand("testarmor").setExecutor(new CommandTestArmor());
 			getCommand("testweapon").setExecutor(new CommandTestWeapon());
+			getCommand("testmob").setExecutor(new CommandTestMob());
 		}
 		
 		// Done, done, and done!

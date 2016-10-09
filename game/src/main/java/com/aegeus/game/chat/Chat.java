@@ -28,7 +28,8 @@ public class Chat implements Listener {
 	// Local messages and custom message format
 	private void onChatEvent(AsyncPlayerChatEvent event) {
 		event.setCancelled(true);
-		if(PlayerData.get(event.getPlayer()).getBankWithdraw())	{
+		Player player = event.getPlayer();
+		if(PlayerData.get(player).getBankWithdraw())	{
 			try	{
 				ItemStack module = new ItemStack(Material.BOOK);
 				ItemMeta meta = module.getItemMeta();
@@ -38,22 +39,22 @@ public class Chat implements Listener {
 				lore.add("" + ChatColor.GRAY + ChatColor.ITALIC + "This module can be used to add gold to your bank.");
 				meta.setLore(lore);
 				module.setItemMeta(meta);
-				event.getPlayer().getInventory().addItem(module);
-				PlayerData.get(event.getPlayer()).setBankWithdraw(false);
+				player.getInventory().addItem(module);
+				PlayerData.get(player).setBankWithdraw(false);
 				return;
 			}
 			catch(Exception e)	{
 				parent.getLogger().log(Level.SEVERE, "Could not parse message for bank withdrawal", e);
-				event.getPlayer().sendMessage(ChatColor.RED + "Invalid Number!");
-				PlayerData.get(event.getPlayer()).setBankWithdraw(false);
+				player.sendMessage(ChatColor.RED + "Invalid Number!");
+				PlayerData.get(player).setBankWithdraw(false);
 				return;
 			}
 		}
-		Player player = event.getPlayer();
-		if (PlayerData.get(player).getChatChannel().equals(ChatChannel.GLOBAL)) {
-			ChatManager.sendGlobalChat(player, Helper.colorCodes(event.getMessage()));
-		} else {
-			ChatManager.sendLocalChat(player, Helper.colorCodes(event.getMessage()));
+		switch(PlayerData.get(player).getChatChannel()) {
+			case GLOBAL:
+				ChatManager.sendGlobalChat(player, Helper.colorCodes(event.getMessage()));
+			default:
+				ChatManager.sendLocalChat(player, Helper.colorCodes(event.getMessage()));
 		}
 	}
 }

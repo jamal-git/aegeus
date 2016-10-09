@@ -3,6 +3,7 @@ package com.aegeus.game.item;
 import com.aegeus.game.util.Helper;
 
 public enum ItemRarity {
+	NONE(-2, ""),
 	STARTER(-1, "&9&oStarter"),
 	STANDARD(0, "&7&oStandard"),
 	UNCOMMON(1, "&a&oUncommon"),

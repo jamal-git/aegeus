@@ -7,7 +7,8 @@ import com.aegeus.game.util.Helper;
 
 public class PlanetManager {
 	
-	public static void warpPlayer(Player player, Planet planet){
+	public static void warpPlayer(Player player, Planet.Enum p){
+		Planet planet = p.getPlanet();
 		if(planet.getLevelRequired() > 0
 				&& PlayerData.get(player).getLevel() < planet.getLevelRequired()){
 			player.sendMessage(Helper.colorCodes("&cYou are not a high enough level to warp to " + planet.getName() + "."));
