@@ -48,6 +48,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("roll").setExecutor(new CommandRoll());
 		getCommand("spacecart").setExecutor(new CommandSpaceCart());
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
+		getCommand("codex").setExecutor(new CommandCodex());
 		
 		// Register test commands
 		if(DEBUG) {

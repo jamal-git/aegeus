@@ -100,7 +100,8 @@ public class Server implements Listener {
 			"Too many daggers!",
 			"Kilvre silled it!",
 			"It's high noon somewhere in the world.",
-			"Contrary to popular belief, Silvre did not kill it."};
+			"Contrary to popular belief, Silvre did not kill it."
+	};
 			
 			
 
@@ -159,10 +160,10 @@ public class Server implements Listener {
 	private void onServerListPingEvent(ServerListPingEvent event) {
 		Random random = new Random();
 		if(Bukkit.hasWhitelist()) event.setMotd(Helper.colorCodes(
-			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n"
+			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
 			+ "&cUngergoing maintenance. Stay tuned!"));
 		else event.setMotd(Helper.colorCodes(
-			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n"
+			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
 			+ motds[random.nextInt(motds.length)]));
 	}
 

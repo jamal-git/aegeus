@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.aegeus.game.item.ItemArmor;
 import com.aegeus.game.item.ItemRarity;
+import com.aegeus.game.mobs.Mob;
 
 public class CommandTestArmor implements CommandExecutor {
 
@@ -23,6 +24,8 @@ public class CommandTestArmor implements CommandExecutor {
 		armor.setTier(2);
 		armor.setRarity(ItemRarity.UNIQUE);
 		player.getInventory().addItem(armor.build());
+		
+		Mob.Enum.XYLO.getMob().create(player.getWorld(), player.getLocation());
 		
 		return true;
 	}

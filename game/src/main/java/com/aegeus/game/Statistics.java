@@ -6,19 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 
+import com.aegeus.game.item.ItemArmor;
+import com.aegeus.game.player.EntityData;
 import com.aegeus.game.player.PlayerData;
 import com.aegeus.game.util.Helper;
-
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
 
 public class Statistics implements Listener {
 
@@ -50,17 +48,13 @@ public class Statistics implements Listener {
 	/**
 	 * Updates the statistics of an entity.
 	 * 
-	 * @param entity
-	 *            Entity to update.
+	 * @param entity Entity to update.
 	 */
 	public static void updateStats(LivingEntity entity) {
-		
-		// TODO This should be based off of NBT tags.
-		
-		List<ItemStack> items = new ArrayList<>();
-		int Hp = 5;
-		int HpRegen = 0;
-		int EnergyRegen = 0;
+		List<ItemArmor> items = new ArrayList<>();
+		int hp = 5;
+		int hpRegen = 0;
+		int energyRegen = 0;
 //		int nstr = 0;
 //		int ndef = 0;
 //		int nvit = 0;
@@ -69,40 +63,36 @@ public class Statistics implements Listener {
 //		int ngoldfind = 0;
 		
 		if (entity.getEquipment().getHelmet() != null
-				&& entity.getEquipment().getHelmet().getType() != Material.AIR) {
-			items.add(entity.getEquipment().getLeggings());
-		}
+				&& entity.getEquipment().getHelmet().getType() != Material.AIR)
+			items.add(new ItemArmor(entity.getEquipment().getHelmet()));
+		
 		if (entity.getEquipment().getChestplate() != null
-				&& entity.getEquipment().getChestplate().getType() != Material.AIR) {
-			items.add(entity.getEquipment().getLeggings());
-		}
+				&& entity.getEquipment().getChestplate().getType() != Material.AIR)
+			items.add(new ItemArmor(entity.getEquipment().getChestplate()));
+		
 		if (entity.getEquipment().getLeggings() != null
-				&& entity.getEquipment().getLeggings().getType() != Material.AIR) {
-			items.add(entity.getEquipment().getLeggings());
-		}
+				&& entity.getEquipment().getLeggings().getType() != Material.AIR)
+			items.add(new ItemArmor(entity.getEquipment().getLeggings()));
+		
 		if (entity.getEquipment().getBoots() != null
-				&& entity.getEquipment().getBoots().getType() != Material.AIR) {
-			items.add(entity.getEquipment().getBoots());
-		}
+				&& entity.getEquipment().getBoots().getType() != Material.AIR)
+			items.add(new ItemArmor(entity.getEquipment().getBoots()));
+		
 
-		if(!items.isEmpty()){
-			for(ItemStack item : items){
-				net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
-				NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-				NBTTagCompound aegeus = (compound.hasKey("AegeusInfo")) ? compound.getCompound("AegeusInfo") : new NBTTagCompound();
-				Hp += aegeus.getInt("Hp");
-				HpRegen += (aegeus.hasKey("HpRegen")) ? aegeus.getInt("HpRegen") : 0;
-				EnergyRegen += (aegeus.hasKey("EnergyRegen")) ? aegeus.getInt("EnergyRegen") : 0;
+		if(!items.isEmpty())
+			for(ItemArmor item : items){
+				hp += item.getHp();
+				hpRegen = item.getHpRegen();
+				//energyRegen += armor.getEnergyRegen();
 			}
-		}
 		
 		if (entity.getType().equals(EntityType.PLAYER)) {
-			Hp += 95;
-			PlayerData.get((Player) entity).setHPRegen(HpRegen);
-			PlayerData.get((Player) entity).setEnergyRegen(EnergyRegen);
+			hp += 95;
 		}
 
-		entity.setMaxHealth(Hp);
+		entity.setMaxHealth(hp);
+		EntityData.get(entity).setHPRegen(hpRegen);
+		EntityData.get(entity).setEnergyRegen(energyRegen);
 		
 		if (entity.getType().equals(EntityType.PLAYER)) {
 			updateDisplay((Player) entity);
@@ -111,28 +101,23 @@ public class Statistics implements Listener {
 
 	/**
 	 * Updates the statistics of a player.
-	 * 
-	 * @param parent
-	 *            Parent plugin to use.
-	 * @param player
-	 *            Player to update.
+	 * @param player Player to update.
 	 */
-	public static void updateStats(JavaPlugin parent, Player player) {
+	public static void updateStats(Player player) {
 		updateStats((LivingEntity) player);
 	}
 
 	/**
 	 * Updates the statistic display of a player.
-	 * 
-	 * @param player
-	 *            Player to update.
+	 * @param player Player to update.
 	 */
 	public static void updateDisplay(Player player) {
-		if (PlayerData.get(player).getBossBarHP() == null) {
+		PlayerData data = PlayerData.get(player);
+		if (data.getBossBarHP() == null) {
 			// Create a new Hp BossBar for this player
-			PlayerData.get(player).setBossBarHP(Bukkit.createBossBar("", BarColor.GREEN, BarStyle.SEGMENTED_20));
-			PlayerData.get(player).getBossBarHP().addPlayer(player);
-			PlayerData.get(player).getBossBarHP().setVisible(true);
+			data.setBossBarHP(Bukkit.createBossBar("", BarColor.GREEN, BarStyle.SEGMENTED_20));
+			data.getBossBarHP().addPlayer(player);
+			data.getBossBarHP().setVisible(true);
 		}
 		if (Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp") == null) {
 			// Create an objective for BelowNameHP
@@ -145,8 +130,8 @@ public class Statistics implements Listener {
 		Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp").getScore(player.getName())
 				.setScore((int) Math.round(player.getHealth()));
 		// Set HP BossBar
-		PlayerData.get(player).getBossBarHP().setProgress(player.getHealth() / player.getMaxHealth());
-		PlayerData.get(player).getBossBarHP().setTitle(Helper.colorCodes(
+		data.getBossBarHP().setProgress(player.getHealth() / player.getMaxHealth());
+		data.getBossBarHP().setTitle(Helper.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
 	}
 

@@ -2,8 +2,6 @@ package com.aegeus.game;
 
 import java.util.Random;
 
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -14,7 +12,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,6 +21,8 @@ import com.aegeus.game.item.ItemWeapon;
 import com.aegeus.game.planets.Planet;
 import com.aegeus.game.player.EntityData;
 import com.aegeus.game.util.Helper;
+
+import net.minecraft.server.v1_10_R1.Material;
 
 public class Combat implements Listener {
 
@@ -42,24 +41,19 @@ public class Combat implements Listener {
 			LivingEntity lastHitBy = data.getLastHitBy();
 			if(lastHitBy instanceof Player){
 				Player player = (Player) lastHitBy;
-				if (player.getEquipment().getItemInMainHand() != null){
-					ItemStack item = player.getEquipment().getItemInMainHand();
-					ItemWeapon weapon = new ItemWeapon(item);
-					int Level = weapon.getLevel();
-					int XP = weapon.getXP();
-					if(Level >= 1){
-						XP += Math.ceil(entity.getMaxHealth() / 500);
-						if(XP >= Helper.calcMaxXP(Level)){
-							XP = 0;
-							Level += 1;
-							weapon.setLevel(Level);
-							player.sendMessage(Helper.colorCodes("&6Your weapon has reached &lLevel " + Level + "&6."));
-							player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 1);
-						}
-						weapon.setXP(XP);
-						item = weapon.build();
-						player.getEquipment().setItemInMainHand(item);
+				if (player.getEquipment().getItemInMainHand() != null
+						&& player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
+					ItemWeapon weapon = new ItemWeapon(player.getEquipment().getItemInMainHand());
+					int level = weapon.getLevel();
+					int xp = weapon.getXp();
+					xp += (entity.getMaxHealth() / 500);
+					if(xp > Helper.calcMaxXP(level)) {
+						xp = 0;
+						level += 1;
 					}
+					weapon.setLevel(level);
+					weapon.setXp(xp);
+					player.getEquipment().setItemInMainHand(weapon.build());
 				}
 			}
 		}
@@ -82,8 +76,12 @@ public class Combat implements Listener {
 			if(damager.getEquipment().getItemInMainHand() != null
 					&& damager.getEquipment().getItemInMainHand().getItemMeta() != null) {
 				ItemWeapon weapon = new ItemWeapon(damager.getEquipment().getItemInMainHand());
-				Random random = new Random();
-				e.setDamage(random.nextInt(weapon.getMaxDmg() - weapon.getMinDmg()) + weapon.getMinDmg());
+				if(weapon.getMinDmg() > 0 || weapon.getMaxDmg() > 0)
+					if(weapon.getMaxDmg() > weapon.getMinDmg()) {
+						Random random = new Random();
+						e.setDamage(random.nextInt(weapon.getMaxDmg() - weapon.getMinDmg()) + weapon.getMinDmg());
+					} else
+						e.setDamage(weapon.getMinDmg());
 				if(weapon.getIceDmg() > 0) {
 					e.setDamage(e.getDamage() + (weapon.getIceDmg() * 0.1));
 					entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (3 * weapon.getTier()), 2));
@@ -110,7 +108,7 @@ public class Combat implements Listener {
 				// TODO When alignments are done, only teleport player to the terminal if lawful
 				if(e.getEntity() instanceof Player) {
 					Player p = (Player) e.getEntity();
-					p.teleport(Planet.TERMINAL.getLocation());
+					p.teleport(Planet.Enum.TERMINAL.getPlanet().getLocation());
 				}
 			case ENTITY_ATTACK:
 				if(e.getEntity() instanceof Player) {
@@ -118,17 +116,11 @@ public class Combat implements Listener {
 					notifyAttacked(player, e.getDamage());
 				}
 				if(e.getEntity() instanceof LivingEntity
-						&& ee.getDamager() instanceof LivingEntity) {
-					LivingEntity attacker = (LivingEntity) ee.getDamager();
-					LivingEntity attacked = (LivingEntity) e.getEntity();
-					EntityData data = EntityData.get(attacked);
-					data.setLastHitBy(attacker);
-					if(attacker instanceof Player) {
-						Player player = (Player) attacker;
-						notifyAttack(player, attacked, e.getDamage());
-					}
+						&& ee.getDamager() instanceof Player) {
+					LivingEntity victim = (LivingEntity) e.getEntity();
+					Player attacker = (Player) ee.getDamager();
+					notifyAttack(attacker, victim, e.getDamage());
 				}
-				
 			default:
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();
@@ -156,9 +148,7 @@ public class Combat implements Listener {
 	private void onInventoryClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		new BukkitRunnable() {
-			public void run() {
-				Statistics.updateStats((LivingEntity) player);
-			}
+			public void run() { Statistics.updateStats(player); }
 		}.runTaskLater(parent, 1);
 	}
 

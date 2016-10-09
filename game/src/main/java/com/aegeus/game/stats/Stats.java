@@ -1,34 +1,22 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.item.ItemArmor;
-
 public interface Stats {
+	
+	public enum Enum {
+		BASIC(new StatsBasic());
+		
+		private final Stats stats;
+		
+		Enum(Stats stats) { this.stats = stats; }
+		public Stats getStats() { return stats; }
+	}
+	
 	public String getName();
-	
-	public default boolean hasHelmet(){
-		return false;
-	}
-	public default boolean hasChestplate(){
-		return false;
-	}
-	public default boolean hasLeggings(){
-		return false;
-	}
-	public default boolean hasBoots(){
-		return false;
-	}
-	
-	public default ItemArmor getHelmet(){
-		return null;
-	}
-	public default ItemArmor getChestplate(){
-		return null;
-	}
-	public default ItemArmor getLeggings(){
-		return null;
-	}
-	public default ItemArmor getBoots(){
-		return null;
-	}
+	public StatsContainer getContainer();
+	public boolean hasHelmet();
+	public boolean hasChestplate();
+	public boolean hasLeggings();
+	public boolean hasBoots();
+	public boolean hasWeapon();
 	
 }
