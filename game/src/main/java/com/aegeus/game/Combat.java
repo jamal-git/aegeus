@@ -2,6 +2,7 @@ package com.aegeus.game;
 
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,8 +23,6 @@ import com.aegeus.game.planets.Planet;
 import com.aegeus.game.player.EntityData;
 import com.aegeus.game.util.Helper;
 
-import net.minecraft.server.v1_10_R1.Material;
-
 public class Combat implements Listener {
 
 	private JavaPlugin parent;
@@ -42,7 +41,7 @@ public class Combat implements Listener {
 			if(lastHitBy instanceof Player){
 				Player player = (Player) lastHitBy;
 				if (player.getEquipment().getItemInMainHand() != null
-						&& player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
+						&& !player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
 					ItemWeapon weapon = new ItemWeapon(player.getEquipment().getItemInMainHand());
 					int level = weapon.getLevel();
 					int xp = weapon.getXp();
