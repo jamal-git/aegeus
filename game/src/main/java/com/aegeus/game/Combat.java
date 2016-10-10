@@ -103,13 +103,16 @@ public class Combat implements Listener {
 			case PROJECTILE:
 				// TODO Discuss this as this may not be final
 				ee.getDamager().remove();
+				break;
 			case VOID:
 				// TODO When alignments are done, only teleport player to the terminal if lawful
 				if(e.getEntity() instanceof Player) {
 					Player p = (Player) e.getEntity();
 					p.teleport(Planet.Enum.TERMINAL.getPlanet().getLocation());
 				}
+				break;
 			case ENTITY_ATTACK:
+				parent.getLogger().info("entity");
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();
 					notifyAttacked(player, e.getDamage());
@@ -120,7 +123,9 @@ public class Combat implements Listener {
 					Player attacker = (Player) ee.getDamager();
 					notifyAttack(attacker, victim, e.getDamage());
 				}
+				break;
 			default:
+				parent.getLogger().info("default");
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();
 					notifyAttacked(player, e.getDamage());
