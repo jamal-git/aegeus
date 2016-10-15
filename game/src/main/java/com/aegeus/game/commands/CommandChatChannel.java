@@ -5,8 +5,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.game.chat.ChatChannel;
-import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.chat.Chat;
+import com.aegeus.game.data.Data;
+import com.aegeus.game.data.PlayerData;
 import com.aegeus.game.util.Helper;
 
 public class CommandChatChannel implements CommandExecutor {
@@ -17,19 +18,16 @@ public class CommandChatChannel implements CommandExecutor {
 		if(args.length < 1) return false;
 		
 		Player player = (Player) sender;
+		String search = args[0];
+		Chat.Channel channel = Chat.Channel.getByShortcuts(search);
+		if(channel == null) return false;
 		
-		if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("local")) {
-			PlayerData.get(player).setChatChannel(ChatChannel.LOCAL);
-			player.sendMessage(Helper.colorCodes(
-					"Chat channel set to Local."));
-			return true;
-		} else if (args[0].equalsIgnoreCase("gl") || args[0].equalsIgnoreCase("global")) {
-			PlayerData.get(player).setChatChannel(ChatChannel.GLOBAL);
-			player.sendMessage(Helper.colorCodes(
-					"Chat channel set to Global."));
-			return true;
-		}
-		return false;
+		PlayerData pd = Data.getPlayerData(player);
+		pd.setChatChannel(channel);
+		
+		player.sendMessage(Helper.colorCodes("&7Default chat channel set to &b" + channel.getName() + "."));
+		
+		return true;
 	}
 
 }

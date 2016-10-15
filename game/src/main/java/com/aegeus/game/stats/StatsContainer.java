@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.bukkit.Material;
 
-import com.aegeus.game.item.ItemArmor;
-import com.aegeus.game.item.ItemWeapon;
+import com.aegeus.game.item.Armor;
+import com.aegeus.game.item.Weapon;
 import com.google.common.collect.Lists;
 
 public class StatsContainer {
@@ -84,15 +84,15 @@ public class StatsContainer {
 	public List<WeaponPossibility> getAllWeapons() { return weapons; }
 	public WeaponPossibility getWeapon() { return weapons.get(random.nextInt(weapons.size())); }
 	
-	public ItemArmor get(ArmorPossibility p, float f) {
-		ItemArmor armor = new ItemArmor(p.material);
+	public Armor get(ArmorPossibility p, float f) {
+		Armor armor = new Armor(p.material);
 		armor.setTier(p.tier);
 		armor.setHp(Math.round(f * (p.maxHp)) + p.minHp);
 		return armor;
 	}
 	
-	public ItemWeapon get(WeaponPossibility p, float f) {
-		ItemWeapon weapon = new ItemWeapon(p.material);
+	public Weapon get(WeaponPossibility p, float f) {
+		Weapon weapon = new Weapon(p.material);
 		weapon.setTier(p.tier);
 		int min = Math.round(f * (p.maxDmg - p.range)) + p.minDmg;
 		int max = Math.round(random.nextInt(p.range) + min);

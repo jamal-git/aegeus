@@ -14,7 +14,7 @@ import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagDouble;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
 
-public class ItemWeapon extends Item {
+public class Weapon extends Item {
 	
 	private int tier = 0;
 	
@@ -28,25 +28,25 @@ public class ItemWeapon extends Item {
 	private int level = 0;
 	private int xp = 0;
 	
-	private ItemRarity rarity = ItemRarity.NONE;
+	private Rarity rarity = Rarity.NONE;
 	
-	public ItemWeapon(Material material) {
+	public Weapon(Material material) {
 		super(material);
 	}
 	
-	public ItemWeapon(ItemStack item){
+	public Weapon(ItemStack item){
 		super(item);
 		NBTTagCompound aegeus = Item.getAegeusInfo(item);
 		if(aegeus != null){
-			tier = aegeus.getInt("tier");
-			minDmg = aegeus.getInt("minDmg");
-			maxDmg = aegeus.getInt("maxDmg");
+			tier = (aegeus.hasKey("tier")) ? aegeus.getInt("tier") : 0;
+			minDmg = (aegeus.hasKey("minDmg")) ? aegeus.getInt("minDmg") : 0;
+			maxDmg = (aegeus.hasKey("maxDmg")) ? aegeus.getInt("maxDmg") : 0;
 			fireDmg = (aegeus.hasKey("fireDmg")) ? aegeus.getInt("fireDmg") : 0;
 			iceDmg = (aegeus.hasKey("iceDmg")) ? aegeus.getInt("iceDmg") : 0;
 			lifeSteal = (aegeus.hasKey("lifeSteal")) ? aegeus.getFloat("lifeSteal") : 0;
 			level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
 			xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
-			rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
+			rarity = (aegeus.hasKey("rarity")) ? Rarity.getById(aegeus.getInt("rarity")) : Rarity.NONE;
 		}
 	}
 	
@@ -116,39 +116,31 @@ public class ItemWeapon extends Item {
 		return xp;
 	}
 	
-	public void setRarity(ItemRarity rarity){
+	public void setRarity(Rarity rarity){
 		this.rarity = rarity;
 	}
 	
-	public ItemRarity getRarity(){
+	public Rarity getRarity(){
 		return rarity;
 	}
 	
-	public static List<String> getLore(ItemStack item){
-		NBTTagCompound aegeus = Item.getAegeusInfo(item);
-		if(aegeus != null){
-			int minDmg = aegeus.getInt("minDmg");
-			int maxDmg = aegeus.getInt("maxDmg");
-			int fireDmg = (aegeus.hasKey("fireDmg")) ? aegeus.getInt("fireDmg") : 0;
-			int iceDmg = (aegeus.hasKey("iceDmg")) ? aegeus.getInt("iceDmg") : 0;
-			int lifeSteal = (aegeus.hasKey("lifeSteal")) ? aegeus.getInt("lifeSteal") : 0;
-			int level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
-			int xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
-			ItemRarity rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
-			List<String> lore = new ArrayList<>();
-			if(level >= 2) lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + " &6(+" + Helper.calcWepLevelBuff(minDmg, level) + ")"));
-			else lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
-			if(fireDmg >= 1) lore.add(Helper.colorCodes("&cFIRE DMG: +" + fireDmg));
-			if(iceDmg >= 1) lore.add(Helper.colorCodes("&cICE DMG: +" + iceDmg));
-			if(lifeSteal >= 1) lore.add(Helper.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
-			if(level >= 1){
-				int maxXp = Math.round(Helper.calcMaxXP(level));
-				lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
-			}
-			if(rarity != null) lore.add(Helper.colorCodes(rarity.getLore()));
-			return lore;
+	@Override
+	public List<String> getLore(){
+		List<String> lore = new ArrayList<>();
+		if(level >= 2)
+			lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + " &6(+" + Helper.calcWepLevelBuff(minDmg, level) + ")"));
+		else
+			lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
+		if(fireDmg >= 1) lore.add(Helper.colorCodes("&cFIRE DMG: +" + fireDmg));
+		if(iceDmg >= 1) lore.add(Helper.colorCodes("&cICE DMG: +" + iceDmg));
+		if(lifeSteal >= 1) lore.add(Helper.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
+		if(level >= 1) {
+			int maxXp = Math.round(Helper.calcMaxXP(level));
+			lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
 		}
-		return null;
+		if(rarity != null && !rarity.getLore().equalsIgnoreCase(""))
+			lore.add(Helper.colorCodes(rarity.getLore()));
+		return lore;
 	}
 	
 	@Override
@@ -165,11 +157,11 @@ public class ItemWeapon extends Item {
 		aegeus.set("lifeSteal", new NBTTagDouble(lifeSteal));
 		aegeus.set("level", new NBTTagInt(level));
 		aegeus.set("xp", new NBTTagInt(xp));
-		aegeus.set("rarity", new NBTTagInt(rarity.getTypeID()));
+		aegeus.set("rarity", new NBTTagInt(rarity.getId()));
 		compound.set("AegeusInfo", aegeus);
 		nmsStack.setTag(compound);
 		item = CraftItemStack.asBukkitCopy(nmsStack);
-		lore = getLore(item);
+		lore = getLore();
 		ItemMeta meta = item.getItemMeta();
 		if(name!=null) meta.setDisplayName(name);
 		if(lore!=null) meta.setLore(lore);

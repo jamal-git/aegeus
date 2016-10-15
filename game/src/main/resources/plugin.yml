@@ -30,6 +30,8 @@ commands:
       description: Test weapons.
     testarmor:
       description: Test armor.
+    testmob:
+      description: Test mobs.
     testinv:
       description: Test inventory.
     spacecart:

@@ -6,26 +6,25 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.game.item.ItemRarity;
-import com.aegeus.game.item.ItemWeapon;
+import com.aegeus.game.item.ItemParser;
+import com.aegeus.game.item.Weapon;
 
 public class CommandTestWeapon implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(!(sender instanceof Player)) return false;
+		if(args.length < 1) return false;
 		
 		Player player = (Player) sender;
 		
-		ItemWeapon wep = new ItemWeapon(Material.DIAMOND_AXE);
-		wep.setName("&dMythripper");
-		wep.setDmg(152, 203);
-		wep.setFireDmg(34);
-		wep.setLifeSteal(0.34);
-		wep.setTier(5);
-		wep.setRarity(ItemRarity.RARE);
+		Material material = Material.getMaterial(args[0]);
+		if(material == null) return false;
 		
-		player.getInventory().addItem(wep.build());
+		Weapon weapon = ItemParser.parseWeapon(new Weapon(material), args);
+	
+		player.getInventory().addItem(weapon.build());
+		
 		return true;
 	}
 

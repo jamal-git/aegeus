@@ -2,12 +2,12 @@ package com.aegeus.game.stats;
 
 public interface Stats {
 	
-	public enum Enum {
+	public static enum Premade {
 		BASIC(new StatsBasic());
 		
 		private final Stats stats;
 		
-		Enum(Stats stats) { this.stats = stats; }
+		Premade(Stats stats) { this.stats = stats; }
 		public Stats getStats() { return stats; }
 	}
 	
@@ -18,5 +18,6 @@ public interface Stats {
 	public boolean hasLeggings();
 	public boolean hasBoots();
 	public boolean hasWeapon();
+	public float getChance();
 	
 }

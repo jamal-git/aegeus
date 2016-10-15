@@ -9,6 +9,7 @@ public class StatsBasic implements Stats {
 	private static final String name = "Basic";
 	private final Random random = new Random();
 	private final StatsContainer container = new StatsContainer();
+	private final float chance = 0.16f;
 	
 	@Override public String getName() { return name; }
 	@Override public StatsContainer getContainer() { return container; }
@@ -17,6 +18,7 @@ public class StatsBasic implements Stats {
 	@Override public boolean hasLeggings() { return random.nextBoolean(); }
 	@Override public boolean hasBoots() { return random.nextBoolean(); }
 	@Override public boolean hasWeapon() { return true; }
+	@Override public float getChance() { return chance; }
 	
 	public StatsBasic() {
 		container.addHelmets(

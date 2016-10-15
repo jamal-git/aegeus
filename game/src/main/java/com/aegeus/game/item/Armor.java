@@ -12,25 +12,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.aegeus.game.util.Helper;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.NBTTagFloat;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
 
-public class ItemArmor extends Item {
+public class Armor extends Item {
+	
+	private int tier = 0;
 	
 	private int hp = 0;
 	private int hpRegen = 0;
+	private float energyRegen = 0;
 	
-	private int tier = 0;
 	private int level = 0;
 	private int xp = 0;
 	
-	private ItemRarity rarity = ItemRarity.NONE;
+	private Rarity rarity = Rarity.NONE;
 	//private List<ArmorRune> runes = new ArrayList<>();
 	
-	public ItemArmor(Material material) {
+	public Armor(Material material) {
 		super(material);
 	}
 	
-	public ItemArmor(ItemStack item){
+	public Armor(ItemStack item){
 		super(item);
 		NBTTagCompound aegeus = Item.getAegeusInfo(item);
 		if(aegeus != null){
@@ -39,7 +42,7 @@ public class ItemArmor extends Item {
 			tier = aegeus.getInt("tier");
 			level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
 			xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
-			rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
+			rarity = (aegeus.hasKey("rarity")) ? Rarity.getById(aegeus.getInt("rarity")) : Rarity.NONE;
 		}
 	}
 	
@@ -63,7 +66,7 @@ public class ItemArmor extends Item {
 		this.tier = tier;
 	}
 	
-	public void setRarity(ItemRarity rarity){
+	public void setRarity(Rarity rarity){
 		this.rarity = rarity;
 	}
 	
@@ -71,19 +74,18 @@ public class ItemArmor extends Item {
 	//	return runes;
 	//}
 	
-	public static List<String> buildLore(ItemStack item){
-		NBTTagCompound aegeus = Item.getAegeusInfo(item);
-		if(aegeus != null){
-			int hp = aegeus.getInt("hp");
-			int hpRegen = (aegeus.hasKey("hpRegen")) ? aegeus.getInt("hpRegen") : 0;
-			String rarity = (aegeus.hasKey("rarity")) ? aegeus.getString("rarity") : "";
-			List<String> lore = new ArrayList<>();
-			lore.add(Helper.colorCodes("&cHP: +" + hp));
-			if(hpRegen > 0) lore.add(Helper.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
-			if(rarity != "") lore.add(Helper.colorCodes(rarity));
-			return lore;
+	public List<String> getLore(){
+		List<String> lore = new ArrayList<>();
+		lore.add(Helper.colorCodes("&cHP: +" + hp));
+		if(hpRegen > 0) lore.add(Helper.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
+		if(energyRegen > 0) lore.add(Helper.colorCodes(("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%")));
+		if(level >= 1) {
+			int maxXp = Math.round(Helper.calcMaxXP(level));
+			lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
 		}
-		return null;
+		if(rarity != null && !rarity.getLore().equalsIgnoreCase(""))
+			lore.add(Helper.colorCodes(rarity.getLore()));
+		return lore;
 	}
 	
 	@Override
@@ -95,13 +97,14 @@ public class ItemArmor extends Item {
 		aegeus.set("tier", new NBTTagInt(tier));
 		aegeus.set("hp", new NBTTagInt(hp));
 		aegeus.set("hpRegen", new NBTTagInt(hpRegen));
+		aegeus.set("energyRegen", new NBTTagFloat(energyRegen));
 		aegeus.set("level", new NBTTagInt(level));
 		aegeus.set("xp", new NBTTagInt(xp));
-		aegeus.set("rarity", new NBTTagInt(rarity.getTypeID()));
+		aegeus.set("rarity", new NBTTagInt(rarity.getId()));
 		compound.set("AegeusInfo", aegeus);
 		nmsStack.setTag(compound);
 		item = CraftItemStack.asBukkitCopy(nmsStack);
-		lore = buildLore(item);
+		lore = getLore();
 		ItemMeta meta = item.getItemMeta();
 		if(name!=null) meta.setDisplayName(name);
 		if(lore!=null) meta.setLore(lore);

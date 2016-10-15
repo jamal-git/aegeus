@@ -1,15 +1,15 @@
-package com.aegeus.game.player;
+package com.aegeus.game.data;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 public class EntityData {
 
-	protected static HashMap<LivingEntity, EntityData> data = new HashMap<>();
+	protected static Map<LivingEntity, EntityData> data = new HashMap<>();
 	
 	protected LivingEntity entity;
 	protected UUID uuid;
@@ -35,6 +35,9 @@ public class EntityData {
 		uuid = entity.getUniqueId();
 	}
 	
+	public LivingEntity getEntity() { return entity; }
+	public UUID getUUID() { return uuid; }
+	
 	public LocalDateTime getCombatDate() { return combatDate; }
 	public void triggerCombat() { combatDate = LocalDateTime.now(); }
 	public boolean isInCombat() { return (LocalDateTime.now().isAfter(combatDate.plusSeconds(15))) ? true : false; }
@@ -45,27 +48,10 @@ public class EntityData {
 	public int getLevel() { return level; }
 	public void setLevel(int level) { this.level = level; }
 	
-	public int getHPRegen() { return hpRegen; }
-	public void setHPRegen(int hpRegen) { this.hpRegen = hpRegen; }
+	public int getHpRegen() { return hpRegen; }
+	public void setHpRegen(int hpRegen) { this.hpRegen = hpRegen; }
 	
 	public int getEnergyRegen()	{ return energyRegen; }
 	public void setEnergyRegen(int energyRegen) { this.energyRegen = energyRegen; }
-	
-	
-	public static EntityData get(LivingEntity entity){
-		if(!data.containsKey(entity)){
-			switch(entity.getType()) {
-				case PLAYER:
-					return PlayerData.get((Player) entity);
-				default:
-					data.put(entity, new EntityData(entity));
-			}
-		}
-		return data.get(entity);
-	}
-	
-	public static void remove(LivingEntity entity){
-		data.remove(entity);
-	}
 	
 }

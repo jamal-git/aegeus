@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.data.Data;
 import com.aegeus.game.util.Helper;
 import com.aegeus.game.util.exceptions.NoneNearbyException;
 
@@ -82,7 +82,7 @@ public class ChatManager {
 			target.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "FROM: " + ChatColor.GREEN
 					+ sender.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.WHITE + message.trim());
 			target.playSound(target.getLocation(), "mob.chicken.plop", 100, 1);
-			PlayerData.get(target).setReplyTo(sender);
+			Data.getPlayerData(target).setReplyTo(sender);
 		} else {
 			sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + target.getDisplayName() + ChatColor.RED
 					+ " is offline or does not exist.");

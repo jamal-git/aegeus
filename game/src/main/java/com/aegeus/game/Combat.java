@@ -1,9 +1,13 @@
 package com.aegeus.game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,17 +16,18 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.aegeus.game.item.ItemWeapon;
+import com.aegeus.game.data.Data;
+import com.aegeus.game.data.EntityData;
+import com.aegeus.game.data.MonsterData;
+import com.aegeus.game.item.Weapon;
 import com.aegeus.game.planets.Planet;
-import com.aegeus.game.player.EntityData;
 import com.aegeus.game.util.Helper;
-
-import net.minecraft.server.v1_10_R1.Material;
 
 public class Combat implements Listener {
 
@@ -35,15 +40,40 @@ public class Combat implements Listener {
 	@EventHandler
 	private void onEntityDeath(EntityDeathEvent e){
 		LivingEntity entity = e.getEntity();
-		EntityData data = EntityData.get(entity);
+		EntityData data = Data.get(entity);
+		
+		if(data instanceof MonsterData) {
+			Monster monster = (Monster) entity;
+			MonsterData md = Data.getMonsterData(monster);
+			if(md.getDropChance() > 0) {
+				Random random = new Random();
+				float c = random.nextFloat();
+				if(c <= md.getDropChance()) {
+					c = random.nextFloat();
+					if(c <= 0.45) {
+						List<ItemStack> items = new ArrayList<>();
+						for(ItemStack i : monster.getEquipment().getArmorContents())
+							if(i != null && i.getType() != Material.AIR) items.add(i);
+						if(items.size() >= 1) {
+							int r = random.nextInt(items.size());
+							monster.getWorld().dropItem(monster.getLocation(), items.get(r));
+						}
+					} else {
+						ItemStack i = monster.getEquipment().getItemInMainHand();
+						if(i != null && i.getType() != Material.AIR)
+							monster.getWorld().dropItem(monster.getLocation(), i);
+					}
+				}
+			}
+		}
 		
 		if (data.getLastHitBy() != null){
 			LivingEntity lastHitBy = data.getLastHitBy();
 			if(lastHitBy instanceof Player){
 				Player player = (Player) lastHitBy;
 				if (player.getEquipment().getItemInMainHand() != null
-						&& player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
-					ItemWeapon weapon = new ItemWeapon(player.getEquipment().getItemInMainHand());
+						&& !player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
+					Weapon weapon = new Weapon(player.getEquipment().getItemInMainHand());
 					int level = weapon.getLevel();
 					int xp = weapon.getXp();
 					xp += (entity.getMaxHealth() / 500);
@@ -60,7 +90,7 @@ public class Combat implements Listener {
 		
 		// Clear entity's data if not player
 		if(!(entity instanceof Player))
-			EntityData.remove(entity);
+			Data.remove(entity);
 		
 	}
 	
@@ -75,7 +105,7 @@ public class Combat implements Listener {
 			LivingEntity entity = (LivingEntity) e.getEntity();
 			if(damager.getEquipment().getItemInMainHand() != null
 					&& damager.getEquipment().getItemInMainHand().getItemMeta() != null) {
-				ItemWeapon weapon = new ItemWeapon(damager.getEquipment().getItemInMainHand());
+				Weapon weapon = new Weapon(damager.getEquipment().getItemInMainHand());
 				if(weapon.getMinDmg() > 0 || weapon.getMaxDmg() > 0)
 					if(weapon.getMaxDmg() > weapon.getMinDmg()) {
 						Random random = new Random();
@@ -104,12 +134,14 @@ public class Combat implements Listener {
 			case PROJECTILE:
 				// TODO Discuss this as this may not be final
 				ee.getDamager().remove();
+				break;
 			case VOID:
 				// TODO When alignments are done, only teleport player to the terminal if lawful
 				if(e.getEntity() instanceof Player) {
 					Player p = (Player) e.getEntity();
-					p.teleport(Planet.Enum.TERMINAL.getPlanet().getLocation());
+					p.teleport(Planet.TERMINAL.getWorld().getSpawnLocation());
 				}
+				break;
 			case ENTITY_ATTACK:
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();
@@ -121,6 +153,7 @@ public class Combat implements Listener {
 					Player attacker = (Player) ee.getDamager();
 					notifyAttack(attacker, victim, e.getDamage());
 				}
+				break;
 			default:
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();

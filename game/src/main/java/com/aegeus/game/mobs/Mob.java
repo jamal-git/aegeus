@@ -5,22 +5,21 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
-import com.aegeus.game.planets.Planet;
 import com.aegeus.game.stats.Stats;
 
 public interface Mob {
 	
-	public enum Enum {
-		XYLO(new MobXylo());
+	public enum Premade {
+		BANDIT(new MobBandit());
 		
 		private final Mob mob;
 		
-		Enum(Mob mob) {
+		Premade(Mob mob) {
 			this.mob = mob;
 		}
 		
-		public static Enum byName(String name) {
-			for(Enum mob : values())
+		public static Premade byName(String name) {
+			for(Premade mob : values())
 				if(mob.getMob().getName().equalsIgnoreCase(name))
 					return mob;
 			return null;
@@ -33,7 +32,6 @@ public interface Mob {
 	public String getDescription();
 	public EntityType[] getTypes();
 	public Stats getStats();
-	public Planet.Enum[] getPlanets();
 	public LivingEntity create(World world, Location loc);
 	public LivingEntity prepare(LivingEntity entity);
 }
