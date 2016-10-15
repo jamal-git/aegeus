@@ -16,7 +16,6 @@ import net.minecraft.server.v1_10_R1.NBTTagInt;
 
 public class Armor extends Item {
 	
-	private ItemType type = ItemType.ARMOR;
 	private int hp = 0;
 	private int hpRegen = 0;
 	
@@ -93,7 +92,6 @@ public class Armor extends Item {
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		NBTTagCompound aegeus = new NBTTagCompound();
-		aegeus.set("type", new NBTTagInt(type.getId()));
 		aegeus.set("tier", new NBTTagInt(tier));
 		aegeus.set("hp", new NBTTagInt(hp));
 		aegeus.set("hpRegen", new NBTTagInt(hpRegen));

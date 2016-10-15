@@ -57,12 +57,6 @@ public class Item {
 		lore.add(Helper.colorCodes(line));
 	}
 	
-	public static ItemType getItemType(ItemStack item){
-		NBTTagCompound aegeus = getAegeusInfo(item);
-		if(aegeus != null) return ItemType.getById(aegeus.getInt("type"));
-		return null;
-	}
-	
 	public static NBTTagCompound getAegeusInfo(ItemStack item){
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound compound;
