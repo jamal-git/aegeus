@@ -14,8 +14,9 @@ import com.aegeus.game.util.Helper;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagInt;
 
-public class ItemArmor extends Item {
+public class Armor extends Item {
 	
+	private ItemType type = ItemType.ARMOR;
 	private int hp = 0;
 	private int hpRegen = 0;
 	
@@ -23,14 +24,14 @@ public class ItemArmor extends Item {
 	private int level = 0;
 	private int xp = 0;
 	
-	private ItemRarity rarity = ItemRarity.NONE;
+	private Rarity rarity = Rarity.NONE;
 	//private List<ArmorRune> runes = new ArrayList<>();
 	
-	public ItemArmor(Material material) {
+	public Armor(Material material) {
 		super(material);
 	}
 	
-	public ItemArmor(ItemStack item){
+	public Armor(ItemStack item){
 		super(item);
 		NBTTagCompound aegeus = Item.getAegeusInfo(item);
 		if(aegeus != null){
@@ -39,7 +40,7 @@ public class ItemArmor extends Item {
 			tier = aegeus.getInt("tier");
 			level = (aegeus.hasKey("level")) ? aegeus.getInt("level") : 0;
 			xp = (aegeus.hasKey("xp")) ? aegeus.getInt("xp") : 0;
-			rarity = (aegeus.hasKey("rarity")) ? ItemRarity.fromTypeID(aegeus.getInt("rarity")) : ItemRarity.NONE;
+			rarity = (aegeus.hasKey("rarity")) ? Rarity.getById(aegeus.getInt("rarity")) : Rarity.NONE;
 		}
 	}
 	
@@ -63,7 +64,7 @@ public class ItemArmor extends Item {
 		this.tier = tier;
 	}
 	
-	public void setRarity(ItemRarity rarity){
+	public void setRarity(Rarity rarity){
 		this.rarity = rarity;
 	}
 	
@@ -92,12 +93,13 @@ public class ItemArmor extends Item {
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		NBTTagCompound aegeus = new NBTTagCompound();
+		aegeus.set("type", new NBTTagInt(type.getId()));
 		aegeus.set("tier", new NBTTagInt(tier));
 		aegeus.set("hp", new NBTTagInt(hp));
 		aegeus.set("hpRegen", new NBTTagInt(hpRegen));
 		aegeus.set("level", new NBTTagInt(level));
 		aegeus.set("xp", new NBTTagInt(xp));
-		aegeus.set("rarity", new NBTTagInt(rarity.getTypeID()));
+		aegeus.set("rarity", new NBTTagInt(rarity.getId()));
 		compound.set("AegeusInfo", aegeus);
 		nmsStack.setTag(compound);
 		item = CraftItemStack.asBukkitCopy(nmsStack);

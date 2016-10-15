@@ -1,6 +1,5 @@
 package com.aegeus.game;
 
-import java.util.HashMap;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,22 +8,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aegeus.common.Common;
-import com.aegeus.game.player.PlayerData;
+import com.aegeus.game.data.Data;
 import com.aegeus.game.util.Helper;
 
 public class Server implements Listener {
 
-//	private JavaPlugin parent;
+	private JavaPlugin parent;
 
 	public Server(JavaPlugin parent) {
-//		this.parent = parent;
+		this.parent = parent;
 //		Runnable checkBySecond = new Runnable() {
 //			public void run() {
 //				if (buffLootTime > 0) {
@@ -72,10 +70,8 @@ public class Server implements Listener {
 //		executor.scheduleAtFixedRate(checkBySecond, 0, 1, TimeUnit.SECONDS);
 	}
 
-	public static int buffLootTime = 0;
-	public static int rebootTime = 7200;
-
-	public static HashMap<Player, Boolean> playerCombatLog = new HashMap<>();
+//	private int buffLootTime = 0;
+//	private int rebootTime = 7200;
 
 	private final String[] motds = { // List of MOTDs
 			"Is that supposed to be a meme?",
@@ -100,59 +96,69 @@ public class Server implements Listener {
 			"Too many daggers!",
 			"Kilvre silled it!",
 			"It's high noon somewhere in the world.",
-			"Contrary to popular belief, Silvre did not kill it."
-	};
-			
-			
+			"Contrary to popular belief, Silvre did not kill it.",
+			"There's something different about this place..."
+	};		
 
 	@EventHandler
-	private void onLoginEvent(PlayerLoginEvent event) {
-		if (rebootTime <= 300) {
-			event.setResult(Result.KICK_OTHER);
-			event.setKickMessage("The server is about to reboot.");
-		}
+	private void onLoginEvent(PlayerLoginEvent e) {
+		
 	}
 
 	@EventHandler
-	private void onCommandEvent(ServerCommandEvent event) {
-		for(Player player : Bukkit.getOnlinePlayers()){
-			if(player.isOp()) player.sendMessage(Helper.colorCodes(
-					"&8" + event.getSender().getName() + " executed " + event.getCommand()));
-		}
+	private void onCommandEvent(ServerCommandEvent e) {
+		Bukkit.getOperators().stream()
+			.filter((p) -> p.isOnline())
+			.map((p) -> (Player) p)
+			.forEach((p) -> p.sendMessage(Helper.colorCodes(
+					"&8" + e.getSender() + " > " + e.getCommand())));
 	}
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	// Login messages and initial player setup
 	// TODO clean this
-	private void onJoinEvent(PlayerJoinEvent event) throws InterruptedException {
-		Player player = event.getPlayer();
-		event.setJoinMessage("");
+	private void onJoinEvent(PlayerJoinEvent e) throws InterruptedException {
+		Player player = e.getPlayer();
+		e.setJoinMessage("");
 		player.setHealthScaled(true);
 		player.setHealthScale(20);
-		if (!player.hasPlayedBefore()) {
-			player.sendTitle("", Helper.colorCodes("&bWelcome."));
-		} else {
-			player.sendTitle("", Helper.colorCodes("&fWelcome back."));
-		}
-		for (int i = 0; i < 10; i++) {
-			player.sendMessage(" ");
-		}
-		player.sendMessage(Helper.colorCodes(
-				"          &bAegeus &f&lMMORPG&f\n" +
-				"          &b� &7Build &b" + Common.BUILD + " &7(&o" + Common.BUILD_NOTE + "&7)\n" +
-				"          &7Modify game settings with &b/settings"));
-		for (int i = 0; i < 3; i++) {
-			player.sendMessage(" ");
-		}
+		
 		Statistics.updateStats(player);
+		
+		if (!player.hasPlayedBefore()) player.sendTitle("", Helper.colorCodes("&bWelcome."));
+		else player.sendTitle("", Helper.colorCodes("&fWelcome back."));
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(parent, new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < 10; i++)
+					player.sendMessage(" ");
+				
+				player.sendMessage(Helper.colorCodes(
+						"          &bAegeus &f&lMMORPG&f\n" +
+						"          &b• &7Build &b" + Common.BUILD + " &7(&o" + Common.BUILD_NOTE + "&7)\n" +
+						"          &7Modify game settings with &b/settings"));
+				
+				for (int i = 0; i < 2; i++)
+					player.sendMessage(" ");
+				
+				if(Bukkit.getOnlinePlayers().size() == 1)
+					player.sendMessage(Helper.colorCodes(
+							"&8That's strange. It's quiet around here, like everyone has gone away. Why's that..? Have you arrived early, or is the universe arriving late?"
+					));
+				
+				player.sendMessage(" ");
+			}
+		}, 2);
+		
 	}
 
 	@EventHandler
 	// Clear user information and punish combat loggers
-	private void onLogoutEvent(PlayerQuitEvent event) {
-		event.setQuitMessage("");
-		PlayerData.remove(event.getPlayer());
+	private void onLogoutEvent(PlayerQuitEvent e) {
+		e.setQuitMessage("");
+		Data.remove(e.getPlayer());
 	}
 
 	@EventHandler
@@ -161,7 +167,7 @@ public class Server implements Listener {
 		Random random = new Random();
 		if(Bukkit.hasWhitelist()) event.setMotd(Helper.colorCodes(
 			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
-			+ "&cUngergoing maintenance. Stay tuned!"));
+			+ "&cUndergoing maintenance. Stay tuned!"));
 		else event.setMotd(Helper.colorCodes(
 			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
 			+ motds[random.nextInt(motds.length)]));

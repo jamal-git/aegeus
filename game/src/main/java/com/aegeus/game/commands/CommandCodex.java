@@ -10,20 +10,22 @@ import com.aegeus.game.planets.Planet;
 public class CommandCodex implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(args.length < 2) return false;
 		String type = args[0].toLowerCase();
 		String search = args[1].toLowerCase();
 		switch(type) {
 			case "planet":
-				Planet planet = Planet.Enum.byName(search).getPlanet();
+				Planet planet = Planet.getByName(search);
+				if(planet == null) return false;
 				sender.sendMessage(planet.getName());
-				sender.sendMessage(planet.getDescription());
+				sender.sendMessage("&o" + planet.getDescription());
 				sender.sendMessage("Level required: " + planet.getLevelRequired());
 				return true;
 			case "mob":
-				Mob mob = Mob.Enum.byName(search).getMob();
+				Mob mob = Mob.Premade.byName(search).getMob();
+				if(mob == null) return false;
 				sender.sendMessage(mob.getName());
-				sender.sendMessage(mob.getDescription());
-				sender.sendMessage("Stats: " + mob.getStats().getName());
+				sender.sendMessage("&o" + mob.getDescription());
 				return true;
 			default: return false;
 		}

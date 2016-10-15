@@ -1,29 +1,33 @@
 package com.aegeus.game.item;
 
 public enum ItemType {
-	WEAPON(0),
-	ARMOR(1),
-	PICKAXE(2);
+
+	NONE(-1, "None"),
+	WEAPON(0, "Weapon"),
+	ARMOR(1, "Armor"),
+	PICKAXE(2, "Pickaxe");
 	
-	private int typeID;
+	private int id;
+	private String name;
 	
-	ItemType(int typeID){
-		this.typeID = typeID;
+	ItemType(int id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 	
-	public int getTypeID(){
-		return typeID;
-	}
+	public int getId() { return id; }
+	public String getName() { return name; }
 	
-	public static ItemType fromTypeID(int typeID){
-		switch(typeID){
-			case 0:
-				return WEAPON;
-			case 1:
-				return ARMOR;
-			case 2:
-				return PICKAXE;
-		}
+	public static ItemType getById(int id) {
+		for(ItemType i : ItemType.values())
+			if(i.id == id) return i;
 		return null;
 	}
+	
+	public static ItemType getByName(String name) {
+		for(ItemType i : ItemType.values())
+			if(i.name.equalsIgnoreCase(name)) return i;
+		return null;
+	}
+	
 }

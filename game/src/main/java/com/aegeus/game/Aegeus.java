@@ -2,8 +2,6 @@ package com.aegeus.game;
 
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aegeus.game.chat.Chat;
@@ -20,7 +18,6 @@ public class Aegeus extends JavaPlugin {
 	
 	private final Logger LOGGER = getLogger();
 	private final boolean DEBUG = true;
-	public static SimpleCommandMap cmdMap = new SimpleCommandMap(Bukkit.getServer());
 	
 	@Override
 	public void onEnable() {	

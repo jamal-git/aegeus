@@ -33,12 +33,24 @@ public class Item {
 		this.material = material;
 	}
 	
+	public Material getMaterial() {
+		return material;
+	}
+	
 	public void setName(String name){
 		this.name = Helper.colorCodes(name);
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public void setLore(List<String> lore){
 		this.lore = lore;
+	}
+	
+	public List<String> getLore() {
+		return lore;
 	}
 	
 	public void addLore(String line){
@@ -47,7 +59,7 @@ public class Item {
 	
 	public static ItemType getItemType(ItemStack item){
 		NBTTagCompound aegeus = getAegeusInfo(item);
-		if(aegeus != null) return ItemType.fromTypeID(aegeus.getInt("type"));
+		if(aegeus != null) return ItemType.getById(aegeus.getInt("type"));
 		return null;
 	}
 	
