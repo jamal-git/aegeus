@@ -34,44 +34,36 @@ public class ItemParser {
 	public static Weapon parseWeapon(Weapon weapon, String... args) {
 		weapon = (Weapon) parseItem(weapon, args);
 		for(int i = 1; i < args.length; i++) {
-			String[] pair = args[i].split("=");
-			String key = pair[0];
-			String value = pair[1];
-			switch(key.toLowerCase()) {
-				case "tier":
-					try {
+			try {
+				String[] pair = args[i].split("=");
+				String key = pair[0];
+				String value = pair[1];
+				switch(key.toLowerCase()) {
+					case "tier":
 						int tier = Integer.parseInt(value);
 						weapon.setTier(tier);
 						break;
-					} catch (Exception e) { break; }
-				case "dmg":
-					try {
+					case "dmg":
 						String[] vals = value.split(";");
 						int minDmg = Integer.parseInt(vals[0]);
 						int maxDmg = Integer.parseInt(vals[1]);
 						weapon.setDmg(minDmg, maxDmg);
 						break;
-					} catch (Exception e) { break; }
-				case "firedmg":
-					try {
+					case "firedmg":
 						int fireDmg = Integer.parseInt(value);
 						weapon.setFireDmg(fireDmg);
 						break;
-					} catch (Exception e) { break; }
-				case "icedmg":
-					try {
+					case "icedmg":
 						int iceDmg = Integer.parseInt(value);
 						weapon.setIceDmg(iceDmg);
 						break;
-					} catch (Exception e) { break; }
-				case "lifesteal":
-					try {
+					case "lifesteal":
 						double lifeSteal = Double.parseDouble(value);
 						weapon.setLifeSteal(lifeSteal);
 						break;
-					} catch (Exception e) { break; }
-				default: break;
-			}
+					default: break;
+				}
+			} catch (Exception e) { }
 		}
 		return weapon;
 	}
@@ -79,30 +71,26 @@ public class ItemParser {
 	public static Armor parseArmor(Armor armor, String... args) {
 		armor = (Armor) parseItem(armor, args);
 		for(int i = 1; i < args.length; i++) {
-			String[] pair = args[i].split("=");
-			String key = pair[0];
-			String value = pair[1];
-			switch(key.toLowerCase()) {
-				case "tier":
-					try {
+			try {
+				String[] pair = args[i].split("=");
+				String key = pair[0];
+				String value = pair[1];
+				switch(key.toLowerCase()) {
+					case "tier":
 						int tier = Integer.parseInt(value);
 						armor.setTier(tier);
 						break;
-					} catch (Exception e) { break; }
-				case "hp":
-					try {
+					case "hp":
 						int hp = Integer.parseInt(value);
 						armor.setHp(hp);
 						break;
-					} catch (Exception e) { break; }
-				case "hpregen":
-					try {
+					case "hpregen":
 						int hpRegen = Integer.parseInt(value);
 						armor.setHpRegen(hpRegen);
 						break;
-					} catch (Exception e) { break; }
-				default: break;
-			}
+					default: break;
+				}
+			} catch (Exception e) { }
 		}
 		return armor;
 	}
