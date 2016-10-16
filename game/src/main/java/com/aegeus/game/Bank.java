@@ -57,7 +57,7 @@ public class Bank implements Listener{
 	
 	@EventHandler
 	public void onClickEvent(InventoryClickEvent e)	{
-		if(e.getCurrentItem().getType() == Material.GOLD_BLOCK)	{
+		if(e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.GOLD_BLOCK)	{
 			e.setCancelled(true);
 			Bukkit.getScheduler().runTask(parent, new Runnable()	{
 				public void run()	{
