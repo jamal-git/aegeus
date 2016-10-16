@@ -25,7 +25,7 @@ public class PlayerData extends EntityData {
 	private Inventory bank;
 	private boolean isBankWithdraw = false;
 	
-	public PlayerData(Player player) {
+	protected PlayerData(Player player) {
 		super((LivingEntity) player);
 		this.player = player;
 	}
@@ -65,7 +65,8 @@ public class PlayerData extends EntityData {
 	public void setChatChannel(Chat.Channel chatChannel) { this.chatChannel = chatChannel; }
 	
 	public Inventory getBank() { return bank; }
-	public void setBank(Inventory bank) { this.bank = bank; } 
+//	public void setBank(Bank bank) { this.bank = bank; }
+	public void setBank(Inventory bank) { this.bank = bank; }
 	
 	public boolean getBankWithdraw() { return isBankWithdraw; }
 	public void setBankWithdraw(boolean isBankWithdraw) { this.isBankWithdraw = isBankWithdraw; }

@@ -1,16 +1,11 @@
 package com.aegeus.game.data;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 
 public class EntityData {
-
-	protected static Map<LivingEntity, EntityData> data = new HashMap<>();
-	
 	protected LivingEntity entity;
 	protected UUID uuid;
 	protected LocalDateTime combatDate = LocalDateTime.now().minusSeconds(15);
@@ -30,7 +25,7 @@ public class EntityData {
 //	private int Thorns = 0;
 //	private int GoldFind = 0;
 	
-	public EntityData(LivingEntity entity) {
+	protected EntityData(LivingEntity entity) {
 		this.entity = entity;
 		uuid = entity.getUniqueId();
 	}
