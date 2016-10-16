@@ -17,7 +17,7 @@ import com.aegeus.game.data.Data;
 import com.aegeus.game.data.EntityData;
 import com.aegeus.game.data.PlayerData;
 import com.aegeus.game.item.Armor;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class Statistics implements Listener {
 
@@ -104,7 +104,7 @@ public class Statistics implements Listener {
 			// Create an objective for BelowNameHP
 			Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("hp", "health");
 			Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp")
-					.setDisplayName(Helper.colorCodes("&c�?�"));
+					.setDisplayName(Utility.colorCodes("&c�?�"));
 			Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp").setDisplaySlot(DisplaySlot.BELOW_NAME);
 		}
 		// Set BelowNameHP
@@ -112,7 +112,7 @@ public class Statistics implements Listener {
 				.setScore((int) Math.round(player.getHealth()));
 		// Set HP BossBar
 		pd.getBossBarHp().setProgress(player.getHealth() / player.getMaxHealth());
-		pd.getBossBarHp().setTitle(Helper.colorCodes(
+		pd.getBossBarHp().setTitle(Utility.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
 	}
 

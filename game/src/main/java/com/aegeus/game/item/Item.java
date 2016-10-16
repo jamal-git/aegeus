@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 
@@ -38,7 +38,7 @@ public class Item {
 	}
 	
 	public void setName(String name){
-		this.name = Helper.colorCodes(name);
+		this.name = Utility.colorCodes(name);
 	}
 	
 	public String getName() {
@@ -54,7 +54,7 @@ public class Item {
 	}
 	
 	public void addLore(String line){
-		lore.add(Helper.colorCodes(line));
+		lore.add(Utility.colorCodes(line));
 	}
 	
 	public static NBTTagCompound getAegeusInfo(ItemStack item){

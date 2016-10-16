@@ -1,7 +1,7 @@
 
 package com.aegeus.game.item;
 
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public enum Rarity {
 	NONE(-2, "None", ""),
@@ -19,7 +19,7 @@ public enum Rarity {
 	Rarity(int id, String name, String lore) {
 		this.id = id;
 		this.name = name;
-		this.lore = Helper.colorCodes(lore);
+		this.lore = Utility.colorCodes(lore);
 	}
 
 	public int getId() { return id; }

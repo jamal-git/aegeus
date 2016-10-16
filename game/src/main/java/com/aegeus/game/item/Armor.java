@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagFloat;
@@ -76,15 +76,15 @@ public class Armor extends Item {
 	
 	public List<String> getLore(){
 		List<String> lore = new ArrayList<>();
-		lore.add(Helper.colorCodes("&cHP: +" + hp));
-		if(hpRegen > 0) lore.add(Helper.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
-		if(energyRegen > 0) lore.add(Helper.colorCodes(("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%")));
+		lore.add(Utility.colorCodes("&cHP: +" + hp));
+		if(hpRegen > 0) lore.add(Utility.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
+		if(energyRegen > 0) lore.add(Utility.colorCodes(("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%")));
 		if(level >= 1) {
-			int maxXp = Math.round(Helper.calcMaxXP(level));
-			lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
+			int maxXp = Math.round(Utility.calcMaxXP(level));
+			lore.add(Utility.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
 		}
 		if(rarity != null && !rarity.getLore().equalsIgnoreCase(""))
-			lore.add(Helper.colorCodes(rarity.getLore()));
+			lore.add(Utility.colorCodes(rarity.getLore()));
 		return lore;
 	}
 	

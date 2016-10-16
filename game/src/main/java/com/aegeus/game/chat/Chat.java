@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class Chat implements Listener {
 
@@ -95,9 +95,9 @@ public class Chat implements Listener {
 		}
 		switch(Data.getPlayerData(player).getChatChannel()) {
 			case GLOBAL:
-				ChatManager.sendGlobalChat(player, Helper.colorCodes(event.getMessage())); break;
+				ChatManager.sendGlobalChat(player, Utility.colorCodes(event.getMessage())); break;
 			default:
-				ChatManager.sendLocalChat(player, Helper.colorCodes(event.getMessage())); break;
+				ChatManager.sendLocalChat(player, Utility.colorCodes(event.getMessage())); break;
 		}
 	}
 }

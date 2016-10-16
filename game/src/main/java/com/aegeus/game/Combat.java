@@ -27,7 +27,7 @@ import com.aegeus.game.data.EntityData;
 import com.aegeus.game.data.MonsterData;
 import com.aegeus.game.item.Weapon;
 import com.aegeus.game.planets.Planet;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class Combat implements Listener {
 
@@ -77,7 +77,7 @@ public class Combat implements Listener {
 					int level = weapon.getLevel();
 					int xp = weapon.getXp();
 					xp += (entity.getMaxHealth() / 500);
-					if(xp > Helper.calcMaxXP(level)) {
+					if(xp > Utility.calcMaxXP(level)) {
 						xp = 0;
 						level += 1;
 					}
@@ -167,14 +167,14 @@ public class Combat implements Listener {
 		long hp = Math.round(Math.ceil(attacked.getHealth()));
 		long maxHp = Math.round(Math.ceil(attacked.getMaxHealth()));
 		long dmg = Math.round(Math.ceil(damage));
-		player.sendMessage(Helper.colorCodes("          &e" + dmg + " &l>&f " + name + "&7 [" + hp + " / " + maxHp + "]"));
+		player.sendMessage(Utility.colorCodes("          &e" + dmg + " &l>&f " + name + "&7 [" + hp + " / " + maxHp + "]"));
 	}
 	
 	public void notifyAttacked(Player player, double damage) {
 		long hp = Math.round(Math.ceil(player.getHealth()));
 		long maxHp = Math.round(Math.ceil(player.getMaxHealth()));
 		long dmg = Math.round(Math.ceil(damage));
-		player.sendMessage(Helper.colorCodes("            &c-" + dmg + "&7 [" + hp + " / " + maxHp + "]"));
+		player.sendMessage(Utility.colorCodes("            &c-" + dmg + "&7 [" + hp + " / " + maxHp + "]"));
 	}
 
 	@EventHandler

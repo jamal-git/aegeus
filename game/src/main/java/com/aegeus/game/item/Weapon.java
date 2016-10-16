@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.NBTTagDouble;
@@ -128,18 +128,18 @@ public class Weapon extends Item {
 	public List<String> getLore(){
 		List<String> lore = new ArrayList<>();
 		if(level >= 2)
-			lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + " &6(+" + Helper.calcWepLevelBuff(minDmg, level) + ")"));
+			lore.add(Utility.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + " &6(+" + Utility.calcWepLevelBuff(minDmg, level) + ")"));
 		else
-			lore.add(Helper.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
-		if(fireDmg >= 1) lore.add(Helper.colorCodes("&cFIRE DMG: +" + fireDmg));
-		if(iceDmg >= 1) lore.add(Helper.colorCodes("&cICE DMG: +" + iceDmg));
-		if(lifeSteal >= 1) lore.add(Helper.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
+			lore.add(Utility.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
+		if(fireDmg >= 1) lore.add(Utility.colorCodes("&cFIRE DMG: +" + fireDmg));
+		if(iceDmg >= 1) lore.add(Utility.colorCodes("&cICE DMG: +" + iceDmg));
+		if(lifeSteal >= 1) lore.add(Utility.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
 		if(level >= 1) {
-			int maxXp = Math.round(Helper.calcMaxXP(level));
-			lore.add(Helper.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
+			int maxXp = Math.round(Utility.calcMaxXP(level));
+			lore.add(Utility.colorCodes("&6&oLevel " + level + " &7&o(" + Math.round((xp / maxXp) * 100) + "%)"));
 		}
 		if(rarity != null && !rarity.getLore().equalsIgnoreCase(""))
-			lore.add(Helper.colorCodes(rarity.getLore()));
+			lore.add(Utility.colorCodes(rarity.getLore()));
 		return lore;
 	}
 	

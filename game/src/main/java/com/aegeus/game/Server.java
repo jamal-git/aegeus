@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aegeus.common.Common;
 import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class Server implements Listener {
 
@@ -110,7 +110,7 @@ public class Server implements Listener {
 		Bukkit.getOperators().stream()
 			.filter((p) -> p.isOnline())
 			.map((p) -> (Player) p)
-			.forEach((p) -> p.sendMessage(Helper.colorCodes(
+			.forEach((p) -> p.sendMessage(Utility.colorCodes(
 					"&8" + e.getSender() + " > " + e.getCommand())));
 	}
 
@@ -126,8 +126,8 @@ public class Server implements Listener {
 		
 		Statistics.updateStats(player);
 		
-		if (!player.hasPlayedBefore()) player.sendTitle("", Helper.colorCodes("&bWelcome."));
-		else player.sendTitle("", Helper.colorCodes("&fWelcome back."));
+		if (!player.hasPlayedBefore()) player.sendTitle("", Utility.colorCodes("&bWelcome."));
+		else player.sendTitle("", Utility.colorCodes("&fWelcome back."));
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(parent, new Runnable() {
 			@Override
@@ -135,7 +135,7 @@ public class Server implements Listener {
 				for (int i = 0; i < 10; i++)
 					player.sendMessage(" ");
 				
-				player.sendMessage(Helper.colorCodes(
+				player.sendMessage(Utility.colorCodes(
 						"          &bAegeus &f&lMMORPG&f\n" +
 						"          &b• &7Build &b" + Common.BUILD + " &7(&o" + Common.BUILD_NOTE + "&7)\n" +
 						"          &7Modify game settings with &b/settings"));
@@ -144,7 +144,7 @@ public class Server implements Listener {
 					player.sendMessage(" ");
 				
 				if(Bukkit.getOnlinePlayers().size() == 1)
-					player.sendMessage(Helper.colorCodes(
+					player.sendMessage(Utility.colorCodes(
 							"&8That's strange. It's quiet around here, like everyone has gone away. Why's that..? Have you arrived early, or is the universe arriving late?"
 					));
 				
@@ -165,10 +165,10 @@ public class Server implements Listener {
 	// Random, custom MOTDs
 	private void onServerListPingEvent(ServerListPingEvent event) {
 		Random random = new Random();
-		if(Bukkit.hasWhitelist()) event.setMotd(Helper.colorCodes(
+		if(Bukkit.hasWhitelist()) event.setMotd(Utility.colorCodes(
 			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
 			+ "&cUndergoing maintenance. Stay tuned!"));
-		else event.setMotd(Helper.colorCodes(
+		else event.setMotd(Utility.colorCodes(
 			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
 			+ motds[random.nextInt(motds.length)]));
 	}

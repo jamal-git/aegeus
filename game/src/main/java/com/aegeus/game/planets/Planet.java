@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.aegeus.game.data.Data;
 import com.aegeus.game.data.PlayerData;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public enum Planet {
 	TERMINAL(Bukkit.getWorld("terminal"), "The Terminal", -1, "The hub of universal communication.", 0),
@@ -44,13 +44,13 @@ public enum Planet {
 		PlayerData pd = Data.getPlayerData(player);
 		if(planet.getLevelRequired() > 0
 				&& Data.getPlayerData(player).getLevel() < planet.getLevelRequired()){
-			player.sendMessage(Helper.colorCodes("&cYou are not a high enough level to warp to " + planet.getName() + "."));
+			player.sendMessage(Utility.colorCodes("&cYou are not a high enough level to warp to " + planet.getName() + "."));
 		}
 		else if(Data.getPlayerData(player).getCurrentPlanet().equals(planet)){
-			player.sendMessage(Helper.colorCodes("&cYou are already on " + planet.getName() + "."));
+			player.sendMessage(Utility.colorCodes("&cYou are already on " + planet.getName() + "."));
 		} else {
-			player.sendMessage(Helper.colorCodes("&bYou are heading to " + planet.getName() + "..."));
-			player.sendMessage(Helper.colorCodes("&7&o" + planet.getDescription()));
+			player.sendMessage(Utility.colorCodes("&bYou are heading to " + planet.getName() + "..."));
+			player.sendMessage(Utility.colorCodes("&7&o" + planet.getDescription()));
 			player.teleport(planet.getWorld().getSpawnLocation());
 			pd.setCurrentPlanet(planet);
 		}

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.aegeus.game.chat.Chat;
 import com.aegeus.game.data.Data;
 import com.aegeus.game.data.PlayerData;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class CommandChatChannel implements CommandExecutor {
 
@@ -25,7 +25,7 @@ public class CommandChatChannel implements CommandExecutor {
 		PlayerData pd = Data.getPlayerData(player);
 		pd.setChatChannel(channel);
 		
-		player.sendMessage(Helper.colorCodes("&7Default chat channel set to &b" + channel.getName() + "."));
+		player.sendMessage(Utility.colorCodes("&7Default chat channel set to &b" + channel.getName() + "."));
 		
 		return true;
 	}

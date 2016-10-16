@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.aegeus.game.chat.ChatManager;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 
 public class CommandMessage implements CommandExecutor {
 
@@ -20,11 +20,11 @@ public class CommandMessage implements CommandExecutor {
 		Player target = Bukkit.getPlayer(args[0]);
 		
 		if(player.equals(target)){
-			player.sendMessage(Helper.colorCodes("&cDon't do that! That's weird!"));
+			player.sendMessage(Utility.colorCodes("&cDon't do that! That's weird!"));
 			return true;
 		}
 		
-		String msg = Helper.buildArgString(args, 1);
+		String msg = Utility.buildArgString(args, 1);
 		
 		ChatManager.sendPrivateMessage(player, target, msg.trim());
 		return true;

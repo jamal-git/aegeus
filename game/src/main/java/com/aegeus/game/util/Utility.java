@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
-public class Helper {
+public class Utility {
 	/**
 	 * Calculates rarity based on circular interpolation.
 	 * 

@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Helper;
+import com.aegeus.game.util.Utility;
 import com.aegeus.game.util.exceptions.NoneNearbyException;
 
 public class ChatManager {
@@ -22,31 +22,31 @@ public class ChatManager {
 	}
 	
 	public static void sendGlobalChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Helper.colorCodes(
-				"&b(&lG&b)&7 " + player.getDisplayName() + ": &f" + Helper.colorCodes(msg)));
+		Bukkit.broadcastMessage(Utility.colorCodes(
+				"&b(&lG&b)&7 " + player.getDisplayName() + ": &f" + Utility.colorCodes(msg)));
 	}
 
 	public static void sendTradeChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Helper.colorCodes(
+		Bukkit.broadcastMessage(Utility.colorCodes(
 				"&a(&lT&a)&7 " + player.getDisplayName() + ": &f" + msg));
 	}
 	
 	public static void sendRecruitChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Helper.colorCodes(
+		Bukkit.broadcastMessage(Utility.colorCodes(
 				"&e(&lR&e)&7 " + player.getDisplayName() + ": &f" + msg));
 	}
 	
 	public static void sendBroadcast(String msg){
-		Bukkit.broadcastMessage(Helper.colorCodes(
+		Bukkit.broadcastMessage(Utility.colorCodes(
 				"&e&l>>&e " + msg));
 	}
 	
 	public static void sendLocalChat(Player player, String msg) {
 		try {
-			sendRadialChat(player, Helper.colorCodes(
+			sendRadialChat(player, Utility.colorCodes(
 					"&7" + player.getDisplayName() + ":&f " + msg), true);
 		} catch (NoneNearbyException e){
-			player.sendMessage(Helper.colorCodes(
+			player.sendMessage(Utility.colorCodes(
 					"&7&oYour voice echoes in the wind."));
 		}
 	}
