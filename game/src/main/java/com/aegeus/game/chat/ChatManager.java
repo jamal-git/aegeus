@@ -3,7 +3,6 @@ package com.aegeus.game.chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import com.aegeus.game.data.Data;
@@ -15,13 +14,11 @@ public class ChatManager {
 	public static void sendAutoChat(Player player, String msg){
 		String[] split = msg.split(" ");
 		if(split[0].equalsIgnoreCase("WTB") || split[0].equalsIgnoreCase("WTS") || split[0].equalsIgnoreCase("WTT") ||
-				split[0].equalsIgnoreCase("Buying") || split[0].equalsIgnoreCase("Selling") || split[0].equalsIgnoreCase("Trading")){
+				split[0].equalsIgnoreCase("Buying") || split[0].equalsIgnoreCase("Selling") || split[0].equalsIgnoreCase("Trading"))
 			sendTradeChat(player, msg);
-		} else if (split[0].equalsIgnoreCase("WTR") || split[0].equalsIgnoreCase("Recruiting")){
+		else if (split[0].equalsIgnoreCase("WTR") || split[0].equalsIgnoreCase("Recruiting"))
 			sendRecruitChat(player, msg);
-		} else {
-			sendGlobalChat(player, msg);
-		}
+		else sendGlobalChat(player, msg);
 	}
 	
 	public static void sendGlobalChat(Player player, String msg) {
@@ -41,27 +38,27 @@ public class ChatManager {
 	
 	public static void sendBroadcast(String msg){
 		Bukkit.broadcastMessage(Helper.colorCodes(
-				"&e&l�&e " + msg));
+				"&e&l>>&e " + msg));
 	}
 	
 	public static void sendLocalChat(Player player, String msg) {
 		try {
-			sendRadialChat(player, ChatColor.GRAY + player.getDisplayName() + ":" + ChatColor.WHITE + " " + msg);
+			sendRadialChat(player, Helper.colorCodes(
+					"&7" + player.getDisplayName() + ":&f " + msg), true);
 		} catch (NoneNearbyException e){
-			player.sendMessage("" + ChatColor.GRAY + ChatColor.ITALIC + "Your voice echoes in the wind.");
+			player.sendMessage(Helper.colorCodes(
+					"&7&oYour voice echoes in the wind."));
 		}
 	}
 	
-	public static void sendRadialChat(Player player, String msg) throws NoneNearbyException {
-		player.sendMessage(msg);
+	public static void sendRadialChat(Player player, String msg, boolean sendToSender) throws NoneNearbyException {
+		if(sendToSender) player.sendMessage(msg);
 		boolean peopleNearby = false;
-		for (Entity nearby : player.getNearbyEntities(30, 30, 30)) {
-			if(nearby.getType().equals(EntityType.PLAYER)
-					&& !nearby.equals((Entity) player)){
+		for (Entity nearby : player.getNearbyEntities(30, 30, 30))
+			if(nearby instanceof Player && !nearby.equals((Entity) player)){
 				peopleNearby = true;
 				nearby.sendMessage(msg);
 			}
-		}
 		if(!peopleNearby) throw new NoneNearbyException("No players nearby.");
 	}
 	

@@ -2,7 +2,6 @@ package com.aegeus.game.commands;
 
 import java.util.Random;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,9 +32,10 @@ public class CommandRoll implements CommandExecutor {
 			Player player = (Player) sender;
 			try {
 				ChatManager.sendRadialChat(player, Helper.colorCodes(
-						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."));
-			} catch (NoneNearbyException e){
-				player.sendMessage("" + ChatColor.GRAY + ChatColor.ITALIC + "The sound of your dice rolling echoes in the wind.");
+						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."), true);
+			} catch (NoneNearbyException e) {
+				player.sendMessage(Helper.colorCodes(
+						"&7&oThe sound of your die rolling echoes in the wind."));
 			}
 		}
 		return true;
