@@ -38,7 +38,7 @@ public class Combat implements Listener {
 	}
 
 	@EventHandler
-	private void onEntityDeath(EntityDeathEvent e){
+	private void onDeath(EntityDeathEvent e){
 		LivingEntity entity = e.getEntity();
 		EntityData data = Data.get(entity);
 		
@@ -95,7 +95,7 @@ public class Combat implements Listener {
 	}
 	
 	@EventHandler
-	private void onHit(EntityDamageEvent e) {
+	private void onEntityDamage(EntityDamageEvent e) {
 		EntityDamageByEntityEvent ee = null;
 		if(e instanceof EntityDamageByEntityEvent) // Created DamageByEntity event incase needed
 			ee = (EntityDamageByEntityEvent) e;
@@ -186,7 +186,7 @@ public class Combat implements Listener {
 	}
 
 	@EventHandler
-	private void onHealEvent(EntityRegainHealthEvent event) {
+	private void onEntityHeal(EntityRegainHealthEvent event) {
 		if (event.getEntityType().equals(EntityType.PLAYER)) {
 			Statistics.updateDisplay((Player) event.getEntity());
 		}

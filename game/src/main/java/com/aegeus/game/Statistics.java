@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import com.aegeus.game.data.Data;
@@ -20,29 +21,25 @@ import com.aegeus.game.util.Helper;
 
 public class Statistics implements Listener {
 
-//	private JavaPlugin parent;
+	private JavaPlugin plugin;
 
-	public Statistics(JavaPlugin parent) {
-//		this.parent = parent;
-//		new BukkitRunnable(){
-//			@Override
-//			public void run() {
-//				for(Player player : parent.getServer().getOnlinePlayers()){
-//					if(PlayerData.get(player).InCombat.isBefore(LocalDateTime.now().minusSeconds(15))
-//							&& player.getHealth() < player.getMaxHealth()
-//							&& !player.isDead()){
-//						double hp = player.getHealth();
-//						double maxhp = player.getMaxHealth();
-//						hp += (5 + PlayerData.get(player).getHPRegen());
-//						if(hp > maxhp){
-//							hp = maxhp;
-//						}
-//						player.setHealth(hp);
-//						updateDisplay(player);
-//					}
-//				}
-//			}
-//		}.runTaskTimer(parent, 0, 20);
+	public Statistics(JavaPlugin plugin) {
+		this.plugin = plugin;
+		new BukkitRunnable(){
+			public void run() {
+				for(Player player : Bukkit.getOnlinePlayers())
+					if(!player.isDead() && player.getHealth() < player.getMaxHealth()) {
+						PlayerData pd = Data.getPlayerData(player);
+						if(!pd.isInCombat()) {
+							double health = player.getHealth();
+							double maxHealth = player.getMaxHealth();
+							health += pd.getHpRegen();
+							if(health > maxHealth) health = maxHealth;
+							player.setHealth(health);
+						}
+					}
+			}
+		}.runTaskTimer(plugin, 20, 20);
 	}
 
 	/**
