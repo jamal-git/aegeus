@@ -1,19 +1,12 @@
 target/
 dependency-reduced-pom.xml
-*.class
 
 *.jar
-*.war
-*.ear
+*.iml
 
-hs_err_pid*
-
+.idea/
 .settings/
-.loadpath
-.recommenders
+.floo
+.flooignore
 .project
-.externalToolBuilders/
-*.launch
 .classpath
-.factorypath
-.recommenders/
