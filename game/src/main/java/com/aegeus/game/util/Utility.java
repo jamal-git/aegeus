@@ -31,8 +31,8 @@ public class Utility {
 		return (int) Math.round(50 * (Level * (Level * 0.4)));
 	}
 	
-	public static int calcWepLevelBuff(int MinDmg, int Level){
-		return (int) Math.round((MinDmg * Level) / 65);
+	public static int calcLevelBuff(int value, int level){
+		return (int) Math.round((value * level) / 65);
 	}
 	
 	public static String buildArgString(String[] args, int start) {

@@ -10,21 +10,22 @@ public class EntityData {
 	protected UUID uuid;
 	protected LocalDateTime combatDate = LocalDateTime.now().minusSeconds(15);
 	protected LivingEntity lastHitBy;
-	
+
 	protected int level = 0;
 	protected int hpRegen = 0;
-	protected int energyRegen = 0;
+	protected float energyRegen = 0;
+	protected float defense = 0;
+	protected float magicRes = 0;
+	protected float block = 0;
 	
-//	private int Dex = 0;
-//	private int Str = 0;
-//	private int Int = 0;
-//	private int Vit = 0;
-//	
-//	private int Def = 0;
-//	private int MagRes = 0;
+//	private int eDex = 0;
+	private int eStr = 0;
+	private int eInt = 0;
+	private int eVit = 0;
+
 //	private int Thorns = 0;
 //	private int GoldFind = 0;
-	
+
 	protected EntityData(LivingEntity entity) {
 		this.entity = entity;
 		uuid = entity.getUniqueId();
@@ -35,7 +36,7 @@ public class EntityData {
 	
 	public LocalDateTime getCombatDate() { return combatDate; }
 	public void triggerCombat() { combatDate = LocalDateTime.now(); }
-	public boolean isInCombat() { return (LocalDateTime.now().isAfter(combatDate.plusSeconds(15))) ? true : false; }
+	public boolean isInCombat() { return (LocalDateTime.now().isAfter(combatDate.plusSeconds(15))); }
 	
 	public LivingEntity getLastHitBy() { return lastHitBy; }
 	public void setLastHitBy(LivingEntity entity) { lastHitBy = entity; }
@@ -46,7 +47,23 @@ public class EntityData {
 	public int getHpRegen() { return hpRegen; }
 	public void setHpRegen(int hpRegen) { this.hpRegen = hpRegen; }
 	
-	public int getEnergyRegen()	{ return energyRegen; }
-	public void setEnergyRegen(int energyRegen) { this.energyRegen = energyRegen; }
-	
+	public float getEnergyRegen() { return energyRegen; }
+	public void setEnergyRegen(float energyRegen) { this.energyRegen = energyRegen; }
+
+	public float getDefense() { return defense; }
+	public void setDefense(float defense) { this.defense = defense; }
+
+	public float getMagicRes() { return magicRes; }
+	public void setMagicRes(float magicRes) { this.magicRes = magicRes; }
+
+	public float getBlock() { return block; }
+	public void setBlock(float block) { this.block = block; }
+
+	public void setStr(int eStr) { this.eStr = eStr; }
+	public int getStr() { return eStr; }
+	public void setInt(int eInt) { this.eInt = eInt; }
+	public int getInt() { return eInt; }
+	public void setVit(int eVit) { this.eVit = eVit; }
+	public int getVit() { return eVit; }
+
 }

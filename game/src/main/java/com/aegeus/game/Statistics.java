@@ -21,7 +21,7 @@ import com.aegeus.game.util.Utility;
 
 public class Statistics implements Listener {
 
-	private JavaPlugin plugin;
+	JavaPlugin plugin;
 
 	public Statistics(JavaPlugin plugin) {
 		this.plugin = plugin;
@@ -50,20 +50,26 @@ public class Statistics implements Listener {
 	public static void updateStats(LivingEntity entity) {
 		int hp = 5;
 		int hpRegen = 0;
-		int energyRegen = 0;
-//		int nstr = 0;
-//		int ndef = 0;
-//		int nvit = 0;
-//		int nmagres = 0;
-//		int nthorns = 0;
-//		int ngoldfind = 0;
+		float energyRegen = 0;
+		float defense = 0;
+		float magicRes = 0;
+		float block = 0;
+		int eStr = 0;
+		int eInt = 0;
+		int eVit = 0;
 
 		for(ItemStack i : entity.getEquipment().getArmorContents()) {
 			if(i != null && i.getType().equals(Material.AIR)) {
 				Armor armor = new Armor(i);
 				hp += armor.getHp();
 				hpRegen = armor.getHpRegen();
-				//energyRegen += armor.getEnergyRegen();
+				energyRegen += armor.getEnergyRegen();
+				defense += armor.getDefense();
+				magicRes += armor.getMagicRes();
+				block += armor.getBlock();
+				eStr += armor.getStr();
+				eInt += armor.getInt();
+				eVit += armor.getVit();
 			}
 		}
 		
