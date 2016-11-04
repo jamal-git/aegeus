@@ -1,10 +1,11 @@
 package com.aegeus.game.item;
 
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 
 public class ItemParser {
-
-	public static Item parseItem(Item item, String... args) {
+	public static AegeusItem parseItem(AegeusItem item, String... args) {
 		for(int i = 1; i < args.length; i++) {
 			String[] pair = args[i].split("=");
 			String key = pair[0];
@@ -12,7 +13,7 @@ public class ItemParser {
 			switch(key.toLowerCase()) {
 				case "name":
 					try {
-						item.setName(value.replace("__", " ")); 
+						item.setName(value.replace("__", " "));
 						break;
 					} catch (Exception e) { break; }
 				case "lore":
@@ -30,9 +31,9 @@ public class ItemParser {
 		}
 		return item;
 	}
-	
-	public static Weapon parseWeapon(Weapon weapon, String... args) {
-		weapon = (Weapon) parseItem(weapon, args);
+
+	public static Equipment parseEquipment(Equipment equipment, String... args) {
+		equipment = (Equipment) parseItem(equipment, args);
 		for(int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");
@@ -41,8 +42,22 @@ public class ItemParser {
 				switch(key.toLowerCase()) {
 					case "tier":
 						int tier = Integer.parseInt(value);
-						weapon.setTier(tier);
+						equipment.setTier(tier);
 						break;
+				}
+			} catch (Exception err) { }
+		}
+		return equipment;
+	}
+
+	public static Weapon parseWeapon(Weapon weapon, String... args) {
+		weapon = (Weapon) parseEquipment(weapon, args);
+		for(int i = 1; i < args.length; i++) {
+			try {
+				String[] pair = args[i].split("=");
+				String key = pair[0];
+				String value = pair[1];
+				switch(key.toLowerCase()) {
 					case "dmg":
 						String[] vals = value.split(";");
 						int minDmg = Integer.parseInt(vals[0]);
@@ -58,7 +73,7 @@ public class ItemParser {
 						weapon.setIceDmg(iceDmg);
 						break;
 					case "lifesteal":
-						double lifeSteal = Double.parseDouble(value);
+						float lifeSteal = Float.parseFloat(value);
 						weapon.setLifeSteal(lifeSteal);
 						break;
 					default: break;
@@ -69,17 +84,13 @@ public class ItemParser {
 	}
 	
 	public static Armor parseArmor(Armor armor, String... args) {
-		armor = (Armor) parseItem(armor, args);
+		armor = (Armor) parseEquipment(armor, args);
 		for(int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");
 				String key = pair[0];
 				String value = pair[1];
 				switch(key.toLowerCase()) {
-					case "tier":
-						int tier = Integer.parseInt(value);
-						armor.setTier(tier);
-						break;
 					case "hp":
 						int hp = Integer.parseInt(value);
 						armor.setHp(hp);

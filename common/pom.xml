@@ -11,7 +11,7 @@
 	
 	<artifactId>common</artifactId>
 	<packaging>jar</packaging>
-	<name>common</name>
+	<name>Common</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

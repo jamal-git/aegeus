@@ -1,16 +1,15 @@
 package com.aegeus.game.mobs;
 
-import java.util.Random;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import com.aegeus.game.Statistics;
 import com.aegeus.game.data.Data;
 import com.aegeus.game.data.MonsterData;
 import com.aegeus.game.stats.Stats;
 import com.aegeus.game.stats.StatsContainer;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+
+import java.util.Random;
 
 public class MobBandit implements Mob {
 
@@ -21,8 +20,6 @@ public class MobBandit implements Mob {
 	private StatsContainer container;
 	
 	private final Random random = new Random();
-	
-	public MobBandit() { }
 	
 	public MobBandit(Stats stats) {
 		this.stats = stats;
@@ -35,10 +32,9 @@ public class MobBandit implements Mob {
 	@Override public Stats getStats() { return stats; }
 	
 	@Override
-	public LivingEntity create(World world, Location loc) {
+	public LivingEntity create(Location loc) {
 		Random random = new Random();
-		LivingEntity entity = prepare((LivingEntity) world.spawnEntity(loc, types[random.nextInt(types.length)]));
-		return entity;
+        return prepare((LivingEntity) loc.getWorld().spawnEntity(loc, types[random.nextInt(types.length)]));
 	}
 	
 	@Override

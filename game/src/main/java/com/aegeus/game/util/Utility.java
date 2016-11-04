@@ -1,46 +1,36 @@
 package com.aegeus.game.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Utility {
-	/**
-	 * Calculates rarity based on circular interpolation.
-	 * 
-	 * @param i
-	 *            Interpolation value (0.0-1.0).
-	 * @param min
-	 *            Minimum value.
-	 * @param max
-	 *            Maximum value.
-	 * @return Interpolated value.
-	 */
 	public static float calcRarity(float i, float min, float max) {
+		// TODO do this without basic math
 		i /= 1;
 		return (float) (-max * (Math.sqrt(1 - i * i) - 1) + min);
 	}
 	
 	public static String colorCodes(String s){
-		return ChatColor.translateAlternateColorCodes('&', s);
+		return colorCodes(s, '&');
 	}
-	
-	public static int calcMaxXP(int Level){
-		return (int) Math.round(50 * (Level * (Level * 0.4)));
+	public static String colorCodes(String s, char c){
+		return ChatColor.translateAlternateColorCodes(c, s);
 	}
-	
+
+	public static int calcMaxXP(int level){
+		return (int) Math.round(50 * (level * (level * 0.4)));
+	}
 	public static int calcLevelBuff(int value, int level){
-		return (int) Math.round((value * level) / 65);
+		return Math.round((value * level) / 65);
 	}
-	
-	public static String buildArgString(String[] args, int start) {
+
+	public static String buildString(String[] args, int start) {
 		List<String> build = new ArrayList<>();
-		for(int i = start; i < args.length; i++){
-			build.add(args[i]);
-		}
+		build.addAll(Arrays.asList(args).subList(start, args.length));
 		return StringUtils.join(build, " ");
 	}
-	
 }

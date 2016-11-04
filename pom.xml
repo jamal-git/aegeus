@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<version>0.0.1</version>
 
-	<name>Aegeus</name>
+	<name>AEGEUS</name>
 
     <build>
         <plugins>
@@ -43,11 +43,16 @@
 	</repositories>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.3.0</version>
+        </dependency>
 	</dependencies>
 	
 	<modules>
-		<module>aegeus.common</module>
-		<module>aegeus.discord</module>
-		<module>aegeus.game</module>
+		<module>common</module>
+		<module>discord</module>
+		<module>game</module>
 	</modules>
 </project>

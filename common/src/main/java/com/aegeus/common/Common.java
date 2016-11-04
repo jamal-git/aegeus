@@ -2,8 +2,8 @@ package com.aegeus.common;
 
 public class Common {
 
-	public static final String BUILD = "dev";
-	public static final String BUILD_NOTE = "ASCII boats.";
+	public static final String PATCH = "0.0.1.1";
+	public static final String PATCH_NOTE = "ASCII boats.";
 	public static final String[] DEVELOPERS = new String[]{"oopsjpeg", "Silvre", "AkenoHimejima_"};
 	
 	/*

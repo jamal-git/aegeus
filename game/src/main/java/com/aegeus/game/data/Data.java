@@ -1,44 +1,44 @@
 package com.aegeus.game.data;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Data {
 	
-	private static Map<LivingEntity, EntityData> map = new HashMap<>();
+	private static Map<LivingEntity, EntityData> entityData = new HashMap<>();
 	
 	public static EntityData get(LivingEntity entity) {
 		createData(entity);
-		return map.get(entity);
+		return entityData.get(entity);
 	}
 	
 	public static void remove(LivingEntity entity) {
-		map.remove(entity);
+		entityData.remove(entity);
 	}
 	
 	public static PlayerData getPlayerData(Player player) {
 		createData(player);
-		return (PlayerData) map.get(player);
+		return (PlayerData) entityData.get(player);
 	}
 	
 	public static MonsterData getMonsterData(LivingEntity entity) {
 		createData(entity);
-		return (MonsterData) map.get(entity);
+		return (MonsterData) entityData.get(entity);
 	}
 	
 	private static void createData(LivingEntity entity) {
-		if(!map.containsKey(entity))
+		if(!entityData.containsKey(entity))
 			if(entity.getType().getClass().isAssignableFrom(Monster.class))
-				map.put(entity, new MonsterData((Monster) entity));
+				entityData.put(entity, new MonsterData((Monster) entity));
 			else if (entity.getType().equals(EntityType.PLAYER))
-				map.put(entity, new PlayerData((Player) entity));
+				entityData.put(entity, new PlayerData((Player) entity));
 			else
-				map.put(entity, new EntityData(entity));
+				entityData.put(entity, new EntityData(entity));
 	}
 	
 }

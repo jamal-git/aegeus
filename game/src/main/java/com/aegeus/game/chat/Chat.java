@@ -1,8 +1,7 @@
 package com.aegeus.game.chat;
 
-import java.util.ArrayList;
-import java.util.logging.Level;
-
+import com.aegeus.game.data.Data;
+import com.aegeus.game.util.Utility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Utility;
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class Chat implements Listener {
 
@@ -24,7 +23,7 @@ public class Chat implements Listener {
 		this.parent = parent;
 	}
 	
-	public static enum Channel {
+	public enum Channel {
 		LOCAL(0, "Local", "l", "nearby"),
 		GLOBAL(1, "Global", "gl", "all"),
 		GUILD(2, "Guild", "gu", "clan");

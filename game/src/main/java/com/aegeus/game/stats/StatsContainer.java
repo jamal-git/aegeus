@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.bukkit.Material;
 
-import com.aegeus.game.item.Armor;
-import com.aegeus.game.item.Weapon;
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Weapon;
 import com.google.common.collect.Lists;
 
 public class StatsContainer {
