@@ -35,9 +35,11 @@ public class Data {
 		if(!entityData.containsKey(entity))
 			if(entity.getType().getClass().isAssignableFrom(Monster.class))
 				entityData.put(entity, new MonsterData((Monster) entity));
-			else if (entity.getType().equals(EntityType.PLAYER))
-				entityData.put(entity, new PlayerData((Player) entity));
-			else
+			else if (entity.getType().equals(EntityType.PLAYER)) {
+				PlayerData pd = new PlayerData((Player) entity);
+
+				entityData.put(entity, pd);
+			} else
 				entityData.put(entity, new EntityData(entity));
 	}
 	

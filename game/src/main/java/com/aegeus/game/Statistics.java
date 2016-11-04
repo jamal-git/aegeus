@@ -53,9 +53,9 @@ public class Statistics implements Listener {
 		float defense = 0;
 		float magicRes = 0;
 		float block = 0;
-		int eStr = 0;
-		int eInt = 0;
-		int eVit = 0;
+		int strength = 0;
+		int intelligence = 0;
+		int vitality = 0;
 
 		for(ItemStack i : entity.getEquipment().getArmorContents()) {
             if (i != null && i.getType().equals(Material.AIR)) {
@@ -66,9 +66,9 @@ public class Statistics implements Listener {
                 defense += armor.getDefense();
                 magicRes += armor.getMagicRes();
                 block += armor.getBlock();
-                eStr += armor.getStr();
-                eInt += armor.getInt();
-                eVit += armor.getVit();
+                strength += armor.getEquipmentInfo().getStrength();
+                intelligence += armor.getEquipmentInfo().getIntelligence();
+                vitality += armor.getEquipmentInfo().getVitality();
             }
         }
 
@@ -82,9 +82,9 @@ public class Statistics implements Listener {
 		ed.setDefense(defense);
 		ed.setMagicRes(magicRes);
 		ed.setBlock(block);
-		ed.setStr(eStr);
-		ed.setInt(eInt);
-		ed.setVit(eVit);
+		ed.setStrength(strength);
+		ed.setIntelligence(intelligence);
+		ed.setVitality(vitality);
 
 		if (entity.getType().equals(EntityType.PLAYER))
 			updateDisplay((Player) entity);

@@ -73,15 +73,15 @@ public class Combat implements Listener {
 				if (player.getEquipment().getItemInMainHand() != null
 						&& !player.getEquipment().getItemInMainHand().getType().equals(Material.AIR)){
 					Weapon weapon = new Weapon(player.getEquipment().getItemInMainHand());
-					int level = weapon.getLevel();
-					int xp = weapon.getXp();
+					int level = weapon.getLevelInfo().getLevel();
+					int xp = weapon.getLevelInfo().getXp();
 					xp += (entity.getMaxHealth() / 500);
 					if(xp > Utility.calcMaxXP(level)) {
 						xp = 0;
 						level += 1;
 					}
-					weapon.setLevel(level);
-					weapon.setXp(xp);
+					weapon.getLevelInfo().setLevel(level);
+					weapon.getLevelInfo().setXp(xp);
 					player.getEquipment().setItemInMainHand(weapon.build());
 				}
 			}
@@ -113,11 +113,11 @@ public class Combat implements Listener {
 						e.setDamage(weapon.getMinDmg());
 				if(weapon.getIceDmg() > 0) {
 					e.setDamage(e.getDamage() + (weapon.getIceDmg() * 0.1));
-					entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (3 * weapon.getTier()), 2));
+					entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (3 * weapon.getEquipmentInfo().getTier()), 2));
 				}
 				if(weapon.getFireDmg() > 0) {
 					e.setDamage(e.getDamage() + (weapon.getFireDmg() * 0.2));
-					entity.setFireTicks(16 + (3 * weapon.getTier()));
+					entity.setFireTicks(16 + (3 * weapon.getEquipmentInfo().getTier()));
 				}
 				if(weapon.getLifeSteal() > 0) {
 					double hp = damager.getHealth();

@@ -37,7 +37,14 @@ public class Weapon extends AegeusItem implements ItemInfo {
 		iceDmg = (info.hasKey("iceDmg")) ? info.getInt("iceDmg") : 0;
 		lifeSteal = (info.hasKey("lifeSteal")) ? info.getFloat("lifeSteal") : 0;
 	}
-	
+
+	public EquipmentInfo getEquipmentInfo() { return equipmentInfo; }
+	public LevelInfo getLevelInfo() { return levelInfo; }
+
+	public void setDmg(int minDmg, int maxDmg) {
+		this.minDmg = minDmg;
+		this.maxDmg = maxDmg;
+	}
 	public int getMinDmg(){
 		return minDmg;
 	}

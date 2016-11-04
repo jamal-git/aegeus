@@ -43,7 +43,10 @@ public class Armor extends AegeusItem implements ItemInfo {
 	}
 
 //	private List<ArmorRune> runes = new ArrayList<>();
-	
+
+	public EquipmentInfo getEquipmentInfo() { return equipmentInfo; }
+	public LevelInfo getLevelInfo() { return levelInfo; }
+
 	public void setHp(int hp){
 		this.hp = hp;
 	}

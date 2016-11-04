@@ -86,14 +86,14 @@ public class StatsContainer {
 	
 	public Armor get(ArmorPossibility p, float f) {
 		Armor armor = new Armor(p.material);
-		armor.setTier(p.tier);
+		armor.getEquipmentInfo().setTier(p.tier);
 		armor.setHp(Math.round(f * (p.maxHp)) + p.minHp);
 		return armor;
 	}
 	
 	public Weapon get(WeaponPossibility p, float f) {
 		Weapon weapon = new Weapon(p.material);
-		weapon.setTier(p.tier);
+		weapon.getEquipmentInfo().setTier(p.tier);
 		int min = Math.round(f * (p.maxDmg - p.range)) + p.minDmg;
 		int max = Math.round(random.nextInt(p.range) + min);
 		weapon.setDmg(min, max);

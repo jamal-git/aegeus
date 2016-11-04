@@ -32,26 +32,8 @@ public class ItemParser {
 		return item;
 	}
 
-	public static Equipment parseEquipment(Equipment equipment, String... args) {
-		equipment = (Equipment) parseItem(equipment, args);
-		for(int i = 1; i < args.length; i++) {
-			try {
-				String[] pair = args[i].split("=");
-				String key = pair[0];
-				String value = pair[1];
-				switch(key.toLowerCase()) {
-					case "tier":
-						int tier = Integer.parseInt(value);
-						equipment.setTier(tier);
-						break;
-				}
-			} catch (Exception err) { }
-		}
-		return equipment;
-	}
-
 	public static Weapon parseWeapon(Weapon weapon, String... args) {
-		weapon = (Weapon) parseEquipment(weapon, args);
+		weapon = (Weapon) parseItem(weapon, args);
 		for(int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");
@@ -84,7 +66,7 @@ public class ItemParser {
 	}
 	
 	public static Armor parseArmor(Armor armor, String... args) {
-		armor = (Armor) parseEquipment(armor, args);
+		armor = (Armor) parseItem(armor, args);
 		for(int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");

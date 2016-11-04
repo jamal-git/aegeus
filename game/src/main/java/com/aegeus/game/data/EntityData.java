@@ -18,10 +18,10 @@ public class EntityData {
 	protected float magicRes = 0;
 	protected float block = 0;
 	
-//	private int eDex = 0;
-	private int eStr = 0;
-	private int eInt = 0;
-	private int eVit = 0;
+//	private int dexterity = 0;
+	private int strength = 0;
+	private int intelligence = 0;
+	private int vitality = 0;
 
 //	private int Thorns = 0;
 //	private int GoldFind = 0;
@@ -59,11 +59,11 @@ public class EntityData {
 	public float getBlock() { return block; }
 	public void setBlock(float block) { this.block = block; }
 
-	public void setStr(int eStr) { this.eStr = eStr; }
-	public int getStr() { return eStr; }
-	public void setInt(int eInt) { this.eInt = eInt; }
-	public int getInt() { return eInt; }
-	public void setVit(int eVit) { this.eVit = eVit; }
-	public int getVit() { return eVit; }
+	public int getStrength() { return strength; }
+	public void setStrength(int strength) { this.strength = strength; }
+	public int getIntelligence() { return intelligence; }
+	public void setIntelligence(int intelligence) { this.intelligence = intelligence; }
+	public int getVitality() { return vitality; }
+	public void setVitality(int vitality) { this.vitality = vitality; }
 
 }
