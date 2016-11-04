@@ -26,6 +26,8 @@ public class Armor extends AegeusItem implements ItemInfo {
 
 	public Armor(Material material) {
 		super(material);
+		equipmentInfo = new EquipmentInfo(this);
+		levelInfo = new LevelInfo(this);
 	}
 
 	public Armor(ItemStack item) {
@@ -102,6 +104,7 @@ public class Armor extends AegeusItem implements ItemInfo {
 	@Override
 	public ItemStack build(){
 		store();
+		setLore(buildLore());
 		return buildDefault();
 	}
 	

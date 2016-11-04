@@ -36,7 +36,7 @@ public class EntityData {
 	
 	public LocalDateTime getCombatDate() { return combatDate; }
 	public void triggerCombat() { combatDate = LocalDateTime.now(); }
-	public boolean isInCombat() { return (LocalDateTime.now().isAfter(combatDate.plusSeconds(15))); }
+	public boolean isInCombat() { return (combatDate != null && LocalDateTime.now().isAfter(combatDate.plusSeconds(15))); }
 	
 	public LivingEntity getLastHitBy() { return lastHitBy; }
 	public void setLastHitBy(LivingEntity entity) { lastHitBy = entity; }
@@ -46,16 +46,13 @@ public class EntityData {
 	
 	public int getHpRegen() { return hpRegen; }
 	public void setHpRegen(int hpRegen) { this.hpRegen = hpRegen; }
-	
 	public float getEnergyRegen() { return energyRegen; }
 	public void setEnergyRegen(float energyRegen) { this.energyRegen = energyRegen; }
 
 	public float getDefense() { return defense; }
 	public void setDefense(float defense) { this.defense = defense; }
-
 	public float getMagicRes() { return magicRes; }
 	public void setMagicRes(float magicRes) { this.magicRes = magicRes; }
-
 	public float getBlock() { return block; }
 	public void setBlock(float block) { this.block = block; }
 

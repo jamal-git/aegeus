@@ -164,14 +164,6 @@ public class Combat implements Listener {
 	}
 
 	@EventHandler
-	private void onInventoryClick(InventoryClickEvent event) {
-		Player player = (Player) event.getWhoClicked();
-		new BukkitRunnable() {
-			public void run() { Statistics.updateStats(player); }
-		}.runTaskLater(parent, 1);
-	}
-
-	@EventHandler
 	private void onEntityHeal(EntityRegainHealthEvent event) {
 		if (event.getEntityType().equals(EntityType.PLAYER)) {
 			Statistics.updateDisplay((Player) event.getEntity());

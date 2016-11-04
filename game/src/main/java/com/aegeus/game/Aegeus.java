@@ -15,16 +15,15 @@ import java.util.logging.Logger;
  * @since 2016/08/19
  */
 public class Aegeus extends JavaPlugin {
-	
+	private static final boolean DEBUG = true;
 	private final Logger LOGGER = getLogger();
-	private final boolean DEBUG = true;
 	
 	@Override
 	public void onEnable() {	
 		// wooOOOOOOOOO, loading up!
 		LOGGER.info("AEGEUS enabling...");
 		saveDefaultConfig();
-		
+
 		// Register plugin events
 		// TODO Clean up a bit?
 		LOGGER.info("Registering event listeners...");
@@ -54,7 +53,7 @@ public class Aegeus extends JavaPlugin {
 			getCommand("testweapon").setExecutor(new CommandTestWeapon());
 			getCommand("testmob").setExecutor(new CommandTestMob());
 		}
-		
+
 		// Done, done, and done!
 		LOGGER.info("AEGEUS enabled.");
 	}

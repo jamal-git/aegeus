@@ -52,7 +52,7 @@ public class EquipmentInfo implements ItemInfo {
 	public void store() {
 		NBTTagCompound info = item.getAegeusInfo();
 		info.setInt("tier", tier);
-		info.setInt("rarity", rarity.getId());
+		if(rarity != null) info.setInt("rarity", rarity.getId());
 		info.setInt("strength", strength);
 		info.setInt("intelligence", intelligence);
 		info.setInt("vitality", vitality);

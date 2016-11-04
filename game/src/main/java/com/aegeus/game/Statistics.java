@@ -12,7 +12,9 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,10 +37,17 @@ public class Statistics implements Listener {
 							health += pd.getHpRegen();
 							if(health > maxHealth) health = maxHealth;
 							player.setHealth(health);
+							updateDisplay(player);
 						}
 					}
 			}
 		}.runTaskTimer(plugin, 20, 20);
+	}
+
+	@EventHandler
+	private void onInventoryClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		Bukkit.getScheduler().runTaskLater(plugin, () -> updateStats(player), 1);
 	}
 
 	/**
@@ -47,7 +56,7 @@ public class Statistics implements Listener {
 	 * @param entity Entity to update.
 	 */
 	public static void updateStats(LivingEntity entity) {
-		int hp = 5;
+		int hp = 0;
 		int hpRegen = 0;
 		float energyRegen = 0;
 		float defense = 0;
@@ -58,7 +67,7 @@ public class Statistics implements Listener {
 		int vitality = 0;
 
 		for(ItemStack i : entity.getEquipment().getArmorContents()) {
-            if (i != null && i.getType().equals(Material.AIR)) {
+            if (i != null && !i.getType().equals(Material.AIR)) {
                 Armor armor = new Armor(i);
                 hp += armor.getHp();
                 hpRegen = armor.getHpRegen();
@@ -73,7 +82,7 @@ public class Statistics implements Listener {
         }
 
 		if (entity.getType().equals(EntityType.PLAYER))
-			hp += 95;
+			hp += 100;
 
 		entity.setMaxHealth(hp);
 		EntityData ed = Data.get(entity);

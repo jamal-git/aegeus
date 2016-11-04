@@ -23,7 +23,11 @@ public class Weapon extends AegeusItem implements ItemInfo {
 	private int iceDmg = 0;
 	private float lifeSteal = 0;
 
-	public Weapon(Material material) { super(material); }
+	public Weapon(Material material) {
+		super(material);
+		equipmentInfo = new EquipmentInfo(this);
+		levelInfo = new LevelInfo(this);
+	}
 
 	public Weapon(ItemStack item) {
 		super(item);
@@ -97,6 +101,7 @@ public class Weapon extends AegeusItem implements ItemInfo {
 	@Override
 	public ItemStack build(){
 		store();
+		setLore(buildLore());
 		return buildDefault();
 	}
 	
