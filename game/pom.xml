@@ -11,7 +11,7 @@
 	
 	<artifactId>game</artifactId>
 	<packaging>jar</packaging>
-	<name>AEGEUS</name>
+	<name>Game</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,6 +29,11 @@
 			<artifactId>craftbukkit</artifactId>
 			<version>1.10-R0.1-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.aegeus</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 	
 </project>

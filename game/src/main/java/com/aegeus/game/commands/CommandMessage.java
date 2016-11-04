@@ -1,20 +1,19 @@
 package com.aegeus.game.commands;
 
+import com.aegeus.game.chat.ChatManager;
+import com.aegeus.game.util.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aegeus.game.chat.ChatManager;
-import com.aegeus.game.util.Utility;
-
 public class CommandMessage implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof Player)) return false;
-		if (args.length < 2) return false;
+		if(!(sender instanceof Player)) return false;
+		if(args.length < 2) return false;
 		
 		Player player = (Player) sender;
 		Player target = Bukkit.getPlayer(args[0]);
@@ -24,7 +23,7 @@ public class CommandMessage implements CommandExecutor {
 			return true;
 		}
 		
-		String msg = Utility.buildArgString(args, 1);
+		String msg = Utility.buildString(args, 0);
 		
 		ChatManager.sendPrivateMessage(player, target, msg.trim());
 		return true;

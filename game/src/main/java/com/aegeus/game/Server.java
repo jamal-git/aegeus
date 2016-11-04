@@ -1,6 +1,8 @@
 package com.aegeus.game;
 
-import java.util.Random;
+import com.aegeus.common.Common;
+import com.aegeus.game.data.Data;
+import com.aegeus.game.util.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,10 +14,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import com.aegeus.common.Common;
-import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Utility;
+import java.util.Random;
 
 public class Server implements Listener {
 
@@ -97,8 +98,9 @@ public class Server implements Listener {
 			"Kilvre silled it!",
 			"It's high noon somewhere in the world.",
 			"Contrary to popular belief, Silvre did not kill it.",
-			"There's something different about this place..."
-	};		
+			"There's something different about this place...",
+			"Reina best girl, no doubt."
+	};
 
 	@EventHandler
 	private void onLoginEvent(PlayerLoginEvent e) {
@@ -107,9 +109,9 @@ public class Server implements Listener {
 
 	@EventHandler
 	private void onCommandEvent(ServerCommandEvent e) {
-		Bukkit.getOperators().stream()
-			.filter((p) -> p.isOnline())
-			.map((p) -> (Player) p)
+		Bukkit.broadcastMessage(e.getCommand());
+		Bukkit.getOnlinePlayers().stream()
+			.filter(Player::isOp)
 			.forEach((p) -> p.sendMessage(Utility.colorCodes(
 					"&8" + e.getSender() + " > " + e.getCommand())));
 	}
@@ -129,7 +131,7 @@ public class Server implements Listener {
 		if (!player.hasPlayedBefore()) player.sendTitle("", Utility.colorCodes("&bWelcome."));
 		else player.sendTitle("", Utility.colorCodes("&fWelcome back."));
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(parent, new Runnable() {
+		new BukkitRunnable() {
 			@Override
 			public void run() {
 				for (int i = 0; i < 10; i++)
@@ -137,7 +139,7 @@ public class Server implements Listener {
 				
 				player.sendMessage(Utility.colorCodes(
 						"          &bAegeus &f&lMMORPG&f\n" +
-						"          &b• &7Build &b" + Common.BUILD + " &7(&o" + Common.BUILD_NOTE + "&7)\n" +
+						"          &b• &7Patch &b" + Common.PATCH + " &7(&o" + Common.PATCH_NOTE + "&7)\n" +
 						"          &7Modify game settings with &b/settings"));
 				
 				for (int i = 0; i < 2; i++)
@@ -150,7 +152,7 @@ public class Server implements Listener {
 				
 				player.sendMessage(" ");
 			}
-		}, 2);
+		}.runTaskLater(parent, 2);
 		
 	}
 
@@ -163,13 +165,13 @@ public class Server implements Listener {
 
 	@EventHandler
 	// Random, custom MOTDs
-	private void onServerListPingEvent(ServerListPingEvent event) {
+	private void onServerListPingEvent(ServerListPingEvent e) {
 		Random random = new Random();
-		if(Bukkit.hasWhitelist()) event.setMotd(Utility.colorCodes(
-			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
+		if(Bukkit.hasWhitelist()) e.setMotd(Utility.colorCodes(
+			"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
 			+ "&cUndergoing maintenance. Stay tuned!"));
-		else event.setMotd(Utility.colorCodes(
-			"&bAegeus &f&lMMORPG&7 - Build &b" + Common.BUILD + "\n&f"
+		else e.setMotd(Utility.colorCodes(
+			"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
 			+ motds[random.nextInt(motds.length)]));
 	}
 

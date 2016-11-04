@@ -1,17 +1,17 @@
 package com.aegeus.game;
 
-import java.util.logging.Logger;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.aegeus.game.chat.Chat;
 import com.aegeus.game.commands.*;
-import com.aegeus.game.commands.test.*;
+import com.aegeus.game.commands.test.CommandTestArmor;
+import com.aegeus.game.commands.test.CommandTestMob;
+import com.aegeus.game.commands.test.CommandTestWeapon;
 import com.aegeus.game.mining.Mining;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 /**
  * AEGEUS Game
- * @category MMORPG
  * @since 2016/08/19
  */
 public class Aegeus extends JavaPlugin {
@@ -31,7 +31,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Server(this), this);
 		getServer().getPluginManager().registerEvents(new Combat(this), this);
 		getServer().getPluginManager().registerEvents(new Chat(this), this);
-//		getServer().getPluginManager().registerEvents(new Mobs(this), this);
+		getServer().getPluginManager().registerEvents(new Mobs(this), this);
 		getServer().getPluginManager().registerEvents(new Mining(this), this);
 		getServer().getPluginManager().registerEvents(new Statistics(this), this);
 		getServer().getPluginManager().registerEvents(new Bank(this), this);
@@ -45,8 +45,8 @@ public class Aegeus extends JavaPlugin {
 		getCommand("roll").setExecutor(new CommandRoll());
 		getCommand("spacecart").setExecutor(new CommandSpaceCart());
 		getCommand("spawnpick").setExecutor(new CommandSpawnPick());
-		getCommand("codex").setExecutor(new CommandCodex());
-		
+		getCommand("spawner").setExecutor(new CommandSpawner());
+
 		// Register test commands
 		if(DEBUG) {
 			LOGGER.info("Registering test commands...");
@@ -61,6 +61,6 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		LOGGER.info("AEGEUS disabled.");
+        LOGGER.info("AEGEUS disabled.");
 	}
 }

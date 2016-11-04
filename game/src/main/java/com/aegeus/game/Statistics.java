@@ -1,5 +1,10 @@
 package com.aegeus.game;
 
+import com.aegeus.game.data.Data;
+import com.aegeus.game.data.EntityData;
+import com.aegeus.game.data.PlayerData;
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.util.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
@@ -12,12 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
-
-import com.aegeus.game.data.Data;
-import com.aegeus.game.data.EntityData;
-import com.aegeus.game.data.PlayerData;
-import com.aegeus.game.item.Armor;
-import com.aegeus.game.util.Utility;
 
 public class Statistics implements Listener {
 
@@ -59,20 +58,20 @@ public class Statistics implements Listener {
 		int eVit = 0;
 
 		for(ItemStack i : entity.getEquipment().getArmorContents()) {
-			if(i != null && i.getType().equals(Material.AIR)) {
-				Armor armor = new Armor(i);
-				hp += armor.getHp();
-				hpRegen = armor.getHpRegen();
-				energyRegen += armor.getEnergyRegen();
-				defense += armor.getDefense();
-				magicRes += armor.getMagicRes();
-				block += armor.getBlock();
-				eStr += armor.getStr();
-				eInt += armor.getInt();
-				eVit += armor.getVit();
-			}
-		}
-		
+            if (i != null && i.getType().equals(Material.AIR)) {
+                Armor armor = new Armor(i);
+                hp += armor.getHp();
+                hpRegen = armor.getHpRegen();
+                energyRegen += armor.getEnergyRegen();
+                defense += armor.getDefense();
+                magicRes += armor.getMagicRes();
+                block += armor.getBlock();
+                eStr += armor.getStr();
+                eInt += armor.getInt();
+                eVit += armor.getVit();
+            }
+        }
+
 		if (entity.getType().equals(EntityType.PLAYER))
 			hp += 95;
 
@@ -80,7 +79,13 @@ public class Statistics implements Listener {
 		EntityData ed = Data.get(entity);
 		ed.setHpRegen(hpRegen);
 		ed.setEnergyRegen(energyRegen);
-		
+		ed.setDefense(defense);
+		ed.setMagicRes(magicRes);
+		ed.setBlock(block);
+		ed.setStr(eStr);
+		ed.setInt(eInt);
+		ed.setVit(eVit);
+
 		if (entity.getType().equals(EntityType.PLAYER))
 			updateDisplay((Player) entity);
 		

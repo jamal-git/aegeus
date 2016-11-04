@@ -1,9 +1,10 @@
 package com.aegeus.game;
 
+import com.aegeus.game.data.Data;
+import com.aegeus.game.data.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,16 +14,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
-
-import com.aegeus.game.data.Data;
-import com.aegeus.game.data.PlayerData;
 
 public class Bank implements Listener{
 	private JavaPlugin parent;
@@ -45,7 +41,6 @@ public class Bank implements Listener{
 			p.openInventory(inv);
 		}
 	}
-	
 	@EventHandler
 	public void onCloseChest(InventoryCloseEvent e)	{
 		if(e.getInventory().getName().equalsIgnoreCase("Bank"))	{
@@ -130,25 +125,5 @@ public class Bank implements Listener{
 		item.setItemMeta(meta);
 		i.setItem(8, item);
 		return i;
-	}
-	
-	@EventHandler
-	public void onVehicleMove(VehicleMoveEvent event) {
-	    Minecart vehicle = (Minecart) event.getVehicle();
-	    Player player = (Player) vehicle.getPassenger();
-	    Vector playerVector = player.getLocation().getDirection();
-	   
-	    vehicle.setPassenger(player);
-	    vehicle.setCustomName(player + "'s Minecart");
-	   
-	    double x = Math.round(playerVector.getX());
-	    double z = Math.round(playerVector.getZ());
-	    
-	    Vector velocity = new Vector(x, 0, z);
-	    
-	    Vector velocityMod = new Vector(1, 0, 1);
-	    
-	    vehicle.setDerailedVelocityMod(velocityMod);
-	    vehicle.setVelocity(velocity);
 	}
 }

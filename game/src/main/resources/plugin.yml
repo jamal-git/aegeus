@@ -26,6 +26,9 @@ commands:
     codex:
       description: Review known information about mobs, planets, runes, etc.
       usage: /codex <type> <search>
+    spawner:
+      description: Creates a spawner at the current location.
+      usage: /spawner
     testweapon:
       description: Test weapons.
     testarmor:

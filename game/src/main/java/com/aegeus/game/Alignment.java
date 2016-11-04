@@ -1,4 +1,4 @@
-package com.aegeus.game.data;
+package com.aegeus.game;
 
 public enum Alignment {
 	LAWFUL(0, "Lawful", "&aYou have abided by the law, and have become Lawful.", 0, 0.5f, 0),

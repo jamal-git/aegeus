@@ -1,9 +1,11 @@
 package com.aegeus.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.aegeus.game.data.Data;
+import com.aegeus.game.data.EntityData;
+import com.aegeus.game.data.MonsterData;
+import com.aegeus.game.item.tool.Weapon;
+import com.aegeus.game.planets.Planet;
+import com.aegeus.game.util.Utility;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -22,12 +24,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.aegeus.game.data.Data;
-import com.aegeus.game.data.EntityData;
-import com.aegeus.game.data.MonsterData;
-import com.aegeus.game.item.Weapon;
-import com.aegeus.game.planets.Planet;
-import com.aegeus.game.util.Utility;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Combat implements Listener {
 
@@ -132,6 +131,7 @@ public class Combat implements Listener {
 		
 		switch(e.getCause()) {
 			case PROJECTILE:
+				assert ee != null;
 				// TODO Discuss this as this may not be final
 				ee.getDamager().remove();
 				break;
@@ -143,6 +143,7 @@ public class Combat implements Listener {
 				}
 				break;
 			case ENTITY_ATTACK:
+				assert ee != null;
 				if(e.getEntity() instanceof Player) {
 					Player player = (Player) e.getEntity();
 					notifyAttacked(player, e.getDamage());
@@ -161,21 +162,6 @@ public class Combat implements Listener {
 				}
 		}
 	}
-	
-	public void notifyAttack(Player player, LivingEntity attacked, double damage) {
-		String name = (attacked.getCustomName() != null) ? attacked.getCustomName() : attacked.getName();
-		long hp = Math.round(Math.ceil(attacked.getHealth()));
-		long maxHp = Math.round(Math.ceil(attacked.getMaxHealth()));
-		long dmg = Math.round(Math.ceil(damage));
-		player.sendMessage(Utility.colorCodes("          &e" + dmg + " &l>&f " + name + "&7 [" + hp + " / " + maxHp + "]"));
-	}
-	
-	public void notifyAttacked(Player player, double damage) {
-		long hp = Math.round(Math.ceil(player.getHealth()));
-		long maxHp = Math.round(Math.ceil(player.getMaxHealth()));
-		long dmg = Math.round(Math.ceil(damage));
-		player.sendMessage(Utility.colorCodes("            &c-" + dmg + "&7 [" + hp + " / " + maxHp + "]"));
-	}
 
 	@EventHandler
 	private void onInventoryClick(InventoryClickEvent event) {
@@ -191,5 +177,29 @@ public class Combat implements Listener {
 			Statistics.updateDisplay((Player) event.getEntity());
 		}
 	}
+
+	private void notifyAttack(Player player, LivingEntity attacked, double damage) {
+		new BukkitRunnable() {
+			public void run() {
+				String name = (attacked.getCustomName() != null) ? attacked.getCustomName() : attacked.getName();
+				long hp = Math.round(Math.ceil(attacked.getHealth()));
+				long maxHp = Math.round(Math.ceil(attacked.getMaxHealth()));
+				long dmg = Math.round(Math.ceil(damage));
+				player.sendMessage(Utility.colorCodes("          &e" + dmg + " &l>&f " + name + "&7 [" + hp + " / " + maxHp + "]"));
+			}
+		}.runTaskLater(parent, 1);
+	}
+
+	private void notifyAttacked(Player player, double damage) {
+		new BukkitRunnable() {
+			public void run() {
+				long hp = Math.round(Math.ceil(player.getHealth()));
+				long maxHp = Math.round(Math.ceil(player.getMaxHealth()));
+				long dmg = Math.round(Math.ceil(damage));
+				player.sendMessage(Utility.colorCodes("            &c-" + dmg + "&7 [" + hp + " / " + maxHp + "]"));
+			}
+		}.runTaskLater(parent, 1);
+	}
+
 
 }

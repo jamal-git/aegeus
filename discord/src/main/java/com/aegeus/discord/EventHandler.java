@@ -1,7 +1,6 @@
 package com.aegeus.discord;
 
 import com.aegeus.common.Common;
-
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
@@ -50,9 +49,9 @@ public class EventHandler {
 					|| args[0].equalsIgnoreCase("corius")
 					|| args[0].equalsIgnoreCase("about")){
 				MessageBuilder builder = new MessageBuilder(client).withChannel(channel);
-				builder.appendContent("Build: " + Common.BUILD);
+				builder.appendContent("Patch: " + Common.PATCH);
 				builder.appendContent(System.lineSeparator());
-				builder.appendContent("Build Note: " + Common.BUILD_NOTE);
+				builder.appendContent("Patch Note: " + Common.PATCH_NOTE);
 				builder.send();
 			}
 			
