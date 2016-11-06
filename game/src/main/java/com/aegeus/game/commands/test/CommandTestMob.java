@@ -10,14 +10,15 @@ import org.bukkit.entity.Player;
 
 public class CommandTestMob implements CommandExecutor {
 
-	@Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(!(sender instanceof Player)) return false;
-		if(!sender.hasPermission("aegeus.test")) return false;
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (!(sender instanceof Player)) return false;
+		if (!sender.hasPermission("aegeus.test")) return false;
 
 		Player player = (Player) sender;
 		Mob mob = new MobBandit(new StatsBasic());
 		mob.create(player.getLocation());
-		
+
 		return true;
 	}
 

@@ -1,17 +1,15 @@
 package com.aegeus.game.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.aegeus.game.mining.Mining;
+import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.aegeus.game.mining.Mining;
-
-import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PickaxeBuilder {
 	private Material itemType;
@@ -21,19 +19,20 @@ public class PickaxeBuilder {
 	private List<String> lore = new ArrayList<>();
 	private String displayName;
 	private boolean isCheaty = false; //Basically add in a line saying that this item was cheated in and should not be used.
-	public PickaxeBuilder(int level, boolean isSpawnIn)	{
+
+	public PickaxeBuilder(int level, boolean isSpawnIn) {
 		this.setLevel(level);
 		isCheaty = isSpawnIn;
-		if(level > 79)	itemType = Material.GOLD_PICKAXE;
-		else if(level > 59) itemType = Material.DIAMOND_PICKAXE;
-		else if(level > 39) itemType = Material.IRON_PICKAXE;
-		else if(level > 19) itemType = Material.STONE_PICKAXE;
+		if (level > 79) itemType = Material.GOLD_PICKAXE;
+		else if (level > 59) itemType = Material.DIAMOND_PICKAXE;
+		else if (level > 39) itemType = Material.IRON_PICKAXE;
+		else if (level > 19) itemType = Material.STONE_PICKAXE;
 		else itemType = Material.WOOD_PICKAXE;
 		lore.add("level");
 		lore.add("xp");
 	}
-	
-	public PickaxeBuilder(ItemStack i)	{
+
+	public PickaxeBuilder(ItemStack i) {
 		NBTTagCompound pick = CraftItemStack.asNMSCopy(i).getTag().getCompound("pickaxe"); //TODO make this more reliable
 		/*
 		 * Transfer the important info to our variables.
@@ -47,37 +46,38 @@ public class PickaxeBuilder {
 		this.xp = pick.getInt("xp");
 		this.xpreq = pick.getInt("xpreq");
 		lore = i.getItemMeta().getLore();
-		
+
 	}
-	
-	public PickaxeBuilder()	{
+
+	public PickaxeBuilder() {
 		itemType = Material.WOOD_PICKAXE;
 		lore.add("level");
 		lore.add("xp");
 	}
-	
-	public void setLevel(int target)	{
+
+	public void setLevel(int target) {
 		level = target;
 		xpreq = Mining.getXPNeeded(target + 1);
 	}
-	
-	public void setExp(int target)	{
-		if(target >= xpreq)	xp = 0;
+
+	public void setExp(int target) {
+		if (target >= xpreq) xp = 0;
 		else xp = target;
 	}
-	
-	public void addEnchant()	{
-		
+
+	public void addEnchant() {
+
 	}
-	
-	public void addCustomLore(String s)	{
+
+	public void addCustomLore(String s) {
 		lore.add(s);
 	}
-	
-	public ItemStack build()	{
+
+	public ItemStack build() {
 		lore.set(0, ChatColor.GRAY + "Level: " + ChatColor.AQUA + level);
 		lore.set(1, ChatColor.GRAY + "EXP: " + xp + " / " + xpreq);
-		if(isCheaty) lore.add("" + ChatColor.GRAY + ChatColor.ITALIC + "This item was spawned in.  If a player is found with this, they will be permanently banned.");
+		if (isCheaty)
+			lore.add("" + ChatColor.GRAY + ChatColor.ITALIC + "This item was spawned in.  If a player is found with this, they will be permanently banned.");
 		//Basically tell all the players to drop the fucking pickaxe if they have posession of the item or else they will be insta-perma banned no questions asked.
 		ItemStack pickaxe = new ItemStack(itemType);
 		ItemMeta meta = pickaxe.getItemMeta();
@@ -94,7 +94,7 @@ public class PickaxeBuilder {
 		nbt.set("pickaxe", nbtpick);
 		nms.setTag(nbt);
 		pickaxe = CraftItemStack.asBukkitCopy(nms);
-		
+
 		return pickaxe;
 	}
 }

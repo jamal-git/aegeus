@@ -42,51 +42,65 @@ public class Weapon extends AegeusItem implements ItemInfo {
 		lifeSteal = (info.hasKey("lifeSteal")) ? info.getFloat("lifeSteal") : 0;
 	}
 
-	public EquipmentInfo getEquipmentInfo() { return equipmentInfo; }
-	public LevelInfo getLevelInfo() { return levelInfo; }
+	public EquipmentInfo getEquipmentInfo() {
+		return equipmentInfo;
+	}
+
+	public LevelInfo getLevelInfo() {
+		return levelInfo;
+	}
 
 	public void setDmg(int minDmg, int maxDmg) {
 		this.minDmg = minDmg;
 		this.maxDmg = maxDmg;
 	}
-	public int getMinDmg(){
+
+	public int getMinDmg() {
 		return minDmg;
 	}
-	public int getMaxDmg(){
+
+	public int getMaxDmg() {
 		return maxDmg;
 	}
-	
-	public void setFireDmg(int fireDmg){
-		this.fireDmg = fireDmg;
-	}
-	public int getFireDmg(){
+
+	public int getFireDmg() {
 		return fireDmg;
 	}
-	public void setIceDmg(int iceDmg){
-		this.iceDmg = iceDmg;
+
+	public void setFireDmg(int fireDmg) {
+		this.fireDmg = fireDmg;
 	}
-	public int getIceDmg(){
+
+	public int getIceDmg() {
 		return iceDmg;
 	}
-	public void setLifeSteal(float lifeSteal){
+
+	public void setIceDmg(int iceDmg) {
+		this.iceDmg = iceDmg;
+	}
+
+	public double getLifeSteal() {
+		return lifeSteal;
+	}
+
+	public void setLifeSteal(float lifeSteal) {
 		this.lifeSteal = lifeSteal;
 	}
-	public double getLifeSteal(){ return lifeSteal; }
 
 	@Override
-	public List<String> buildLore(){
+	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Utility.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
-		if(fireDmg > 0) lore.add(Utility.colorCodes("&cFIRE DMG: +" + fireDmg));
-		if(iceDmg > 0) lore.add(Utility.colorCodes("&cICE DMG: +" + iceDmg));
-		if(lifeSteal > 0) lore.add(Utility.colorCodes("&cLIFE STEAL: +" + (lifeSteal * 100) + "%"));
+		if (fireDmg > 0) lore.add(Utility.colorCodes("&cFIRE DMG: +" + fireDmg));
+		if (iceDmg > 0) lore.add(Utility.colorCodes("&cICE DMG: +" + iceDmg));
+		if (lifeSteal > 0) lore.add(Utility.colorCodes("&cLIFE STEAL: +" + Math.round(lifeSteal * 100) + "%"));
 		lore.addAll(equipmentInfo.buildLore());
 		lore.addAll(levelInfo.buildLore());
 		return lore;
 	}
 
 	@Override
-	public void store(){
+	public void store() {
 		NBTTagCompound info = getAegeusInfo();
 		equipmentInfo.store();
 		levelInfo.store();
@@ -99,10 +113,10 @@ public class Weapon extends AegeusItem implements ItemInfo {
 	}
 
 	@Override
-	public ItemStack build(){
+	public ItemStack build() {
 		store();
 		setLore(buildLore());
 		return buildDefault();
 	}
-	
+
 }

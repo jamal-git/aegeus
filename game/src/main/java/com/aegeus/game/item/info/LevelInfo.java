@@ -19,26 +19,41 @@ public class LevelInfo implements ItemInfo {
 		xp = (info.hasKey("xp")) ? info.getInt("xp") : 0;
 	}
 
-	public int getLevel() { return level; }
+	public int getLevel() {
+		return level;
+	}
+
 	public void setLevel(int level) {
 		this.level = level;
 		xp = 0;
 	}
-	public int getXp() { return xp; }
+
+	public void addLevel(int i) {
+		setLevel(getLevel() + 1);
+	}
+
+	public int getXp() {
+		return xp;
+	}
+
 	public boolean setXp(int xp) {
 		this.xp = xp;
-		if(xp >= Utility.calcMaxXP(level)) {
+		if (xp >= Utility.calcMaxXP(level)) {
 			setLevel(level + 1);
 			return true;
 		}
 		return false;
 	}
 
+	public boolean addXp(int i) {
+		return setXp(getXp() + i);
+	}
+
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		if(level > 0) lore.add(Utility.colorCodes("&6&oLevel " + (level + 1) + " &7&o("
-				+ ((xp / Utility.calcMaxXP(level)) * 100) + ")"));
+		lore.add(Utility.colorCodes("&6&oLevel " + (level + 1) + " &7&o("
+				+ ((xp / Utility.calcMaxXP(level)) * 100) + "%)"));
 		return lore;
 	}
 

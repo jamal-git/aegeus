@@ -15,6 +15,7 @@ public class EquipmentInfo implements ItemInfo {
 	private int strength = 0;
 	private int intelligence = 0;
 	private int vitality = 0;
+	private int dexterity = 0;
 
 	public EquipmentInfo(AegeusItem item) {
 		this.item = item;
@@ -24,27 +25,65 @@ public class EquipmentInfo implements ItemInfo {
 		strength = (info.hasKey("strength")) ? info.getInt("strength") : 0;
 		intelligence = (info.hasKey("intelligence")) ? info.getInt("intelligence") : 0;
 		vitality = (info.hasKey("vitality")) ? info.getInt("vitality") : 0;
+		dexterity = (info.hasKey("dexterity")) ? info.getInt("dexterity") : 0;
 	}
 
-	public int getTier() { return tier; }
-	public void setTier(int tier) { this.tier = tier; }
-	public Rarity getRarity() { return rarity; }
-	public void setRarity(Rarity rarity) { this.rarity = rarity; }
+	public int getTier() {
+		return tier;
+	}
 
-	public int getStrength() { return strength; }
-	public void setStrength(int strength) { this.strength = strength; }
-	public int getIntelligence() { return intelligence; }
-	public void setIntelligence(int intelligence) { this.intelligence = intelligence; }
-	public int getVitality() { return vitality; }
-	public void setVitality(int vitality) { this.vitality = vitality; }
+	public void setTier(int tier) {
+		this.tier = tier;
+	}
+
+	public Rarity getRarity() {
+		return rarity;
+	}
+
+	public void setRarity(Rarity rarity) {
+		this.rarity = rarity;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getIntelligence() {
+		return intelligence;
+	}
+
+	public void setIntelligence(int intelligence) {
+		this.intelligence = intelligence;
+	}
+
+	public int getVitality() {
+		return vitality;
+	}
+
+	public void setVitality(int vitality) {
+		this.vitality = vitality;
+	}
+
+	public int getDexterity() {
+		return dexterity;
+	}
+
+	public void setDexterity(int dexterity) {
+		this.dexterity = dexterity;
+	}
 
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		if(strength > 0) lore.add(Utility.colorCodes("&cSTR: " + strength));
-		if(intelligence > 0) lore.add(Utility.colorCodes("&cINT: " + intelligence));
-		if(vitality > 0) lore.add(Utility.colorCodes("&cVIT: " + vitality));
-		if(rarity != null) lore.add(Utility.colorCodes(rarity.getLore()));
+		if (strength > 0) lore.add(Utility.colorCodes("&cSTR: " + strength));
+		if (intelligence > 0) lore.add(Utility.colorCodes("&cINT: " + intelligence));
+		if (vitality > 0) lore.add(Utility.colorCodes("&cVIT: " + vitality));
+		if (dexterity > 0) lore.add(Utility.colorCodes("&cDEX: " + dexterity));
+		if (rarity != null) lore.add(Utility.colorCodes(rarity.getLore()));
 		return lore;
 	}
 
@@ -52,10 +91,11 @@ public class EquipmentInfo implements ItemInfo {
 	public void store() {
 		NBTTagCompound info = item.getAegeusInfo();
 		info.setInt("tier", tier);
-		if(rarity != null) info.setInt("rarity", rarity.getId());
+		if (rarity != null) info.setInt("rarity", rarity.getId());
 		info.setInt("strength", strength);
 		info.setInt("intelligence", intelligence);
 		info.setInt("vitality", vitality);
+		info.setInt("dexterity", dexterity);
 		item.setAegeusInfo(info);
 	}
 }

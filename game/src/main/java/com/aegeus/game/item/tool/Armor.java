@@ -46,52 +46,82 @@ public class Armor extends AegeusItem implements ItemInfo {
 
 //	private List<ArmorRune> runes = new ArrayList<>();
 
-	public EquipmentInfo getEquipmentInfo() { return equipmentInfo; }
-	public LevelInfo getLevelInfo() { return levelInfo; }
-
-	public void setHp(int hp){
-		this.hp = hp;
+	public EquipmentInfo getEquipmentInfo() {
+		return equipmentInfo;
 	}
-	public int getHp(){
+
+	public LevelInfo getLevelInfo() {
+		return levelInfo;
+	}
+
+	public int getHp() {
 		return hp;
 	}
 
-	public void setHpRegen(int hpRegen){
-		this.hpRegen = hpRegen;
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
-	public int getHpRegen(){
+
+	public int getHpRegen() {
 		return hpRegen;
 	}
-	public float getEnergyRegen() { return energyRegen; }
-	public void setEnergyRegen(float energyRegen) { this.energyRegen = energyRegen; }
 
-	public float getDefense() { return defense; }
-	public void setDefense(float defense) { this.defense = defense; }
-	public float getMagicRes() { return magicRes; }
-	public void setMagicRes(float magicRes) { this.magicRes = magicRes; }
-	public float getBlock() { return block; }
-	public void setBlock(float block) { this.block = block; }
+	public void setHpRegen(int hpRegen) {
+		this.hpRegen = hpRegen;
+	}
+
+	public float getEnergyRegen() {
+		return energyRegen;
+	}
+
+	public void setEnergyRegen(float energyRegen) {
+		this.energyRegen = energyRegen;
+	}
+
+	public float getDefense() {
+		return defense;
+	}
+
+	public void setDefense(float defense) {
+		this.defense = defense;
+	}
+
+	public float getMagicRes() {
+		return magicRes;
+	}
+
+	public void setMagicRes(float magicRes) {
+		this.magicRes = magicRes;
+	}
+
+	public float getBlock() {
+		return block;
+	}
+
+	public void setBlock(float block) {
+		this.block = block;
+	}
 
 	//public List<ArmorRune> getRunes() {
 	//	return runes;
 	//}
 
 	@Override
-	public List<String> buildLore(){
+	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		if(hp > 0) lore.add(Utility.colorCodes("&cHP: +" + hp));
-		if(hpRegen > 0) lore.add(Utility.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
-		if(energyRegen > 0) lore.add(Utility.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
-		if(defense > 0) lore.add(Utility.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
-		if(magicRes > 0) lore.add(Utility.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
-		if(block > 0) lore.add(Utility.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
+		if (hp > 0) lore.add(Utility.colorCodes("&cHP: +" + hp));
+		if (hpRegen > 0) lore.add(Utility.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
+		if (energyRegen > 0) lore.add(Utility.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
+		if (defense > 0) lore.add(Utility.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
+		if (magicRes > 0) lore.add(Utility.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
+		if (block > 0) lore.add(Utility.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
 		lore.addAll(equipmentInfo.buildLore());
 		lore.addAll(levelInfo.buildLore());
 		return lore;
 	}
 
 	@Override
-	public void store(){
+	public void store() {
 		NBTTagCompound info = getAegeusInfo();
 		equipmentInfo.store();
 		levelInfo.store();
@@ -102,10 +132,10 @@ public class Armor extends AegeusItem implements ItemInfo {
 	}
 
 	@Override
-	public ItemStack build(){
+	public ItemStack build() {
 		store();
 		setLore(buildLore());
 		return buildDefault();
 	}
-	
+
 }

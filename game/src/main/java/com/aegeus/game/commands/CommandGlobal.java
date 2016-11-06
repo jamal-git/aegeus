@@ -1,7 +1,7 @@
 package com.aegeus.game.commands;
 
 import com.aegeus.game.chat.ChatManager;
-import com.aegeus.game.util.Utility;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,14 +11,14 @@ public class CommandGlobal implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(!(sender instanceof Player)) return false;
-		if(args.length < 1) return false;
-		
+		if (!(sender instanceof Player)) return false;
+		if (args.length < 1) return false;
+
 		Player player = (Player) sender;
-		String msg = Utility.buildString(args, 0);
-		
+		String msg = StringUtils.join(args, " ");
+
 		ChatManager.sendAutoChat(player, msg.trim());
-		
+
 		return true;
 	}
 

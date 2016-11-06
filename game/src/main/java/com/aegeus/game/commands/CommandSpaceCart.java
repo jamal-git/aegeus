@@ -10,9 +10,9 @@ public class CommandSpaceCart implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] arg3) {
-		if(!(sender instanceof Player))	return false;
+		if (!(sender instanceof Player)) return false;
 
-		Player p =(Player) sender;
+		Player p = (Player) sender;
 		p.getWorld().spawn(p.getLocation(), Minecart.class);
 		return false;
 	}

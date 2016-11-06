@@ -1,4 +1,3 @@
-
 package com.aegeus.game.item;
 
 import com.aegeus.game.util.Utility;
@@ -21,19 +20,27 @@ public enum Rarity {
 		this.lore = Utility.colorCodes(lore);
 	}
 
-	public int getId() { return id; }
-	public String getName() { return name; }
-	public String getLore() { return lore; }
-
 	public static Rarity getById(int id) {
-		for(Rarity r : Rarity.values())
-			if(r.id == id) return r;
+		for (Rarity r : Rarity.values())
+			if (r.id == id) return r;
 		return null;
 	}
-	
+
 	public static Rarity getByName(String name) {
-		for(Rarity r : Rarity.values())
-			if(r.name.equalsIgnoreCase(name)) return r;
+		for (Rarity r : Rarity.values())
+			if (r.name.equalsIgnoreCase(name)) return r;
 		return null;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getLore() {
+		return lore;
 	}
 }

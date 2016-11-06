@@ -1,51 +1,82 @@
 package com.aegeus.game.stats;
 
-import java.util.Random;
-
 import org.bukkit.Material;
+
+import java.util.Random;
 
 public class StatsBasic implements Stats {
 
-	private static final String name = "Basic";
-	private final Random random = new Random();
-	private final StatsContainer container = new StatsContainer();
-	private final float chance = 0.16f;
-	
-	@Override public String getName() { return name; }
-	@Override public StatsContainer getContainer() { return container; }
-	@Override public boolean hasHelmet() { return true; }
-	@Override public boolean hasChestplate() { return random.nextBoolean(); }
-	@Override public boolean hasLeggings() { return random.nextBoolean(); }
-	@Override public boolean hasBoots() { return random.nextBoolean(); }
-	@Override public boolean hasWeapon() { return true; }
-	@Override public float getChance() { return chance; }
-	
+	public static final String NAME = "Basic";
+	public static final float CHANCE = 0.16f;
+	private final Random RANDOM = new Random();
+	private final StatsContainer CONTAINER = new StatsContainer();
+
 	public StatsBasic() {
-		container.addHelmets(
-			container.new ArmorPossibility(
-				Material.LEATHER_HELMET, 1,
-				5, 40
-		));
-		container.addChestplates(
-			container.new ArmorPossibility(
-				Material.LEATHER_CHESTPLATE, 1,
-				5, 40
-		));
-		container.addLeggings(
-			container.new ArmorPossibility(
-				Material.LEATHER_LEGGINGS, 1,
-				5, 40
-		));
-		container.addBoots(
-			container.new ArmorPossibility(
-				Material.LEATHER_BOOTS, 1,
-				5, 40
-		));
-		container.addWeapons(
-			container.new WeaponPossibility(
-				Material.WOOD_SWORD, 1,
-				1, 25, 6
-		));
+		CONTAINER.addHelmets(
+				CONTAINER.new ArmorPossibility(
+						Material.LEATHER_HELMET, 1,
+						5, 40
+				));
+		CONTAINER.addChestplates(
+				CONTAINER.new ArmorPossibility(
+						Material.LEATHER_CHESTPLATE, 1,
+						5, 40
+				));
+		CONTAINER.addLeggings(
+				CONTAINER.new ArmorPossibility(
+						Material.LEATHER_LEGGINGS, 1,
+						5, 40
+				));
+		CONTAINER.addBoots(
+				CONTAINER.new ArmorPossibility(
+						Material.LEATHER_BOOTS, 1,
+						5, 40
+				));
+		CONTAINER.addWeapons(
+				CONTAINER.new WeaponPossibility(
+						Material.WOOD_SWORD, 1,
+						1, 25, 6
+				));
 	}
-	
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public StatsContainer getContainer() {
+		return CONTAINER;
+	}
+
+	@Override
+	public boolean hasHelmet() {
+		return true;
+	}
+
+	@Override
+	public boolean hasChestplate() {
+		return RANDOM.nextBoolean();
+	}
+
+	@Override
+	public boolean hasLeggings() {
+		return RANDOM.nextBoolean();
+	}
+
+	@Override
+	public boolean hasBoots() {
+		return RANDOM.nextBoolean();
+	}
+
+	@Override
+	public boolean hasWeapon() {
+		return true;
+	}
+
+	@Override
+	public float getChance() {
+		return CHANCE;
+	}
+
 }

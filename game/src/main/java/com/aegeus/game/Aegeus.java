@@ -12,20 +12,19 @@ import java.util.logging.Logger;
 
 /**
  * AEGEUS Game
+ *
  * @since 2016/08/19
  */
 public class Aegeus extends JavaPlugin {
-	private static final boolean DEBUG = true;
-	private final Logger LOGGER = getLogger();
-	
+	public final Logger LOGGER = getLogger();
+
 	@Override
-	public void onEnable() {	
+	public void onEnable() {
 		// wooOOOOOOOOO, loading up!
 		LOGGER.info("AEGEUS enabling...");
 		saveDefaultConfig();
 
 		// Register plugin events
-		// TODO Clean up a bit?
 		LOGGER.info("Registering event listeners...");
 		getServer().getPluginManager().registerEvents(new Server(this), this);
 		getServer().getPluginManager().registerEvents(new Combat(this), this);
@@ -34,7 +33,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Mining(this), this);
 		getServer().getPluginManager().registerEvents(new Statistics(this), this);
 		getServer().getPluginManager().registerEvents(new Bank(this), this);
-		
+
 		// Register game commands
 		LOGGER.info("Registering commands...");
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());
@@ -47,12 +46,10 @@ public class Aegeus extends JavaPlugin {
 		getCommand("spawner").setExecutor(new CommandSpawner());
 
 		// Register test commands
-		if(DEBUG) {
-			LOGGER.info("Registering test commands...");
-			getCommand("testarmor").setExecutor(new CommandTestArmor());
-			getCommand("testweapon").setExecutor(new CommandTestWeapon());
-			getCommand("testmob").setExecutor(new CommandTestMob());
-		}
+		LOGGER.info("Registering test commands...");
+		getCommand("testarmor").setExecutor(new CommandTestArmor());
+		getCommand("testweapon").setExecutor(new CommandTestWeapon());
+		getCommand("testmob").setExecutor(new CommandTestMob());
 
 		// Done, done, and done!
 		LOGGER.info("AEGEUS enabled.");
@@ -60,6 +57,6 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-        LOGGER.info("AEGEUS disabled.");
+		LOGGER.info("AEGEUS disabled.");
 	}
 }

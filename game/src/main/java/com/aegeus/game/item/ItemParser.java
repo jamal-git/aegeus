@@ -6,27 +6,34 @@ import org.bukkit.Material;
 
 public class ItemParser {
 	public static AegeusItem parseItem(AegeusItem item, String... args) {
-		for(int i = 1; i < args.length; i++) {
+		for (int i = 1; i < args.length; i++) {
 			String[] pair = args[i].split("=");
 			String key = pair[0];
 			String value = pair[1];
-			switch(key.toLowerCase()) {
+			switch (key.toLowerCase()) {
 				case "name":
 					try {
-						item.setName(value.replace("__", " "));
+						item.setName(value.replace("_", " "));
 						break;
-					} catch (Exception e) { break; }
+					} catch (Exception e) {
+						break;
+					}
 				case "lore":
 					try {
-						for(String line : value.split("||"))
+						for (String line : value.split("||"))
 							item.addLore(line.replace("__", " "));
 						break;
-					} catch (Exception e) { break; }
+					} catch (Exception e) {
+						break;
+					}
 				case "material":
 					try {
 						item.setMaterial(Material.getMaterial(value));
-					} catch (Exception e) { break; }
-				default: break;
+					} catch (Exception e) {
+						break;
+					}
+				default:
+					break;
 			}
 		}
 		return item;
@@ -34,12 +41,12 @@ public class ItemParser {
 
 	public static Weapon parseWeapon(Weapon weapon, String... args) {
 		weapon = (Weapon) parseItem(weapon, args);
-		for(int i = 1; i < args.length; i++) {
+		for (int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");
 				String key = pair[0];
 				String value = pair[1];
-				switch(key.toLowerCase()) {
+				switch (key.toLowerCase()) {
 					case "dmg":
 						String[] vals = value.split(";");
 						int minDmg = Integer.parseInt(vals[0]);
@@ -58,21 +65,23 @@ public class ItemParser {
 						float lifeSteal = Float.parseFloat(value);
 						weapon.setLifeSteal(lifeSteal);
 						break;
-					default: break;
+					default:
+						break;
 				}
-			} catch (Exception e) { }
+			} catch (Exception err) {
+			}
 		}
 		return weapon;
 	}
-	
+
 	public static Armor parseArmor(Armor armor, String... args) {
 		armor = (Armor) parseItem(armor, args);
-		for(int i = 1; i < args.length; i++) {
+		for (int i = 1; i < args.length; i++) {
 			try {
 				String[] pair = args[i].split("=");
 				String key = pair[0];
 				String value = pair[1];
-				switch(key.toLowerCase()) {
+				switch (key.toLowerCase()) {
 					case "hp":
 						int hp = Integer.parseInt(value);
 						armor.setHp(hp);
@@ -81,11 +90,13 @@ public class ItemParser {
 						int hpRegen = Integer.parseInt(value);
 						armor.setHpRegen(hpRegen);
 						break;
-					default: break;
+					default:
+						break;
 				}
-			} catch (Exception e) { }
+			} catch (Exception err) {
+			}
 		}
 		return armor;
 	}
-	
+
 }

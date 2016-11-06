@@ -12,19 +12,19 @@ public class CommandTestWeapon implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(!(sender instanceof Player)) return false;
-		if(!sender.hasPermission("aegeus.test")) return false;
-		if(args.length < 1) return false;
-		
+		if (!(sender instanceof Player)) return false;
+		if (!sender.hasPermission("aegeus.test")) return false;
+		if (args.length < 1) return false;
+
 		Player player = (Player) sender;
-		
+
 		Material material = Material.getMaterial(args[0]);
-		if(material == null) return false;
-		
+		if (material == null) return false;
+
 		Weapon weapon = ItemParser.parseWeapon(new Weapon(material), args);
-	
+
 		player.getInventory().addItem(weapon.build());
-		
+
 		return true;
 	}
 
