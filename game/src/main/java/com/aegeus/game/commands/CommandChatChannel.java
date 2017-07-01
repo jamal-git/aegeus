@@ -1,9 +1,9 @@
 package com.aegeus.game.commands;
 
-import com.aegeus.game.chat.Chat;
-import com.aegeus.game.data.AegeusPlayer;
-import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Utility;
+import com.aegeus.game.Aegeus;
+import com.aegeus.game.chat.ChatChannel;
+import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,14 +17,14 @@ public class CommandChatChannel implements CommandExecutor {
 		if (args.length < 1) return false;
 
 		Player player = (Player) sender;
-		String search = args[0];
-		Chat.Channel channel = Chat.Channel.getByShortcuts(search);
+		String name = args[0];
+		ChatChannel channel = ChatChannel.fromName(name);
 		if (channel == null) return false;
 
-		AegeusPlayer ap = Data.get(player);
-		ap.setChatChannel(channel);
+		AgPlayer info = Aegeus.getInstance().getPlayer(player);
+		info.setChatChannel(channel);
 
-		player.sendMessage(Utility.colorCodes("&7Default chat channel set to &b" + channel.getName() + "."));
+		player.sendMessage(Util.colorCodes("&7Default chat channel set to &b" + channel.getName() + "."));
 
 		return true;
 	}

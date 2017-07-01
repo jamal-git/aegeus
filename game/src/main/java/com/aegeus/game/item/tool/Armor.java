@@ -1,20 +1,21 @@
 package com.aegeus.game.item.tool;
 
-import com.aegeus.game.item.AegeusItem;
+import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.LevelInfo;
-import com.aegeus.game.util.Utility;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.NBTTagFloat;
-import net.minecraft.server.v1_10_R1.NBTTagInt;
+import com.aegeus.game.util.Util;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagFloat;
+import net.minecraft.server.v1_9_R1.NBTTagInt;
+import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Armor extends AegeusItem implements ItemInfo {
+public class Armor extends AgItem implements ItemInfo {
 	private EquipmentInfo equipmentInfo;
 	private LevelInfo levelInfo;
 	private int hp = 0;
@@ -23,6 +24,7 @@ public class Armor extends AegeusItem implements ItemInfo {
 	private float defense = 0;
 	private float magicRes = 0;
 	private float block = 0;
+	private float thorns = 0;
 
 	public Armor(Material material) {
 		super(material);
@@ -42,16 +44,31 @@ public class Armor extends AegeusItem implements ItemInfo {
 		defense = (info.hasKey("defense")) ? info.getFloat("defense") : 0;
 		magicRes = (info.hasKey("magicRes")) ? info.getFloat("magicRes") : 0;
 		block = (info.hasKey("block")) ? info.getFloat("block") : 0;
+		thorns = (info.hasKey("thorns")) ? info.getFloat("thorns") : 0;
 	}
 
 //	private List<ArmorRune> runes = new ArrayList<>();
+
+	public static boolean verify(ItemStack item) {
+		AgItem agItem = new AgItem(item);
+		NBTTagCompound info = agItem.getAegeusInfo();
+		return info.hasKey("type") && info.getString("type").equalsIgnoreCase("armor");
+	}
 
 	public EquipmentInfo getEquipmentInfo() {
 		return equipmentInfo;
 	}
 
+	public void setEquipmentInfo(EquipmentInfo equipmentInfo) {
+		this.equipmentInfo = equipmentInfo;
+	}
+
 	public LevelInfo getLevelInfo() {
 		return levelInfo;
+	}
+
+	public void setLevelInfo(LevelInfo levelInfo) {
+		this.levelInfo = levelInfo;
 	}
 
 	public int getHp() {
@@ -102,19 +119,28 @@ public class Armor extends AegeusItem implements ItemInfo {
 		this.block = block;
 	}
 
+	public float getThorns() {
+		return thorns;
+	}
+
 	//public List<ArmorRune> getRunes() {
 	//	return runes;
 	//}
 
+	public void setThorns(float thorns) {
+		this.thorns = thorns;
+	}
+
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		if (hp > 0) lore.add(Utility.colorCodes("&cHP: +" + hp));
-		if (hpRegen > 0) lore.add(Utility.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
-		if (energyRegen > 0) lore.add(Utility.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
-		if (defense > 0) lore.add(Utility.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
-		if (magicRes > 0) lore.add(Utility.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
-		if (block > 0) lore.add(Utility.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
+		if (hp > 0) lore.add(Util.colorCodes("&cHP: +" + hp));
+		if (hpRegen > 0) lore.add(Util.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
+		if (energyRegen > 0) lore.add(Util.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
+		if (defense > 0) lore.add(Util.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
+		if (magicRes > 0) lore.add(Util.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
+		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
+		if (thorns > 0) lore.add(Util.colorCodes("&cTHORNS: " + Math.round(thorns * 100) + "%"));
 		lore.addAll(equipmentInfo.buildLore());
 		lore.addAll(levelInfo.buildLore());
 		return lore;
@@ -125,9 +151,14 @@ public class Armor extends AegeusItem implements ItemInfo {
 		NBTTagCompound info = getAegeusInfo();
 		equipmentInfo.store();
 		levelInfo.store();
+		info.set("type", new NBTTagString("armor"));
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
 		info.set("energyRegen", new NBTTagFloat(energyRegen));
+		info.set("defense", new NBTTagFloat(defense));
+		info.set("magicRes", new NBTTagFloat(magicRes));
+		info.set("block", new NBTTagFloat(block));
+		info.set("thorns", new NBTTagFloat(thorns));
 		setAegeusInfo(info);
 	}
 
@@ -135,7 +166,7 @@ public class Armor extends AegeusItem implements ItemInfo {
 	public ItemStack build() {
 		store();
 		setLore(buildLore());
-		return buildDefault();
+		return super.build();
 	}
 
 }

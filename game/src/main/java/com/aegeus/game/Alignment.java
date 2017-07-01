@@ -5,15 +5,15 @@ public enum Alignment {
 	NEUTRAL(1, "Neutral", "&eYou have seeded a disruption and have become Neutral.", 0, 1, 0.25f),
 	OUTLAW(2, "Outlaw", "&cYou have killed a lawful player and have become an Outlaw.", 1, 1, 0.5f);
 
-	private int id;
-	private String name;
-	private String description;
-	private float firstItemChance;
-	private float invChance;
-	private float armorChance;
+	private final int id;
+	private final String name;
+	private final String description;
+	private final float firstItemChance;
+	private final float invChance;
+	private final float armorChance;
 
 	Alignment(int id, String name, String description,
-	          float firstItemChance, float invChance, float armorChance) {
+			  float firstItemChance, float invChance, float armorChance) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -34,7 +34,7 @@ public enum Alignment {
 		return null;
 	}
 
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 

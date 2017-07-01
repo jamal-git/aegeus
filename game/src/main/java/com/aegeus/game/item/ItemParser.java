@@ -5,7 +5,7 @@ import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 
 public class ItemParser {
-	public static AegeusItem parseItem(AegeusItem item, String... args) {
+	public static AgItem parseItem(AgItem item, String... args) {
 		for (int i = 1; i < args.length; i++) {
 			String[] pair = args[i].split("=");
 			String key = pair[0];
@@ -15,7 +15,7 @@ public class ItemParser {
 					try {
 						item.setName(value.replace("_", " "));
 						break;
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 						break;
 					}
 				case "lore":
@@ -23,13 +23,13 @@ public class ItemParser {
 						for (String line : value.split("||"))
 							item.addLore(line.replace("__", " "));
 						break;
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 						break;
 					}
 				case "material":
 					try {
 						item.setMaterial(Material.getMaterial(value));
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 						break;
 					}
 				default:
@@ -68,7 +68,7 @@ public class ItemParser {
 					default:
 						break;
 				}
-			} catch (Exception err) {
+			} catch (Exception ignored) {
 			}
 		}
 		return weapon;
@@ -93,7 +93,7 @@ public class ItemParser {
 					default:
 						break;
 				}
-			} catch (Exception err) {
+			} catch (Exception ignored) {
 			}
 		}
 		return armor;

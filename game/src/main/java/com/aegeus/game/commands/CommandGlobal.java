@@ -17,7 +17,7 @@ public class CommandGlobal implements CommandExecutor {
 		Player player = (Player) sender;
 		String msg = StringUtils.join(args, " ");
 
-		ChatManager.sendAutoChat(player, msg.trim());
+		ChatManager.sendAuto(player, msg.trim());
 
 		return true;
 	}

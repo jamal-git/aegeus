@@ -1,9 +1,8 @@
 package com.aegeus.game.commands;
 
-import com.aegeus.game.mobs.Mob;
-import com.aegeus.game.mobs.MobBandit;
-import com.aegeus.game.mobs.Spawner;
-import com.aegeus.game.stats.StatsBasic;
+import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.Spawner;
+import com.aegeus.game.stats.StatsT1Bandit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -19,8 +18,10 @@ public class CommandSpawner implements CommandExecutor {
 
 		Player player = (Player) sender;
 		Location loc = player.getLocation().getBlock().getLocation();
-		Mob mob = new MobBandit(new StatsBasic());
-		Spawner.create(loc, mob, 3, 1, 1);
+		Spawner spawner = new Spawner(loc);
+		spawner.add(new StatsT1Bandit());
+		Aegeus.getInstance().addSpawner(spawner);
+
 		player.sendBlockChange(loc, Material.MOB_SPAWNER, (byte) 0);
 
 		return true;

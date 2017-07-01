@@ -1,43 +1,31 @@
 name: AEGEUS
 version: dev
 description: We need a boat.
-authors: [oopsjpeg, Silvre, AkenoHimejima_]
+authors: [oopsjpeg, Silvre]
 main: com.aegeus.game.Aegeus
 
 commands:
-    global:
-      description: Send a message to all players on the server.
-      aliases: gl
-      usage: /global <message>
-    roll:
-      description: Roll a random number.
-      usage: /roll [max number]
-    message:
-      description: Send a private message to a specified player.
-      aliases: [msg, m, whisper, tell, pm]
-      usage: /message <player> <message>
     chatchannel:
       description: Changes your default chat channel.
       aliases: [cc, chat, channel]
       usage: /chatchannel <local / global>
-    planet:
-      description: Change planets.
-      usage: /planet <planet>
-    codex:
-      description: Review known information about mobs, planets, runes, etc.
-      usage: /codex <type> <search>
+    global:
+      description: Send a message to all players on the server.
+      aliases: gl
+      usage: /global <message>
+    message:
+      description: Send a private message to a specified player.
+      aliases: [msg, m, whisper, tell, pm]
+      usage: /message <player> <message>
+    roll:
+      description: Roll a random number.
+      usage: /roll [max number]
     spawner:
       description: Creates a spawner at the current location.
       usage: /spawner
-    testweapon:
-      description: Test weapons.
     testarmor:
       description: Test armor.
     testmob:
-      description: Test mobs.
-    testinv:
-      description: Test inventory.
-    spacecart:
-      description: create spaceboats and shit.
-    spawnpick:
-      description: Spawn a pick in for testing purposes
+      description: Test entity.
+    testweapon:
+      description: Test weapons.

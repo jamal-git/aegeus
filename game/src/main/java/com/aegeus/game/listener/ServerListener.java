@@ -1,26 +1,24 @@
-package com.aegeus.game;
+package com.aegeus.game.listener;
 
 import com.aegeus.common.Common;
-import com.aegeus.game.data.AegeusPlayer;
-import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Utility;
+import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Server implements Listener {
-	private final Aegeus PARENT;
-	private final Random RANDOM = new Random();
-	private final String[] motds = { // List of MOTDs
+public class ServerListener implements Listener {
+	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+	private static final String[] motds = { // List of MOTDs
 			"Is that supposed to be a meme?",
 			"Not supported by Atlas!",
 			"What are you, a miner?",
@@ -29,7 +27,7 @@ public class Server implements Listener {
 			"You have to see to believe!",
 			"<none>",
 			"&mBeloved&7 Known by Gio himself!",
-			"Fancy items!",
+			"Fancy item!",
 			"peppy pls fix",
 			"oopspng",
 			"I'm from PlanetMinecraft, op please?",
@@ -47,12 +45,13 @@ public class Server implements Listener {
 			"There's something different about this place...",
 			"Reina best girl, no doubt."
 	};
+	private final Aegeus parent;
 
 //	private int buffLootTime = 0;
 //	private int rebootTime = 7200;
 
-	public Server(Aegeus parent) {
-		this.PARENT = parent;
+	public ServerListener(Aegeus parent) {
+		this.parent = parent;
 //		Runnable checkBySecond = new Runnable() {
 //			public void run() {
 //				if (buffLootTime > 0) {
@@ -100,78 +99,61 @@ public class Server implements Listener {
 //		executor.scheduleAtFixedRate(checkBySecond, 0, 1, TimeUnit.SECONDS);
 	}
 
-	@EventHandler
-	private void onLoginEvent(PlayerLoginEvent e) {
-
-	}
-
-	@EventHandler
-	private void onCommandEvent(ServerCommandEvent e) {
-		Bukkit.broadcastMessage(e.getCommand());
-		Bukkit.getOnlinePlayers().stream()
-				.filter(Player::isOp)
-				.forEach((p) -> p.sendMessage(Utility.colorCodes(
-						"&8" + e.getSender() + " > " + e.getCommand())));
-	}
-
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	// Login messages and initial player setup
-	// TODO clean this
-	private void onJoinEvent(PlayerJoinEvent e) throws InterruptedException {
+	private void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
+		AgPlayer info = parent.getPlayer(player);
 		e.setJoinMessage("");
 		player.setHealthScaled(true);
 		player.setHealthScale(20);
 
-		Statistics.updateStats(player);
+		Util.updateStats(player);
 
-		if (!player.hasPlayedBefore()) player.sendTitle("", Utility.colorCodes("&bWelcome."));
-		else player.sendTitle("", Utility.colorCodes("&fWelcome back."));
+		if (!player.hasPlayedBefore()) player.sendTitle("", Util.colorCodes("&bWelcome."));
+		else player.sendTitle("", Util.colorCodes("&fWelcome back."));
 
-		Bukkit.getScheduler().runTaskLater(PARENT, () -> {
+		Bukkit.getScheduler().runTaskLater(parent, () -> {
 			for (int i = 0; i < 10; i++)
 				player.sendMessage(" ");
-			player.sendMessage(Utility.colorCodes(
+			player.sendMessage(Util.colorCodes(
 					"          &bAegeus &f&lMMORPG&f\n" +
 							"          &b• &7Patch &b" + Common.PATCH + " &7(&o" + Common.PATCH_NOTE + "&7)\n" +
 							"          &7Modify game settings with &b/settings"));
 			for (int i = 0; i < 2; i++)
 				player.sendMessage(" ");
 			if (Bukkit.getOnlinePlayers().size() == 1)
-				player.sendMessage(Utility.colorCodes(
-						"&8That's strange. It's quiet around here, like everyone has gone away. Why's that..? Have you arrived early, or is the universe arriving late?"
+				player.sendMessage(Util.colorCodes(
+						"&8That's strange. It's quiet around here, like everyone has gone away. Why's that..? " +
+								"Have you arrived early, or is the universe arriving late?"
 				));
 			player.sendMessage(" ");
-			AegeusPlayer data = Data.get(player);
-			if (data.isCombatLog()) {
-				player.sendMessage(Utility.colorCodes("You logged out in-combat, and have been killed."));
-				data.setCombatLog(false);
-			}
 		}, 2);
 	}
 
 	@EventHandler
+	private void onRespawn(PlayerRespawnEvent e) {
+		Player player = e.getPlayer();
+		Util.updateStats(player);
+		player.setHealth(player.getMaxHealth());
+	}
+
+	@EventHandler
 	// Clear user information and punish combat loggers
-	private void onLogoutEvent(PlayerQuitEvent e) {
+	private void onLogout(PlayerQuitEvent e) {
 		e.setQuitMessage("");
-		AegeusPlayer data = Data.get(e.getPlayer());
-		if (data.isInCombat() && !data.getCurrentPlanet().equals(Planet.XYLO)) {
-			data.getPlayer().setHealth(0);
-			data.setCombatLog(true);
-		}
-		Data.remove(e.getPlayer());
 	}
 
 	@EventHandler
 	// Random, custom MOTDs
 	private void onServerListPing(ServerListPingEvent e) {
-		if (Bukkit.hasWhitelist()) e.setMotd(Utility.colorCodes(
+		if (Bukkit.hasWhitelist()) e.setMotd(Util.colorCodes(
 				"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
 						+ "&cUndergoing maintenance. Stay tuned!"));
-		else e.setMotd(Utility.colorCodes(
+		else e.setMotd(Util.colorCodes(
 				"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
-						+ motds[RANDOM.nextInt(motds.length)]));
+						+ motds[random.nextInt(motds.length)]));
 	}
 
 	@EventHandler
@@ -179,4 +161,5 @@ public class Server implements Listener {
 	private void onCraft(CraftItemEvent e) {
 		e.setCancelled(true);
 	}
+
 }

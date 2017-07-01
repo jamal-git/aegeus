@@ -1,17 +1,17 @@
 package com.aegeus.game.commands;
 
 import com.aegeus.game.chat.ChatManager;
-import com.aegeus.game.util.Utility;
+import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.NoneNearbyException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CommandRoll implements CommandExecutor {
-	private final Random RANDOM = new Random();
+	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -24,19 +24,17 @@ public class CommandRoll implements CommandExecutor {
 			}
 		}
 
-		if (max > 100000) max = 100000;
-
-		int roll = RANDOM.nextInt(max);
-		sender.sendMessage(Utility.colorCodes(
-				"&7You rolled a &f" + roll + "&7 out of &f" + max + "&7."));
+		max = Math.min(100000, Math.max(1, max));
+		int roll = random.nextInt(max);
+		sender.sendMessage(Util.colorCodes("&7You rolled a(n) &f" + roll + "*7 out of &f" + max + "&7."));
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			try {
-				ChatManager.sendRadialChat(player, Utility.colorCodes(
-						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."), true);
+				ChatManager.sendRadial(player, Util.colorCodes(
+						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."), false);
 			} catch (NoneNearbyException e) {
-				player.sendMessage(Utility.colorCodes(
+				player.sendMessage(Util.colorCodes(
 						"&7&oThe sound of your die rolling echoes in the wind."));
 			}
 		}

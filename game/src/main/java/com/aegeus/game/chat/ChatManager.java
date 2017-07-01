@@ -1,83 +1,117 @@
 package com.aegeus.game.chat;
 
-import com.aegeus.game.data.Data;
-import com.aegeus.game.util.Utility;
+import com.aegeus.game.Aegeus;
+import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.NoneNearbyException;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class ChatManager {
-	public static void sendAutoChat(Player player, String msg) {
-		String[] split = msg.split(" ");
-		if (split[0].equalsIgnoreCase("WTB") || split[0].equalsIgnoreCase("WTS") || split[0].equalsIgnoreCase("WTT") ||
-				split[0].equalsIgnoreCase("Buying") || split[0].equalsIgnoreCase("Selling") || split[0].equalsIgnoreCase("Trading"))
-			sendTradeChat(player, msg);
-		else if (split[0].equalsIgnoreCase("WTR") || split[0].equalsIgnoreCase("Recruiting"))
-			sendRecruitChat(player, msg);
-		else sendGlobalChat(player, msg);
+	/**
+	 * Sends a global, trade, or recruit message depending on keywords.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 */
+	public static void sendAuto(Player sender, String content) {
+		if (content.contains("WTB") || content.contains("WTS") || content.contains("WTT") ||
+				content.contains("Buying") || content.contains("Selling") || content.contains("Trading"))
+			sendTrade(sender, content);
+		else if (content.contains("WTR") || content.contains("Recruiting"))
+			sendRecruit(sender, content);
+		else
+			sendGlobal(sender, content);
 	}
 
-	public static void sendGlobalChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Utility.colorCodes(
-				"&b(&lG&b)&7 " + player.getDisplayName() + ": &f" + Utility.colorCodes(msg)));
-	}
-
-	public static void sendTradeChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Utility.colorCodes(
-				"&a(&lT&a)&7 " + player.getDisplayName() + ": &f" + msg));
-	}
-
-	public static void sendRecruitChat(Player player, String msg) {
-		Bukkit.broadcastMessage(Utility.colorCodes(
-				"&e(&lR&e)&7 " + player.getDisplayName() + ": &f" + msg));
-	}
-
-	public static void sendBroadcast(String msg) {
-		Bukkit.broadcastMessage(Utility.colorCodes(
-				"&e&l>>&e " + msg));
-	}
-
-	public static void sendLocalChat(Player player, String msg) {
+	/**
+	 * Sends a local message.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 */
+	public static void sendLocal(Player sender, String content) {
 		try {
-			sendRadialChat(player, Utility.colorCodes(
-					"&7" + player.getDisplayName() + ":&f " + msg), true);
+			sendRadial(sender, Util.colorCodes("&7" + sender.getDisplayName() + ":&f " + content), true);
 		} catch (NoneNearbyException e) {
-			player.sendMessage(Utility.colorCodes(
+			sender.sendMessage(Util.colorCodes(
 					"&7&oYour voice echoes in the wind."));
 		}
 	}
 
-	public static void sendRadialChat(Player player, String msg, boolean sendToSender) throws NoneNearbyException {
-		if (sendToSender) player.sendMessage(msg);
-		boolean peopleNearby = false;
-		for (Entity nearby : player.getNearbyEntities(30, 30, 30))
-			if (nearby instanceof Player && !nearby.equals(player)) {
-				peopleNearby = true;
-				nearby.sendMessage(msg);
-			}
-		if (!peopleNearby) throw new NoneNearbyException("No players nearby.");
+	/**
+	 * Sends a global message.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 */
+	public static void sendGlobal(Player sender, String content) {
+		Bukkit.broadcastMessage(Util.colorCodes(
+				"&b(&lG&b)&7 " + sender.getDisplayName() + ":&f " + Util.colorCodes(content)));
+	}
+
+	/**
+	 * Sends a trade message.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 */
+	public static void sendTrade(Player sender, String content) {
+		Bukkit.broadcastMessage(Util.colorCodes(
+				"&a(&lT&a)&7 " + sender.getDisplayName() + ":&f " + Util.colorCodes(content)));
+	}
+
+	/**
+	 * Sends a recruit message.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 */
+	public static void sendRecruit(Player sender, String content) {
+		Bukkit.broadcastMessage(Util.colorCodes(
+				"&c(&lR&c)&7 " + sender.getDisplayName() + ":&f " + Util.colorCodes(content)));
+	}
+
+	/**
+	 * Sends a broadcast.
+	 *
+	 * @param content The content.
+	 */
+	public static void sendBroadcast(String content) {
+		Bukkit.broadcastMessage(Util.colorCodes("&b&l>>&b " + content));
+	}
+
+	/**
+	 * Sends a message within a radius of a location.
+	 *
+	 * @param sender  The sender.
+	 * @param content The content.
+	 * @throws NoneNearbyException No players are nearby.
+	 */
+	public static void sendRadial(Player sender, String content, boolean sendToSender) throws NoneNearbyException {
+		sender.sendMessage(Util.colorCodes(content));
+		List<Entity> entities = sender.getNearbyEntities(35, 35, 35);
+		if (entities.isEmpty()) throw new NoneNearbyException();
+		if (sendToSender) sender.sendMessage(Util.colorCodes(content));
+		sender.getNearbyEntities(35, 35, 35).stream().filter(e -> e instanceof Player && !e.equals(sender))
+				.forEach(e -> e.sendMessage(Util.colorCodes(content)));
 	}
 
 	/**
 	 * Sends a private message to a player.
-	 *
-	 * @param sender  Sender player.
-	 * @param target  Recipent player.
-	 * @param message Message to send.
+	 * @param sender The sender.
+	 * @param target The target.
+	 * @param content The content.
 	 */
-	public static void sendPrivateMessage(Player sender, Player target, String message) {
-		if (target.isOnline()) {
-			sender.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "TO: " + ChatColor.GREEN + target.getDisplayName()
-					+ ChatColor.GRAY + " - " + ChatColor.WHITE + message.trim());
-			target.sendMessage(ChatColor.GRAY + "" + ChatColor.BOLD + "FROM: " + ChatColor.GREEN
-					+ sender.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.WHITE + message.trim());
-			target.playSound(target.getLocation(), "mob.chicken.plop", 100, 1);
-			Data.get(target).setReplyTo(sender);
-		} else {
-			sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + target.getDisplayName() + ChatColor.RED
-					+ " is offline or does not exist.");
+	public static void sendPrivateMessage(Player sender, Player target, String content) {
+		if (!target.isOnline())
+			sender.sendMessage(Util.colorCodes("&c&l" + target.getDisplayName() + "&c is currently offline."));
+		else {
+			sender.sendMessage(Util.colorCodes("&7&lTO&f " + target.getDisplayName() + "&7:&f " + content.trim()));
+			target.sendMessage(Util.colorCodes("&7&lFROM&f " + sender.getDisplayName() + "&7:&f " + content.trim()));
+			Aegeus.getInstance().getPlayer(target).setReplyTo(sender);
 		}
 	}
 

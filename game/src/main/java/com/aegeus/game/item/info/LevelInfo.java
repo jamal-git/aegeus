@@ -1,18 +1,18 @@
 package com.aegeus.game.item.info;
 
-import com.aegeus.game.item.AegeusItem;
-import com.aegeus.game.util.Utility;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import com.aegeus.game.item.AgItem;
+import com.aegeus.game.util.Util;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LevelInfo implements ItemInfo {
-	private AegeusItem item;
+	private final AgItem item;
 	private int level = 0;
 	private int xp = 0;
 
-	public LevelInfo(AegeusItem item) {
+	public LevelInfo(AgItem item) {
 		this.item = item;
 		NBTTagCompound info = item.getAegeusInfo();
 		level = (info.hasKey("level")) ? info.getInt("level") : 0;
@@ -25,6 +25,7 @@ public class LevelInfo implements ItemInfo {
 
 	public void setLevel(int level) {
 		this.level = level;
+		if (this.level > 99) this.level = 99;
 		xp = 0;
 	}
 
@@ -38,7 +39,7 @@ public class LevelInfo implements ItemInfo {
 
 	public boolean setXp(int xp) {
 		this.xp = xp;
-		if (xp >= Utility.calcMaxXP(level)) {
+		if (xp >= Util.calcMaxXP(level) && level < 99) {
 			setLevel(level + 1);
 			return true;
 		}
@@ -52,8 +53,8 @@ public class LevelInfo implements ItemInfo {
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		lore.add(Utility.colorCodes("&6&oLevel " + (level + 1) + " &7&o("
-				+ ((xp / Utility.calcMaxXP(level)) * 100) + "%)"));
+		lore.add(Util.colorCodes("&6&oLevel " + (level + 1) + " &7&o("
+				+ Math.round(((float) xp / (float) Util.calcMaxXP(level)) * 100) + "%)"));
 		return lore;
 	}
 

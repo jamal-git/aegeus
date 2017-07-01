@@ -1,23 +1,29 @@
 package com.aegeus.game.item;
 
-import com.aegeus.game.util.Utility;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import com.aegeus.game.util.Util;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AegeusItem {
+public class AgItem {
 	private ItemStack item;
+	private String name;
 
-	public AegeusItem(Material material) {
+	public AgItem(Material material) {
 		this.item = new ItemStack(material);
 	}
 
-	public AegeusItem(ItemStack item) {
+	public AgItem(Material material, int amount) {
+		this.item = new ItemStack(material, amount);
+	}
+
+	public AgItem(ItemStack item) {
 		this.item = item;
 	}
 
@@ -30,17 +36,15 @@ public abstract class AegeusItem {
 	}
 
 	public String getName() {
-		return item.getItemMeta().getDisplayName();
+		return name;
 	}
 
 	public void setName(String name) {
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(Utility.colorCodes(name));
-		item.setItemMeta(meta);
+		this.name = Util.colorCodes(name);
 	}
 
 	public List<String> getLore() {
-		return item.getItemMeta().getLore();
+		return item.getItemMeta().getLore() == null ? new ArrayList<>() : item.getItemMeta().getLore();
 	}
 
 	public void setLore(List<String> lore) {
@@ -49,10 +53,9 @@ public abstract class AegeusItem {
 		item.setItemMeta(meta);
 	}
 
-	public void addLore(String... lines) {
+	public void addLore(String line) {
 		List<String> lore = getLore();
-		for (String s : lines)
-			lore.add(Utility.colorCodes(s));
+		lore.add(Util.colorCodes(line));
 		setLore(lore);
 	}
 
@@ -65,12 +68,12 @@ public abstract class AegeusItem {
 	}
 
 	private NBTTagCompound getTag() {
-		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_9_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		return (nmsStack.getTag() != null) ? nmsStack.getTag() : new NBTTagCompound();
 	}
 
 	private void setTag(NBTTagCompound tag) {
-		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_9_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		nmsStack.setTag(tag);
 		this.item = CraftItemStack.asBukkitCopy(nmsStack);
 	}
@@ -86,10 +89,13 @@ public abstract class AegeusItem {
 		setTag(tag);
 	}
 
-	public abstract ItemStack build();
+	public boolean verify() {
+		return true;
+	}
 
-	public ItemStack buildDefault() {
+	public ItemStack build() {
 		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(name);
 		meta.addItemFlags(
 				ItemFlag.HIDE_ENCHANTS,
 				ItemFlag.HIDE_POTION_EFFECTS,

@@ -1,8 +1,6 @@
 package com.aegeus.game.commands.test;
 
-import com.aegeus.game.mobs.Mob;
-import com.aegeus.game.mobs.MobBandit;
-import com.aegeus.game.stats.StatsBasic;
+import com.aegeus.game.stats.StatsShatterbone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +14,7 @@ public class CommandTestMob implements CommandExecutor {
 		if (!sender.hasPermission("aegeus.test")) return false;
 
 		Player player = (Player) sender;
-		Mob mob = new MobBandit(new StatsBasic());
-		mob.create(player.getLocation());
+		new StatsShatterbone().spawn(player.getLocation());
 
 		return true;
 	}

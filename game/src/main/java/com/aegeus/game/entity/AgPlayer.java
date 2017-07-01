@@ -1,39 +1,53 @@
-package com.aegeus.game.data;
+package com.aegeus.game.entity;
 
+import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
-import com.aegeus.game.chat.Chat;
+import com.aegeus.game.chat.ChatChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
 
-public class AegeusPlayer extends AegeusEntity {
-	private Player player;
+public class AgPlayer extends AgEntity {
+	private final Player player;
 	private BossBar bossBarHp;
-	private boolean combatLog = false;
 
-	//	private Alignment alignment = Alignment.LAWFUL;
+	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
-	private Legion legion = null;
+	private Legion legion = Legion.FEROCIOUS;
 //	private Mount mount = null;
 //	private Story story = new Story(this);
-//	private Bank bank = new Bank(this);
+//	private BankListener bank = new BankListener(this);
 
 	private Player replyTo;
-	private Chat.Channel chatChannel = Chat.Channel.LOCAL;
-	private Inventory bank;
-	private boolean isBankWithdraw = false;
+	private ChatChannel chatChannel = ChatChannel.LOCAL;
 
-	protected AegeusPlayer(Player player) {
+	public AgPlayer(Player player) {
 		super(player);
 		this.player = player;
 	}
 
-	public AegeusPlayer(UUID uuid) {
+	public AgPlayer(AgEntity info, Player player) {
+		super(info);
+		this.player = player;
+	}
+
+	public AgPlayer(AgPlayer other) {
+		super(other);
+		this.player = other.player;
+		this.bossBarHp = other.bossBarHp;
+		this.alignment = other.alignment;
+		this.division = other.division;
+		this.legion = other.legion;
+		this.replyTo = other.replyTo;
+		this.chatChannel = other.chatChannel;
+	}
+
+	public AgPlayer(UUID uuid) {
 		super(Bukkit.getPlayer(uuid));
+		this.player = Bukkit.getPlayer(uuid);
 	}
 
 	public Player getPlayer() {
@@ -48,15 +62,9 @@ public class AegeusPlayer extends AegeusEntity {
 		this.bossBarHp = bossBarHp;
 	}
 
-	public boolean isCombatLog() {
-		return combatLog;
+	public Alignment getAlignment() {
+		return alignment;
 	}
-
-	public void setCombatLog(boolean combatLog) {
-		this.combatLog = combatLog;
-	}
-
-//	public Alignment getAlignment() { return alignment; }
 //	public void setAlignment(Alignment alignment) {
 //		if(!alignment.equals(alignment)) {
 //			this.alignment = alignment;
@@ -91,28 +99,11 @@ public class AegeusPlayer extends AegeusEntity {
 		this.replyTo = replyTo;
 	}
 
-	public Chat.Channel getChatChannel() {
+	public ChatChannel getChatChannel() {
 		return chatChannel;
 	}
 
-	public void setChatChannel(Chat.Channel chatChannel) {
+	public void setChatChannel(ChatChannel chatChannel) {
 		this.chatChannel = chatChannel;
-	}
-
-	public Inventory getBank() {
-		return bank;
-	}
-
-	//	public void setBank(Bank bank) { this.bank = bank; }
-	public void setBank(Inventory bank) {
-		this.bank = bank;
-	}
-
-	public boolean getBankWithdraw() {
-		return isBankWithdraw;
-	}
-
-	public void setBankWithdraw(boolean isBankWithdraw) {
-		this.isBankWithdraw = isBankWithdraw;
 	}
 }
