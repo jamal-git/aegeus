@@ -5,7 +5,6 @@ import com.aegeus.game.Legion;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.item.ItemGold;
-import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Condition;
@@ -62,19 +61,19 @@ public class CombatListener implements Listener {
 				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
 		}
 
-		if (entity.getKiller() != null) {
-			Player player = entity.getKiller();
-			ItemStack mainHand = player.getInventory().getItemInMainHand();
-			if (mainHand != null && !mainHand.getType().equals(Material.AIR)) {
-				Weapon weapon = new Weapon(mainHand);
-				LevelInfo levels = weapon.getLevelInfo();
-				int xp = 45 + ((int) Math.round(entity.getMaxHealth() / 300));
-				if (levels.addXp(xp))
-					player.sendMessage(Util.colorCodes("&6Your weapon has reached &lLevel " + (levels.getLevel() + 1) + "&6."));
-				weapon.setLevelInfo(levels);
-				player.getInventory().setItemInMainHand(weapon.build());
-			}
-		}
+		//if (entity.getKiller() != null) {
+		//	Player player = entity.getKiller();
+		//	ItemStack mainHand = player.getInventory().getItemInMainHand();
+		//	if (mainHand != null && !mainHand.getType().equals(Material.AIR)) {
+		//		Weapon weapon = new Weapon(mainHand);
+		//		int xp = 45 + ((int) Math.round(entity.getMaxHealth() / 300));
+		//		weapon.addXp(xp);
+		//		if (weapon.getXp()
+		//			player.sendMessage(Util.colorCodes("&6Your weapon has reached &lLevel " + (levels.getLevel() + 1) + "&6."));
+		//		weapon.setLevelInfo(levels);
+		//		player.getInventory().setItemInMainHand(weapon.build());
+		//	}
+		//}
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
@@ -99,7 +98,7 @@ public class CombatListener implements Listener {
 			AgEntity aInfo = parent.getEntity(lAttacker);
 
 			ItemStack tool = lAttacker.getEquipment().getItemInMainHand();
-			if (tool != null && !tool.getType().equals(Material.AIR) && Weapon.verify(tool)) {
+			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
 				Weapon weapon = new Weapon(tool);
 				List<Sound> sounds = new ArrayList<>();
 				int physDmg = 0;
@@ -110,16 +109,16 @@ public class CombatListener implements Listener {
 
 				if (weapon.getFireDmg() > 0) {
 					magDmg += weapon.getFireDmg();
-					lVictim.setFireTicks(38 + (weapon.getEquipmentInfo().getTier() * 7));
+					lVictim.setFireTicks(38 + (weapon.getTier() * 7));
 				}
 				if (weapon.getIceDmg() > 0) {
 					magDmg += weapon.getIceDmg();
-					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (weapon.getEquipmentInfo().getTier() * 4), 2));
+					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 + (weapon.getTier() * 4), 2));
 					lVictim.getWorld().playSound(lVictim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 				}
 				if (weapon.getPoisonDmg() > 0) {
 					magDmg += weapon.getPoisonDmg();
-					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getEquipmentInfo().getTier() * 12), 1));
+					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1));
 					lVictim.getWorld().playSound(lVictim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 				}
 				if (weapon.getPureDmg() > 0) {
@@ -127,16 +126,16 @@ public class CombatListener implements Listener {
 					for (ItemStack i : lVictim.getEquipment().getArmorContents())
 						if (i != null && !i.getType().equals(Material.AIR)) {
 							Armor armor = new Armor(i);
-							if (armor.getEquipmentInfo().getTier() == weapon.getEquipmentInfo().getTier())
+							if (armor.getTier() == weapon.getTier())
 								matches++;
 						}
 					physDmg += weapon.getPureDmg() * matches;
 				}
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
-					physDmg += lVictim.getMaxHealth() * (0.04 * weapon.getEquipmentInfo().getTier());
+					physDmg += lVictim.getMaxHealth() * (0.04 * weapon.getTier());
 				}
 				if (weapon.getBlindness() > 0 && random.nextFloat() <= weapon.getBlindness()) {
-					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getEquipmentInfo().getTier() * 6), 1));
+					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1));
 				}
 				if (weapon.getLifeSteal() > 0) {
 					healing += (physDmg + magDmg) * weapon.getLifeSteal();

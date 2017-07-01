@@ -184,17 +184,17 @@ public abstract class Stats {
 	public Weapon get(WeaponPossible p, float f) {
 		Weapon weapon = new Weapon(p.material);
 		if (!p.name.isEmpty()) weapon.setName(Util.colorCodes(p.name));
-		weapon.getEquipmentInfo().setTier(tier);
-		weapon.getEquipmentInfo().setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
+		weapon.setTier(tier);
+		weapon.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
 
 		if (random.nextFloat() <= p.statChance)
-			weapon.getEquipmentInfo().setStrength(p.strength.get());
+			weapon.setStrength(p.strength.get());
 		if (random.nextFloat() < p.statChance)
-			weapon.getEquipmentInfo().setDexterity(p.dexterity.get());
+			weapon.setDexterity(p.dexterity.get());
 		if (random.nextFloat() <= p.statChance)
-			weapon.getEquipmentInfo().setIntellect(p.intellect.get());
+			weapon.setIntellect(p.intellect.get());
 		if (random.nextFloat() <= p.statChance)
-			weapon.getEquipmentInfo().setVitality(p.vitality.get());
+			weapon.setVitality(p.vitality.get());
 
 		int min = Math.round(f * (p.dmg.getMax() - p.dmg.getMin())) + p.dmg.getMin();
 		int max = min + p.range.get();
@@ -221,17 +221,17 @@ public abstract class Stats {
 	public Armor get(ArmorPossible p, float f) {
 		Armor armor = new Armor(p.material);
 		if (!p.name.isEmpty()) armor.setName(Util.colorCodes(p.name));
-		armor.getEquipmentInfo().setTier(tier);
-		armor.getEquipmentInfo().setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
+		armor.setTier(tier);
+		armor.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
 
 		if (random.nextFloat() <= p.statChance)
-			armor.getEquipmentInfo().setStrength(p.strength.get());
+			armor.setStrength(p.strength.get());
 		if (random.nextFloat() <= p.statChance)
-			armor.getEquipmentInfo().setDexterity(p.dexterity.get());
+			armor.setDexterity(p.dexterity.get());
 		if (random.nextFloat() <= p.statChance)
-			armor.getEquipmentInfo().setIntellect(p.intellect.get());
+			armor.setIntellect(p.intellect.get());
 		if (random.nextFloat() <= p.statChance)
-			armor.getEquipmentInfo().setVitality(p.vitality.get());
+			armor.setVitality(p.vitality.get());
 
 		armor.setHp(Math.round(f * (p.hp.getMax() - p.hp.getMin())) + p.hp.getMin());
 

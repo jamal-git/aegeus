@@ -21,6 +21,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private int xp = 0;
 
 	// Equipment Info
+	private int tier = 0;
 	private Rarity rarity = null;
 	private int strength = 0;
 	private int dexterity = 0;
@@ -131,6 +132,16 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setXp(int xp) {
 		this.xp = xp;
+	}
+
+	@Override
+	public int getTier() {
+		return tier;
+	}
+
+	@Override
+	public void setTier(int tier) {
+		this.tier = tier;
 	}
 
 	@Override

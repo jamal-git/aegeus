@@ -11,6 +11,7 @@ import java.util.List;
 public interface EquipmentInfo extends ItemInfo {
 	static <T extends AgItem & EquipmentInfo> void impo(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
+		t.setTier((info.hasKey("tier")) ? info.getInt("tier") : 0);
 		t.setRarity((info.hasKey("rarity")) ? Rarity.fromID(info.getInt("rarity")) : null);
 
 		t.setStrength((info.hasKey("strength")) ? info.getInt("strength") : 0);
@@ -21,6 +22,7 @@ public interface EquipmentInfo extends ItemInfo {
 
 	static <T extends AgItem & EquipmentInfo> void store(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
+		info.setInt("tier", t.getTier());
 		if (t.getRarity() != null) info.setInt("rarity", t.getRarity().getId());
 		info.setInt("strength", t.getStrength());
 		info.setInt("dexterity", t.getDexterity());
@@ -39,6 +41,10 @@ public interface EquipmentInfo extends ItemInfo {
 		if (getRarity() != null) lore.add(Util.colorCodes(getRarity().getLore()));
 		return lore;
 	}
+
+	int getTier();
+
+	void setTier(int tier);
 
 	Rarity getRarity();
 
