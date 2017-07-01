@@ -75,10 +75,10 @@ public class Util {
 				defense += armor.getDefense();
 				magicRes += armor.getMagicRes();
 				block += armor.getBlock();
-				strength += armor.getEquipmentInfo().getStrength();
-				dexterity += armor.getEquipmentInfo().getDexterity();
-				intellect += armor.getEquipmentInfo().getIntellect();
-				vitality += armor.getEquipmentInfo().getVitality();
+				strength += armor.getStrength();
+				dexterity += armor.getDexterity();
+				intellect += armor.getIntellect();
+				vitality += armor.getVitality();
 			}
 		}
 
