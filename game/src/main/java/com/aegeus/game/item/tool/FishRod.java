@@ -1,11 +1,11 @@
 package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
-import com.aegeus.game.item.info.LevelInfo;
+import com.aegeus.game.item.ProfessionTier;
+import com.aegeus.game.item.info.ProfessionInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
-import net.minecraft.server.v1_9_R1.NBTTagInt;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,13 +13,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FishRod extends AgItem implements LevelInfo {
+public class FishRod extends AgItem implements ProfessionInfo {
 	// Level Info
 	private int level;
 	private int xp;
+	private int requiredXp;
+	private ProfessionTier tier;
 
 	// Fishing Rod Stats
-	private int tier = 0;
 	private float fishingSuccess = 0;
 	private float durability = 0;
 	private float doubleCatch = 0;
@@ -42,10 +43,9 @@ public class FishRod extends AgItem implements LevelInfo {
 
 	@Override
 	public void impo() {
-		LevelInfo.impo(this);
+		ProfessionInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
-		tier = (info.hasKey("tier")) ? info.getInt("tier") : 0;
 		fishingSuccess = (info.hasKey("fishingSuccess")) ? info.getInt("fishingSuccess") : 0;
 		durability = (info.hasKey("durability")) ? info.getInt("durability") : 0;
 		doubleCatch = (info.hasKey("doubleCatch")) ? info.getInt("doubleCatch") : 0;
@@ -56,11 +56,10 @@ public class FishRod extends AgItem implements LevelInfo {
 
 	@Override
 	public void store() {
-		LevelInfo.store(this);
+		ProfessionInfo.store(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("fishrod"));
-		info.set("tier", new NBTTagInt(tier));
 		info.set("fishingSuccess", new NBTTagFloat(fishingSuccess));
 		info.set("durability", new NBTTagFloat(durability));
 		info.set("doubleCatch", new NBTTagFloat(doubleCatch));
@@ -79,7 +78,7 @@ public class FishRod extends AgItem implements LevelInfo {
 		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + tripleCatch));
 		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + junkFind));
 		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + treasureFind));
-		lore.addAll(LevelInfo.super.buildLore());
+		lore.addAll(ProfessionInfo.super.buildLore());
 		return lore;
 	}
 
@@ -120,15 +119,25 @@ public class FishRod extends AgItem implements LevelInfo {
 		this.xp = xp;
 	}
 
+    @Override
+    public int getRequiredXp() {
+        return requiredXp;
+    }
+
+    @Override
+    public void setRequiredXp(int requiredXp) {
+        this.requiredXp = requiredXp;
+    }
+
 	/*
 	Fishing Rod Methods
 	 */
 
-	public int getTier() {
+	public ProfessionTier getTier() {
 		return tier;
 	}
 
-	public void setTier(int tier) {
+	public void setTier(ProfessionTier tier) {
 		this.tier = tier;
 	}
 

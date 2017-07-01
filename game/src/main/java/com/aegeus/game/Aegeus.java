@@ -3,12 +3,14 @@ package com.aegeus.game;
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.CommandTestArmor;
 import com.aegeus.game.commands.test.CommandTestMob;
+import com.aegeus.game.commands.test.CommandTestPickaxe;
 import com.aegeus.game.commands.test.CommandTestWeapon;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.listener.*;
+import com.aegeus.game.listener.MiningListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -59,6 +61,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
+		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 
 		// Register game commands
 		getLogger().info("Registering commands...");
@@ -73,6 +76,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("testarmor").setExecutor(new CommandTestArmor());
 		getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		getCommand("testmob").setExecutor(new CommandTestMob());
+		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
 
 		// Load spawners
 		//loadSpawners();

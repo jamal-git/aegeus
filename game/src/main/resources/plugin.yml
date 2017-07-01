@@ -1,7 +1,7 @@
 name: AEGEUS
 version: dev
 description: We need a boat.
-authors: [oopsjpeg, Silvre]
+authors: [VarusMain, Silvre]
 main: com.aegeus.game.Aegeus
 
 commands:
@@ -29,3 +29,5 @@ commands:
       description: Test entity.
     testweapon:
       description: Test weapons.
+    testpickaxe:
+      description: Test pickaxe.

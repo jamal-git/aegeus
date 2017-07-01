@@ -1,6 +1,7 @@
 package com.aegeus.game.item;
 
 import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 
@@ -99,4 +100,45 @@ public class ItemParser {
 		return armor;
 	}
 
+	public static Pickaxe parsePick(Pickaxe p, String... args)  {
+	    p = (Pickaxe) parseItem(p, args);
+        for(int i = 0; i < args.length; i++)    {
+            try {
+                String[] pair = args[i].split("=");
+                String key = pair[0];
+                String value = pair[1];
+                switch(key.toLowerCase())   {
+                    case "level":
+                        p.setLevel(Integer.valueOf(value));
+                    case "xp":
+                        p.setXp(Integer.valueOf(value));
+                        break;
+                    case "miningsuccess":
+                        p.setMiningSuccess(Float.valueOf(value));
+                        break;
+                    case "densefind":
+                        p.setDenseFind(Float.valueOf(value));
+                        break;
+                    case "densemultiplier":
+                        p.setDenseMultiplier(Integer.valueOf(value));
+                        break;
+                    case "doubleore":
+                        p.setDoubleOre(Float.valueOf(value));
+                        break;
+                    case "tripleore":
+                        p.setTripleOre(Float.valueOf(value));
+                        break;
+                    case "gemfind":
+                        p.setGemFind(Float.valueOf(value));
+                        break;
+                    case "durability":
+                        p.setDurability(Float.valueOf(value));
+                }
+            }
+            catch(Exception fuckexceptions){
+                //nope
+            }
+        }
+        return p;
+    }
 }
