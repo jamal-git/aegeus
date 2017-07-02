@@ -189,7 +189,7 @@ public class CombatListener implements Listener {
 				lVictim.setLastDamageCause(e);
 
 				Vector vec = lAttacker.getLocation().getDirection().multiply(0.16);
-				lVictim.setVelocity(vec.setY(vec.getY() + 3));
+				lVictim.setVelocity(vec.setY(vec.getY() + 0.13));
 			}
 		}
 
