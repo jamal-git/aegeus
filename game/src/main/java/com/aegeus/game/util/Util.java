@@ -5,17 +5,21 @@ import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.tool.Armor;
+import net.minecraft.server.v1_9_R1.EntityFishingHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
@@ -188,11 +192,41 @@ public class Util {
 		victim.sendMessage(Util.colorCodes("              &4-" + dmg + " &lHP&7 [" + hp + " / " + maxHp + "]"));
 	}
 
+	public static void notifyProfXp(Player player, int xp, int totalXp, int maxXp) {
+		player.sendMessage(Util.colorCodes("              &e+" + xp + " &lXP&7 [" + totalXp + " / " + maxXp + "]"));
+	}
+
+	public static void notifyProfLevel(Player player, int level) {
+		player.sendMessage(Util.colorCodes("              &6&l** LEVEL UP!&6 [&l" + level + "&6] &l**"));
+	}
+
 	public static double distance(double x1, double y1, double z1, double x2, double y2, double z2) {
 		return Math.cbrt(Math.pow((x1 - x2), 3) + Math.pow((y1 - y2), 3) + Math.pow((z1 - z2), 3));
 	}
 
 	public static double distance(Location loc1, Location loc2) {
 		return distance(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+	}
+
+	public static void setBiteTime(FishHook hook, int time) {
+		net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
+
+		Field fishCatchTime = null;
+
+		try {
+			fishCatchTime = net.minecraft.server.v1_9_R1.EntityFishingHook.class.getDeclaredField("aw");
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+
+		fishCatchTime.setAccessible(true);
+
+		try {
+			fishCatchTime.setInt(hookCopy, time);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+
+		fishCatchTime.setAccessible(false);
 	}
 }
