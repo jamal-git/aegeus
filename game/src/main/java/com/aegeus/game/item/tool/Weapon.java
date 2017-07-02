@@ -43,7 +43,11 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private float blindness = 0;
 
 	public Weapon(Material material) {
-		super(new ItemStack(material));
+		this(new ItemStack(material));
+	}
+
+	public Weapon(Material material, int amount) {
+		this(new ItemStack(material, amount));
 	}
 
 	public Weapon(ItemStack item) {
@@ -138,11 +142,6 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setXp(int xp) {
 		this.xp = xp;
-	}
-
-	@Override
-	public int getMaxXp() {
-		return (int) Util.calcMaxXP(level);
 	}
 
 	@Override

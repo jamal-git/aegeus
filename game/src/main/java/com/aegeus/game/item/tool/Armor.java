@@ -38,7 +38,11 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private float thorns = 0;
 
 	public Armor(Material material) {
-		super(new ItemStack(material));
+		this(new ItemStack(material));
+	}
+
+	public Armor(Material material, int amount) {
+		this(new ItemStack(material, amount));
 	}
 
 	public Armor(ItemStack item) {
@@ -128,11 +132,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setXp(int xp) {
 		this.xp = xp;
-	}
-
-	@Override
-	public int getMaxXp() {
-		return (int) Util.calcMaxXP(level);
 	}
 
 	@Override
