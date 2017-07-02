@@ -26,6 +26,8 @@ commands:
     testarmor:
       description: Test armor.
     testmob:
-      description: Test entity.
+      description: Test entities.
     testweapon:
       description: Test weapons.
+    testrod:
+      description: Test fishing rods.

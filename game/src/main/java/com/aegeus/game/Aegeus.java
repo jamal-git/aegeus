@@ -3,6 +3,7 @@ package com.aegeus.game;
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.CommandTestArmor;
 import com.aegeus.game.commands.test.CommandTestMob;
+import com.aegeus.game.commands.test.CommandTestRod;
 import com.aegeus.game.commands.test.CommandTestWeapon;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
@@ -36,7 +37,7 @@ public class Aegeus extends JavaPlugin {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	private static Aegeus instance;
-	private Map<LivingEntity, AgEntity> entityData = new HashMap<>();
+	private final Map<LivingEntity, AgEntity> entityData = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
@@ -59,6 +60,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
+		getServer().getPluginManager().registerEvents(new FishingListener(this), this);
 
 		// Register game commands
 		getLogger().info("Registering commands...");
@@ -72,6 +74,7 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Registering test commands...");
 		getCommand("testarmor").setExecutor(new CommandTestArmor());
 		getCommand("testweapon").setExecutor(new CommandTestWeapon());
+		getCommand("testrod").setExecutor(new CommandTestRod());
 		getCommand("testmob").setExecutor(new CommandTestMob());
 
 		// Load spawners

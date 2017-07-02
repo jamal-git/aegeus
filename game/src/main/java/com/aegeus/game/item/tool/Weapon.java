@@ -43,11 +43,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private float blindness = 0;
 
 	public Weapon(Material material) {
-		this(new ItemStack(material));
-	}
-
-	public Weapon(Material material, int amount) {
-		this(new ItemStack(material, amount));
+		super(new ItemStack(material));
 	}
 
 	public Weapon(ItemStack item) {
@@ -145,6 +141,11 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	}
 
 	@Override
+	public int getMaxXp() {
+		return (int) Util.calcMaxXP(getLevel());
+	}
+
+	@Override
 	public int getTier() {
 		return tier;
 	}
@@ -208,21 +209,29 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	Weapon Methods
 	 */
 
+	public int getDmg() {
+		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg());
+	}
+
 	public void setDmg(int minDmg, int maxDmg) {
 		this.minDmg = minDmg;
 		this.maxDmg = maxDmg;
-	}
-
-	public int getDmg() {
-		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg());
 	}
 
 	public int getMinDmg() {
 		return minDmg;
 	}
 
+	public void setMinDmg(int minDmg) {
+		this.minDmg = minDmg;
+	}
+
 	public int getMaxDmg() {
 		return maxDmg;
+	}
+
+	public void setMaxDmg(int maxDmg) {
+		this.maxDmg = maxDmg;
 	}
 
 	public int getFireDmg() {
