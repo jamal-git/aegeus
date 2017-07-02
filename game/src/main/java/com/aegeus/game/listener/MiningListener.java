@@ -5,7 +5,6 @@ import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -56,28 +55,27 @@ public class MiningListener implements Listener {
                     if (!p.getInventory().addItem(stack).isEmpty()) {
                         //Player doesnt have enough space in their inventory, dropping item on the floor.
                         p.getWorld().dropItem(p.getLocation(), stack);
-                        p.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "Your inventory is full, so your ore was dropped on the ground.");
+                        p.sendMessage(Util.colorCodes("&7&oYour inventory is full, so your ore was dropped on the ground."));
                     }
                     int expGained = o.getRandom();
                     if(pick.getLevel() != 100) {
                         if (pick.addExp(expGained)) {
-                            p.sendMessage(ChatColor.GREEN + "Your pick has levelled up to level " + pick.getTier().getColor() + pick.getLevel() + ChatColor.GREEN + "!");
+                            p.sendMessage(Util.colorCodes("&7Your pick has levelled up to level " + pick.getTier().getColor() + pick.getLevel() + "&a!"));
                         }
                         if (pick.checkForNextTier()) {
-                            p.sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "You pick has ascended and is now a(n) "
-                                    + ChatColor.UNDERLINE + pick.getTier().getColor() + pick.getTier().getPickaxeName() + ChatColor.RESET + ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "!");
+                            p.sendMessage(Util.colorCodes("&7&oYour pick has ascended and is now a(n) " + pick.getTier().getColor() + "&n&o" + pick.getTier().getPickaxeName() + "&7&o!"));
                         }
-                        p.sendMessage(Util.colorCodes("    &e&l+&r&e" + expGained + " EXP"));
-                        p.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "  " + ChatColor.RESET + ChatColor.YELLOW + "[" + pick.getXp() + " / " + pick.getXPRequired() + "]");
                     }
+                        p.sendMessage(Util.colorCodes("    &e&l+&r&e" + expGained + " EXP"));
+                        p.sendMessage(Util.colorCodes("  &e[" + pick.getXp() + " / " + pick.getXPRequired() + "]"));
                 }
                 else    {
-	                p.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "The ore was destroyed while attempting the mine it.");
+	                p.sendMessage(Util.colorCodes("&7&oThe ore was destroyed while attempting the mine it."));
                 }
                 parent.getServer().getScheduler().scheduleSyncDelayedTask(parent, () -> b.setType(o.getOre()), o.getRespawnTime());
             }
             else if(o != null && !o.isMinable(pick))    {
-	            p.sendMessage(ChatColor.RED + "Your pickaxe is not powerful enough to mine that yet!");
+	            p.sendMessage(Util.colorCodes("&c&nYour pickaxe is not powerful enough to mine that yet!"));
             }
             p.getEquipment().setItemInMainHand(pick.build());
         }

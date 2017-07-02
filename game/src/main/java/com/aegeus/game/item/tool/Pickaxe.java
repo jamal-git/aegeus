@@ -161,9 +161,9 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
     public boolean addExp(int i)   {
         xp += i;
         if(xp >= requiredxp)    {
-            xp -= requiredxp;
+            xp = 0;
             requiredxp = getXPRequired(++level + 1);
-            if(level != 100 && level % 20 == 0) {
+            if(level % 20 == 0) {
                 tier = tier.next();
                 setMaterial(tier.getPickaxeMaterial());
                 //todo implement stats.
