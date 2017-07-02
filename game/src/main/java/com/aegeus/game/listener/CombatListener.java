@@ -174,6 +174,9 @@ public class CombatListener implements Listener {
 
 			}
 
+			if (lAttacker instanceof Player && ((Player) lAttacker).isSneaking())
+				e.setDamage(e.getDamage() / 2);
+			e.setDamage(Math.max(1, e.getDamage()));
 			e.setCancelled(true);
 
 			if (e.getDamage() > 0) {
@@ -182,7 +185,10 @@ public class CombatListener implements Listener {
 				lVictim.setLastDamageCause(e);
 
 				Vector vec = lAttacker.getLocation().getDirection().multiply(0.16);
-				lVictim.setVelocity(vec.setY(vec.getY() + 0.13));
+				if (((lVictim instanceof Player && !((Player) lVictim).isSneaking()) || !(victim instanceof Player)) && lVictim.isOnGround())
+					lVictim.setVelocity(vec.setY(vec.getY() + 0.21));
+				else
+					lVictim.setVelocity(vec.setY(vec.getY() + 0.08));
 			}
 		}
 
