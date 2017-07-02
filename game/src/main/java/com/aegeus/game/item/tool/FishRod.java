@@ -1,7 +1,7 @@
 package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
-import com.aegeus.game.item.info.LevelInfo;
+import com.aegeus.game.item.info.ProfessionInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
@@ -10,10 +10,9 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FishRod extends AgItem implements LevelInfo {
+public class FishRod extends AgItem implements ProfessionInfo {
 	// Level Info
 	private int level;
 	private int xp;
@@ -27,12 +26,8 @@ public class FishRod extends AgItem implements LevelInfo {
 	private float junkFind = 0;
 	private float treasureFind = 0;
 
-	public FishRod(Material material) {
-		this(new ItemStack(material));
-	}
-
-	public FishRod(Material material, int amount) {
-		this(new ItemStack(material, amount));
+	public FishRod() {
+		super(Material.FISHING_ROD);
 	}
 
 	public FishRod(ItemStack item) {
@@ -42,7 +37,7 @@ public class FishRod extends AgItem implements LevelInfo {
 
 	@Override
 	public void impo() {
-		LevelInfo.impo(this);
+		ProfessionInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		tier = (info.hasKey("tier")) ? info.getInt("tier") : 0;
@@ -56,7 +51,7 @@ public class FishRod extends AgItem implements LevelInfo {
 
 	@Override
 	public void store() {
-		LevelInfo.store(this);
+		ProfessionInfo.store(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("fishrod"));
@@ -72,14 +67,14 @@ public class FishRod extends AgItem implements LevelInfo {
 
 	@Override
 	public List<String> buildLore() {
-		List<String> lore = new ArrayList<>();
-		if (fishingSuccess > 0) lore.add(Util.colorCodes("&cFISHING SUCCESS: +" + fishingSuccess));
-		if (durability > 0) lore.add(Util.colorCodes("&cDURABILITY: +" + durability));
-		if (doubleCatch > 0) lore.add(Util.colorCodes("&cDOUBLE CATCH: +" + doubleCatch));
-		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + tripleCatch));
-		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + junkFind));
-		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + treasureFind));
-		lore.addAll(LevelInfo.super.buildLore());
+		List<String> lore = ProfessionInfo.super.buildLore();
+		if (fishingSuccess > 0)
+			lore.add(Util.colorCodes("&cFISHING SUCCESS: " + Math.round(fishingSuccess * 100) + "%"));
+		if (durability > 0) lore.add(Util.colorCodes("&cDURABILITY: +" + Math.round(durability * 100) + "%"));
+		if (doubleCatch > 0) lore.add(Util.colorCodes("&cDOUBLE CATCH: +" + Math.round(doubleCatch * 100) + "%"));
+		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + Math.round(tripleCatch * 100) + "%"));
+		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + Math.round(junkFind * 100) + "%"));
+		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + Math.round(treasureFind * 100) + "%"));
 		return lore;
 	}
 
@@ -118,6 +113,11 @@ public class FishRod extends AgItem implements LevelInfo {
 	@Override
 	public void setXp(int xp) {
 		this.xp = xp;
+	}
+
+	@Override
+	public int getRequiredXp() {
+		return (int) Math.round(1000 + (Math.pow(getLevel(), 1.114) * 200));
 	}
 
 	/*
