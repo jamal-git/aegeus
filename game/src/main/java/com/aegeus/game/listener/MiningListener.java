@@ -41,7 +41,7 @@ public class MiningListener implements Listener {
 	    NBTTagCompound tag = CraftItemStack.asNMSCopy(p.getEquipment().getItemInMainHand()).getTag();
 	    if(tag.hasKey("AegeusInfo") && tag.getCompound("AegeusInfo").getString("type").equalsIgnoreCase("pickaxe")) {
 	        p.playSound(p.getLocation(), Sound.BLOCK_STONE_BREAK, 0.7f, 1.0f);
-	        Pickaxe pick = new Pickaxe();
+	        Pickaxe pick = new Pickaxe(p.getEquipment().getItemInMainHand());
 	        pick.impo();
 	        Ore o = Ore.getOreByMaterial(b.getType());
 	        if(o != null && o.isMinable(pick))  {

@@ -36,6 +36,10 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
     private float gemFind;
     private float durability;
 
+    public Pickaxe(ItemStack stack) {
+        super(stack);
+    }
+
     public Pickaxe()    {
         this(1);
     }
