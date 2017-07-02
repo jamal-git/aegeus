@@ -1,6 +1,5 @@
 package com.aegeus.game.item.info;
 
-import com.aegeus.game.Aegeus;
 import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.ProfessionTier;
 import com.aegeus.game.util.Util;
@@ -10,7 +9,6 @@ import net.minecraft.server.v1_9_R1.NBTTagInt;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Created by Silvre on 7/1/2017.
@@ -20,7 +18,6 @@ import java.util.logging.Level;
 public interface ProfessionInfo extends ItemInfo {
     static <T extends AgItem & ProfessionInfo> void impo(T t) {
         NBTTagCompound info = t.getAegeusInfo();
-        Aegeus.getInstance().getLogger().log(Level.INFO, "Importing level" + info.getInt("level") + " and xp value " + info.getInt("xp"));
         t.setLevel(info.hasKey("level") ? info.getInt("level") : 0);
         t.setXp(info.hasKey("xp") ? info.getInt("xp") : 0);
 
@@ -28,10 +25,8 @@ public interface ProfessionInfo extends ItemInfo {
 
     static <T extends AgItem & ProfessionInfo> void store(T t) {
         NBTTagCompound info = t.getAegeusInfo();
-        Aegeus.getInstance().getLogger().log(Level.INFO, "Exporting level" + t.getLevel() + " and xp" + t.getXp());
         info.set("level", new NBTTagInt(t.getLevel()));
         info.set("xp", new NBTTagInt(t.getXp()));
-        Aegeus.getInstance().getLogger().log(Level.INFO, "Stored level" + info.getInt("level") + " and xp" + info.getInt("xp"));
         t.setAegeusInfo(info);
     }
 

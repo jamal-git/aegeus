@@ -59,15 +59,17 @@ public class MiningListener implements Listener {
                         p.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "Your inventory is full, so your ore was dropped on the ground.");
                     }
                     int expGained = o.getRandom();
-                    if(pick.addExp(expGained))  {
-                        p.sendMessage(ChatColor.GREEN + "Your pick has levelled up to level " + ChatColor.BLUE + pick.getLevel() + ChatColor.GREEN + "!");
+                    if(pick.getLevel() != 100) {
+                        if (pick.addExp(expGained)) {
+                            p.sendMessage(ChatColor.GREEN + "Your pick has levelled up to level " + pick.getTier().getColor() + pick.getLevel() + ChatColor.GREEN + "!");
+                        }
+                        if (pick.checkForNextTier()) {
+                            p.sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "You pick has ascended and is now a(n) "
+                                    + ChatColor.UNDERLINE + pick.getTier().getColor() + pick.getTier().getPickaxeName() + ChatColor.RESET + ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "!");
+                        }
+                        p.sendMessage(Util.colorCodes("    &e&l+&r&e" + expGained + " EXP"));
+                        p.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "  " + ChatColor.RESET + ChatColor.YELLOW + "[" + pick.getXp() + " / " + pick.getXPRequired() + "]");
                     }
-                    if(pick.checkForNextTier()) {
-                        p.sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "You pick has ascended and is now a(n) "
-                                + ChatColor.UNDERLINE + pick.getTier().getColor() + pick.getTier().name() + " Pickaxe" + ChatColor.RESET + ChatColor.BOLD + "" + ChatColor.ITALIC + ChatColor.GREEN + "!");
-                    }
-                    p.sendMessage(Util.colorCodes("    &e&l+&r&e" + expGained + " EXP"));
-                    p.sendMessage(ChatColor.BOLD + "" + ChatColor.YELLOW + "  " + ChatColor.RESET + ChatColor.YELLOW + "[" + pick.getXp() + " / " + pick.getXPRequired() + "]");
                 }
                 else    {
 	                p.sendMessage(ChatColor.ITALIC + "" + ChatColor.GRAY + "The ore was destroyed while attempting the mine it.");

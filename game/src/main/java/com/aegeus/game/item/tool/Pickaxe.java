@@ -179,6 +179,7 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
     }
 
     public static int getXPRequired(int targetLevel)    {
+        if(targetLevel == 101) return 1;
         double xp = Math.pow(CONSTANT, targetLevel) * 100;
         if(targetLevel >= 80)   {
             xp += 50000 * (targetLevel - 80);

@@ -9,11 +9,12 @@ import org.bukkit.Material;
  * If you are reading this - you can read this
  */
 public enum ProfessionTier   {
-    BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.AQUA),
-    IMPROVED("Improved Pickaxe", "Improved Fishing Rod", Material.STONE_PICKAXE, ChatColor.RED),
-    REINFORCED("Reinforced Pickaxe", "Reinforced Fishing Rod", Material.IRON_PICKAXE, ChatColor.GREEN),
+    BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.RED),
+    IMPROVED("Improved Pickaxe", "Improved Fishing Rod", Material.STONE_PICKAXE, ChatColor.GREEN),
+    REINFORCED("Reinforced Pickaxe", "Reinforced Fishing Rod", Material.IRON_PICKAXE, ChatColor.AQUA),
     ELITE("Elite Pickaxe", "Elite Fishing Rod", Material.DIAMOND_PICKAXE, ChatColor.LIGHT_PURPLE),
-    ULTIMATE("Ultimate Pickaxe", "Ultimate Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW);
+    ULTIMATE("Ultimate Pickaxe", "Ultimate Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW),
+    TRANSCENDANT("Transcendant Pickaxe", "Transcendant Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW);
 
     private static final ProfessionTier[] vals = values();
 
@@ -30,6 +31,9 @@ public enum ProfessionTier   {
     }
 
     public static ProfessionTier getTierByLevel(int level)  {
+        if(level >= 100)    {
+            return TRANSCENDANT;
+        }
         if(level >= 80) {
             return ULTIMATE;
         }
