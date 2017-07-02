@@ -1,4 +1,4 @@
-package com.aegeus.game.mining;
+package com.aegeus.game.profession;
 
 import com.aegeus.game.item.ProfessionTier;
 import com.aegeus.game.item.tool.Pickaxe;

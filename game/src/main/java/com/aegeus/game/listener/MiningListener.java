@@ -1,7 +1,7 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.item.tool.Pickaxe;
-import com.aegeus.game.mining.Ore;
+import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
@@ -78,8 +78,6 @@ public class MiningListener implements Listener {
             }
             else if(o != null && !o.isMinable(pick))    {
 	            p.sendMessage(ChatColor.RED + "Your pickaxe is not powerful enough to mine that yet!");
-            }
-            else    {
             }
             p.getEquipment().setItemInMainHand(pick.build());
         }
