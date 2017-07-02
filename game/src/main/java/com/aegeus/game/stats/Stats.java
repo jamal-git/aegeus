@@ -28,16 +28,14 @@ public abstract class Stats {
 	private final List<ArmorPossible> leggings = new ArrayList<>();
 	private final List<ArmorPossible> boots = new ArrayList<>();
 	private final List<WeaponPossible> weapons = new ArrayList<>();
-
+	private final ArmorPossible defArmor = new ArmorPossible(true);
+	private final WeaponPossible defWeapon = new WeaponPossible(true);
 	private float chance = 0.1f;
 	private int tier = 1;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
 	private FloatPossible rarity = new FloatPossible(0, 1);
-
-	private ArmorPossible defArmor = new ArmorPossible(true);
-	private WeaponPossible defWeapon = new WeaponPossible(true);
 
 	public Stats() {
 		prepare();

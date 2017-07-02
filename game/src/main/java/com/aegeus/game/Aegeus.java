@@ -37,7 +37,7 @@ public class Aegeus extends JavaPlugin {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	private static Aegeus instance;
-	private Map<LivingEntity, AgEntity> entityData = new HashMap<>();
+	private final Map<LivingEntity, AgEntity> entityData = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
