@@ -45,7 +45,7 @@ public class MiningListener implements Listener {
 	        if(o != null) p.playSound(p.getLocation(), Sound.BLOCK_STONE_BREAK, 0.7f, 1.0f);
 	        if(o != null && o.isMinable(pick))  {
 	            b.setType(Material.STONE);
-	            if(!o.sameTier(pick) || rng.nextInt(100) < 80 - pick.getLevel() % 20 * 2) {
+	            if(!o.sameTier(pick) || rng.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
 	                b.setType(Material.STONE);
                     ItemStack stack = new ItemStack(o.getOre(), 1);
                     ItemMeta meta = Bukkit.getItemFactory().getItemMeta(o.getOre());
@@ -60,14 +60,13 @@ public class MiningListener implements Listener {
                     int expGained = o.getRandom();
                     if(pick.getLevel() != 100) {
                         if (pick.addExp(expGained)) {
-                            p.sendMessage(Util.colorCodes("&7Your pick has levelled up to level " + pick.getTier().getColor() + pick.getLevel() + "&a!"));
+                            p.sendMessage(Util.colorCodes("              &6&l*** LEVEL UP!&6 [&l" + pick.getTier().getColor() + pick.getLevel() + "&6] &l***"));
                         }
                         if (pick.checkForNextTier()) {
                             p.sendMessage(Util.colorCodes("&7&oYour pick has ascended and is now a(n) " + pick.getTier().getColor() + "&n&o" + pick.getTier().getPickaxeName() + "&7&o!"));
                         }
                     }
-                        p.sendMessage(Util.colorCodes("    &e&l+&r&e" + expGained + " EXP"));
-                        p.sendMessage(Util.colorCodes("  &e[" + pick.getXp() + " / " + pick.getXPRequired() + "]"));
+                        p.sendMessage(Util.colorCodes("              &e+" + expGained + " &lXP&7 [" + pick.getXp() + " / " + pick.getRequiredXp() + "]"));
                 }
                 else    {
 	                p.sendMessage(Util.colorCodes("&7&oThe ore was destroyed while attempting the mine it."));

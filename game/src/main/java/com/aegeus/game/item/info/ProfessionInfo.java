@@ -34,7 +34,7 @@ public interface ProfessionInfo extends ItemInfo {
     default List<String> buildLore() {
         List<String> lore = new ArrayList<>();
         lore.add(Util.colorCodes("&7Level: " + ProfessionTier.getTierByLevel(getLevel()).getColor() + getLevel()));
-        lore.add(Util.colorCodes("&7" + getXp() + " / " + getRequiredXp() + "(" + new DecimalFormat("#00.00%").format((getXp() + 0.0) / getRequiredXp()) + ")"));
+        lore.add(Util.colorCodes("&7" + getXp() + " / " + getRequiredXp() + "(" + new DecimalFormat("####0.00%").format((getXp() + 0.0) / getRequiredXp()) + ")"));
         return lore;
     }
 
