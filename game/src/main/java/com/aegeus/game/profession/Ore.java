@@ -36,7 +36,7 @@ public enum Ore {
 	}
 
 	public static Ore getOreByMaterial(Material m)  {
-	    for(Ore o : Ore.values())   if(o.getOre() == m) return o;
+	    for(Ore o : Ore.values())   if(o.getOre() == m || m == Material.GLOWING_REDSTONE_ORE) return o;
         return null;
     }
 

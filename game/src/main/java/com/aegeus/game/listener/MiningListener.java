@@ -5,6 +5,7 @@ import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -78,5 +79,6 @@ public class MiningListener implements Listener {
             }
             p.getEquipment().setItemInMainHand(pick.build());
         }
+        else if(p.getGameMode() == GameMode.CREATIVE) e.setCancelled(false);
     }
 }
