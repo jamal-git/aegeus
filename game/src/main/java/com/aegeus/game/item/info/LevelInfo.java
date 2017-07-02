@@ -25,7 +25,7 @@ public interface LevelInfo extends ItemInfo {
 	default List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&6&oLevel " + (getLevel() + 1) + " &7&o("
-				+ Math.round(((float) getXp() / (float) Util.calcMaxXP(getLevel())) * 100) + "%)"));
+				+ Math.round(((float) getXp() / (float) getMaxXp()) * 100) + "%)"));
 		return lore;
 	}
 
@@ -41,7 +41,13 @@ public interface LevelInfo extends ItemInfo {
 
 	void setXp(int xp);
 
+	int getMaxXp();
+
 	default void addXp(int i) {
 		setXp(getXp() + i);
+	}
+
+	default void subtractXp(int i) {
+		setXp(getXp() - i);
 	}
 }
