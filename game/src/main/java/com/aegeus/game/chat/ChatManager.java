@@ -101,8 +101,9 @@ public class ChatManager {
 
 	/**
 	 * Sends a private message to a player.
-	 * @param sender The sender.
-	 * @param target The target.
+	 *
+	 * @param sender  The sender.
+	 * @param target  The target.
 	 * @param content The content.
 	 */
 	public static void sendPrivateMessage(Player sender, Player target, String content) {

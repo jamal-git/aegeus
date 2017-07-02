@@ -45,13 +45,11 @@ public class ServerListener implements Listener {
 			"There's something different about this place...",
 			"Reina best girl, no doubt."
 	};
-	private final Aegeus parent;
 
 //	private int buffLootTime = 0;
 //	private int rebootTime = 7200;
 
-	public ServerListener(Aegeus parent) {
-		this.parent = parent;
+	public ServerListener() {
 //		Runnable checkBySecond = new Runnable() {
 //			public void run() {
 //				if (buffLootTime > 0) {
@@ -104,7 +102,7 @@ public class ServerListener implements Listener {
 	// Login messages and initial player setup
 	private void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
-		AgPlayer info = parent.getPlayer(player);
+		AgPlayer info = Aegeus.getInstance().getPlayer(player);
 		e.setJoinMessage("");
 		player.setHealthScaled(true);
 		player.setHealthScale(20);
@@ -114,7 +112,7 @@ public class ServerListener implements Listener {
 		if (!player.hasPlayedBefore()) player.sendTitle("", Util.colorCodes("&bWelcome."));
 		else player.sendTitle("", Util.colorCodes("&fWelcome back."));
 
-		Bukkit.getScheduler().runTaskLater(parent, () -> {
+		Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
 			for (int i = 0; i < 10; i++)
 				player.sendMessage(" ");
 			player.sendMessage(Util.colorCodes(

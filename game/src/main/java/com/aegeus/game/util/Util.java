@@ -209,24 +209,14 @@ public class Util {
 	}
 
 	public static void setBiteTime(FishHook hook, int time) {
-		net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
-
-		Field fishCatchTime = null;
-
 		try {
-			fishCatchTime = net.minecraft.server.v1_9_R1.EntityFishingHook.class.getDeclaredField("aw");
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-		}
-
-		fishCatchTime.setAccessible(true);
-
-		try {
+			net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
+			Field fishCatchTime = net.minecraft.server.v1_9_R1.EntityFishingHook.class.getDeclaredField("aw");
+			fishCatchTime.setAccessible(true);
 			fishCatchTime.setInt(hookCopy, time);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+			fishCatchTime.setAccessible(false);
+		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
-
-		fishCatchTime.setAccessible(false);
 	}
 }

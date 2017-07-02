@@ -22,6 +22,7 @@ public class CommandSpawner implements CommandExecutor {
 		spawner.add(new StatsT1Bandit());
 		Aegeus.getInstance().addSpawner(spawner);
 
+		//noinspection deprecation
 		player.sendBlockChange(loc, Material.MOB_SPAWNER, (byte) 0);
 
 		return true;

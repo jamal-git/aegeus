@@ -55,12 +55,12 @@ public class Aegeus extends JavaPlugin {
 
 		// Register plugin events
 		getLogger().info("Registering event listener...");
-		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
-		getServer().getPluginManager().registerEvents(new CombatListener(this), this);
-		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
-		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
-		getServer().getPluginManager().registerEvents(new FishingListener(this), this);
+		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+		getServer().getPluginManager().registerEvents(new CombatListener(), this);
+		getServer().getPluginManager().registerEvents(new FishingListener(), this);
+		getServer().getPluginManager().registerEvents(new ServerListener(), this);
+		getServer().getPluginManager().registerEvents(new SpawnerListener(), this);
+		getServer().getPluginManager().registerEvents(new StatsListener(), this);
 
 		// Register game commands
 		getLogger().info("Registering commands...");
