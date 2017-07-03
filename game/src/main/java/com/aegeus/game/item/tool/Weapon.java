@@ -10,6 +10,7 @@ import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private int dexterity = 0;
 	private int intellect = 0;
 	private int vitality = 0;
+	private int enchant = 0;
 
 	// Weapon Stats
 	private int minDmg = 0;
@@ -51,8 +53,33 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		impo();
 	}
 
+	public Weapon(Weapon other) {
+		super(other);
+		this.level = other.level;
+		this.xp = other.xp;
+
+		this.tier = other.tier;
+		this.rarity = other.rarity;
+		this.strength = other.strength;
+		this.dexterity = other.dexterity;
+		this.intellect = other.intellect;
+		this.vitality = other.vitality;
+		this.enchant = other.enchant;
+
+		this.minDmg = other.minDmg;
+		this.maxDmg = other.maxDmg;
+		this.fireDmg = other.fireDmg;
+		this.iceDmg = other.iceDmg;
+		this.poisonDmg = other.poisonDmg;
+		this.pureDmg = other.pureDmg;
+		this.lifeSteal = other.lifeSteal;
+		this.trueHearts = other.trueHearts;
+		this.blindness = other.blindness;
+	}
+
 	@Override
 	public void impo() {
+		super.impo();
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
 
@@ -70,6 +97,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 	@Override
 	public void store() {
+		super.store();
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
 
@@ -88,6 +116,11 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	}
 
 	@Override
+	public String buildNamePrefix() {
+		return EquipmentInfo.buildNamePrefix(this);
+	}
+
+	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
@@ -98,8 +131,8 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		if (lifeSteal > 0) lore.add(Util.colorCodes("&cLIFE STEAL: +" + Math.round(lifeSteal * 100) + "%"));
 		if (trueHearts > 0) lore.add(Util.colorCodes("&cTRUE HEARTS: " + Math.round(trueHearts * 100) + "%"));
 		if (blindness > 0) lore.add(Util.colorCodes("&cBLINDNESS: " + Math.round(blindness * 100) + "%"));
-		lore.addAll(EquipmentInfo.super.buildLore());
-		lore.addAll(LevelInfo.super.buildLore());
+		lore.addAll(EquipmentInfo.buildLore(this));
+		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
 
@@ -112,7 +145,12 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public ItemStack build() {
 		store();
-		setLore(buildLore());
+
+		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
+		setLore(Util.union(buildLore(), getLore()));
+		if (getEnchant() >= 4)
+			getItem().addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
 		return super.build();
 	}
 
@@ -163,6 +201,16 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setRarity(Rarity rarity) {
 		this.rarity = rarity;
+	}
+
+	@Override
+	public int getEnchant() {
+		return enchant;
+	}
+
+	@Override
+	public void setEnchant(int enchant) {
+		this.enchant = enchant;
 	}
 
 	@Override

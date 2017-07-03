@@ -1,10 +1,7 @@
 package com.aegeus.game;
 
 import com.aegeus.game.commands.*;
-import com.aegeus.game.commands.test.CommandTestArmor;
-import com.aegeus.game.commands.test.CommandTestMob;
-import com.aegeus.game.commands.test.CommandTestRod;
-import com.aegeus.game.commands.test.CommandTestWeapon;
+import com.aegeus.game.commands.test.*;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
@@ -57,6 +54,8 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Registering event listener...");
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new CombatListener(), this);
+		getServer().getPluginManager().registerEvents(new EnchantListener(), this);
+		getServer().getPluginManager().registerEvents(new EnchantListener(), this);
 		getServer().getPluginManager().registerEvents(new FishingListener(), this);
 		getServer().getPluginManager().registerEvents(new ServerListener(), this);
 		getServer().getPluginManager().registerEvents(new SpawnerListener(), this);
@@ -73,6 +72,7 @@ public class Aegeus extends JavaPlugin {
 		// Register test commands
 		getLogger().info("Registering test commands...");
 		getCommand("testarmor").setExecutor(new CommandTestArmor());
+		getCommand("testenchant").setExecutor(new CommandTestEnchant());
 		getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		getCommand("testrod").setExecutor(new CommandTestRod());
 		getCommand("testmob").setExecutor(new CommandTestMob());
@@ -82,7 +82,8 @@ public class Aegeus extends JavaPlugin {
 
 		// Clear entities
 		getLogger().info("Clearing entities...");
-		Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(Entity::remove));
+		Bukkit.getWorlds().forEach(w -> w.getLivingEntities().stream()
+				.filter(e -> !(e instanceof Player)).forEach(Entity::remove));
 
 		// Done, done, and done!
 		getLogger().info("AEGEUS enabled.");

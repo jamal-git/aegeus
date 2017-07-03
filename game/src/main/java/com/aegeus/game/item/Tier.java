@@ -2,11 +2,11 @@ package com.aegeus.game.item;
 
 public enum Tier {
 	NONE("Custom", "Custom", "Custom Sword", "Custom Axe"),
-	TIER_1("Leather", "Wood", "Shortsword", "Hatchet"),
-	TIER_2("Chainmail", "Stone", "Longsword", "Great Axe"),
-	TIER_3("Iron", "Iron", "Magic Sword", "Magic Axe"),
-	TIER_4("Diamond", "Diamond", "Ancient Sword", "Ancient Axe"),
-	TIER_5("Gold", "Gold", "Legendary Sword", "Legendary Axe");
+	TIER_1("&fLeather", "&fWood", "&fShortsword", "&fHatchet"),
+	TIER_2("&aChainmail", "&aStone", "&aLongsword", "&aGreat Axe"),
+	TIER_3("&bIron", "&bIron", "&bMagic Sword", "&bMagic Axe"),
+	TIER_4("&dDiamond", "&dDiamond", "&dAncient Sword", "&dAncient Axe"),
+	TIER_5("&eGold", "&eGold", "&eLegendary Sword", "&eLegendary Axe");
 
 	private final String armor;
 	private final String weapon;
