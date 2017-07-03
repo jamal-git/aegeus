@@ -43,7 +43,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private int pureDmg = 0;
 	private float lifeSteal = 0;
 	private float trueHearts = 0;
-	private float blindness = 0;
+	private float blind = 0;
 
 	public Weapon(Material material) {
 		super(new ItemStack(material));
@@ -76,7 +76,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		this.pureDmg = other.pureDmg;
 		this.lifeSteal = other.lifeSteal;
 		this.trueHearts = other.trueHearts;
-		this.blindness = other.blindness;
+		this.blind = other.blind;
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		pureDmg = (info.hasKey("pureDmg")) ? info.getInt("pureDmg") : 0;
 		lifeSteal = (info.hasKey("lifeSteal")) ? info.getFloat("lifeSteal") : 0;
 		trueHearts = (info.hasKey("trueHearts")) ? info.getFloat("trueHearts") : 0;
-		blindness = (info.hasKey("blindness")) ? info.getFloat("blindness") : 0;
+		blind = (info.hasKey("blind")) ? info.getFloat("blind") : 0;
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		info.set("pureDmg", new NBTTagInt(pureDmg));
 		info.set("lifeSteal", new NBTTagFloat(lifeSteal));
 		info.set("trueHearts", new NBTTagFloat(trueHearts));
-		info.set("blindness", new NBTTagFloat(blindness));
+		info.set("blind", new NBTTagFloat(blind));
 		setAegeusInfo(info);
 	}
 
@@ -135,7 +135,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		if (pureDmg > 0) lore.add(Util.colorCodes("&cPURE DMG: +" + pureDmg));
 		if (lifeSteal > 0) lore.add(Util.colorCodes("&cLIFE STEAL: +" + Math.round(lifeSteal * 100) + "%"));
 		if (trueHearts > 0) lore.add(Util.colorCodes("&cTRUE HEARTS: " + Math.round(trueHearts * 100) + "%"));
-		if (blindness > 0) lore.add(Util.colorCodes("&cBLINDNESS: " + Math.round(blindness * 100) + "%"));
+		if (blind > 0) lore.add(Util.colorCodes("&cBLIND: " + Math.round(blind * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
@@ -343,12 +343,12 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		this.trueHearts = trueHearts;
 	}
 
-	public float getBlindness() {
-		return blindness;
+	public float getBlind() {
+		return blind;
 	}
 
-	public void setBlindness(float blindness) {
-		this.blindness = blindness;
+	public void setBlind(float blind) {
+		this.blind = blind;
 	}
 
 }

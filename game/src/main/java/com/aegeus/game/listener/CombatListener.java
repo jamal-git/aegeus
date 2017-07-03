@@ -127,7 +127,7 @@ public class CombatListener implements Listener {
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
 					physDmg += lVictim.getMaxHealth() * (0.02 * weapon.getTier());
 				}
-				if (weapon.getBlindness() > 0 && random.nextFloat() <= weapon.getBlindness()) {
+				if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1));
 				}
 				if (weapon.getLifeSteal() > 0) {
