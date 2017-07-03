@@ -1,13 +1,11 @@
 package com.aegeus.game.listener;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -16,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Random;
 
@@ -27,11 +24,11 @@ import java.util.Random;
 public class MiningListener implements Listener {
 
 	Random rng = new Random();
-	private JavaPlugin parent;
+	private Aegeus parent;
 
-	public MiningListener(JavaPlugin parent) {
+	public MiningListener(Aegeus parent) {
 		this.parent = parent;
-	}
+    }
 
     @EventHandler
     public void onMine(BlockBreakEvent e)   {
@@ -41,10 +38,11 @@ public class MiningListener implements Listener {
 	    NBTTagCompound tag = CraftItemStack.asNMSCopy(p.getEquipment().getItemInMainHand()).getTag();
 	    if(tag.hasKey("AegeusInfo") && tag.getCompound("AegeusInfo").getString("type").equalsIgnoreCase("pickaxe")) {
 	        Pickaxe pick = new Pickaxe(p.getEquipment().getItemInMainHand());
+	        Location l = b.getLocation();
 	        pick.impo();
 	        Ore o = Ore.getOreByMaterial(b.getType());
 	        if(o != null) p.playSound(p.getLocation(), Sound.BLOCK_STONE_BREAK, 0.7f, 1.0f);
-	        if(o != null && o.isMinable(pick))  {
+	        if(o != null && parent.getOres().containsKey(new Location(l.getWorld(), l.getX(), l.getY(), l.getZ())) && o.isMinable(pick))  {
 	            b.setType(Material.STONE);
 	            if(!o.sameTier(pick) || rng.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
 	                b.setType(Material.STONE);
@@ -74,7 +72,7 @@ public class MiningListener implements Listener {
                 }
                 parent.getServer().getScheduler().scheduleSyncDelayedTask(parent, () -> b.setType(o.getOre()), o.getRespawnTime());
             }
-            else if(o != null && !o.isMinable(pick))    {
+            else if(o != null && !o.isMinable(pick) && parent.getOres().containsKey(b.getLocation()))    {
 	            p.sendMessage(Util.colorCodes("&c&nYour pickaxe is not powerful enough to mine that yet!"));
             }
             p.getEquipment().setItemInMainHand(pick.build());

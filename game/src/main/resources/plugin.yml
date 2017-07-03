@@ -23,6 +23,9 @@ commands:
     spawner:
       description: Creates a spawner at the current location.
       usage: /spawner
+    addore:
+      description: Set the block to a minable ore at the currently facing block.
+      usage: /addore
     testarmor:
       description: Test armor.
     testmob:
