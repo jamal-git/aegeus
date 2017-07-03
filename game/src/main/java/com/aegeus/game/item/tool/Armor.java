@@ -10,6 +10,7 @@ import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private int dexterity = 0;
 	private int intellect = 0;
 	private int vitality = 0;
+	private int enchant = 0;
 
 	// Armor Stats
 	private int hp = 0;
@@ -46,8 +48,31 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		impo();
 	}
 
+	public Armor(Armor other) {
+		super(other);
+		this.level = other.level;
+		this.xp = other.xp;
+
+		this.tier = other.tier;
+		this.rarity = other.rarity;
+		this.strength = other.strength;
+		this.dexterity = other.dexterity;
+		this.intellect = other.intellect;
+		this.vitality = other.vitality;
+		this.enchant = other.enchant;
+
+		this.hp = other.hp;
+		this.hpRegen = other.hpRegen;
+		this.energyRegen = other.energyRegen;
+		this.defense = other.defense;
+		this.magicRes = other.magicRes;
+		this.block = other.block;
+		this.thorns = other.thorns;
+	}
+
 	@Override
 	public void impo() {
+		super.impo();
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
 
@@ -63,6 +88,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 
 	@Override
 	public void store() {
+		super.store();
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
 
@@ -79,17 +105,22 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	}
 
 	@Override
+	public String buildNamePrefix() {
+		return EquipmentInfo.buildNamePrefix(this);
+	}
+
+	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		if (hp > 0) lore.add(Util.colorCodes("&cHP: +" + hp));
+		lore.add(Util.colorCodes("&cHP: +" + hp));
 		if (hpRegen > 0) lore.add(Util.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
 		if (energyRegen > 0) lore.add(Util.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
 		if (defense > 0) lore.add(Util.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
 		if (magicRes > 0) lore.add(Util.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
 		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
 		if (thorns > 0) lore.add(Util.colorCodes("&cTHORNS: " + Math.round(thorns * 100) + "%"));
-		lore.addAll(EquipmentInfo.super.buildLore());
-		lore.addAll(LevelInfo.super.buildLore());
+		lore.addAll(EquipmentInfo.buildLore(this));
+		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
 
@@ -102,7 +133,12 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public ItemStack build() {
 		store();
-		setLore(buildLore());
+
+		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
+		setLore(Util.union(buildLore(), getLore()));
+		if (getEnchant() >= 4)
+			getItem().addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
 		return super.build();
 	}
 
@@ -153,6 +189,16 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setRarity(Rarity rarity) {
 		this.rarity = rarity;
+	}
+
+	@Override
+	public int getEnchant() {
+		return enchant;
+	}
+
+	@Override
+	public void setEnchant(int enchant) {
+		this.enchant = enchant;
 	}
 
 	@Override

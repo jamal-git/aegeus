@@ -25,6 +25,8 @@ commands:
       usage: /spawner
     testarmor:
       description: Test armor.
+    testenchant:
+      description: Test enchants.
     testmob:
       description: Test entities.
     testweapon:

@@ -87,7 +87,10 @@ public class FishRod extends AgItem implements ProfessionInfo {
 	@Override
 	public ItemStack build() {
 		store();
-		setLore(buildLore());
+
+		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
+		setLore(Util.union(buildLore(), getLore()));
+
 		return super.build();
 	}
 
