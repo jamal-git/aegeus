@@ -72,7 +72,7 @@ public class CombatListener implements Listener {
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
-			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> Aegeus.getInstance().removeEntity(entity), 1);
+			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> Aegeus.getInstance().removeEntity(entity), 2);
 
 	}
 
@@ -125,7 +125,7 @@ public class CombatListener implements Listener {
 					physDmg += weapon.getPureDmg() * matches;
 				}
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
-					physDmg += lVictim.getMaxHealth() * (0.04 * weapon.getTier());
+					physDmg += lVictim.getMaxHealth() * (0.02 * weapon.getTier());
 				}
 				if (weapon.getBlindness() > 0 && random.nextFloat() <= weapon.getBlindness()) {
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1));
@@ -164,7 +164,7 @@ public class CombatListener implements Listener {
 					if (c.isComplete(lVictim)) {
 						c.onComplete(lVictim);
 						if (c.addOnComplete() != null)
-							mInfo.getHitConds().addAll(Arrays.asList(c.addOnComplete()));
+							mInfo.getHitConds().addAll(c.addOnComplete());
 						if (c.removeOnComplete()) {
 							mInfo.getHitConds().remove(c);
 							i--;

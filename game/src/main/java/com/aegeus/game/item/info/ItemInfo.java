@@ -1,11 +1,18 @@
 package com.aegeus.game.item.info;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemInfo {
-	void impo();
+	default String buildNamePrefix() {
+		return "";
+	}
 
-	void store();
+	default String buildNameSuffix() {
+		return "";
+	}
 
-	List<String> buildLore();
+	default List<String> buildLore() {
+		return new ArrayList<>();
+	}
 }

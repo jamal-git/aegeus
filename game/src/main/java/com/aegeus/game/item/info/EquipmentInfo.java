@@ -13,6 +13,7 @@ public interface EquipmentInfo extends ItemInfo {
 		NBTTagCompound info = t.getAegeusInfo();
 		t.setTier((info.hasKey("tier")) ? info.getInt("tier") : 0);
 		t.setRarity((info.hasKey("rarity")) ? Rarity.fromID(info.getInt("rarity")) : null);
+		t.setEnchant((info.hasKey("enchant")) ? info.getInt("enchant") : 0);
 
 		t.setStrength((info.hasKey("strength")) ? info.getInt("strength") : 0);
 		t.setDexterity((info.hasKey("dexterity")) ? info.getInt("dexterity") : 0);
@@ -24,6 +25,7 @@ public interface EquipmentInfo extends ItemInfo {
 		NBTTagCompound info = t.getAegeusInfo();
 		info.setInt("tier", t.getTier());
 		if (t.getRarity() != null) info.setInt("rarity", t.getRarity().getId());
+		info.setInt("enchant", t.getEnchant());
 		info.setInt("strength", t.getStrength());
 		info.setInt("dexterity", t.getDexterity());
 		info.setInt("intellect", t.getIntellect());
@@ -31,14 +33,19 @@ public interface EquipmentInfo extends ItemInfo {
 		t.setAegeusInfo(info);
 	}
 
-	@Override
-	default List<String> buildLore() {
+	static <T extends AgItem & EquipmentInfo> String buildNamePrefix(T t) {
+		String name = "";
+		if (t.getEnchant() > 0) name += "&e[+" + t.getEnchant() + "]&f ";
+		return name;
+	}
+
+	static <T extends AgItem & EquipmentInfo> List<String> buildLore(T t) {
 		List<String> lore = new ArrayList<>();
-		if (getStrength() > 0) lore.add(Util.colorCodes("&cSTR: +" + getStrength()));
-		if (getDexterity() > 0) lore.add(Util.colorCodes("&cDEX: +" + getDexterity()));
-		if (getIntellect() > 0) lore.add(Util.colorCodes("&cINT: +" + getIntellect()));
-		if (getVitality() > 0) lore.add(Util.colorCodes("&cVIT: +" + getVitality()));
-		if (getRarity() != null) lore.add(Util.colorCodes(getRarity().getLore()));
+		if (t.getStrength() > 0) lore.add(Util.colorCodes("&cSTR: +" + t.getStrength()));
+		if (t.getDexterity() > 0) lore.add(Util.colorCodes("&cDEX: +" + t.getDexterity()));
+		if (t.getIntellect() > 0) lore.add(Util.colorCodes("&cINT: +" + t.getIntellect()));
+		if (t.getVitality() > 0) lore.add(Util.colorCodes("&cVIT: +" + t.getVitality()));
+		if (t.getRarity() != null) lore.add(Util.colorCodes(t.getRarity().getLore()));
 		return lore;
 	}
 
@@ -49,6 +56,14 @@ public interface EquipmentInfo extends ItemInfo {
 	Rarity getRarity();
 
 	void setRarity(Rarity rarity);
+
+	int getEnchant();
+
+	void setEnchant(int enchant);
+
+	default void addEnchant(int i) {
+		setEnchant(getEnchant() + i);
+	}
 
 	int getStrength();
 

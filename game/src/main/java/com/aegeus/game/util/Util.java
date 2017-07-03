@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
@@ -218,5 +222,26 @@ public class Util {
 		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String getName(ItemStack item) {
+		return item == null || item.getType().equals(Material.AIR)
+				? "Nothing" : CraftItemStack.asNMSCopy(item).getName();
+	}
+
+	public static String getName(Material material) {
+		return material == null || material.equals(Material.AIR)
+				? "Nothing" : CraftItemStack.asNMSCopy(new ItemStack(material)).getName();
+	}
+
+	public static List<String> getLore(ItemStack item) {
+		return item == null || item.getItemMeta() == null || item.getItemMeta().getLore() == null
+				? new ArrayList<>() : item.getItemMeta().getLore();
+	}
+
+	@SafeVarargs
+	public static <T> List<T> union(List<T> t, List<T>... others) {
+		Arrays.stream(others).forEach(t::addAll);
+		return t;
 	}
 }

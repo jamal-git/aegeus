@@ -6,17 +6,21 @@ import com.aegeus.game.item.Rarity;
 import com.aegeus.game.util.Condition;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StatsShatterbone extends Stats {
 	@Override
 	public void prepare() {
 		setTier(3);
 		setChance(0.86f);
-		setForcedHp(15000);
+		setForcedHp(19000);
 		setDmgMultiplier(4f);
 
 		addName("&b&lShatterbone");
@@ -30,18 +34,48 @@ public class StatsShatterbone extends Stats {
 
 		addHitCond(new Condition<LivingEntity>() {
 			@Override
+			public void onComplete(LivingEntity entity) {
+				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0.7f);
+			}
+
+			@Override
+			public boolean removeOnComplete() {
+				return false;
+			}
+		});
+		addHitCond(new Condition<LivingEntity>() {
+			@Override
 			public boolean isComplete(LivingEntity entity) {
 				return entity.getHealth() <= 4000;
 			}
 
 			@Override
 			public void onComplete(LivingEntity entity) {
-				AgMonster info = Aegeus.getInstance().getMonster(entity);
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 4));
-				info.setName(Util.colorCodes("&6&lEnraged Shatterbone"));
-				info.setDmgMultiplier(8f);
-				info.setDefense(0.35f);
-				info.setBlock(0.3f);
+				entity.setHealth(entity.getMaxHealth());
+				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITHER_SHOOT, 1, 0);
+			}
+
+			@Override
+			public List<Condition<LivingEntity>> addOnComplete() {
+				List<Condition<LivingEntity>> conditions = new ArrayList<>();
+				conditions.add(new Condition<LivingEntity>() {
+					@Override
+					public boolean isComplete(LivingEntity entity) {
+						return entity.getHealth() <= 3000;
+					}
+
+					@Override
+					public void onComplete(LivingEntity entity) {
+						AgMonster info = Aegeus.getInstance().getMonster(entity);
+						entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 5));
+						info.setName(Util.colorCodes("&6&lEnraged Shatterbone"));
+						info.setDmgMultiplier(8f);
+						info.setDefense(0.35f);
+						info.setBlock(0.3f);
+						entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0);
+					}
+				});
+				return conditions;
 			}
 		});
 

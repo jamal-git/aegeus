@@ -21,11 +21,10 @@ public interface LevelInfo extends ItemInfo {
 		t.setAegeusInfo(info);
 	}
 
-	@Override
-	default List<String> buildLore() {
+	static <T extends AgItem & LevelInfo> List<String> buildLore(T t) {
 		List<String> lore = new ArrayList<>();
-		lore.add(Util.colorCodes("&6&oLevel " + (getLevel() + 1) + " &7&o("
-				+ Math.round(((float) getXp() / (float) getMaxXp()) * 100) + "%)"));
+		lore.add(Util.colorCodes("&6&oLevel " + (t.getLevel() + 1) + " &7&o("
+				+ Math.round(((float) t.getXp() / (float) t.getMaxXp()) * 100) + "%)"));
 		return lore;
 	}
 
