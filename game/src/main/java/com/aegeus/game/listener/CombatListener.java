@@ -122,7 +122,7 @@ public class CombatListener implements Listener {
 							if (armor.getTier() == weapon.getTier())
 								matches++;
 						}
-					physDmg += weapon.getPureDmg() * matches;
+					physDmg += weapon.getPureDmg() * (matches / 4);
 				}
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
 					physDmg += lVictim.getMaxHealth() * (0.02 * weapon.getTier());
