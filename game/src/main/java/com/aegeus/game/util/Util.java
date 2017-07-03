@@ -64,8 +64,8 @@ public class Util {
 		int hp = 0;
 		int hpRegen = 0;
 		float energyRegen = 0;
-		float defense = 0;
-		float magicRes = 0;
+		float physRes = 0;
+		float magRes = 0;
 		float block = 0;
 		int strength = 0;
 		int intellect = 0;
@@ -80,8 +80,8 @@ public class Util {
 				hp += armor.getHp();
 				hpRegen = armor.getHpRegen();
 				energyRegen += armor.getEnergyRegen();
-				defense += armor.getDefense();
-				magicRes += armor.getMagicRes();
+				physRes += armor.getPhysRes();
+				magRes += armor.getMagRes();
 				block += armor.getBlock();
 				strength += armor.getStrength();
 				dexterity += armor.getDexterity();
@@ -125,8 +125,8 @@ public class Util {
 		entity.setMaxHealth(Math.max(1, hp));
 		info.setHpRegen(hpRegen);
 		info.setEnergyRegen(energyRegen);
-		info.setDefense(defense);
-		info.setMagicRes(magicRes);
+		info.setPhysRes(physRes);
+		info.setMagRes(magRes);
 		info.setBlock(block);
 		info.setStrength(strength);
 		info.setIntellect(intellect);

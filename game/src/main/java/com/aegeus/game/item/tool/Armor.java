@@ -34,10 +34,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private int hp = 0;
 	private int hpRegen = 0;
 	private float energyRegen = 0;
-	private float defense = 0;
-	private float magicRes = 0;
+	private float physRes = 0;
+	private float magRes = 0;
 	private float block = 0;
-	private float thorns = 0;
+	private float dodge = 0;
 
 	public Armor(Material material) {
 		super(new ItemStack(material));
@@ -64,10 +64,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.hp = other.hp;
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
-		this.defense = other.defense;
-		this.magicRes = other.magicRes;
+		this.physRes = other.physRes;
+		this.magRes = other.magRes;
 		this.block = other.block;
-		this.thorns = other.thorns;
+		this.dodge = other.dodge;
 	}
 
 	@Override
@@ -80,10 +80,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		hp = (info.hasKey("hp")) ? info.getInt("hp") : 0;
 		hpRegen = (info.hasKey("hpRegen")) ? info.getInt("hpRegen") : 0;
 		energyRegen = (info.hasKey("energyRegen")) ? info.getFloat("energyRegen") : 0;
-		defense = (info.hasKey("defense")) ? info.getFloat("defense") : 0;
-		magicRes = (info.hasKey("magicRes")) ? info.getFloat("magicRes") : 0;
+		physRes = (info.hasKey("physRes")) ? info.getFloat("physRes") : 0;
+		magRes = (info.hasKey("magRes")) ? info.getFloat("magRes") : 0;
 		block = (info.hasKey("block")) ? info.getFloat("block") : 0;
-		thorns = (info.hasKey("thorns")) ? info.getFloat("thorns") : 0;
+		dodge = (info.hasKey("dodge")) ? info.getFloat("dodge") : 0;
 	}
 
 	@Override
@@ -97,10 +97,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
 		info.set("energyRegen", new NBTTagFloat(energyRegen));
-		info.set("defense", new NBTTagFloat(defense));
-		info.set("magicRes", new NBTTagFloat(magicRes));
+		info.set("physRes", new NBTTagFloat(physRes));
+		info.set("magRes", new NBTTagFloat(magRes));
 		info.set("block", new NBTTagFloat(block));
-		info.set("thorns", new NBTTagFloat(thorns));
+		info.set("dodge", new NBTTagFloat(dodge));
 		setAegeusInfo(info);
 	}
 
@@ -115,10 +115,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		lore.add(Util.colorCodes("&cHP: +" + hp));
 		if (hpRegen > 0) lore.add(Util.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
 		if (energyRegen > 0) lore.add(Util.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
-		if (defense > 0) lore.add(Util.colorCodes("&cDEFENSE: " + Math.round(defense * 100) + "%"));
-		if (magicRes > 0) lore.add(Util.colorCodes("&cMAGIC RES: " + Math.round(magicRes * 100) + "%"));
+		if (physRes > 0) lore.add(Util.colorCodes("&cPHYSICAL RESIST: " + Math.round(physRes * 100) + "%"));
+		if (magRes > 0) lore.add(Util.colorCodes("&cMAGIC RESIST: " + Math.round(magRes * 100) + "%"));
 		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
-		if (thorns > 0) lore.add(Util.colorCodes("&cTHORNS: " + Math.round(thorns * 100) + "%"));
+		if (dodge > 0) lore.add(Util.colorCodes("&cDODGE: " + Math.round(dodge * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
@@ -269,20 +269,20 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.energyRegen = energyRegen;
 	}
 
-	public float getDefense() {
-		return defense;
+	public float getPhysRes() {
+		return physRes;
 	}
 
-	public void setDefense(float defense) {
-		this.defense = defense;
+	public void setPhysRes(float physRes) {
+		this.physRes = physRes;
 	}
 
-	public float getMagicRes() {
-		return magicRes;
+	public float getMagRes() {
+		return magRes;
 	}
 
-	public void setMagicRes(float magicRes) {
-		this.magicRes = magicRes;
+	public void setMagRes(float magRes) {
+		this.magRes = magRes;
 	}
 
 	public float getBlock() {
@@ -293,12 +293,12 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.block = block;
 	}
 
-	public float getThorns() {
-		return thorns;
+	public float getDodge() {
+		return dodge;
 	}
 
-	public void setThorns(float thorns) {
-		this.thorns = thorns;
+	public void setDodge(float dodge) {
+		this.dodge = dodge;
 	}
 
 }

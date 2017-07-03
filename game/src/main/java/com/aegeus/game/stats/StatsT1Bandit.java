@@ -21,42 +21,53 @@ public class StatsT1Bandit extends Stats {
 
 		addType(EntityType.ZOMBIE);
 
-		ArmorPossible armor = new ArmorPossible();
-		armor.material = Material.LEATHER_HELMET;
-		armor.hp = new IntPossible(10, 56);
-		addHelmet(armor);
+		getDefaultArmor().hpRegen = new IntPossible(5, 10);
+		getDefaultArmor().energyRegen = new FloatPossible(0.01f, 0.02f);
+		getDefaultArmor().physRes = new FloatPossible(0.01f, 0.03f);
+		getDefaultArmor().magRes = new FloatPossible(0.01f, 0.03f);
+		getDefaultArmor().block = new FloatPossible(0.01f, 0.04f);
+		getDefaultArmor().dodge = new FloatPossible(0.01f, 0.04f);
 
-		armor.material = Material.LEATHER_CHESTPLATE;
-		armor.hp = new IntPossible(18, 98);
-		addChestplate(armor);
+		ArmorPossible helmet = new ArmorPossible();
+		helmet.material = Material.LEATHER_HELMET;
+		helmet.hp = new IntPossible(10, 56);
+		addHelmet(helmet);
 
-		armor.material = Material.LEATHER_LEGGINGS;
-		armor.hp = new IntPossible(15, 84);
-		addLeggings(armor);
+		ArmorPossible chestplate = new ArmorPossible();
+		chestplate.material = Material.LEATHER_CHESTPLATE;
+		chestplate.hp = new IntPossible(18, 98);
+		addChestplate(chestplate);
 
-		armor.material = Material.LEATHER_BOOTS;
-		armor.hp = new IntPossible(8, 42);
-		addBoots(armor);
+		ArmorPossible leggings = new ArmorPossible();
+		leggings.material = Material.LEATHER_LEGGINGS;
+		leggings.hp = new IntPossible(15, 84);
+		addLeggings(leggings);
 
-		WeaponPossible weapon = new WeaponPossible();
-		weapon.strength = new IntPossible(1, 10);
-		weapon.dexterity = new IntPossible(1, 10);
-		weapon.intellect = new IntPossible(1, 10);
-		weapon.vitality = new IntPossible(1, 10);
-		weapon.fireDmg = new IntPossible(1, 8);
-		weapon.iceDmg = new IntPossible(1, 8);
-		weapon.poisonDmg = new IntPossible(1, 8);
-		weapon.lifeSteal = new FloatPossible(0.01f, 0.2f);
+		ArmorPossible boots = new ArmorPossible();
+		boots.material = Material.LEATHER_BOOTS;
+		boots.hp = new IntPossible(8, 42);
+		addBoots(boots);
 
-		weapon.material = Material.WOOD_SWORD;
-		weapon.dmg = new IntPossible(1, 16);
-		weapon.range = new IntPossible(0, 4);
-		addWeapon(weapon);
+		getDefaultWeapon().pen = new FloatPossible(0.01f, 0.05f);
+		getDefaultWeapon().fireDmg = new IntPossible(1, 6);
+		getDefaultWeapon().iceDmg = new IntPossible(1, 6);
+		getDefaultWeapon().poisonDmg = new IntPossible(1, 6);
+		getDefaultWeapon().pureDmg = new IntPossible(1, 6);
+		getDefaultWeapon().lifeSteal = new FloatPossible(0.01f, 0.25f);
+		getDefaultWeapon().trueHearts = new FloatPossible(0.01f, 0.05f);
+		getDefaultWeapon().blindness = new FloatPossible(0.01f, 0.25f);
 
-		weapon.material = Material.WOOD_AXE;
-		weapon.dmg = new IntPossible(1, 17);
-		weapon.range = new IntPossible(0, 5);
-		addWeapon(weapon);
+		WeaponPossible sword = new WeaponPossible();
+		sword.material = Material.WOOD_SWORD;
+		sword.dmg = new IntPossible(1, 12);
+		sword.range = new IntPossible(0, 5);
+		addWeapon(sword);
+
+		WeaponPossible axe = new WeaponPossible();
+		axe.material = Material.WOOD_AXE;
+		axe.dmg = new IntPossible(1, 13);
+		axe.range = new IntPossible(0, 4);
+		addWeapon(axe);
 	}
 
 	@Override

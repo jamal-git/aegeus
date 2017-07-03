@@ -143,11 +143,14 @@ public class CombatListener implements Listener {
 					}
 				}
 
-				physDmg *= 1 - vInfo.getDefense();
-				magDmg *= 1 - vInfo.getMagicRes();
+				physDmg *= 1 - Math.max(0, vInfo.getPhysRes() - weapon.getPen());
+				magDmg *= 1 - Math.max(0, vInfo.getMagRes());
 
 				if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
 					physDmg = 0;
+				} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
+					physDmg = 0;
+					magDmg = 0;
 				}
 
 				e.setDamage(physDmg + magDmg);

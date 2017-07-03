@@ -36,6 +36,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	// Weapon Stats
 	private int minDmg = 0;
 	private int maxDmg = 0;
+	private float pen = 0;
 	private int fireDmg = 0;
 	private int iceDmg = 0;
 	private int poisonDmg = 0;
@@ -68,6 +69,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 		this.minDmg = other.minDmg;
 		this.maxDmg = other.maxDmg;
+		this.pen = other.pen;
 		this.fireDmg = other.fireDmg;
 		this.iceDmg = other.iceDmg;
 		this.poisonDmg = other.poisonDmg;
@@ -86,6 +88,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		NBTTagCompound info = getAegeusInfo();
 		minDmg = (info.hasKey("minDmg")) ? info.getInt("minDmg") : 0;
 		maxDmg = (info.hasKey("maxDmg")) ? info.getInt("maxDmg") : 0;
+		pen = (info.hasKey("pen")) ? info.getFloat("pen") : 0;
 		fireDmg = (info.hasKey("fireDmg")) ? info.getInt("fireDmg") : 0;
 		iceDmg = (info.hasKey("iceDmg")) ? info.getInt("iceDmg") : 0;
 		poisonDmg = (info.hasKey("poisonDmg")) ? info.getInt("poisonDmg") : 0;
@@ -105,6 +108,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		info.set("type", new NBTTagString("weapon"));
 		info.set("minDmg", new NBTTagInt(minDmg));
 		info.set("maxDmg", new NBTTagInt(maxDmg));
+		info.set("pen", new NBTTagFloat(pen));
 		info.set("fireDmg", new NBTTagInt(fireDmg));
 		info.set("iceDmg", new NBTTagInt(iceDmg));
 		info.set("poisonDmg", new NBTTagInt(poisonDmg));
@@ -124,6 +128,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
+		if (pen > 0) lore.add(Util.colorCodes("&cPENETRATION: " + Math.round(pen * 100) + "%"));
 		if (fireDmg > 0) lore.add(Util.colorCodes("&cFIRE DMG: +" + fireDmg));
 		if (iceDmg > 0) lore.add(Util.colorCodes("&cICE DMG: +" + iceDmg));
 		if (poisonDmg > 0) lore.add(Util.colorCodes("&cPOISON DMG: +" + poisonDmg));
@@ -280,6 +285,14 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 	public void setMaxDmg(int maxDmg) {
 		this.maxDmg = maxDmg;
+	}
+
+	public float getPen() {
+		return pen;
+	}
+
+	public void setPen(float pen) {
+		this.pen = pen;
 	}
 
 	public int getFireDmg() {
