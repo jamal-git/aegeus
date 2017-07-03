@@ -45,8 +45,8 @@ public class EnchantListener implements Listener {
 					e.setCancelled(true);
 					e.setCursor(new ItemStack(Material.AIR));
 					if (weapon.getEnchant() < 3 || random.nextFloat() <= (1.01 - (weapon.getEnchant() / 12)) * 0.4) {
-						weapon.setMinDmg(Math.round(weapon.getMinDmg() * 1.05f));
-						weapon.setMaxDmg(Math.round(weapon.getMaxDmg() * 1.05f));
+						weapon.setMinDmg((int) (Math.floor(weapon.getMinDmg() * 1.05f) + 1));
+						weapon.setMaxDmg((int) (Math.floor(weapon.getMaxDmg() * 1.05f) + 1));
 						weapon.addEnchant(1);
 						e.setCurrentItem(weapon.build());
 						enchantSuccess(player, weapon.getEnchant());
@@ -63,7 +63,7 @@ public class EnchantListener implements Listener {
 					e.setCancelled(true);
 					e.setCursor(new ItemStack(Material.AIR));
 					if (armor.getEnchant() < 3 || random.nextFloat() <= (1 - (armor.getEnchant() / 12)) * 0.6) {
-						armor.setHp(Math.round(armor.getHp() * 1.05f));
+						armor.setHp((int) (Math.floor(armor.getHp() * 1.05f) + 1));
 						armor.addEnchant(1);
 						e.setCurrentItem(armor.build());
 						enchantSuccess(player, armor.getEnchant());

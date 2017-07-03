@@ -263,7 +263,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	 */
 
 	public int getDmg() {
-		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg());
+		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg() + 1);
 	}
 
 	public void setDmg(int minDmg, int maxDmg) {
