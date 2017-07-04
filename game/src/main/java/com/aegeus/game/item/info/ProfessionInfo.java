@@ -56,5 +56,4 @@ public interface ProfessionInfo extends ItemInfo {
 
     int getRequiredXp();
 
-    void setRequiredXp(int requiredXp);
 }

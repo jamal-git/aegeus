@@ -93,11 +93,6 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
         return requiredxp;
     }
 
-    @Override
-    public void setRequiredXp(int requiredXp) {
-        //dont use this. sorry.
-    }
-
     public int getXPRequired()  {
         return requiredxp;
     }

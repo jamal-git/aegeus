@@ -55,7 +55,7 @@ public class StatsT1Bandit extends Stats {
 		getDefaultWeapon().pureDmg = new IntPossible(1, 6);
 		getDefaultWeapon().lifeSteal = new FloatPossible(0.01f, 0.25f);
 		getDefaultWeapon().trueHearts = new FloatPossible(0.01f, 0.05f);
-		getDefaultWeapon().blindness = new FloatPossible(0.01f, 0.25f);
+		getDefaultWeapon().blind = new FloatPossible(0.01f, 0.25f);
 
 		WeaponPossible sword = new WeaponPossible();
 		sword.material = Material.WOOD_SWORD;

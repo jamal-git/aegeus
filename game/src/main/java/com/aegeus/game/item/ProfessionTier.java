@@ -68,8 +68,4 @@ public enum ProfessionTier   {
     public String getRodName()  {
         return rodName;
     }
-
-    public Material getRodMaterial()    {
-        return Material.FISHING_ROD;
-    }
 }

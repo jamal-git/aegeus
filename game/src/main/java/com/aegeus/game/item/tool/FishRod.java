@@ -10,6 +10,7 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FishRod extends AgItem implements ProfessionInfo {
@@ -73,7 +74,7 @@ public class FishRod extends AgItem implements ProfessionInfo {
 		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + tripleCatch));
 		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + junkFind));
 		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + treasureFind));
-		lore.addAll(LevelInfo.super.buildLore());
+		lore.addAll(ProfessionInfo.super.buildLore());
 		return lore;
 	}
 
@@ -111,6 +112,10 @@ public class FishRod extends AgItem implements ProfessionInfo {
 	public int getXp() {
 		return xp;
 	}
+
+	public void subtractXp(int xp)  {
+	    this.xp -= xp;
+    }
 
 	@Override
 	public void setXp(int xp) {
