@@ -14,7 +14,7 @@ public enum Ore {
 	BAUXITE(Material.REDSTONE_ORE, ChatColor.RED + "Bauxite Ore", Arrays.asList(ChatColor.GRAY + "This chunk might prove useful for yielding Aluminium.") ,250, 50, ProfessionTier.IMPROVED, 5, 20),
 	IRON(Material.IRON_ORE, ChatColor.YELLOW + "Iron Ore", Arrays.asList(ChatColor.GRAY + "Magnetite contains large amounts of Iron, useful in many machines and equipment."),350, 75, ProfessionTier.IMPROVED, 10, 30),
 	AZURITE(Material.LAPIS_ORE, ChatColor.BLUE + "Azurite Ore", Arrays.asList(ChatColor.GRAY + "One of many minerals to contain copper, useful in manufacturing"),770, 100, ProfessionTier.REINFORCED, 20, 50),
-	GOLD(Material.GOLD_ORE, ChatColor.GOLD + "Gold Ore", Arrays.asList(ChatColor.GRAY + "This heavy ore contains gold, an excellent conductor in electronics."),950, 125, ProfessionTier.ELITE, 30, 70),
+	GOLD(Material.GOLD_ORE, ChatColor.GOLD + "Gold Ore", Arrays.asList(ChatColor.GRAY + "This heavy ore contains gold, an excellent conductor in electronics."),950, 125, ProfessionTier.ELITE, 30, 90),
     CRYSTAL(Material.DIAMOND_ORE, ChatColor.AQUA + "Unsorted Crystal Cluster", Arrays.asList(ChatColor.GRAY + "An assortment of minerals and gemstones.", ChatColor.GRAY +"You should probably refine it first."),1500, 300, ProfessionTier.ELITE, 60, 85),
     VERIDIUM(Material.EMERALD_ORE, ChatColor.DARK_GREEN + "Veridium Ore", Arrays.asList(ChatColor.GRAY + "The rarest of all minerals, only to be found in dangerous areas."),2100, 150, ProfessionTier.ULTIMATE, 90, 120);
 
@@ -102,6 +102,6 @@ public enum Ore {
     }
 
     public int getRandomGold()  {
-        return r.nextInt(goldDrop / 2) + goldDrop / 2;
+        return r.nextInt(goldDrop) + goldDrop / 2;
     }
 }
