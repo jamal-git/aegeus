@@ -11,6 +11,7 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Silvre on 6/24/2017.
@@ -20,6 +21,7 @@ import java.util.List;
 public class Pickaxe extends AgItem implements ProfessionInfo {
 
     private static final double CONSTANT = 1.114;
+    private static final Random r = new Random();
 
     private int level;
     private int xp;
@@ -134,13 +136,13 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
     @Override
     public List<String> buildLore() {
         List<String> lore = ProfessionInfo.super.buildLore();
-        if(miningSuccess > 0) lore.add(Util.colorCodes("&cMINING SUCCESS: +" + miningSuccess + "%"));
-        if(denseFind > 0) lore.add(Util.colorCodes("&cDENSE FIND: +" + denseFind + "%"));
+        if(miningSuccess > 0) lore.add(Util.colorCodes("&cMINING SUCCESS: +" + (miningSuccess * 100) + "%"));
+        if(denseFind > 0) lore.add(Util.colorCodes("&cDENSE FIND: +" + denseFind * 100 + "%"));
         if(denseMultiplier > 0) lore.add(Util.colorCodes("&cDENSE MULTIPLIER: " + denseMultiplier + "x"));
-        if(doubleOre > 0) lore.add(Util.colorCodes("&cDOUBLE ORE: +" + doubleOre + "%"));
-        if(tripleOre > 0) lore.add(Util.colorCodes("&cTRIPLE ORE: +" + tripleOre + "%"));
-        if(gemFind > 0) lore.add(Util.colorCodes("&cGEM FIND: +" + gemFind + "%"));
-        if(durability > 0) lore.add(Util.colorCodes("&cDURABILITY: +" + durability + "%"));
+        if(doubleOre > 0) lore.add(Util.colorCodes("&cDOUBLE ORE: +" + doubleOre * 100 + "%"));
+        if(tripleOre > 0) lore.add(Util.colorCodes("&cTRIPLE ORE: +" + tripleOre * 100 + "%"));
+        if(gemFind > 0) lore.add(Util.colorCodes("&cGEM FIND: +" + gemFind * 100 + "%"));
+        if(durability > 0) lore.add(Util.colorCodes("&cDURABILITY: +" + durability * 100 + "%"));
         return lore;
     }
 
@@ -168,6 +170,67 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
                 setMaterial(tier.getPickaxeMaterial());
                 //todo implement stats.
                 tieredUp = true;
+                int j = 1;
+                switch(getTier())   {
+                    case IMPROVED:
+                    case REINFORCED:
+                        j = 5;
+                        break;
+                    case ELITE:
+                    case ULTIMATE:
+                    case TRANSCENDENT:
+                        j = 7;
+                        break;
+                }
+                switch(r.nextInt(j))    {
+                    case 0: //MINING SUCCESS
+                        if(tier == ProfessionTier.IMPROVED) miningSuccess += (r.nextInt(2) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.REINFORCED) miningSuccess += (r.nextInt(4) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ELITE) miningSuccess += (r.nextInt(8) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) miningSuccess += (r.nextInt(10) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) miningSuccess += (r.nextInt(15) + 1.0f) / 100.0f;
+                        break;
+                    case 1: //DOUBLE ORE
+                        if(tier == ProfessionTier.IMPROVED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.REINFORCED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ELITE) doubleOre += (r.nextInt(5) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) doubleOre += (r.nextInt(7) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) doubleOre += (r.nextInt(9) + 1.0f) / 100.0f;
+                        break;
+                    case 2: //TRIPLE ORE
+                        if(tier == ProfessionTier.IMPROVED) tripleOre += (r.nextInt(1) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.REINFORCED) tripleOre += (r.nextInt(2) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ELITE) tripleOre += (r.nextInt(4) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) tripleOre += (r.nextInt(5) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) tripleOre += (r.nextInt(7) + 1.0f) / 100.0f;
+                        break;
+                    case 3: //GEM FIND
+                        if(tier == ProfessionTier.IMPROVED) gemFind += (r.nextInt(2) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.REINFORCED) gemFind += (r.nextInt(3) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ELITE) gemFind += (r.nextInt(5) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) gemFind += (r.nextInt(7) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) gemFind += (r.nextInt(9) + 1.0f) / 100.0f;
+                        break;
+                    case 4: //DURABILITY
+                        if(tier == ProfessionTier.IMPROVED) durability += (r.nextInt(5) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.REINFORCED) durability += (r.nextInt(7) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ELITE) durability += (r.nextInt(11) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) durability += (r.nextInt(13) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) durability += (r.nextInt(15) + 1.0f) / 100.0f;
+                        break;
+                    case 5: //DENSE MULTIPLIER
+                        if(tier == ProfessionTier.ELITE) denseMultiplier += r.nextInt(3);
+                        if(tier == ProfessionTier.ULTIMATE) denseMultiplier += r.nextInt(5);
+                        if(tier == ProfessionTier.TRANSCENDENT) denseMultiplier += r.nextInt(7);
+                        if(denseFind != 0.0) break;
+                    case 6: //DENSE FIND
+                        if(tier == ProfessionTier.ELITE) denseFind += (r.nextInt(2) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.ULTIMATE) denseFind += (r.nextInt(4) + 1.0f) / 100.0f;
+                        if(tier == ProfessionTier.TRANSCENDENT) denseFind += (r.nextInt(5) + 1.0f) / 100.0f;
+                        break;
+                    default:
+                        break;
+                }
             }
             return true;
         }
@@ -181,17 +244,11 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
     public static int getXPRequired(int targetLevel)    {
         if(targetLevel == 101) return 1;
         double xp = Math.pow(CONSTANT, targetLevel) * 100;
-        if(targetLevel >= 80)   {
-            xp += 50000 * (targetLevel - 80);
-        }
-        if(targetLevel >= 60)   {
-            xp += 10000 * (targetLevel - 60);
-        }
-        if(targetLevel >= 40)   {
-            xp += 5000 * (targetLevel - 40);
-        }
-        if(targetLevel >= 20)
-            xp += 1200 * (targetLevel - 20);
+        if(targetLevel >= 81)   xp += 50000 * (targetLevel - 70);
+        if(targetLevel >= 61)   xp += 10000 * (targetLevel - 50);
+        if(targetLevel >= 41)   xp += 5000 * (targetLevel - 30);
+        if(targetLevel >= 21)   xp += 1200 * targetLevel;
+        if(targetLevel >= 11)   xp += 300 * targetLevel;
         xp += 100 * targetLevel;
         return (int) Math.round(xp);
     }

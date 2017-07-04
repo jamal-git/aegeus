@@ -183,7 +183,6 @@ public class Aegeus extends JavaPlugin {
         catch(IOException e)    {
 	        e.printStackTrace();
         }
-        getLogger().info(ores.toString());
     }
 
 	public void saveSpawners() {

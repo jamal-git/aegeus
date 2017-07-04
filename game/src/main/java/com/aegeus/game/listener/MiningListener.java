@@ -1,6 +1,7 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.item.ItemGold;
 import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
@@ -46,9 +47,36 @@ public class MiningListener implements Listener {
 	            b.setType(Material.STONE);
 	            if(!o.sameTier(pick) || rng.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
 	                b.setType(Material.STONE);
-                    ItemStack stack = new ItemStack(o.getOre(), 1);
+	                /*
+	                ENCHANT PROCS!
+	                 */
+	                int amount = 1;
+	                boolean isDense = false;
+	                if(pick.getDoubleOre() > 0 && rng.nextDouble() <= pick.getDoubleOre())  {
+	                    amount++;
+	                    p.sendMessage(Util.colorCodes("       &e&l*** DOUBLE ORE(x2) ***"));
+                    }
+                    if(pick.getTripleOre() > 0 && rng.nextDouble() <= pick.getTripleOre())  {
+	                    amount += 2;
+	                    p.sendMessage(Util.colorCodes("       &e&l*** TRIPLE ORE(x3) ***"));
+                    }
+                    if(pick.getDenseFind() > 0 && rng.nextDouble() <= pick.getDenseFind())  {
+	                    isDense = true;
+	                    p.sendMessage(Util.colorCodes("       &e&l*** DENSE FIND ***"));
+                    }
+                    if(pick.getGemFind() > 0 && rng.nextDouble() <= pick.getGemFind())  {
+	                    int goldDrop = (int) (o.getRandomGold() * (isDense ? Math.max(Math.log(pick.getDenseMultiplier() / Math.log(2)), 1.5) : 1));
+                        p.sendMessage(Util.colorCodes("       &a&l*** GOLD FIND +" + goldDrop + "G ***"));
+	                    while(goldDrop > 64) {
+                            b.getWorld().dropItem(b.getLocation(), new ItemGold(64).build());
+                            goldDrop -= 64;
+                        }
+                        b.getWorld().dropItem(b.getLocation(), new ItemGold(goldDrop).build());
+                    }
+                    ItemStack stack = new ItemStack(o.getOre(), amount);
                     ItemMeta meta = Bukkit.getItemFactory().getItemMeta(o.getOre());
-                    meta.setDisplayName(o.getName());
+                    if(isDense) meta.setDisplayName(o.getName() + " x" + pick.getDenseMultiplier());
+                    else meta.setDisplayName(o.getName());
                     meta.setLore(o.getLore());
                     stack.setItemMeta(meta);
                     if (!p.getInventory().addItem(stack).isEmpty()) {
