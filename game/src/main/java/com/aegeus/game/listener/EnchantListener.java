@@ -1,5 +1,6 @@
 package com.aegeus.game.listener;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.ArmorEnchant;
 import com.aegeus.game.item.tool.Weapon;
@@ -23,6 +24,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class EnchantListener implements Listener {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+	private final Aegeus parent;
+
+	public EnchantListener(Aegeus parent) {
+		this.parent = parent;
+	}
 
 	@EventHandler
 	private void onInteract(PlayerInteractEvent e) {

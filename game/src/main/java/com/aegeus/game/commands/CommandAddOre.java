@@ -19,15 +19,15 @@ import java.util.HashSet;
  * If you are reading this - you can read this
  */
 public class CommandAddOre implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(args.length != 0 || !sender.hasPermission("aegeus.world") || !(sender instanceof Player)) return false;
-        Player p = (Player) sender;
-        Block target = p.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100);
-        if(Ore.getOreByMaterial(target.getType()) != null)   {
-            Aegeus.getInstance().addOre(target);
-            p.sendMessage(Util.colorCodes("&7Added ore at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
-        }
-        return true;
-    }
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+		if (args.length != 0 || !sender.hasPermission("aegeus.world") || !(sender instanceof Player)) return false;
+		Player p = (Player) sender;
+		Block target = p.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100);
+		if (Ore.getOreByMaterial(target.getType()) != null) {
+			Aegeus.getInstance().addOre(target);
+			p.sendMessage(Util.colorCodes("&7Added ore at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
+		}
+		return true;
+	}
 }

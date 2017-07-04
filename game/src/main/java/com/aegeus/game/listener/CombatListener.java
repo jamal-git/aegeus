@@ -32,14 +32,19 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatListener implements Listener {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+	private final Aegeus parent;
+
+	public CombatListener(Aegeus parent) {
+		this.parent = parent;
+	}
 
 	@EventHandler
 	private void onDeath(EntityDeathEvent e) {
 		LivingEntity entity = e.getEntity();
-		AgEntity info = Aegeus.getInstance().getEntity(entity);
+		AgEntity info = parent.getEntity(entity);
 
 		if (info instanceof AgMonster) {
-			AgMonster mInfo = Aegeus.getInstance().getMonster(entity);
+			AgMonster mInfo = parent.getMonster(entity);
 			if (random.nextFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
 				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && random.nextFloat() <= 0.45f)
@@ -72,7 +77,7 @@ public class CombatListener implements Listener {
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
-			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> Aegeus.getInstance().removeEntity(entity), 2);
+			Bukkit.getScheduler().runTaskLater(parent, () -> parent.removeEntity(entity), 2);
 
 	}
 
@@ -89,8 +94,8 @@ public class CombatListener implements Listener {
 				&& Util.distance(victim.getLocation(), attacker.getLocation()) < 3.5) {
 			LivingEntity lVictim = (LivingEntity) victim;
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity vInfo = Aegeus.getInstance().getEntity(lVictim);
-			AgEntity aInfo = Aegeus.getInstance().getEntity(lAttacker);
+			AgEntity vInfo = parent.getEntity(lVictim);
+			AgEntity aInfo = parent.getEntity(lAttacker);
 
 			ItemStack tool = lAttacker.getEquipment().getItemInMainHand();
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
@@ -137,7 +142,7 @@ public class CombatListener implements Listener {
 				float critChance = aInfo.getCritChance();
 				if (critChance > 0 && random.nextFloat() <= critChance) {
 					physDmg *= 1.25;
-					if (lAttacker instanceof Player && Aegeus.getInstance().getPlayer((Player) lAttacker).getLegion().equals(Legion.FEROCIOUS)) {
+					if (lAttacker instanceof Player && parent.getPlayer((Player) lAttacker).getLegion().equals(Legion.FEROCIOUS)) {
 						magDmg *= 1.2;
 						healing += physDmg * 0.2;
 					}
@@ -197,7 +202,7 @@ public class CombatListener implements Listener {
 
 		if (victim instanceof LivingEntity) {
 			LivingEntity lVictim = (LivingEntity) victim;
-			AgEntity vInfo = Aegeus.getInstance().getEntity(lVictim);
+			AgEntity vInfo = parent.getEntity(lVictim);
 			vInfo.inCombat();
 
 			lVictim.setMaximumNoDamageTicks(3);
@@ -217,18 +222,18 @@ public class CombatListener implements Listener {
 
 		if (attacker instanceof LivingEntity) {
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity aInfo = Aegeus.getInstance().getEntity(lAttacker);
+			AgEntity aInfo = parent.getEntity(lAttacker);
 			aInfo.inCombat();
 		}
 
 		if (victim instanceof Player) {
-			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
+			Bukkit.getScheduler().runTaskLater(parent, () -> {
 				Util.notifyAttacked((Player) victim, e.getDamage());
 				Util.updateDisplay((Player) victim);
 			}, 1);
 		}
 		if (attacker instanceof Player && victim instanceof LivingEntity) {
-			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
+			Bukkit.getScheduler().runTaskLater(parent, () -> {
 				Util.notifyAttack((Player) attacker, (LivingEntity) victim, e.getDamage());
 				Util.updateDisplay((Player) attacker);
 			}, 1);

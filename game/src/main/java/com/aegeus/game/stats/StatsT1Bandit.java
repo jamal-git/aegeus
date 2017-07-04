@@ -11,13 +11,17 @@ public class StatsT1Bandit extends Stats {
 	@Override
 	public void prepare() {
 		setTier(1);
-		setChance(0.1f);
+		setChance(0.17f);
 		setHpMultiplier(0.86f);
 		setDmgMultiplier(0.95f);
 
 		addName("Tired Bandit");
 		addName("Old Bandit");
+		addName("Young Bandit");
 		addName("Angry Bandit");
+		addName("Happy Bandit");
+		addName("Pretty Bandit");
+		addName("Ugly Bandit");
 
 		addType(EntityType.ZOMBIE);
 

@@ -18,11 +18,10 @@ public class CommandTestEnchant implements CommandExecutor {
 		String type = args[0];
 		int tier = Integer.parseInt(args[1]);
 
-		if (type.equalsIgnoreCase("armor")) {
+		if (type.equalsIgnoreCase("armor"))
 			player.getInventory().addItem(new ArmorEnchant(tier).build());
-		} else if (type.equalsIgnoreCase("weapon")) {
+		else if (type.equalsIgnoreCase("weapon"))
 			player.getInventory().addItem(new WeaponEnchant(tier).build());
-		}
 
 		return true;
 	}

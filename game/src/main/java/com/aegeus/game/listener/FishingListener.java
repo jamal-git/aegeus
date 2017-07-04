@@ -1,5 +1,6 @@
 package com.aegeus.game.listener;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.item.tool.FishRod;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
@@ -13,6 +14,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class FishingListener implements Listener {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+	private final Aegeus parent;
+
+	public FishingListener(Aegeus parent) {
+		this.parent = parent;
+	}
 
 	@EventHandler
 	private void onFish(PlayerFishEvent e) {
