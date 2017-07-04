@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface LevelInfo extends ItemInfo {
+    int i = 0;
 	static <T extends AgItem & LevelInfo> void impo(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
 		t.setLevel((info.hasKey("level")) ? info.getInt("level") : 0);

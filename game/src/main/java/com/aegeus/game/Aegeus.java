@@ -3,6 +3,7 @@ package com.aegeus.game;
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.CommandTestArmor;
 import com.aegeus.game.commands.test.CommandTestMob;
+import com.aegeus.game.commands.test.CommandTestPickaxe;
 import com.aegeus.game.commands.test.CommandTestWeapon;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
@@ -14,11 +15,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,6 +42,7 @@ public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
 	private Map<LivingEntity, AgEntity> entityData = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
+    public static HashMap<Location, Material> ores = new HashMap<>();
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -59,6 +64,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
+		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 
 		// Register game commands
 		getLogger().info("Registering commands...");
@@ -67,15 +73,18 @@ public class Aegeus extends JavaPlugin {
 		getCommand("message").setExecutor(new CommandMessage());
 		getCommand("roll").setExecutor(new CommandRoll());
 		getCommand("spawner").setExecutor(new CommandSpawner());
+		getCommand("addore").setExecutor(new CommandAddOre());
 
 		// Register test commands
 		getLogger().info("Registering test commands...");
 		getCommand("testarmor").setExecutor(new CommandTestArmor());
 		getCommand("testweapon").setExecutor(new CommandTestWeapon());
 		getCommand("testmob").setExecutor(new CommandTestMob());
+		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
 
 		// Load spawners
 		//loadSpawners();
+        loadOres();
 
 		// Clear entities
 		getLogger().info("Clearing entities...");
@@ -87,7 +96,7 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getLogger().info("AEGEUS disabled.");
+        getLogger().info("AEGEUS disabled.");
 	}
 
 	public AgEntity getEntity(LivingEntity entity) {
@@ -138,6 +147,43 @@ public class Aegeus extends JavaPlugin {
 	public List<AgEntity> getEntities() {
 		return new ArrayList<>(entityData.values());
 	}
+
+    public void addOre(Block b) {
+	    Location temp = b.getLocation();
+	    ores.put(new Location(temp.getWorld(), temp.getX(), temp.getY(), temp.getZ()), b.getType());
+	    saveOres();
+    }
+
+    public Map<Location, Material> getOres()    {
+	    return ores;
+    }
+
+    public void removeOre(Location l)  {
+	    ores.remove(l);
+	    saveOres();
+    }
+
+	public void saveOres()  {
+        try(FileWriter f = new FileWriter(getDataFolder() + "/ores.json")) {
+            for(Location l : ores.keySet()) {
+                f.write(ores.get(l).toString() + " " + l.getX() + " " + l.getY() + " " + l.getZ() + " " + l.getWorld().toString() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadOres()  {
+	    try(BufferedReader r = new BufferedReader(new FileReader(getDataFolder() + "/ores.json")))  {
+	        while(r.ready())    {
+	            String[] line = r.readLine().split(" ");
+	            ores.put(new Location(getServer().getWorld(line[4].substring(line[4].indexOf("=") + 1, line[4].indexOf("}"))), Double.valueOf(line[1]), Double.valueOf(line[2]), Double.valueOf(line[3])), Material.valueOf(line[0]));
+            }
+        }
+        catch(IOException e)    {
+	        e.printStackTrace();
+        }
+    }
 
 	public void saveSpawners() {
 		try (FileWriter fw = new FileWriter(getDataFolder() + "/spawners.json")) {
