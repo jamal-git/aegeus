@@ -11,13 +11,17 @@ public class StatsT1Bandit extends Stats {
 	@Override
 	public void prepare() {
 		setTier(1);
-		setChance(0.1f);
+		setChance(0.17f);
 		setHpMultiplier(0.86f);
 		setDmgMultiplier(0.95f);
 
 		addName("Tired Bandit");
 		addName("Old Bandit");
+		addName("Young Bandit");
 		addName("Angry Bandit");
+		addName("Happy Bandit");
+		addName("Pretty Bandit");
+		addName("Ugly Bandit");
 
 		addType(EntityType.ZOMBIE);
 
@@ -55,7 +59,7 @@ public class StatsT1Bandit extends Stats {
 		getDefaultWeapon().pureDmg = new IntPossible(1, 6);
 		getDefaultWeapon().lifeSteal = new FloatPossible(0.01f, 0.25f);
 		getDefaultWeapon().trueHearts = new FloatPossible(0.01f, 0.05f);
-		getDefaultWeapon().blindness = new FloatPossible(0.01f, 0.25f);
+		getDefaultWeapon().blind = new FloatPossible(0.01f, 0.25f);
 
 		WeaponPossible sword = new WeaponPossible();
 		sword.material = Material.WOOD_SWORD;

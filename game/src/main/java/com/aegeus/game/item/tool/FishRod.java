@@ -66,14 +66,13 @@ public class FishRod extends AgItem implements ProfessionInfo {
 
 	@Override
 	public List<String> buildLore() {
-		List<String> lore = new ArrayList<>();
+		List<String> lore = ProfessionInfo.buildLore(this);
 		if (fishingSuccess > 0) lore.add(Util.colorCodes("&cFISHING SUCCESS: +" + fishingSuccess));
 		if (durability > 0) lore.add(Util.colorCodes("&cDURABILITY: +" + durability));
 		if (doubleCatch > 0) lore.add(Util.colorCodes("&cDOUBLE CATCH: +" + doubleCatch));
 		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + tripleCatch));
 		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + junkFind));
 		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + treasureFind));
-		lore.addAll(LevelInfo.super.buildLore());
 		return lore;
 	}
 

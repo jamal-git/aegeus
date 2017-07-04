@@ -16,45 +16,46 @@ import java.util.List;
  * If you are reading this - you can read this
  */
 public interface ProfessionInfo extends ItemInfo {
-    static <T extends AgItem & ProfessionInfo> void impo(T t) {
-        NBTTagCompound info = t.getAegeusInfo();
-        t.setLevel(info.hasKey("level") ? info.getInt("level") : 0);
-        t.setXp(info.hasKey("xp") ? info.getInt("xp") : 0);
+	static <T extends AgItem & ProfessionInfo> void impo(T t) {
+		NBTTagCompound info = t.getAegeusInfo();
+		t.setLevel(info.hasKey("level") ? info.getInt("level") : 0);
+		t.setXp(info.hasKey("xp") ? info.getInt("xp") : 0);
 
-    }
+	}
 
-    static <T extends AgItem & ProfessionInfo> void store(T t) {
-        NBTTagCompound info = t.getAegeusInfo();
-        info.set("level", new NBTTagInt(t.getLevel()));
-        info.set("xp", new NBTTagInt(t.getXp()));
-        t.setAegeusInfo(info);
-    }
+	static <T extends AgItem & ProfessionInfo> void store(T t) {
+		NBTTagCompound info = t.getAegeusInfo();
+		info.set("level", new NBTTagInt(t.getLevel()));
+		info.set("xp", new NBTTagInt(t.getXp()));
+		t.setAegeusInfo(info);
+	}
 
-    @Override
-    default List<String> buildLore() {
-        List<String> lore = new ArrayList<>();
-        lore.add(Util.colorCodes("&7Level: " + ProfessionTier.getTierByLevel(getLevel()).getColor() + getLevel()));
-        lore.add(Util.colorCodes("&7" + getXp() + " / " + getRequiredXp() + "(" + new DecimalFormat("####0.00%").format((getXp() + 0.0) / getRequiredXp()) + ")"));
-        return lore;
-    }
+	static <T extends AgItem & ProfessionInfo> List<String> buildLore(T t) {
+		List<String> lore = new ArrayList<>();
+		lore.add(Util.colorCodes("&7Level: " + ProfessionTier.getTierByLevel(t.getLevel()).getColor() + t.getLevel()));
+		lore.add(Util.colorCodes("&7" + t.getXp() + " / " + t.getRequiredXp() + "(" + new DecimalFormat("####0.00%").format((t.getXp() + 0.0) / t.getRequiredXp()) + ")"));
+		return lore;
+	}
 
-    int getLevel();
+	int getLevel();
 
-    void setLevel(int level);
+	void setLevel(int level);
 
-    default void addLevel(int i) {
-        setLevel(getLevel() + i);
-    }
+	default void addLevel(int i) {
+		setLevel(getLevel() + i);
+	}
 
-    int getXp();
+	int getXp();
 
-    void setXp(int xp);
+	void setXp(int xp);
 
-    default void addXp(int i) {
-        setXp(getXp() + i);
-    }
+	default void addXp(int i) {
+		setXp(getXp() + i);
+	}
 
-    int getRequiredXp();
+	default void subtractXp(int i) {
+		setXp(getXp() - i);
+	}
 
-    void setRequiredXp(int requiredXp);
+	int getRequiredXp();
 }
