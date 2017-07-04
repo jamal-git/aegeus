@@ -18,18 +18,16 @@ public class AgEntity {
 
 	protected int hpRegen = 0;
 	protected float energyRegen = 0;
-	protected float defense = 0;
-	protected float magicRes = 0;
+	protected float physRes = 0;
+	protected float magRes = 0;
 	protected float block = 0;
+	protected float dodge = 0;
 	protected float critChance = 0;
 
 	protected int strength = 0;
 	protected int dexterity = 0;
 	protected int intellect = 0;
 	protected int vitality = 0;
-
-//	private int Thorns = 0;
-//	private int GoldFind = 0;
 
 	public AgEntity(LivingEntity entity) {
 		this.entity = entity;
@@ -46,8 +44,8 @@ public class AgEntity {
 
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
-		this.defense = other.defense;
-		this.magicRes = other.magicRes;
+		this.physRes = other.physRes;
+		this.physRes = other.physRes;
 		this.block = other.block;
 		this.critChance = other.critChance;
 
@@ -132,20 +130,20 @@ public class AgEntity {
 		this.energy = energy;
 	}
 
-	public float getDefense() {
-		return defense;
+	public float getPhysRes() {
+		return physRes;
 	}
 
-	public void setDefense(float defense) {
-		this.defense = Math.min(1, defense);
+	public void setPhysRes(float physRes) {
+		this.physRes = physRes;
 	}
 
-	public float getMagicRes() {
-		return magicRes;
+	public float getMagRes() {
+		return physRes;
 	}
 
-	public void setMagicRes(float magicRes) {
-		this.magicRes = Math.min(1, magicRes);
+	public void setMagRes(float physRes) {
+		this.physRes = physRes;
 	}
 
 	public float getBlock() {
@@ -153,7 +151,15 @@ public class AgEntity {
 	}
 
 	public void setBlock(float block) {
-		this.block = Math.min(1, block);
+		this.block = block;
+	}
+
+	public float getDodge() {
+		return dodge;
+	}
+
+	public void setDodge(float dodge) {
+		this.dodge = dodge;
 	}
 
 	public float getCritChance() {

@@ -48,6 +48,9 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 				switch (key.toLowerCase()) {
+					case "tier":
+						int tier = Integer.parseInt(value);
+						weapon.setTier(tier);
 					case "dmg":
 						String[] vals = value.split(";");
 						int minDmg = Integer.parseInt(vals[0]);
@@ -83,6 +86,9 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 				switch (key.toLowerCase()) {
+					case "tier":
+						int tier = Integer.parseInt(value);
+						armor.setTier(tier);
 					case "hp":
 						int hp = Integer.parseInt(value);
 						armor.setHp(hp);

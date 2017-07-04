@@ -10,11 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class StatsListener implements Listener {
-	private final Aegeus parent;
-
-	public StatsListener(Aegeus parent) {
-		this.parent = parent;
-		Bukkit.getScheduler().runTaskTimer(parent, () -> {
+	public StatsListener() {
+		Bukkit.getScheduler().runTaskTimer(Aegeus.getInstance(), () -> {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				AgPlayer info = Aegeus.getInstance().getPlayer(player);
 				if (!player.isDead() && player.getHealth() < player.getMaxHealth() && !info.isInCombat()) {
@@ -27,7 +24,7 @@ public class StatsListener implements Listener {
 
 	@EventHandler
 	private void onInventoryClick(InventoryClickEvent e) {
-		Bukkit.getScheduler().runTaskLater(parent, () -> Util.updateStats(e.getWhoClicked()), 1);
+		Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> Util.updateStats(e.getWhoClicked()), 1);
 	}
 
 }

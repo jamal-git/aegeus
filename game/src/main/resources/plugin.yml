@@ -28,9 +28,13 @@ commands:
       usage: /addore
     testarmor:
       description: Test armor.
+    testenchant:
+      description: Test enchants.
     testmob:
-      description: Test entity.
+      description: Test entities.
     testweapon:
       description: Test weapons.
+    testrod:
+      description: Test fishing rods.
     testpickaxe:
-      description: Test pickaxe.
+      description: Test pickaxes.

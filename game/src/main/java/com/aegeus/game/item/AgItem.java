@@ -2,6 +2,8 @@ package com.aegeus.game.item;
 
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagList;
+import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
@@ -13,7 +15,8 @@ import java.util.List;
 
 public class AgItem {
 	private ItemStack item;
-	private String name;
+	private String name = "";
+	private List<String> lore = new ArrayList<>();
 
 	public AgItem(Material material) {
 		this.item = new ItemStack(material);
@@ -25,6 +28,12 @@ public class AgItem {
 
 	public AgItem(ItemStack item) {
 		this.item = item;
+	}
+
+	public AgItem(AgItem other) {
+		this.item = other.item;
+		this.name = other.name;
+		this.lore = other.lore;
 	}
 
 	public ItemStack getItem() {
@@ -44,19 +53,15 @@ public class AgItem {
 	}
 
 	public List<String> getLore() {
-		return item.getItemMeta().getLore() == null ? new ArrayList<>() : item.getItemMeta().getLore();
+		return lore;
 	}
 
 	public void setLore(List<String> lore) {
-		ItemMeta meta = item.getItemMeta();
-		meta.setLore(lore);
-		item.setItemMeta(meta);
+		this.lore = lore;
 	}
 
 	public void addLore(String line) {
-		List<String> lore = getLore();
 		lore.add(Util.colorCodes(line));
-		setLore(lore);
 	}
 
 	public Material getMaterial() {
@@ -93,9 +98,26 @@ public class AgItem {
 		return true;
 	}
 
+	public void impo() {
+		NBTTagCompound info = getAegeusInfo();
+		name = (info.hasKey("name")) ? info.getString("name") : "";
+		if (info.hasKey("info")) for (int i = 0; i < info.getList("lore", 9).size(); i++)
+			lore.add(info.getList("lore", 9).getString(i));
+	}
+
+	public void store() {
+		NBTTagCompound info = getAegeusInfo();
+		info.set("name", new NBTTagString(name));
+		NBTTagList lore = new NBTTagList();
+		this.lore.forEach(s -> lore.add(new NBTTagString(s)));
+		info.set("lore", lore);
+		setAegeusInfo(info);
+	}
+
 	public ItemStack build() {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
+		meta.setLore(lore);
 		meta.addItemFlags(
 				ItemFlag.HIDE_ENCHANTS,
 				ItemFlag.HIDE_POTION_EFFECTS,

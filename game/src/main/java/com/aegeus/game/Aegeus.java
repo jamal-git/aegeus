@@ -1,10 +1,7 @@
 package com.aegeus.game;
 
 import com.aegeus.game.commands.*;
-import com.aegeus.game.commands.test.CommandTestArmor;
-import com.aegeus.game.commands.test.CommandTestMob;
-import com.aegeus.game.commands.test.CommandTestPickaxe;
-import com.aegeus.game.commands.test.CommandTestWeapon;
+import com.aegeus.game.commands.test.*;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
@@ -17,11 +14,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -40,7 +40,7 @@ public class Aegeus extends JavaPlugin {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	private static Aegeus instance;
-	private Map<LivingEntity, AgEntity> entityData = new HashMap<>();
+	private final Map<LivingEntity, AgEntity> entityData = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
     public static HashMap<Location, Material> ores = new HashMap<>();
 
@@ -59,11 +59,13 @@ public class Aegeus extends JavaPlugin {
 
 		// Register plugin events
 		getLogger().info("Registering event listener...");
-		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
-		getServer().getPluginManager().registerEvents(new CombatListener(this), this);
-		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
-		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
+		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+		getServer().getPluginManager().registerEvents(new CombatListener(), this);
+		getServer().getPluginManager().registerEvents(new EnchantListener(), this);
+		getServer().getPluginManager().registerEvents(new FishingListener(), this);
+		getServer().getPluginManager().registerEvents(new ServerListener(), this);
+		getServer().getPluginManager().registerEvents(new SpawnerListener(), this);
+		getServer().getPluginManager().registerEvents(new StatsListener(), this);
 		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 
 		// Register game commands
@@ -78,7 +80,9 @@ public class Aegeus extends JavaPlugin {
 		// Register test commands
 		getLogger().info("Registering test commands...");
 		getCommand("testarmor").setExecutor(new CommandTestArmor());
+		getCommand("testenchant").setExecutor(new CommandTestEnchant());
 		getCommand("testweapon").setExecutor(new CommandTestWeapon());
+		getCommand("testrod").setExecutor(new CommandTestRod());
 		getCommand("testmob").setExecutor(new CommandTestMob());
 		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
 
@@ -88,7 +92,8 @@ public class Aegeus extends JavaPlugin {
 
 		// Clear entities
 		getLogger().info("Clearing entities...");
-		Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(Entity::remove));
+		Bukkit.getWorlds().forEach(w -> w.getLivingEntities().stream()
+				.filter(e -> !(e instanceof Player)).forEach(Entity::remove));
 
 		// Done, done, and done!
 		getLogger().info("AEGEUS enabled.");

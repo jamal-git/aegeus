@@ -10,18 +10,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
-	private final Aegeus parent;
-
-	public ChatListener(Aegeus parent) {
-		this.parent = parent;
-	}
-
 	@EventHandler
 	// Local messages and custom message format
 	private void onChat(AsyncPlayerChatEvent e) {
 		e.setCancelled(true);
 		Player player = e.getPlayer();
-		AgPlayer info = parent.getPlayer(player);
+		AgPlayer info = Aegeus.getInstance().getPlayer(player);
 		switch (info.getChatChannel()) {
 			case GLOBAL:
 				ChatManager.sendGlobal(player, Util.colorCodes(e.getMessage()));

@@ -28,16 +28,14 @@ public abstract class Stats {
 	private final List<ArmorPossible> leggings = new ArrayList<>();
 	private final List<ArmorPossible> boots = new ArrayList<>();
 	private final List<WeaponPossible> weapons = new ArrayList<>();
-
+	private final ArmorPossible defArmor = new ArmorPossible(true);
+	private final WeaponPossible defWeapon = new WeaponPossible(true);
 	private float chance = 0.1f;
 	private int tier = 1;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
 	private FloatPossible rarity = new FloatPossible(0, 1);
-
-	private ArmorPossible defArmor = new ArmorPossible(true);
-	private WeaponPossible defWeapon = new WeaponPossible(true);
 
 	public Stats() {
 		prepare();
@@ -125,6 +123,10 @@ public abstract class Stats {
 		return defArmor;
 	}
 
+	public WeaponPossible getDefaultWeapon() {
+		return defWeapon;
+	}
+
 	public void addHitCond(Condition<LivingEntity> condition) {
 		this.hitConds.add(condition);
 	}
@@ -201,6 +203,8 @@ public abstract class Stats {
 		weapon.setDmg(min, max);
 
 		if (random.nextFloat() <= p.attChance)
+			weapon.setPen(p.pen.get());
+		if (random.nextFloat() <= p.attChance)
 			weapon.setFireDmg(p.fireDmg.get());
 		if (random.nextFloat() <= p.attChance)
 			weapon.setIceDmg(p.iceDmg.get());
@@ -213,7 +217,7 @@ public abstract class Stats {
 		if (random.nextFloat() <= p.attChance)
 			weapon.setTrueHearts(p.trueHearts.get());
 		if (random.nextFloat() <= p.attChance)
-			weapon.setBlindness(p.blindness.get());
+			weapon.setBlind(p.blind.get());
 
 		return weapon;
 	}
@@ -244,13 +248,18 @@ public abstract class Stats {
 			armor.setEnergyRegen(p.energyRegen.get());
 
 		if (random.nextFloat() <= p.attChance)
-			armor.setDefense(p.defense.get());
-		if (random.nextFloat() <= p.attChance)
-			armor.setMagicRes(p.magicRes.get());
+			if (p.physRes.getMin() > 0 && p.magRes.getMin() > 0) {
+				if (random.nextBoolean()) armor.setPhysRes(p.physRes.get());
+				else armor.setMagRes(p.magRes.get());
+			} else if (p.physRes.getMin() > 0)
+				armor.setPhysRes(p.physRes.get());
+			else if (p.magRes.getMin() > 0)
+				armor.setMagRes(p.magRes.get());
+
 		if (random.nextFloat() <= p.attChance)
 			armor.setBlock(p.block.get());
 		if (random.nextFloat() <= p.attChance)
-			armor.setThorns(p.thorns.get());
+			armor.setDodge(p.dodge.get());
 
 		return armor;
 	}
@@ -294,20 +303,23 @@ public abstract class Stats {
 		public IntPossible dmg = new IntPossible(1);
 		public IntPossible range = new IntPossible(0);
 
-		public float statChance = 0.05f;
+		public float statChance = 0.08f;
+		public int statMax = 3;
 		public IntPossible strength = new IntPossible(0);
 		public IntPossible dexterity = new IntPossible(0);
 		public IntPossible intellect = new IntPossible(0);
 		public IntPossible vitality = new IntPossible(0);
 
-		public float attChance = 0.05f;
+		public float attChance = 0.08f;
+		public int attMax = 3;
+		public FloatPossible pen = new FloatPossible(0);
 		public IntPossible fireDmg = new IntPossible(0);
 		public IntPossible iceDmg = new IntPossible(0);
 		public IntPossible poisonDmg = new IntPossible(0);
 		public IntPossible pureDmg = new IntPossible(0);
 		public FloatPossible lifeSteal = new FloatPossible(0);
 		public FloatPossible trueHearts = new FloatPossible(0);
-		public FloatPossible blindness = new FloatPossible(0);
+		public FloatPossible blind = new FloatPossible(0);
 
 		public WeaponPossible() {
 			this(false);
@@ -324,19 +336,22 @@ public abstract class Stats {
 				range = defWeapon.range;
 
 				statChance = defWeapon.statChance;
+				statMax = defWeapon.attMax;
+				pen = defWeapon.pen;
 				strength = defWeapon.strength;
 				dexterity = defWeapon.dexterity;
 				intellect = defWeapon.intellect;
 				vitality = defWeapon.vitality;
 
 				attChance = defWeapon.attChance;
+				attMax = defWeapon.attMax;
 				fireDmg = defWeapon.fireDmg;
 				iceDmg = defWeapon.iceDmg;
 				poisonDmg = defWeapon.poisonDmg;
 				pureDmg = defWeapon.pureDmg;
 				lifeSteal = defWeapon.lifeSteal;
 				trueHearts = defWeapon.trueHearts;
-				blindness = defWeapon.blindness;
+				blind = defWeapon.blind;
 			}
 		}
 	}
@@ -351,17 +366,19 @@ public abstract class Stats {
 		public IntPossible hpRegen = new IntPossible(0);
 		public FloatPossible energyRegen = new FloatPossible(0);
 
-		public float statChance = 0.05f;
+		public float statChance = 0.08f;
+		public int statMax = 3;
 		public IntPossible strength = new IntPossible(0);
 		public IntPossible dexterity = new IntPossible(0);
 		public IntPossible intellect = new IntPossible(0);
 		public IntPossible vitality = new IntPossible(0);
 
-		public float attChance = 0.05f;
-		public FloatPossible defense = new FloatPossible(0);
-		public FloatPossible magicRes = new FloatPossible(0);
+		public float attChance = 0.08f;
+		public int attMax = 3;
+		public FloatPossible physRes = new FloatPossible(0);
+		public FloatPossible magRes = new FloatPossible(0);
 		public FloatPossible block = new FloatPossible(0);
-		public FloatPossible thorns = new FloatPossible(0);
+		public FloatPossible dodge = new FloatPossible(0);
 
 		public ArmorPossible() {
 			this(false);
@@ -379,16 +396,18 @@ public abstract class Stats {
 				energyRegen = defArmor.energyRegen;
 
 				statChance = defArmor.statChance;
+				statMax = defArmor.statMax;
 				strength = defArmor.strength;
 				dexterity = defArmor.dexterity;
 				intellect = defArmor.intellect;
 				vitality = defArmor.vitality;
 
 				attChance = defArmor.attChance;
-				defense = defArmor.defense;
-				magicRes = defArmor.magicRes;
+				attMax = defArmor.attMax;
+				physRes = defArmor.physRes;
+				magRes = defArmor.magRes;
 				block = defArmor.block;
-				thorns = defArmor.thorns;
+				dodge = defArmor.dodge;
 			}
 		}
 	}

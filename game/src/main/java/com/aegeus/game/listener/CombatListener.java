@@ -32,19 +32,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatListener implements Listener {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
-	private final Aegeus parent;
-
-	public CombatListener(Aegeus parent) {
-		this.parent = parent;
-	}
 
 	@EventHandler
 	private void onDeath(EntityDeathEvent e) {
 		LivingEntity entity = e.getEntity();
-		AgEntity info = parent.getEntity(entity);
+		AgEntity info = Aegeus.getInstance().getEntity(entity);
 
 		if (info instanceof AgMonster) {
-			AgMonster mInfo = parent.getMonster(entity);
+			AgMonster mInfo = Aegeus.getInstance().getMonster(entity);
 			if (random.nextFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
 				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && random.nextFloat() <= 0.45f)
@@ -77,7 +72,7 @@ public class CombatListener implements Listener {
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
-			Bukkit.getScheduler().runTaskLater(parent, () -> parent.removeEntity(entity), 1);
+			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> Aegeus.getInstance().removeEntity(entity), 2);
 
 	}
 
@@ -94,18 +89,16 @@ public class CombatListener implements Listener {
 				&& Util.distance(victim.getLocation(), attacker.getLocation()) < 3.5) {
 			LivingEntity lVictim = (LivingEntity) victim;
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity vInfo = parent.getEntity(lVictim);
-			AgEntity aInfo = parent.getEntity(lAttacker);
+			AgEntity vInfo = Aegeus.getInstance().getEntity(lVictim);
+			AgEntity aInfo = Aegeus.getInstance().getEntity(lAttacker);
 
 			ItemStack tool = lAttacker.getEquipment().getItemInMainHand();
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
 				Weapon weapon = new Weapon(tool);
 				List<Sound> sounds = new ArrayList<>();
-				int physDmg = 0;
+				int physDmg = weapon.getDmg();
 				int magDmg = 0;
 				int healing = 0;
-
-				physDmg = weapon.getDmg();
 
 				if (weapon.getFireDmg() > 0) {
 					magDmg += weapon.getFireDmg();
@@ -129,12 +122,12 @@ public class CombatListener implements Listener {
 							if (armor.getTier() == weapon.getTier())
 								matches++;
 						}
-					physDmg += weapon.getPureDmg() * matches;
+					physDmg += weapon.getPureDmg() * (matches / 4);
 				}
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
-					physDmg += lVictim.getMaxHealth() * (0.04 * weapon.getTier());
+					physDmg += lVictim.getMaxHealth() * (0.02 * weapon.getTier());
 				}
-				if (weapon.getBlindness() > 0 && random.nextFloat() <= weapon.getBlindness()) {
+				if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1));
 				}
 				if (weapon.getLifeSteal() > 0) {
@@ -144,17 +137,20 @@ public class CombatListener implements Listener {
 				float critChance = aInfo.getCritChance();
 				if (critChance > 0 && random.nextFloat() <= critChance) {
 					physDmg *= 1.25;
-					if (lAttacker instanceof Player && parent.getPlayer((Player) lAttacker).getLegion().equals(Legion.FEROCIOUS)) {
+					if (lAttacker instanceof Player && Aegeus.getInstance().getPlayer((Player) lAttacker).getLegion().equals(Legion.FEROCIOUS)) {
 						magDmg *= 1.2;
 						healing += physDmg * 0.2;
 					}
 				}
 
-				physDmg *= 1 - vInfo.getDefense();
-				magDmg *= 1 - vInfo.getMagicRes();
+				physDmg *= 1 - Math.max(0, vInfo.getPhysRes() - weapon.getPen());
+				magDmg *= 1 - Math.max(0, vInfo.getMagRes());
 
 				if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
 					physDmg = 0;
+				} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
+					physDmg = 0;
+					magDmg = 0;
 				}
 
 				e.setDamage(physDmg + magDmg);
@@ -171,7 +167,7 @@ public class CombatListener implements Listener {
 					if (c.isComplete(lVictim)) {
 						c.onComplete(lVictim);
 						if (c.addOnComplete() != null)
-							mInfo.getHitConds().addAll(Arrays.asList(c.addOnComplete()));
+							mInfo.getHitConds().addAll(c.addOnComplete());
 						if (c.removeOnComplete()) {
 							mInfo.getHitConds().remove(c);
 							i--;
@@ -181,6 +177,9 @@ public class CombatListener implements Listener {
 
 			}
 
+			if (lAttacker instanceof Player && ((Player) lAttacker).isSneaking())
+				e.setDamage(e.getDamage() / 2);
+			e.setDamage(Math.max(1, e.getDamage()));
 			e.setCancelled(true);
 
 			if (e.getDamage() > 0) {
@@ -189,13 +188,16 @@ public class CombatListener implements Listener {
 				lVictim.setLastDamageCause(e);
 
 				Vector vec = lAttacker.getLocation().getDirection().multiply(0.16);
-				lVictim.setVelocity(vec.setY(vec.getY() + 3));
+				if (((lVictim instanceof Player && !((Player) lVictim).isSneaking()) || !(victim instanceof Player)) && lVictim.isOnGround())
+					lVictim.setVelocity(vec.setY(vec.getY() + 0.21));
+				else
+					lVictim.setVelocity(vec.setY(vec.getY() + 0.08));
 			}
 		}
 
 		if (victim instanceof LivingEntity) {
 			LivingEntity lVictim = (LivingEntity) victim;
-			AgEntity vInfo = parent.getEntity(lVictim);
+			AgEntity vInfo = Aegeus.getInstance().getEntity(lVictim);
 			vInfo.inCombat();
 
 			lVictim.setMaximumNoDamageTicks(3);
@@ -215,18 +217,18 @@ public class CombatListener implements Listener {
 
 		if (attacker instanceof LivingEntity) {
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity aInfo = parent.getEntity(lAttacker);
+			AgEntity aInfo = Aegeus.getInstance().getEntity(lAttacker);
 			aInfo.inCombat();
 		}
 
 		if (victim instanceof Player) {
-			Bukkit.getScheduler().runTaskLater(parent, () -> {
+			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
 				Util.notifyAttacked((Player) victim, e.getDamage());
 				Util.updateDisplay((Player) victim);
 			}, 1);
 		}
 		if (attacker instanceof Player && victim instanceof LivingEntity) {
-			Bukkit.getScheduler().runTaskLater(parent, () -> {
+			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
 				Util.notifyAttack((Player) attacker, (LivingEntity) victim, e.getDamage());
 				Util.updateDisplay((Player) attacker);
 			}, 1);

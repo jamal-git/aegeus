@@ -1,5 +1,7 @@
 package com.aegeus.game.util;
 
+import java.util.List;
+
 public abstract class Condition<T> {
 	public boolean isComplete(T t) {
 		return true;
@@ -7,7 +9,7 @@ public abstract class Condition<T> {
 
 	public abstract void onComplete(T t);
 
-	public Condition<T>[] addOnComplete() {
+	public List<Condition<T>> addOnComplete() {
 		return null;
 	}
 

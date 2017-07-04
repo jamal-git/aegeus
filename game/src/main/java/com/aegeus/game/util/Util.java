@@ -5,17 +5,25 @@ import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.tool.Armor;
+import net.minecraft.server.v1_9_R1.EntityFishingHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
@@ -56,8 +64,8 @@ public class Util {
 		int hp = 0;
 		int hpRegen = 0;
 		float energyRegen = 0;
-		float defense = 0;
-		float magicRes = 0;
+		float physRes = 0;
+		float magRes = 0;
 		float block = 0;
 		int strength = 0;
 		int intellect = 0;
@@ -72,8 +80,8 @@ public class Util {
 				hp += armor.getHp();
 				hpRegen = armor.getHpRegen();
 				energyRegen += armor.getEnergyRegen();
-				defense += armor.getDefense();
-				magicRes += armor.getMagicRes();
+				physRes += armor.getPhysRes();
+				magRes += armor.getMagRes();
 				block += armor.getBlock();
 				strength += armor.getStrength();
 				dexterity += armor.getDexterity();
@@ -117,8 +125,8 @@ public class Util {
 		entity.setMaxHealth(Math.max(1, hp));
 		info.setHpRegen(hpRegen);
 		info.setEnergyRegen(energyRegen);
-		info.setDefense(defense);
-		info.setMagicRes(magicRes);
+		info.setPhysRes(physRes);
+		info.setMagRes(magRes);
 		info.setBlock(block);
 		info.setStrength(strength);
 		info.setIntellect(intellect);
@@ -188,11 +196,52 @@ public class Util {
 		victim.sendMessage(Util.colorCodes("              &4-" + dmg + " &lHP&7 [" + hp + " / " + maxHp + "]"));
 	}
 
+	public static void notifyProfXp(Player player, int xp, int totalXp, int maxXp) {
+		player.sendMessage(Util.colorCodes("              &e+" + xp + " &lXP&7 [" + totalXp + " / " + maxXp + "]"));
+	}
+
+	public static void notifyProfLevel(Player player, int level) {
+		player.sendMessage(Util.colorCodes("              &6&l** LEVEL UP!&6 [&l" + level + "&6] &l**"));
+	}
+
 	public static double distance(double x1, double y1, double z1, double x2, double y2, double z2) {
 		return Math.cbrt(Math.pow((x1 - x2), 3) + Math.pow((y1 - y2), 3) + Math.pow((z1 - z2), 3));
 	}
 
 	public static double distance(Location loc1, Location loc2) {
 		return distance(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+	}
+
+	public static void setBiteTime(FishHook hook, int time) {
+		try {
+			net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
+			Field fishCatchTime = net.minecraft.server.v1_9_R1.EntityFishingHook.class.getDeclaredField("aw");
+			fishCatchTime.setAccessible(true);
+			fishCatchTime.setInt(hookCopy, time);
+			fishCatchTime.setAccessible(false);
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String getName(ItemStack item) {
+		return item == null || item.getType().equals(Material.AIR)
+				? "Nothing" : CraftItemStack.asNMSCopy(item).getName();
+	}
+
+	public static String getName(Material material) {
+		return material == null || material.equals(Material.AIR)
+				? "Nothing" : CraftItemStack.asNMSCopy(new ItemStack(material)).getName();
+	}
+
+	public static List<String> getLore(ItemStack item) {
+		return item == null || item.getItemMeta() == null || item.getItemMeta().getLore() == null
+				? new ArrayList<>() : item.getItemMeta().getLore();
+	}
+
+	@SafeVarargs
+	public static <T> List<T> union(List<T> t, List<T>... others) {
+		Arrays.stream(others).forEach(t::addAll);
+		return t;
 	}
 }

@@ -10,7 +10,6 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FishRod extends AgItem implements ProfessionInfo {
@@ -28,12 +27,8 @@ public class FishRod extends AgItem implements ProfessionInfo {
 	private float junkFind = 0;
 	private float treasureFind = 0;
 
-	public FishRod(Material material) {
-		this(new ItemStack(material));
-	}
-
-	public FishRod(Material material, int amount) {
-		this(new ItemStack(material, amount));
+	public FishRod() {
+		super(Material.FISHING_ROD);
 	}
 
 	public FishRod(ItemStack item) {
@@ -78,7 +73,7 @@ public class FishRod extends AgItem implements ProfessionInfo {
 		if (tripleCatch > 0) lore.add(Util.colorCodes("&cTRIPLE CATCH: +" + tripleCatch));
 		if (junkFind > 0) lore.add(Util.colorCodes("&cJUNK FIND: +" + junkFind));
 		if (treasureFind > 0) lore.add(Util.colorCodes("&cTREASURE FIND: +" + treasureFind));
-		lore.addAll(ProfessionInfo.super.buildLore());
+		lore.addAll(LevelInfo.super.buildLore());
 		return lore;
 	}
 
@@ -91,7 +86,10 @@ public class FishRod extends AgItem implements ProfessionInfo {
 	@Override
 	public ItemStack build() {
 		store();
-		setLore(buildLore());
+
+		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
+		setLore(Util.union(buildLore(), getLore()));
+
 		return super.build();
 	}
 
@@ -119,15 +117,10 @@ public class FishRod extends AgItem implements ProfessionInfo {
 		this.xp = xp;
 	}
 
-    @Override
-    public int getRequiredXp() {
-        return requiredXp;
-    }
-
-    @Override
-    public void setRequiredXp(int requiredXp) {
-        this.requiredXp = requiredXp;
-    }
+	@Override
+	public int getRequiredXp() {
+		return (int) Math.round(1000 + (Math.pow(getLevel(), 1.114) * 200));
+	}
 
 	/*
 	Fishing Rod Methods
