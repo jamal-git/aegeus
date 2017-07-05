@@ -1,29 +1,16 @@
 package com.aegeus.game.stats;
 
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class StatsT1Bandit extends Stats {
+public class StatsT1 extends Stats {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	@Override
 	public void prepare() {
 		setTier(1);
 		setChance(0.17f);
-		setHpMultiplier(0.86f);
-		setDmgMultiplier(0.95f);
-
-		addName("Tired Bandit");
-		addName("Old Bandit");
-		addName("Young Bandit");
-		addName("Angry Bandit");
-		addName("Happy Bandit");
-		addName("Pretty Bandit");
-		addName("Ugly Bandit");
-
-		addType(EntityType.ZOMBIE);
 
 		getDefaultArmor().hpRegen = new IntPossible(5, 10);
 		getDefaultArmor().energyRegen = new FloatPossible(0.01f, 0.02f);
@@ -34,22 +21,26 @@ public class StatsT1Bandit extends Stats {
 
 		ArmorPossible helmet = new ArmorPossible();
 		helmet.material = Material.LEATHER_HELMET;
-		helmet.hp = new IntPossible(10, 56);
+		helmet.name = "Leather Helmet";
+		helmet.hp = new IntPossible(9, 54);
 		addHelmet(helmet);
 
 		ArmorPossible chestplate = new ArmorPossible();
 		chestplate.material = Material.LEATHER_CHESTPLATE;
-		chestplate.hp = new IntPossible(18, 98);
+		chestplate.name = "Leather Chestplate";
+		chestplate.hp = new IntPossible(17, 99);
 		addChestplate(chestplate);
 
 		ArmorPossible leggings = new ArmorPossible();
 		leggings.material = Material.LEATHER_LEGGINGS;
-		leggings.hp = new IntPossible(15, 84);
+		leggings.name = "Leather Leggings";
+		leggings.hp = new IntPossible(16, 96);
 		addLeggings(leggings);
 
 		ArmorPossible boots = new ArmorPossible();
 		boots.material = Material.LEATHER_BOOTS;
-		boots.hp = new IntPossible(8, 42);
+		boots.name = "Leather Boots";
+		boots.hp = new IntPossible(9, 51);
 		addBoots(boots);
 
 		getDefaultWeapon().pen = new FloatPossible(0.01f, 0.05f);

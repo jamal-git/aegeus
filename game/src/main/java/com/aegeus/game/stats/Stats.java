@@ -20,17 +20,17 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Stats {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-	private final List<String> names = new ArrayList<>();
-	private final List<EntityType> types = new ArrayList<>();
-	private final List<Condition<LivingEntity>> hitConds = new ArrayList<>();
-	private final List<ArmorPossible> helmets = new ArrayList<>();
-	private final List<ArmorPossible> chestplates = new ArrayList<>();
-	private final List<ArmorPossible> leggings = new ArrayList<>();
-	private final List<ArmorPossible> boots = new ArrayList<>();
-	private final List<WeaponPossible> weapons = new ArrayList<>();
-	private final ArmorPossible defArmor = new ArmorPossible(true);
-	private final WeaponPossible defWeapon = new WeaponPossible(true);
-	private float chance = 0.1f;
+	private List<String> names = new ArrayList<>();
+	private List<EntityType> types = new ArrayList<>();
+	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
+	private List<ArmorPossible> helmets = new ArrayList<>();
+	private List<ArmorPossible> chestplates = new ArrayList<>();
+	private List<ArmorPossible> leggings = new ArrayList<>();
+	private List<ArmorPossible> boots = new ArrayList<>();
+	private List<WeaponPossible> weapons = new ArrayList<>();
+	private ArmorPossible defArmor = new ArmorPossible(true);
+	private WeaponPossible defWeapon = new WeaponPossible(true);
+	private float chance = 1;
 	private int tier = 1;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
@@ -41,7 +41,31 @@ public abstract class Stats {
 		prepare();
 	}
 
+	public Stats(Stats inherit) {
+		inherit.prepare();
+		copy(inherit);
+	}
+
 	public abstract void prepare();
+
+	public void copy(Stats other) {
+		this.names = other.names;
+		this.types = other.types;
+		this.hitConds = other.hitConds;
+		this.helmets = other.helmets;
+		this.chestplates = other.chestplates;
+		this.leggings = other.leggings;
+		this.boots = other.boots;
+		this.weapons = other.weapons;
+		this.defArmor = other.defArmor;
+		this.defWeapon = other.defWeapon;
+		this.chance = other.chance;
+		this.tier = other.tier;
+		this.forcedHp = other.forcedHp;
+		this.hpMultiplier = other.hpMultiplier;
+		this.dmgMultiplier = other.dmgMultiplier;
+		this.rarity = other.rarity;
+	}
 
 	public boolean hasHelmet() {
 		return true;
