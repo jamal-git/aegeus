@@ -43,6 +43,6 @@ public class Spawner {
 	}
 
 	public boolean canSpawn() {
-	    return true;
+		return true;
 	}
 }

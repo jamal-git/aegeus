@@ -38,19 +38,19 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	private float gemFind;
 	private float durability;
 
-    /**
-     * TODO
-     *
-     * NOTE THAT DURABILITY THE VARIABLE AND DURABILITYENCHANT IN METHODS REFERS TO DURABILITY THE
-     * ENCHANT ON THE PICKAXE AND NOT THE ACTUAL DURABILITY OF THE ITEM.
-     *
-     * DURA THE VARIABLE AND DURABILITY IN METHODS REFERS TO THE ACTUAL DURABILITY
-     * OF THE ITEM AND NOT THE ENCHANT USED TO INCREASE THE ACTUAL DURABILITY OF ITEM.
-     *
-     * I KNOW THAT SOUNDS VERY CONFUSING BUT TRUST ME IT WORKS.  MAYBE ONE DAY I WILL
-     * UPDATE THE VARIABLE AND METHOD NAMES SO IT WILL NOT BE AS CONFUSING AS IT
-     * IS IN THE CURRENT STATE THE CODE
-     */
+	/**
+	 * TODO
+	 * <p>
+	 * NOTE THAT DURABILITY THE VARIABLE AND DURABILITYENCHANT IN METHODS REFERS TO DURABILITY THE
+	 * ENCHANT ON THE PICKAXE AND NOT THE ACTUAL DURABILITY OF THE ITEM.
+	 * <p>
+	 * DURA THE VARIABLE AND DURABILITY IN METHODS REFERS TO THE ACTUAL DURABILITY
+	 * OF THE ITEM AND NOT THE ENCHANT USED TO INCREASE THE ACTUAL DURABILITY OF ITEM.
+	 * <p>
+	 * I KNOW THAT SOUNDS VERY CONFUSING BUT TRUST ME IT WORKS.  MAYBE ONE DAY I WILL
+	 * UPDATE THE VARIABLE AND METHOD NAMES SO IT WILL NOT BE AS CONFUSING AS IT
+	 * IS IN THE CURRENT STATE THE CODE
+	 */
 
 	public Pickaxe(ItemStack stack) {
 		super(stack);
@@ -175,11 +175,11 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 
 	@Override
 	public ItemStack build() {
-            store();
-            setLore(buildLore());
-            setName(tier.getColor() + tier.getPickaxeName());
-            return super.build();
-    }
+		store();
+		setLore(buildLore());
+		setName(tier.getColor() + tier.getPickaxeName());
+		return super.build();
+	}
 
 	public boolean addExp(int i) {
 		xp += i;

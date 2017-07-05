@@ -67,11 +67,11 @@ public enum ProfessionTier {
 		return pickMat;
 	}
 
-    public int getMaxDurability() {
-        return maxDurability;
-    }
+	public int getMaxDurability() {
+		return maxDurability;
+	}
 
-    public String getRodName() {
+	public String getRodName() {
 		return rodName;
 	}
 

@@ -11,16 +11,16 @@ import java.lang.reflect.Type;
  * If you are reading this - you can read this
  */
 public class SpawnerSerializer implements JsonSerializer<Spawner> {
-    @Override
-    public JsonElement serialize(Spawner spawner, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject o = new JsonObject();
-        o.addProperty("world", spawner.getLocation().getWorld().getName());
-        o.addProperty("x", spawner.getLocation().getX());
-        o.addProperty("y", spawner.getLocation().getY());
-        o.addProperty("z", spawner.getLocation().getZ());
-        JsonArray stats = new JsonArray();
-        spawner.getList().stream().map(x -> new JsonPrimitive(x.getClass().getCanonicalName())).forEach(stats::add);
-        o.add("list", stats);
-        return o;
-    }
+	@Override
+	public JsonElement serialize(Spawner spawner, Type type, JsonSerializationContext jsonSerializationContext) {
+		JsonObject o = new JsonObject();
+		o.addProperty("world", spawner.getLocation().getWorld().getName());
+		o.addProperty("x", spawner.getLocation().getX());
+		o.addProperty("y", spawner.getLocation().getY());
+		o.addProperty("z", spawner.getLocation().getZ());
+		JsonArray stats = new JsonArray();
+		spawner.getList().stream().map(x -> new JsonPrimitive(x.getClass().getCanonicalName())).forEach(stats::add);
+		o.add("list", stats);
+		return o;
+	}
 }

@@ -14,15 +14,15 @@ import org.bukkit.entity.Player;
  * If you are reading this - you can read this
  */
 public class CommandShowSpawners implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String st, String[] strings) {
-        if(commandSender instanceof Player && strings.length == 0 && commandSender.hasPermission("aegeus.world"))   {
-            Player p = (Player) commandSender;
-            for(Spawner s : Aegeus.getInstance().getSpawners())
-                //noinspection deprecation
-                p.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean onCommand(CommandSender commandSender, Command command, String st, String[] strings) {
+		if (commandSender instanceof Player && strings.length == 0 && commandSender.hasPermission("aegeus.world")) {
+			Player p = (Player) commandSender;
+			for (Spawner s : Aegeus.getInstance().getSpawners())
+				//noinspection deprecation
+				p.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
+			return true;
+		}
+		return false;
+	}
 }

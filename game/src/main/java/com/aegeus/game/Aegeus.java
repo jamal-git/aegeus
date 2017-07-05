@@ -56,11 +56,11 @@ public class Aegeus extends JavaPlugin {
 		saveDefaultConfig();
 
 		// LOaDin uO GsOn SeriAliZiNg aNd DeseriAlizinG adapters!
-        GsonBuilder b = new GsonBuilder();
-        b.setPrettyPrinting();
-        b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
-        b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
-        GSON = b.create();
+		GsonBuilder b = new GsonBuilder();
+		b.setPrettyPrinting();
+		b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
+		b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
+		GSON = b.create();
 
 		// Register plugin events
 		getLogger().info("Registering event listener...");
@@ -95,12 +95,12 @@ public class Aegeus extends JavaPlugin {
 		getCommand("testrune").setExecutor(new CommandTestRune());
 
 		// Load spawners
-        loadSpawners();
+		loadSpawners();
 		loadOres();
 
-		for(Spawner s : spawners)   {
-		    getLogger().info(s.getList().toString());
-        }
+		for (Spawner s : spawners) {
+			getLogger().info(s.getList().toString());
+		}
 
 		// Clear entities
 		getLogger().info("Clearing entities...");
