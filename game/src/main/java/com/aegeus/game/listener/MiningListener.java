@@ -9,11 +9,14 @@ import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -86,6 +89,12 @@ public class MiningListener implements Listener {
                                 p.sendMessage(Util.colorCodes("              &6&l*** LEVEL UP!&6 [&l" + pick.getTier().getColor() + pick.getLevel() + "&6] &l***"));
                             }
                             if (pick.checkForNextTier()) {
+                                p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.7f);
+                                Firework f = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+                                FireworkMeta fm = f.getFireworkMeta();
+                                fm.setPower(1);
+                                fm.addEffect(FireworkEffect.builder().with(FireworkEffect.Type.BURST).trail(true).withColor(Color.RED, Color.YELLOW).flicker(true).build());
+                                f.setFireworkMeta(fm);
                                 p.sendMessage(Util.colorCodes("&7&oYour pick has ascended and is now a(n) " + pick.getTier().getColor() + "&n&o" + pick.getTier().getPickaxeName() + "&7&o!"));
                             }
                         }

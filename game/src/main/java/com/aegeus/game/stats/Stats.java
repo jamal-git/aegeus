@@ -277,7 +277,6 @@ public abstract class Stats {
 		info.setForcedHp(getForcedHp());
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
-		entity.setGlowing(true);
 
 		if (hasWeapon())
 			entity.getEquipment().setItemInMainHand(get(getWeapon(), Util.rarity(rarity.get())).build());
