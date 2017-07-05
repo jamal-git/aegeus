@@ -18,9 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * TODO implement coordinate specific ores, so only specific ores will be minable
- */
 public class MiningListener implements Listener {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Aegeus parent;
