@@ -8,11 +8,11 @@ import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface EquipmentInfo extends ItemInfo {
+public interface EquipmentInfo {
 	static <T extends AgItem & EquipmentInfo> void impo(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
 		t.setTier((info.hasKey("tier")) ? info.getInt("tier") : 0);
-		t.setRarity((info.hasKey("rarity")) ? Rarity.fromID(info.getInt("rarity")) : null);
+		t.setRarity((info.hasKey("rarity")) ? (info.getInt("rarity") == -1 ? null : Rarity.fromID(info.getInt("rarity"))) : null);
 		t.setEnchant((info.hasKey("enchant")) ? info.getInt("enchant") : 0);
 
 		t.setStrength((info.hasKey("strength")) ? info.getInt("strength") : 0);
@@ -24,7 +24,7 @@ public interface EquipmentInfo extends ItemInfo {
 	static <T extends AgItem & EquipmentInfo> void store(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
 		info.setInt("tier", t.getTier());
-		if (t.getRarity() != null) info.setInt("rarity", t.getRarity().getId());
+		info.setInt("rarity", t.getRarity() == null ? -1 : t.getRarity().getId());
 		info.setInt("enchant", t.getEnchant());
 		info.setInt("strength", t.getStrength());
 		info.setInt("dexterity", t.getDexterity());
@@ -33,10 +33,10 @@ public interface EquipmentInfo extends ItemInfo {
 		t.setAegeusInfo(info);
 	}
 
-	static <T extends AgItem & EquipmentInfo> String buildNamePrefix(T t) {
+	static <T extends AgItem & EquipmentInfo> String buildPrefix(T t) {
 		String name = "";
-		if (t.getEnchant() > 0) name += "&e[+" + t.getEnchant() + "]&f ";
-		return name;
+		if (t.getEnchant() > 0) name += "&a(+" + t.getEnchant() + ")&f ";
+		return Util.colorCodes(name);
 	}
 
 	static <T extends AgItem & EquipmentInfo> List<String> buildLore(T t) {

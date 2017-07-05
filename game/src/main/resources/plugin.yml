@@ -38,3 +38,5 @@ commands:
       description: Test fishing rods.
     testpickaxe:
       description: Test pickaxes.
+    testrune:
+      description: Test runes.
