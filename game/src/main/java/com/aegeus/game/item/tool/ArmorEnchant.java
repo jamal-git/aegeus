@@ -2,17 +2,13 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.Tier;
-import com.aegeus.game.item.info.ItemInfo;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ArmorEnchant extends AgItem implements ItemInfo {
+public class ArmorEnchant extends AgItem {
 	private int tier;
 
 	public ArmorEnchant(int tier) {
@@ -46,11 +42,6 @@ public class ArmorEnchant extends AgItem implements ItemInfo {
 	}
 
 	@Override
-	public List<String> buildLore() {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public boolean verify() {
 		NBTTagCompound info = getAegeusInfo();
 		return info.hasKey("type") && info.getString("type").equalsIgnoreCase("enchant_armor");
@@ -59,11 +50,6 @@ public class ArmorEnchant extends AgItem implements ItemInfo {
 	@Override
 	public ItemStack build() {
 		store();
-
-		List<String> lore = buildLore();
-		lore.addAll(getLore());
-		setLore(lore);
-
 		return super.build();
 	}
 

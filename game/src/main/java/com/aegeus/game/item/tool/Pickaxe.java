@@ -141,9 +141,8 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		setAegeusInfo(info);
 	}
 
-	@Override
 	public List<String> buildLore() {
-		List<String> lore = ProfessionInfo.super.buildLore();
+		List<String> lore = ProfessionInfo.buildLore(this);
 		if (miningSuccess > 0) lore.add(Util.colorCodes("&cMINING SUCCESS: +" + (miningSuccess * 100) + "%"));
 		if (denseFind > 0) lore.add(Util.colorCodes("&cDENSE FIND: +" + denseFind * 100 + "%"));
 		if (denseMultiplier > 0) lore.add(Util.colorCodes("&cDENSE MULTIPLIER: " + denseMultiplier + "x"));

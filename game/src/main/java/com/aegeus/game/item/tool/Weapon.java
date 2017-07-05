@@ -12,6 +12,7 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private int enchant = 0;
 
 	// Weapon Stats
+	private Rune rune = null;
 	private int minDmg = 0;
 	private int maxDmg = 0;
 	private float pen = 0;
@@ -67,6 +69,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		this.vitality = other.vitality;
 		this.enchant = other.enchant;
 
+		this.rune = other.rune;
 		this.minDmg = other.minDmg;
 		this.maxDmg = other.maxDmg;
 		this.pen = other.pen;
@@ -86,6 +89,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		LevelInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
+		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
 		minDmg = (info.hasKey("minDmg")) ? info.getInt("minDmg") : 0;
 		maxDmg = (info.hasKey("maxDmg")) ? info.getInt("maxDmg") : 0;
 		pen = (info.hasKey("pen")) ? info.getFloat("pen") : 0;
@@ -106,6 +110,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("weapon"));
+		info.set("runeType", rune == null ? new NBTTagInt(-1) : new NBTTagInt(rune.getRuneType().getId()));
 		info.set("minDmg", new NBTTagInt(minDmg));
 		info.set("maxDmg", new NBTTagInt(maxDmg));
 		info.set("pen", new NBTTagFloat(pen));
@@ -119,12 +124,10 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		setAegeusInfo(info);
 	}
 
-	@Override
-	public String buildNamePrefix() {
-		return EquipmentInfo.buildNamePrefix(this);
+	public String buildPrefix() {
+		return EquipmentInfo.buildPrefix(this);
 	}
 
-	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
@@ -137,6 +140,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		if (trueHearts > 0) lore.add(Util.colorCodes("&cTRUE HEARTS: " + Math.round(trueHearts * 100) + "%"));
 		if (blind > 0) lore.add(Util.colorCodes("&cBLIND: " + Math.round(blind * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
+		if (rune != null) lore.add(Util.colorCodes("&5&oRune:&d&o " + rune.getRuneType().getName()));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
@@ -150,13 +154,16 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public ItemStack build() {
 		store();
+		ItemStack item = super.build();
 
-		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
-		setLore(Util.union(buildLore(), getLore()));
-		if (getEnchant() >= 4)
-			getItem().addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(String.join("", buildPrefix(), getName()));
+		meta.setLore(Util.union(buildLore(), getLore()));
+		item.setItemMeta(meta);
 
-		return super.build();
+		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
+		return item;
 	}
 
 	/*
@@ -261,6 +268,14 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	/*
 	Weapon Methods
 	 */
+
+	public Rune getRune() {
+		return rune;
+	}
+
+	public void setRune(Rune rune) {
+		this.rune = rune;
+	}
 
 	public int getDmg() {
 		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg() + 1);

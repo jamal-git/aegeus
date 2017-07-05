@@ -12,6 +12,7 @@ import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private int enchant = 0;
 
 	// Armor Stats
+	private Rune rune = null;
 	private int hp = 0;
 	private int hpRegen = 0;
 	private float energyRegen = 0;
@@ -61,6 +63,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.vitality = other.vitality;
 		this.enchant = other.enchant;
 
+		this.rune = other.rune;
 		this.hp = other.hp;
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
@@ -77,6 +80,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		LevelInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
+		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
 		hp = (info.hasKey("hp")) ? info.getInt("hp") : 0;
 		hpRegen = (info.hasKey("hpRegen")) ? info.getInt("hpRegen") : 0;
 		energyRegen = (info.hasKey("energyRegen")) ? info.getFloat("energyRegen") : 0;
@@ -94,6 +98,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("armor"));
+		info.set("runeType", rune == null ? new NBTTagInt(-1) : new NBTTagInt(rune.getRuneType().getId()));
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
 		info.set("energyRegen", new NBTTagFloat(energyRegen));
@@ -104,12 +109,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		setAegeusInfo(info);
 	}
 
-	@Override
-	public String buildNamePrefix() {
-		return EquipmentInfo.buildNamePrefix(this);
+	public String buildPrefix() {
+		return EquipmentInfo.buildPrefix(this);
 	}
 
-	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&cHP: +" + hp));
@@ -120,6 +123,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
 		if (dodge > 0) lore.add(Util.colorCodes("&cDODGE: " + Math.round(dodge * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
+		if (rune != null) lore.add(Util.colorCodes("&5&oRune:&d&o " + rune.getRuneType().getName()));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
@@ -133,13 +137,16 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public ItemStack build() {
 		store();
+		ItemStack item = super.build();
 
-		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
-		setLore(Util.union(buildLore(), getLore()));
-		if (getEnchant() >= 4)
-			getItem().addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(String.join("", buildPrefix(), getName()));
+		meta.setLore(Util.union(buildLore(), getLore()));
+		item.setItemMeta(meta);
 
-		return super.build();
+		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
+		return item;
 	}
 
 	/*
@@ -244,6 +251,14 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	/*
 	Armor Methods
 	 */
+
+	public Rune getRune() {
+		return rune;
+	}
+
+	public void setRune(Rune rune) {
+		this.rune = rune;
+	}
 
 	public int getHp() {
 		return hp;

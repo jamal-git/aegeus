@@ -7,9 +7,7 @@ import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface LevelInfo extends ItemInfo {
-	int i = 0;
-
+public interface LevelInfo {
 	static <T extends AgItem & LevelInfo> void impo(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
 		t.setLevel((info.hasKey("level")) ? info.getInt("level") : 0);

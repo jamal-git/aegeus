@@ -115,6 +115,8 @@ public class AgItem {
 	}
 
 	public ItemStack build() {
+		store();
+
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		meta.setLore(lore);

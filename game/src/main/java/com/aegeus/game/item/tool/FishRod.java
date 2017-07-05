@@ -9,6 +9,7 @@ import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -64,7 +65,6 @@ public class FishRod extends AgItem implements ProfessionInfo {
 		setAegeusInfo(info);
 	}
 
-	@Override
 	public List<String> buildLore() {
 		List<String> lore = ProfessionInfo.buildLore(this);
 		if (fishingSuccess > 0) lore.add(Util.colorCodes("&cFISHING SUCCESS: +" + fishingSuccess));
@@ -85,11 +85,14 @@ public class FishRod extends AgItem implements ProfessionInfo {
 	@Override
 	public ItemStack build() {
 		store();
+		ItemStack item = super.build();
+		ItemMeta meta = item.getItemMeta();
 
-		setName(String.join("", buildNamePrefix(), getName(), buildNameSuffix()));
-		setLore(Util.union(buildLore(), getLore()));
+		meta.setLore(Util.union(buildLore(), getLore()));
 
-		return super.build();
+		item.setItemMeta(meta);
+
+		return item;
 	}
 
 	/*

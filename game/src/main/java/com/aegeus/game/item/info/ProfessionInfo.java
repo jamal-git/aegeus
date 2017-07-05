@@ -15,12 +15,11 @@ import java.util.List;
  * Project: aegeus
  * If you are reading this - you can read this
  */
-public interface ProfessionInfo extends ItemInfo {
+public interface ProfessionInfo {
 	static <T extends AgItem & ProfessionInfo> void impo(T t) {
 		NBTTagCompound info = t.getAegeusInfo();
 		t.setLevel(info.hasKey("level") ? info.getInt("level") : 0);
 		t.setXp(info.hasKey("xp") ? info.getInt("xp") : 0);
-
 	}
 
 	static <T extends AgItem & ProfessionInfo> void store(T t) {

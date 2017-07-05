@@ -81,6 +81,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("testrod").setExecutor(new CommandTestRod());
 		getCommand("testmob").setExecutor(new CommandTestMob());
 		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
+		getCommand("testrune").setExecutor(new CommandTestRune());
 
 		// Load spawners
 		//loadSpawners();
