@@ -38,6 +38,20 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	private float gemFind;
 	private float durability;
 
+    /**
+     * TODO
+     *
+     * NOTE THAT DURABILITY THE VARIABLE AND DURABILITYENCHANT IN METHODS REFERS TO DURABILITY THE
+     * ENCHANT ON THE PICKAXE AND NOT THE ACTUAL DURABILITY OF THE ITEM.
+     *
+     * DURA THE VARIABLE AND DURABILITY IN METHODS REFERS TO THE ACTUAL DURABILITY
+     * OF THE ITEM AND NOT THE ENCHANT USED TO INCREASE THE ACTUAL DURABILITY OF ITEM.
+     *
+     * I KNOW THAT SOUNDS VERY CONFUSING BUT TRUST ME IT WORKS.  MAYBE ONE DAY I WILL
+     * UPDATE THE VARIABLE AND METHOD NAMES SO IT WILL NOT BE AS CONFUSING AS IT
+     * IS IN THE CURRENT STATE THE CODE
+     */
+
 	public Pickaxe(ItemStack stack) {
 		super(stack);
 	}
@@ -121,7 +135,7 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		setDoubleOre(info.hasKey("doubleOre") ? info.getFloat("doubleOre") : 0);
 		setTripleOre(info.hasKey("tripleOre") ? info.getFloat("tripleOre") : 0);
 		setGemFind(info.hasKey("gemFind") ? info.getFloat("gemFind") : 0);
-		setDurability(info.hasKey("durability") ? info.getFloat("durability") : 0);
+		setDurabilityEnchant(info.hasKey("durability") ? info.getFloat("durability") : 0);
 
 	}
 
@@ -137,13 +151,13 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		info.set("doubleOre", new NBTTagFloat(getDoubleOre()));
 		info.set("tripleOre", new NBTTagFloat(getTripleOre()));
 		info.set("gemFind", new NBTTagFloat(getGemFind()));
-		info.set("durability", new NBTTagFloat(getDurability()));
+		info.set("durability", new NBTTagFloat(getDurabilityEnchant()));
 		setAegeusInfo(info);
 	}
 
 	@Override
 	public List<String> buildLore() {
-		List<String> lore = ProfessionInfo.super.buildLore();
+		List<String> lore = ProfessionInfo.buildLore(this);
 		if (miningSuccess > 0) lore.add(Util.colorCodes("&cMINING SUCCESS: +" + (miningSuccess * 100) + "%"));
 		if (denseFind > 0) lore.add(Util.colorCodes("&cDENSE FIND: +" + denseFind * 100 + "%"));
 		if (denseMultiplier > 0) lore.add(Util.colorCodes("&cDENSE MULTIPLIER: " + denseMultiplier + "x"));
@@ -162,11 +176,11 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 
 	@Override
 	public ItemStack build() {
-		store();
-		setLore(buildLore());
-		setName(tier.getColor() + tier.getPickaxeName());
-		return super.build();
-	}
+            store();
+            setLore(buildLore());
+            setName(tier.getColor() + tier.getPickaxeName());
+            return super.build();
+    }
 
 	public boolean addExp(int i) {
 		xp += i;
@@ -301,11 +315,11 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		this.gemFind = gemFind;
 	}
 
-	public float getDurability() {
+	public float getDurabilityEnchant() {
 		return durability;
 	}
 
-	public void setDurability(float durability) {
+	public void setDurabilityEnchant(float durability) {
 		this.durability = durability;
 	}
 }

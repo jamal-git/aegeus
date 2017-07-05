@@ -141,11 +141,11 @@ public class FishRod extends AgItem implements ProfessionInfo {
 		this.fishingSuccess = fishingSuccess;
 	}
 
-	public float getDurability() {
+	public float getDurabilityEnchant() {
 		return durability;
 	}
 
-	public void setDurability(float durability) {
+	public void setDurabilityEnchant(float durability) {
 		this.durability = durability;
 	}
 

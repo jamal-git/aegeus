@@ -152,7 +152,6 @@ public class ItemParser {
 					armor.setHpRegen(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("energyregen"))
 					armor.setEnergyRegen(Float.parseFloat(value));
-
 				else if (key.equalsIgnoreCase("physres"))
 					armor.setPhysRes(Float.parseFloat(value));
 				else if (key.equalsIgnoreCase("magres"))
@@ -197,7 +196,7 @@ public class ItemParser {
 						p.setGemFind(Float.valueOf(value));
 						break;
 					case "durability":
-						p.setDurability(Float.valueOf(value));
+						p.setDurabilityEnchant(Float.valueOf(value));
 						break;
 				}
 			} catch (Exception fuckexceptions) {

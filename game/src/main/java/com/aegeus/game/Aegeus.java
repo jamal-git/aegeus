@@ -7,6 +7,8 @@ import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.listener.*;
+import com.aegeus.game.util.SpawnerDeserializer;
+import com.aegeus.game.util.SpawnerSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +36,7 @@ import java.util.Map;
  * @since 2016/08/19
  */
 public class Aegeus extends JavaPlugin {
-	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	public static Gson GSON;
 	private static Aegeus instance;
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
@@ -52,6 +54,13 @@ public class Aegeus extends JavaPlugin {
 		// wooOOOOOOOOO, loading up!
 		getLogger().info("AEGEUS enabling...");
 		saveDefaultConfig();
+
+		// LOaDin uO GsOn SeriAliZiNg aNd DeseriAlizinG adapters!
+        GsonBuilder b = new GsonBuilder();
+        b.setPrettyPrinting();
+        b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
+        b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
+        GSON = b.create();
 
 		// Register plugin events
 		getLogger().info("Registering event listener...");
@@ -83,8 +92,12 @@ public class Aegeus extends JavaPlugin {
 		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
 
 		// Load spawners
-		//loadSpawners();
+        loadSpawners();
 		loadOres();
+
+		for(Spawner s : spawners)   {
+		    getLogger().info(s.getList().toString());
+        }
 
 		// Clear entities
 		getLogger().info("Clearing entities...");

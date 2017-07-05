@@ -9,12 +9,12 @@ import org.bukkit.Material;
  * If you are reading this - you can read this
  */
 public enum ProfessionTier {
-	BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.RED),
-	IMPROVED("Improved Pickaxe", "Improved Fishing Rod", Material.STONE_PICKAXE, ChatColor.GREEN),
-	REINFORCED("Reinforced Pickaxe", "Reinforced Fishing Rod", Material.IRON_PICKAXE, ChatColor.AQUA),
-	ELITE("Elite Pickaxe", "Elite Fishing Rod", Material.DIAMOND_PICKAXE, ChatColor.LIGHT_PURPLE),
-	ULTIMATE("Ultimate Pickaxe", "Ultimate Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW),
-	TRANSCENDENT("Transcendent Pickaxe", "Transcendent Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW);
+	BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.RED, 500),
+	IMPROVED("Improved Pickaxe", "Improved Fishing Rod", Material.STONE_PICKAXE, ChatColor.GREEN, 1000),
+	REINFORCED("Reinforced Pickaxe", "Reinforced Fishing Rod", Material.IRON_PICKAXE, ChatColor.AQUA, 1500),
+	ELITE("Elite Pickaxe", "Elite Fishing Rod", Material.DIAMOND_PICKAXE, ChatColor.LIGHT_PURPLE, 2000),
+	ULTIMATE("Ultimate Pickaxe", "Ultimate Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW, 3000),
+	TRANSCENDENT("Transcendent Pickaxe", "Transcendent Fishing Rod", Material.GOLD_PICKAXE, ChatColor.YELLOW, 5000);
 
 	private static final ProfessionTier[] vals = values();
 
@@ -22,12 +22,14 @@ public enum ProfessionTier {
 	private final ChatColor color;
 	private final String pickName;
 	private final String rodName;
+	private final int maxDurability;
 
-	ProfessionTier(String pickName, String rodName, Material pickMat, ChatColor color) {
+	ProfessionTier(String pickName, String rodName, Material pickMat, ChatColor color, int maxDurability) {
 		this.pickName = pickName;
 		this.rodName = rodName;
 		this.pickMat = pickMat;
 		this.color = color;
+		this.maxDurability = maxDurability;
 	}
 
 	public static ProfessionTier getTierByLevel(int level) {
@@ -65,7 +67,11 @@ public enum ProfessionTier {
 		return pickMat;
 	}
 
-	public String getRodName() {
+    public int getMaxDurability() {
+        return maxDurability;
+    }
+
+    public String getRodName() {
 		return rodName;
 	}
 

@@ -43,6 +43,6 @@ public class Spawner {
 	}
 
 	public boolean canSpawn() {
-		return (location.getWorld().getNearbyEntities(location, 25, 25, 25).size() < 5);
+	    return true;
 	}
 }
