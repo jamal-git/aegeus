@@ -10,6 +10,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 public class CommandSpawner implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,7 +20,7 @@ public class CommandSpawner implements CommandExecutor {
 		if (!sender.hasPermission("aegeus.world")) return false;
 
 		Player player = (Player) sender;
-		Location loc = player.getLocation().getBlock().getLocation();
+		Location loc = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 100).getLocation();
 		Spawner spawner = new Spawner(loc);
 		spawner.add(new StatsT1Bandit());
 		Aegeus.getInstance().addSpawner(spawner);
