@@ -45,7 +45,7 @@ public class MiningListener implements Listener {
                         b.setType(Material.STONE);
                         /*
                         ENCHANT PROCS!
-*/
+                        */
                         int amount = 1;
                         boolean isDense = false;
                         if (pick.getDoubleOre() > 0 && random.nextDouble() <= pick.getDoubleOre()) {

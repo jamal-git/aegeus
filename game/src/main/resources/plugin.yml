@@ -23,6 +23,12 @@ commands:
     spawner:
       description: Creates a spawner at the current location.
       usage: /spawner
+    showspawners:
+      description: Show all spawners as a mob spawner.
+      usage: /showspawners
+    hidespawners:
+      description: Hides all spawners that were previously mob spawners.
+      usage: /hidespawners
     addore:
       description: Set the block to a minable ore at the currently facing block.
       usage: /addore
