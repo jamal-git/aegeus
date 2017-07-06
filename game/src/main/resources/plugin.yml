@@ -17,6 +17,8 @@ commands:
       description: Send a private message to a specified player.
       aliases: [msg, m, whisper, tell, pm]
       usage: /message <player> <message>
+    openentity:
+      description: Opens an entity's inventory.
     roll:
       description: Roll a random number.
       usage: /roll [max number]

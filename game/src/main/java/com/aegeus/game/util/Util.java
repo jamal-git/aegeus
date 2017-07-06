@@ -14,11 +14,13 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -247,5 +249,22 @@ public class Util {
 	public static <T> List<T> union(List<T> t, List<T>... others) {
 		Arrays.stream(others).forEach(t::addAll);
 		return t;
+	}
+
+	public static Entity getTargetEntity(Entity entity) {
+		return getTarget(entity, entity.getWorld().getEntities());
+	}
+
+	public static <T extends Entity> T getTarget(Entity entity, Iterable<T> entities) {
+		T target = null;
+		double threshold = 1;
+		for (T other : entities) {
+			Vector n = other.getLocation().toVector().subtract(entity.getLocation().toVector());
+			if (entity.getLocation().getDirection().normalize().crossProduct(n).lengthSquared() < threshold && n.normalize().dot(entity.getLocation().getDirection().normalize()) >= 0) {
+				if (target == null || target.getLocation().distanceSquared(entity.getLocation()) > other.getLocation().distanceSquared(entity.getLocation()))
+					target = other;
+			}
+		}
+		return target;
 	}
 }

@@ -77,6 +77,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());
 		getCommand("global").setExecutor(new CommandGlobal());
 		getCommand("message").setExecutor(new CommandMessage());
+		getCommand("openentity").setExecutor(new CommandOpenEntity());
 		getCommand("roll").setExecutor(new CommandRoll());
 		getCommand("spawner").setExecutor(new CommandSpawner());
 		getCommand("addore").setExecutor(new CommandAddOre());
