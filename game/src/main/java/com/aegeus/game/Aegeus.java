@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -99,11 +98,6 @@ public class Aegeus extends JavaPlugin {
 
 		// Post loading
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-			// Clear entities
-			getLogger().info("Clearing entities...");
-			Bukkit.getWorlds().forEach(w -> w.getLivingEntities().stream()
-					.filter(e -> !(e instanceof Player)).forEach(Entity::remove));
-
 			// Load game data
 			getLogger().info("Loading game data...");
 			loadSpawners();

@@ -5,14 +5,17 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -86,6 +89,18 @@ public class ServerListener implements Listener {
 	// Disable crafting
 	private void onCraft(CraftItemEvent e) {
 		e.setCancelled(true);
+	}
+
+	@EventHandler
+	private void onPlayerDeath(PlayerDeathEvent e) {
+		e.setDeathMessage("");
+	}
+
+	@EventHandler
+	private void onWorldLoad(WorldLoadEvent e) {
+		// Clear entities
+		Aegeus.getInstance().getLogger().info("Cleaning world '" + e.getWorld().getName() + "'...");
+		e.getWorld().getLivingEntities().stream().filter(a -> !(a instanceof Player)).forEach(Entity::remove);
 	}
 
 }
