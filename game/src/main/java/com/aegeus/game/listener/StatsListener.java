@@ -29,7 +29,7 @@ public class StatsListener implements Listener {
 				AgPlayer info = parent.getPlayer(player);
 				if (!player.isDead()) {
 					if (info.getEnergy() >= 0)
-						info.setEnergy(Math.max(0, Math.min(100, info.getEnergy() + 1 + (info.getEnergyRegen() * 20))));
+						info.setEnergy(Math.max(0, Math.min(100, info.getEnergy() + 2 + (info.getEnergyRegen() * 12))));
 					else
 						info.setEnergy(Math.max(-40, Math.min(100, info.getEnergy() + 1)));
 					Util.updateEnergy(player);
