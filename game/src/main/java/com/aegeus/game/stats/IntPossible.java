@@ -40,4 +40,8 @@ public class IntPossible {
 	public void setMax(int max) {
 		this.max = max;
 	}
+
+	public int getDiff() {
+		return max - min;
+	}
 }
