@@ -10,7 +10,9 @@ public class SpawnerListener implements Listener {
 
 	public SpawnerListener(Aegeus parent) {
 		this.parent = parent;
-		Bukkit.getScheduler().runTaskTimer(parent, () -> parent.getSpawners().stream()
-				.filter(Spawner::canSpawn).forEach(s -> s.get().spawn(s.getLocation())), 200, 200);
+		Bukkit.getScheduler().runTaskTimer(parent, () -> {
+			for (Spawner s : parent.getSpawners())
+				if (s.canSpawn()) s.get().spawn(s.getLocation());
+		}, 300, 300);
 	}
 }

@@ -14,6 +14,9 @@ public class AgPlayer extends AgEntity {
 	private final Player player;
 	private BossBar bossBarHp;
 
+	private int level = 0;
+	private float energy = 100;
+
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
@@ -38,6 +41,10 @@ public class AgPlayer extends AgEntity {
 		super(other);
 		this.player = other.player;
 		this.bossBarHp = other.bossBarHp;
+
+		this.level = other.level;
+		this.energy = other.energy;
+
 		this.alignment = other.alignment;
 		this.division = other.division;
 		this.legion = other.legion;
@@ -74,6 +81,22 @@ public class AgPlayer extends AgEntity {
 //			player.sendMessage("Each item in your armor slots in has a **" + Math.round(alignment.getArmorChance()) + "** chance to drop.");
 //		}
 //	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public float getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(float energy) {
+		this.energy = energy;
+	}
 
 	public Division getDivision() {
 		return division;

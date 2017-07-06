@@ -13,9 +13,6 @@ public class AgEntity {
 	protected final UUID uuid;
 	protected LocalDateTime combatDate;
 
-	protected int level = 0;
-	protected int energy = 0;
-
 	protected int hpRegen = 0;
 	protected float energyRegen = 0;
 	protected float physRes = 0;
@@ -38,9 +35,6 @@ public class AgEntity {
 		this.entity = other.entity;
 		this.uuid = other.uuid;
 		this.combatDate = other.combatDate;
-
-		this.level = other.level;
-		this.energy = other.energy;
 
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
@@ -98,14 +92,6 @@ public class AgEntity {
 		return combatDate != null && LocalDateTime.now().isBefore(combatDate.plusSeconds(10));
 	}
 
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
-	}
-
 	public int getHpRegen() {
 		return hpRegen;
 	}
@@ -120,14 +106,6 @@ public class AgEntity {
 
 	public void setEnergyRegen(float energyRegen) {
 		this.energyRegen = energyRegen;
-	}
-
-	public int getEnergy() {
-		return energy;
-	}
-
-	public void setEnergy(int energy) {
-		this.energy = energy;
 	}
 
 	public float getPhysRes() {

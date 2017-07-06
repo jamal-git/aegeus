@@ -39,7 +39,7 @@ public class Spawner {
 	}
 
 	public Stats get() {
-		return list.get(random.nextInt(list.size()));
+		return list.size() < 2 ? list.get(0) : list.get(random.nextInt(list.size()));
 	}
 
 	public boolean canSpawn() {

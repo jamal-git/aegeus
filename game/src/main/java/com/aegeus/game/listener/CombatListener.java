@@ -4,6 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.Legion;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
+import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.ItemGold;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
@@ -97,8 +98,25 @@ public class CombatListener implements Listener {
 			AgEntity vInfo = parent.getEntity(lVictim);
 			AgEntity aInfo = parent.getEntity(lAttacker);
 
+			e.setCancelled(true);
+			if (aInfo instanceof AgPlayer) {
+				AgPlayer pInfo = (AgPlayer) aInfo;
+				if (pInfo.getEnergy() > 0) {
+					pInfo.setEnergy(pInfo.getEnergy() - 9);
+					Util.updateEnergy(pInfo.getPlayer());
+				}
+				if (pInfo.getEnergy() <= 0) {
+					pInfo.setEnergy(-40);
+					lAttacker.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 4));
+					Util.updateEnergy(pInfo.getPlayer());
+					return;
+				}
+				Util.updateEnergy(pInfo.getPlayer());
+			}
+
 			ItemStack tool = lAttacker.getEquipment().getItemInMainHand();
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
+				tool.setDurability((short) 0);
 				Weapon weapon = new Weapon(tool);
 				List<Sound> sounds = new ArrayList<>();
 				int physDmg = weapon.getDmg();
@@ -185,18 +203,18 @@ public class CombatListener implements Listener {
 			if (lAttacker instanceof Player && ((Player) lAttacker).isSneaking())
 				e.setDamage(e.getDamage() / 2);
 			e.setDamage(Math.max(1, e.getDamage()));
-			e.setCancelled(true);
 
 			if (e.getDamage() > 0) {
 				lVictim.damage(e.getDamage());
 				lVictim.setLastDamage(e.getDamage());
 				lVictim.setLastDamageCause(e);
 
-				Vector vec = lAttacker.getLocation().getDirection().multiply(0.16);
-				if (((lVictim instanceof Player && !((Player) lVictim).isSneaking()) || !(victim instanceof Player)) && lVictim.isOnGround())
-					lVictim.setVelocity(vec.setY(vec.getY() + 0.21));
-				else
-					lVictim.setVelocity(vec.setY(vec.getY() + 0.08));
+				float multiply = 0.04f;
+				if (((lVictim instanceof Player && !((Player) lVictim).isSneaking())
+						|| !(victim instanceof Player)) && lVictim.isOnGround())
+					multiply += 0.17;
+				Vector vec = lAttacker.getLocation().getDirection().multiply(multiply);
+				lVictim.setVelocity(vec.setY(vec.getY() + 0.08));
 			}
 		}
 
@@ -226,13 +244,13 @@ public class CombatListener implements Listener {
 			aInfo.inCombat();
 		}
 
-		if (victim instanceof Player) {
+		if (victim instanceof Player && e.getDamage() > 0) {
 			Bukkit.getScheduler().runTaskLater(parent, () -> {
 				Util.notifyAttacked((Player) victim, e.getDamage());
 				Util.updateDisplay((Player) victim);
 			}, 1);
 		}
-		if (attacker instanceof Player && victim instanceof LivingEntity) {
+		if (attacker instanceof Player && victim instanceof LivingEntity && e.getDamage() > 0) {
 			Bukkit.getScheduler().runTaskLater(parent, () -> {
 				Util.notifyAttack((Player) attacker, (LivingEntity) victim, e.getDamage());
 				Util.updateDisplay((Player) attacker);

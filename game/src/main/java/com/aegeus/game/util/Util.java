@@ -138,6 +138,7 @@ public class Util {
 
 	public static void updateDisplay(Player player) {
 		AgPlayer info = Aegeus.getInstance().getPlayer(player);
+		updateEnergy(player);
 		if (info.getBossBarHp() == null) {
 			// Create a new Hp BossBar for this player
 			info.setBossBarHp(Bukkit.createBossBar("", BarColor.GREEN, BarStyle.SEGMENTED_20));
@@ -158,9 +159,12 @@ public class Util {
 		info.getBossBarHp().setProgress(player.getHealth() / player.getMaxHealth());
 		info.getBossBarHp().setTitle(Util.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
-		// Set Energy Bar
-		player.setTotalExperience(1);
-		player.setExp(info.getEnergy() / 100);
+	}
+
+	public static void updateEnergy(Player player) {
+		AgPlayer info = Aegeus.getInstance().getPlayer(player);
+		player.setLevel(Math.max(1, Math.round(info.getEnergy())));
+		player.setExp(Math.max(0, (info.getEnergy() / 100)));
 	}
 
 	public static void heal(LivingEntity entity, double amount) {

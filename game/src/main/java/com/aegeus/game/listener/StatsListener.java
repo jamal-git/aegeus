@@ -18,11 +18,24 @@ public class StatsListener implements Listener {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				AgPlayer info = parent.getPlayer(player);
 				if (!player.isDead() && player.getHealth() < player.getMaxHealth() && !info.isInCombat()) {
-					player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + info.getHpRegen() + 10));
+					player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() + info.getHpRegen() + 10)));
 					Util.updateDisplay(player);
 				}
 			}
 		}, 20, 20);
+
+		Bukkit.getScheduler().runTaskTimer(parent, () -> {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				AgPlayer info = parent.getPlayer(player);
+				if (!player.isDead()) {
+					if (info.getEnergy() >= 0)
+						info.setEnergy(Math.max(0, Math.min(100, info.getEnergy() + 1 + (info.getEnergyRegen() * 20))));
+					else
+						info.setEnergy(Math.max(-40, Math.min(100, info.getEnergy() + 1)));
+					Util.updateEnergy(player);
+				}
+			}
+		}, 1, 1);
 	}
 
 	@EventHandler
