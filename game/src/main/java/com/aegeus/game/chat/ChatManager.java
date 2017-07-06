@@ -34,7 +34,7 @@ public class ChatManager {
 	 */
 	public static void sendLocal(Player sender, String content) {
 		try {
-			sendRadial(sender, Util.colorCodes("&7" + sender.getDisplayName() + ":&f " + content), true);
+			sendRadial(sender, Util.colorCodes("&7" + sender.getDisplayName() + ":&f " + content));
 		} catch (NoneNearbyException e) {
 			sender.sendMessage(Util.colorCodes(
 					"&7&oYour voice echoes in the wind."));
@@ -90,11 +90,10 @@ public class ChatManager {
 	 * @param content The content.
 	 * @throws NoneNearbyException No players are nearby.
 	 */
-	public static void sendRadial(Player sender, String content, boolean sendToSender) throws NoneNearbyException {
+	public static void sendRadial(Player sender, String content) throws NoneNearbyException {
 		sender.sendMessage(Util.colorCodes(content));
 		List<Entity> entities = sender.getNearbyEntities(35, 35, 35);
 		if (entities.isEmpty()) throw new NoneNearbyException();
-		if (sendToSender) sender.sendMessage(Util.colorCodes(content));
 		sender.getNearbyEntities(35, 35, 35).stream().filter(e -> e instanceof Player && !e.equals(sender))
 				.forEach(e -> e.sendMessage(Util.colorCodes(content)));
 	}
