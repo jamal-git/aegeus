@@ -21,39 +21,73 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Stats {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-	private final Stats inherit;
-	private List<String> names = new ArrayList<>();
-	private List<EntityType> types = new ArrayList<>();
-	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
-	private List<ArmorPossible> helmets = new ArrayList<>();
-	private List<ArmorPossible> chestplates = new ArrayList<>();
-	private List<ArmorPossible> leggings = new ArrayList<>();
-	private List<ArmorPossible> boots = new ArrayList<>();
-	private List<WeaponPossible> weapons = new ArrayList<>();
-	private ArmorPossible defArmor = new ArmorPossible(true);
-	private WeaponPossible defWeapon = new WeaponPossible(true);
+	private final Stats parent;
+
 	private float chance = 1;
 	private int tier = 1;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
 	private FloatPossible rarity = new FloatPossible(0, 1);
+	private boolean genNames = false;
 
+	// Randomizers
+	private List<String> names = new ArrayList<>();
+	private List<EntityType> types = new ArrayList<>();
+	private List<ArmorPossible> helmets = new ArrayList<>();
+	private List<ArmorPossible> chestplates = new ArrayList<>();
+	private List<ArmorPossible> leggings = new ArrayList<>();
+	private List<ArmorPossible> boots = new ArrayList<>();
+	private List<WeaponPossible> weapons = new ArrayList<>();
+
+	// Defaults
+	private ArmorPossible defArmor = new ArmorPossible(true);
+	private WeaponPossible defWeapon = new WeaponPossible(true);
+
+	// Conditions
+	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
+	private List<Condition<LivingEntity>> deathConds = new ArrayList<>();
+	private List<Condition<LivingEntity>> spawnConds = new ArrayList<>();
+
+	/**
+	 * Creates an instance of Stats without a parent.
+	 */
 	public Stats() {
-		inherit = null;
+		this(null);
+	}
+
+	/**
+	 * Creates an instance of Stats that copies a parent.
+	 *
+	 * @param parent The parent.
+	 */
+	public Stats(Stats parent) {
+		this.parent = parent;
+		if (parent != null) {
+			parent.prepare();
+			copy(parent);
+		}
 		prepare();
 	}
 
-	public Stats(Stats inherit) {
-		this.inherit = inherit;
-		inherit.prepare();
-		copy(inherit);
-		prepare();
-	}
-
+	/**
+	 * Prepares for usage.
+	 */
 	public abstract void prepare();
 
+	/**
+	 * Copies information from another Stats object.
+	 * @param other The stats to copy from.
+	 */
 	public void copy(Stats other) {
+		this.genNames = other.genNames;
+		this.chance = other.chance;
+		this.tier = other.tier;
+		this.forcedHp = other.forcedHp;
+		this.hpMultiplier = other.hpMultiplier;
+		this.dmgMultiplier = other.dmgMultiplier;
+		this.rarity = other.rarity;
+
 		this.names = other.names;
 		this.types = other.types;
 		this.hitConds = other.hitConds;
@@ -62,110 +96,17 @@ public abstract class Stats {
 		this.leggings = other.leggings;
 		this.boots = other.boots;
 		this.weapons = other.weapons;
+
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
-		this.chance = other.chance;
-		this.tier = other.tier;
-		this.forcedHp = other.forcedHp;
-		this.hpMultiplier = other.hpMultiplier;
-		this.dmgMultiplier = other.dmgMultiplier;
-		this.rarity = other.rarity;
+
+		this.hitConds = other.hitConds;
+		this.deathConds = other.deathConds;
+		this.spawnConds = other.spawnConds;
 	}
 
-	public Stats getInherit() {
-		return inherit;
-	}
-
-	public boolean hasHelmet() {
-		return true;
-	}
-
-	public boolean hasChestplate() {
-		return true;
-	}
-
-	public boolean hasLeggings() {
-		return true;
-	}
-
-	public boolean hasBoots() {
-		return true;
-	}
-
-	public boolean hasWeapon() {
-		return true;
-	}
-
-	public void addName(String name) {
-		this.names.add(name);
-	}
-
-	public void addType(EntityType type) {
-		this.types.add(type);
-	}
-
-	public void addHelmet(ArmorPossible possible) {
-		this.helmets.add(possible);
-	}
-
-	public void addChestplate(ArmorPossible possible) {
-		this.chestplates.add(possible);
-	}
-
-	public void addLeggings(ArmorPossible possible) {
-		this.leggings.add(possible);
-	}
-
-	public void addBoots(ArmorPossible possible) {
-		this.boots.add(possible);
-	}
-
-	public void addWeapon(WeaponPossible possible) {
-		this.weapons.add(possible);
-	}
-
-	public String getName() {
-		return !names.isEmpty() ? names.get(random.nextInt(names.size())) : null;
-	}
-
-	public EntityType getType() {
-		return !types.isEmpty() ? types.get(random.nextInt(types.size())) : EntityType.ZOMBIE;
-	}
-
-	public ArmorPossible getHelmet() {
-		return !helmets.isEmpty() ? helmets.get(random.nextInt(helmets.size())) : null;
-	}
-
-	public ArmorPossible getChestplate() {
-		return !chestplates.isEmpty() ? chestplates.get(random.nextInt(chestplates.size())) : null;
-	}
-
-	public ArmorPossible getLeggings() {
-		return !leggings.isEmpty() ? leggings.get(random.nextInt(leggings.size())) : null;
-	}
-
-	public ArmorPossible getBoots() {
-		return !boots.isEmpty() ? boots.get(random.nextInt(boots.size())) : null;
-	}
-
-	public WeaponPossible getWeapon() {
-		return !weapons.isEmpty() ? weapons.get(random.nextInt(weapons.size())) : null;
-	}
-
-	public ArmorPossible getDefaultArmor() {
-		return defArmor;
-	}
-
-	public WeaponPossible getDefaultWeapon() {
-		return defWeapon;
-	}
-
-	public void addHitCond(Condition<LivingEntity> condition) {
-		this.hitConds.add(condition);
-	}
-
-	public List<Condition<LivingEntity>> getHitConds() {
-		return hitConds;
+	public Stats getParent() {
+		return parent;
 	}
 
 	public float getChance() {
@@ -216,90 +157,168 @@ public abstract class Stats {
 		this.rarity = rarity;
 	}
 
-	public Weapon get(WeaponPossible p, float f) {
-		Weapon weapon = new Weapon(p.material);
-		if (!p.name.isEmpty()) weapon.setName(Util.colorCodes(p.name));
-		else weapon.setName(Util.colorCodes("&f" + Util.getName(weapon.getItem())));
-
-		weapon.setTier(tier);
-		weapon.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
-
-		if (random.nextFloat() <= p.statChance)
-			weapon.setStrength(p.strength.get());
-		if (random.nextFloat() < p.statChance)
-			weapon.setDexterity(p.dexterity.get());
-		if (random.nextFloat() <= p.statChance)
-			weapon.setIntellect(p.intellect.get());
-		if (random.nextFloat() <= p.statChance)
-			weapon.setVitality(p.vitality.get());
-
-		int min = Math.round((p.dmg.getDiff() * f) + p.dmg.getMin());
-		int max = min + p.range.get();
-		weapon.setDmg(min, max);
-
-		if (random.nextFloat() <= p.attChance)
-			weapon.setPen(p.pen.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setFireDmg(p.fireDmg.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setIceDmg(p.iceDmg.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setPoisonDmg(p.poisonDmg.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setPureDmg(p.pureDmg.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setLifeSteal(p.lifeSteal.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setTrueHearts(p.trueHearts.get());
-		if (random.nextFloat() <= p.attChance)
-			weapon.setBlind(p.blind.get());
-
-		return weapon;
+	public boolean getGenNames() {
+		return genNames;
 	}
 
-	public Armor get(ArmorPossible p, float f) {
-		Armor armor = new Armor(p.material);
-		if (!p.name.isEmpty()) armor.setName(Util.colorCodes(p.name));
-		else armor.setName(Util.colorCodes("&f" + Util.getName(armor.getItem())));
-
-		armor.setTier(tier);
-		armor.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
-
-		if (random.nextFloat() <= p.statChance)
-			armor.setStrength(p.strength.get());
-		if (random.nextFloat() <= p.statChance)
-			armor.setDexterity(p.dexterity.get());
-		if (random.nextFloat() <= p.statChance)
-			armor.setIntellect(p.intellect.get());
-		if (random.nextFloat() <= p.statChance)
-			armor.setVitality(p.vitality.get());
-
-		armor.setHp(Math.round((p.hp.getDiff() * f) + p.hp.getMin()));
-
-		if (p.hpRegen.getMin() > 0 && p.energyRegen.getMin() > 0) {
-			if (random.nextBoolean()) armor.setHpRegen(p.hpRegen.get());
-			else armor.setEnergyRegen(p.energyRegen.get());
-		} else if (p.hpRegen.getMin() > 0)
-			armor.setHpRegen(p.hpRegen.get());
-		else if (p.energyRegen.getMin() > 0)
-			armor.setEnergyRegen(p.energyRegen.get());
-
-		if (random.nextFloat() <= p.attChance)
-			if (p.physRes.getMin() > 0 && p.magRes.getMin() > 0) {
-				if (random.nextBoolean()) armor.setPhysRes(p.physRes.get());
-				else armor.setMagRes(p.magRes.get());
-			} else if (p.physRes.getMin() > 0)
-				armor.setPhysRes(p.physRes.get());
-			else if (p.magRes.getMin() > 0)
-				armor.setMagRes(p.magRes.get());
-
-		if (random.nextFloat() <= p.attChance)
-			armor.setBlock(p.block.get());
-		if (random.nextFloat() <= p.attChance)
-			armor.setDodge(p.dodge.get());
-
-		return armor;
+	public void setGenNames(boolean genNames) {
+		this.genNames = genNames;
 	}
+
+	// Randomizers
+
+	public String getName() {
+		return names.isEmpty() ? null : names.size() == 1 ? names.get(0) :
+				names.get(random.nextInt(names.size()));
+	}
+
+	public EntityType getType() {
+		return types.isEmpty() ? EntityType.ZOMBIE : types.size() == 1 ? types.get(0) :
+				types.get(random.nextInt(types.size()));
+	}
+
+	public ArmorPossible getHelmet() {
+		return helmets.isEmpty() ? defArmor : helmets.size() == 1 ? helmets.get(0) :
+				helmets.get(random.nextInt(helmets.size()));
+	}
+
+	public boolean hasHelmet() {
+		return true;
+	}
+
+	public ArmorPossible getChestplate() {
+		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
+				chestplates.get(random.nextInt(chestplates.size()));
+	}
+
+	public boolean hasChestplate() {
+		return true;
+	}
+
+	public ArmorPossible getLeggings() {
+		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
+				leggings.get(random.nextInt(leggings.size()));
+	}
+
+	public void setLeggings(List<ArmorPossible> leggings) {
+		this.leggings = leggings;
+	}
+
+	public boolean hasLeggings() {
+		return true;
+	}
+
+	public ArmorPossible getBoots() {
+		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
+				boots.get(random.nextInt(boots.size()));
+	}
+
+	public void setBoots(List<ArmorPossible> boots) {
+		this.boots = boots;
+	}
+
+	public boolean hasBoots() {
+		return true;
+	}
+
+	public WeaponPossible getWeapon() {
+		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
+				weapons.get(random.nextInt(weapons.size()));
+	}
+
+	public List<String> getNames() {
+		return names;
+	}
+
+	public void setNames(List<String> names) {
+		this.names = names;
+	}
+
+	public List<EntityType> getTypes() {
+		return types;
+	}
+
+	public void setTypes(List<EntityType> types) {
+		this.types = types;
+	}
+
+	public List<ArmorPossible> getHelmets() {
+		return helmets;
+	}
+
+	public void setHelmets(List<ArmorPossible> helmets) {
+		this.helmets = helmets;
+	}
+
+	public List<ArmorPossible> getChestplates() {
+		return chestplates;
+	}
+
+	public void setChestplates(List<ArmorPossible> chestplates) {
+		this.chestplates = chestplates;
+	}
+
+	public List<ArmorPossible> getAllLeggings() {
+		return leggings;
+	}
+
+	public List<ArmorPossible> getAllBoots() {
+		return boots;
+	}
+
+	public List<WeaponPossible> getWeapons() {
+		return weapons;
+	}
+
+	public void setWeapons(List<WeaponPossible> weapons) {
+		this.weapons = weapons;
+	}
+
+	// Defaults
+
+	public ArmorPossible getDefArmor() {
+		return defArmor;
+	}
+
+	public void setDefArmor(ArmorPossible defArmor) {
+		this.defArmor = defArmor;
+	}
+
+	public WeaponPossible getDefWeapon() {
+		return defWeapon;
+	}
+
+	public void setDefWeapon(WeaponPossible defWeapon) {
+		this.defWeapon = defWeapon;
+	}
+
+	// Conditions
+
+	public List<Condition<LivingEntity>> getHitConds() {
+		return hitConds;
+	}
+
+	public void setHitConds(List<Condition<LivingEntity>> hitConds) {
+		this.hitConds = hitConds;
+	}
+
+	public List<Condition<LivingEntity>> getDeathConds() {
+		return deathConds;
+	}
+
+	public void setDeathConds(List<Condition<LivingEntity>> deathConds) {
+		this.deathConds = deathConds;
+	}
+
+	public List<Condition<LivingEntity>> getSpawnConds() {
+		return spawnConds;
+	}
+
+	public void setSpawnConds(List<Condition<LivingEntity>> spawnConds) {
+		this.spawnConds = spawnConds;
+	}
+
+	// Generation methods
 
 	public void spawn(Location location) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
@@ -321,17 +340,16 @@ public abstract class Stats {
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
 
-		if (hasWeapon())
-			entity.getEquipment().setItemInMainHand(get(getWeapon(), Util.rarity(rarity.get())).build());
+		entity.getEquipment().setItemInMainHand(getWeapon().get(Util.rarity(rarity.get())).build());
 
 		if (hasHelmet())
-			entity.getEquipment().setHelmet(get(getHelmet(), Util.rarity(rarity.get())).build());
+			entity.getEquipment().setHelmet(getHelmet().get(Util.rarity(rarity.get())).build());
 		if (hasChestplate())
-			entity.getEquipment().setChestplate(get(getChestplate(), Util.rarity(rarity.get())).build());
+			entity.getEquipment().setChestplate(getChestplate().get(Util.rarity(rarity.get())).build());
 		if (hasLeggings())
-			entity.getEquipment().setLeggings(get(getLeggings(), Util.rarity(rarity.get())).build());
+			entity.getEquipment().setLeggings(getLeggings().get(Util.rarity(rarity.get())).build());
 		if (hasBoots())
-			entity.getEquipment().setBoots(get(getBoots(), Util.rarity(rarity.get())).build());
+			entity.getEquipment().setBoots(getBoots().get(Util.rarity(rarity.get())).build());
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
@@ -397,6 +415,47 @@ public abstract class Stats {
 				blind = defWeapon.blind;
 			}
 		}
+
+		public Weapon get(float f) {
+			Weapon weapon = new Weapon(material);
+			if (!name.isEmpty()) weapon.setName(Util.colorCodes(name));
+			else weapon.setName(Util.colorCodes("&f" + Util.getName(weapon.getItem())));
+
+			weapon.setTier(tier);
+			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
+
+			if (random.nextFloat() <= statChance)
+				weapon.setStrength(strength.get());
+			if (random.nextFloat() < statChance)
+				weapon.setDexterity(dexterity.get());
+			if (random.nextFloat() <= statChance)
+				weapon.setIntellect(intellect.get());
+			if (random.nextFloat() <= statChance)
+				weapon.setVitality(vitality.get());
+
+			int min = Math.round((dmg.getDiff() * f) + dmg.getMin());
+			int max = min + range.get();
+			weapon.setDmg(min, max);
+
+			if (random.nextFloat() <= attChance)
+				weapon.setPen(pen.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setFireDmg(fireDmg.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setIceDmg(iceDmg.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setPoisonDmg(poisonDmg.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setPureDmg(pureDmg.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setLifeSteal(lifeSteal.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setTrueHearts(trueHearts.get());
+			if (random.nextFloat() <= attChance)
+				weapon.setBlind(blind.get());
+
+			return weapon;
+		}
 	}
 
 	public class ArmorPossible {
@@ -452,6 +511,50 @@ public abstract class Stats {
 				block = defArmor.block;
 				dodge = defArmor.dodge;
 			}
+		}
+
+		public Armor get(float f) {
+			Armor armor = new Armor(material);
+			if (!name.isEmpty()) armor.setName(Util.colorCodes(name));
+			else armor.setName(Util.colorCodes("&f" + Util.getName(armor.getItem())));
+
+			armor.setTier(tier);
+			armor.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
+
+			if (random.nextFloat() <= statChance)
+				armor.setStrength(strength.get());
+			if (random.nextFloat() <= statChance)
+				armor.setDexterity(dexterity.get());
+			if (random.nextFloat() <= statChance)
+				armor.setIntellect(intellect.get());
+			if (random.nextFloat() <= statChance)
+				armor.setVitality(vitality.get());
+
+			armor.setHp(Math.round((hp.getDiff() * f) + hp.getMin()));
+
+			if (hpRegen.getMin() > 0 && energyRegen.getMin() > 0) {
+				if (random.nextBoolean()) armor.setHpRegen(hpRegen.get());
+				else armor.setEnergyRegen(energyRegen.get());
+			} else if (hpRegen.getMin() > 0)
+				armor.setHpRegen(hpRegen.get());
+			else if (energyRegen.getMin() > 0)
+				armor.setEnergyRegen(energyRegen.get());
+
+			if (random.nextFloat() <= attChance)
+				if (physRes.getMin() > 0 && magRes.getMin() > 0) {
+					if (random.nextBoolean()) armor.setPhysRes(physRes.get());
+					else armor.setMagRes(magRes.get());
+				} else if (physRes.getMin() > 0)
+					armor.setPhysRes(physRes.get());
+				else if (magRes.getMin() > 0)
+					armor.setMagRes(magRes.get());
+
+			if (random.nextFloat() <= attChance)
+				armor.setBlock(block.get());
+			if (random.nextFloat() <= attChance)
+				armor.setDodge(dodge.get());
+
+			return armor;
 		}
 	}
 }

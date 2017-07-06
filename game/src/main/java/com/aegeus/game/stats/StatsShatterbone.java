@@ -23,16 +23,16 @@ public class StatsShatterbone extends Stats {
 		setForcedHp(19000);
 		setDmgMultiplier(4f);
 
-		addName("&b&lShatterbone");
+		getNames().add("&b&lShatterbone");
 
-		addType(EntityType.SKELETON);
+		getTypes().add(EntityType.SKELETON);
 
-		getDefaultArmor().rarity = Rarity.DUNGEON;
-		getDefaultArmor().statChance = 1f;
-		getDefaultArmor().attChance = 1f;
-		getDefaultArmor().vitality = new IntPossible(40, 50);
+		getDefArmor().rarity = Rarity.DUNGEON;
+		getDefArmor().statChance = 1f;
+		getDefArmor().attChance = 1f;
+		getDefArmor().vitality = new IntPossible(40, 50);
 
-		addHitCond(new Condition<LivingEntity>() {
+		getHitConds().add(new Condition<LivingEntity>() {
 			@Override
 			public void onComplete(LivingEntity entity) {
 				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0.7f);
@@ -43,7 +43,7 @@ public class StatsShatterbone extends Stats {
 				return false;
 			}
 		});
-		addHitCond(new Condition<LivingEntity>() {
+		getHitConds().add(new Condition<LivingEntity>() {
 			@Override
 			public boolean isComplete(LivingEntity entity) {
 				return entity.getHealth() <= 4000;
@@ -85,7 +85,7 @@ public class StatsShatterbone extends Stats {
 		helmet.hpRegen = new IntPossible(20, 40);
 		helmet.physRes = new FloatPossible(0.02f);
 		helmet.hp = new IntPossible(360, 490);
-		addHelmet(helmet);
+		getHelmets().add(helmet);
 
 		ArmorPossible chestplate = new ArmorPossible();
 		chestplate.material = Material.IRON_CHESTPLATE;
@@ -93,7 +93,7 @@ public class StatsShatterbone extends Stats {
 		chestplate.hpRegen = new IntPossible(40, 90);
 		chestplate.physRes = new FloatPossible(0.05f);
 		chestplate.hp = new IntPossible(790, 910);
-		addChestplate(chestplate);
+		getChestplates().add(chestplate);
 
 		ArmorPossible leggings = new ArmorPossible();
 		leggings.material = Material.IRON_LEGGINGS;
@@ -101,7 +101,7 @@ public class StatsShatterbone extends Stats {
 		leggings.hpRegen = new IntPossible(20, 40);
 		leggings.physRes = new FloatPossible(0.05f);
 		leggings.hp = new IntPossible(710, 880);
-		addLeggings(leggings);
+		getAllLeggings().add(leggings);
 
 		ArmorPossible boots = new ArmorPossible();
 		boots.material = Material.IRON_BOOTS;
@@ -109,7 +109,7 @@ public class StatsShatterbone extends Stats {
 		boots.hpRegen = new IntPossible(20, 40);
 		boots.physRes = new FloatPossible(0.02f);
 		boots.hp = new IntPossible(310, 440);
-		addBoots(boots);
+		getAllBoots().add(boots);
 
 		WeaponPossible weapon = new WeaponPossible();
 		weapon.material = Material.IRON_SPADE;
@@ -119,6 +119,6 @@ public class StatsShatterbone extends Stats {
 		weapon.dmg = new IntPossible(51, 60);
 		weapon.range = new IntPossible(25, 30);
 		weapon.iceDmg = new IntPossible(7, 10);
-		addWeapon(weapon);
+		getWeapons().add(weapon);
 	}
 }

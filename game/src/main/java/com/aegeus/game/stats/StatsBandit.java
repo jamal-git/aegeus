@@ -9,17 +9,14 @@ public class StatsBandit extends Stats {
 
 	@Override
 	public void prepare() {
-		setHpMultiplier(0.86f);
-		setDmgMultiplier(0.95f);
+		getNames().add("Tired Bandit");
+		getNames().add("Old Bandit");
+		getNames().add("Young Bandit");
+		getNames().add("Angry Bandit");
+		getNames().add("Happy Bandit");
+		getNames().add("Pretty Bandit");
+		getNames().add("Ugly Bandit");
 
-		addName("Tired Bandit");
-		addName("Old Bandit");
-		addName("Young Bandit");
-		addName("Angry Bandit");
-		addName("Happy Bandit");
-		addName("Pretty Bandit");
-		addName("Ugly Bandit");
-
-		addType(EntityType.ZOMBIE);
+		getTypes().add(EntityType.ZOMBIE);
 	}
 }
