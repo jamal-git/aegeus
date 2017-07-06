@@ -32,16 +32,16 @@ public class Util {
 	public static float rarity(float a) {
 
 		/*
-		0 - 62: 40%
-		63 - 86: 27%
-		87 - 96: 23%
-		97 - 100: 10%
+		0 - 57: 33%
+		58 - 86: 27%
+		87 - 98: 23%
+		99 - 100: 17%
 		 */
 
-		if (a <= 0.62) return random.nextFloat() * 0.40f;
-		else if (a <= 0.86) return (random.nextFloat() * 0.27f) + 0.40f;
-		else if (a <= 0.96) return (random.nextFloat() * 0.23f) + 0.67f;
-		else return (random.nextFloat() * 0.10f) + 0.90f;
+		if (a <= 0.57) return random.nextFloat() * 0.33f;
+		else if (a <= 0.86) return (random.nextFloat() * 0.27f) + 0.33f;
+		else if (a <= 0.98) return (random.nextFloat() * 0.23f) + 0.6f;
+		else return (random.nextFloat() * 0.17f) + 0.83f;
 	}
 
 	public static String colorCodes(String s) {
