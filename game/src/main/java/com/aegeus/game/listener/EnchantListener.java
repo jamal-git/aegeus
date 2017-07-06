@@ -51,7 +51,9 @@ public class EnchantListener implements Listener {
 					WeaponEnchant enchant = new WeaponEnchant(cursor);
 
 					// Match weapon tier to enchantment
-					if (weapon.getTier() == enchant.getTier()) {
+					if (weapon.getTier() != enchant.getTier())
+						player.sendMessage(Util.colorCodes("&cYou must use this enchant on a weapon of the same tier."));
+					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
 						if (weapon.getEnchant() < 3 || random.nextFloat() <= (1.01 - (weapon.getEnchant() / 12)) * 0.4) {
@@ -67,22 +69,23 @@ public class EnchantListener implements Listener {
 								e.setCurrentItem(new ItemStack(Material.AIR));
 							enchantFailed(player);
 						}
-					} else
-						player.sendMessage(Util.colorCodes("&cYou must use this enchant on a weapon of the same tier."));
+					}
 				}
 
 				// Equipping weapon runes
 				if (e.isLeftClick() && weapon.getRune() == null && cursor != null && !cursor.getType().equals(Material.AIR)
 						&& new Rune(cursor).verify()) {
 					Rune rune = new Rune(cursor);
-					if (rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.WEAPON)) {
+
+					if (!rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.WEAPON))
+						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on weapons."));
+					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
 						weapon.setRune(rune);
 						e.setCurrentItem(weapon.build());
 						player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
-					} else
-						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on weapons."));
+					}
 				}
 
 				// Unequipping weapon runes
@@ -102,7 +105,9 @@ public class EnchantListener implements Listener {
 					ArmorEnchant enchant = new ArmorEnchant(cursor);
 
 					// Match armor tier to enchantment
-					if (armor.getTier() == enchant.getTier()) {
+					if (armor.getTier() != enchant.getTier())
+						player.sendMessage(Util.colorCodes("&cYou must use this enchant on an armor piece of the same tier."));
+					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
 						if (armor.getEnchant() < 3 || random.nextFloat() <= (1.01 - (armor.getEnchant() / 12)) * 0.4) {
@@ -117,22 +122,23 @@ public class EnchantListener implements Listener {
 								e.setCurrentItem(new ItemStack(Material.AIR));
 							enchantFailed(player);
 						}
-					} else
-						player.sendMessage(Util.colorCodes("&cYou must use this enchant on an armor piece of the same tier."));
+					}
 				}
 
 				// Equipping armor runes
 				if (e.isLeftClick() && armor.getRune() == null && cursor != null && !cursor.getType().equals(Material.AIR)
 						&& new Rune(cursor).verify()) {
 					Rune rune = new Rune(cursor);
-					if (rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.ARMOR)) {
+
+					if (!rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.ARMOR))
+						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on armor pieces."));
+					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
 						armor.setRune(rune);
 						e.setCurrentItem(armor.build());
 						player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
-					} else
-						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on armor pieces."));
+					}
 				}
 
 				// Unequipping armor runes
