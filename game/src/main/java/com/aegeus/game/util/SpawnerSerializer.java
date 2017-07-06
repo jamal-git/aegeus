@@ -19,7 +19,13 @@ public class SpawnerSerializer implements JsonSerializer<Spawner> {
 		o.addProperty("y", spawner.getLocation().getY());
 		o.addProperty("z", spawner.getLocation().getZ());
 		JsonArray stats = new JsonArray();
-		spawner.getList().stream().map(x -> new JsonPrimitive(x.getClass().getCanonicalName())).forEach(stats::add);
+		spawner.getList().stream().map(x -> {
+			if (x.getInherit() != null)
+				return new JsonPrimitive(x.getClass().getCanonicalName()
+						+ ":" + x.getInherit().getClass().getCanonicalName());
+			else
+				return new JsonPrimitive(x.getClass().getCanonicalName());
+		}).forEach(stats::add);
 		o.add("list", stats);
 		return o;
 	}

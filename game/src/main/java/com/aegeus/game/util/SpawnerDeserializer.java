@@ -6,6 +6,7 @@ import com.aegeus.game.stats.Stats;
 import com.google.gson.*;
 import org.bukkit.Location;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +22,23 @@ public class SpawnerDeserializer implements JsonDeserializer<Spawner> {
 		JsonObject o = jsonElement.getAsJsonObject();
 		Location l = new Location(Aegeus.getInstance().getServer().getWorld(
 				o.get("world").getAsString()),
-				o.get("x").getAsInt(),
-				o.get("y").getAsInt(),
-				o.get("z").getAsInt());
+				o.get("x").getAsDouble(),
+				o.get("y").getAsDouble(),
+				o.get("z").getAsDouble());
 		Spawner s = new Spawner(l);
 		List<Stats> list = new ArrayList<>();
 		JsonArray a = o.get("list").getAsJsonArray();
 		for (JsonElement e : a) {
 			try {
-				list.add((Stats) Class.forName(e.getAsString()).newInstance());
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e1) {
+				String[] split = e.getAsString().split(":");
+				Class clazz = Class.forName(split[0]);
+				if (split.length >= 2) {
+					Class inherit = Class.forName(split[1]);
+					list.add((Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()));
+				} else
+					list.add((Stats) clazz.newInstance());
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+					| NoSuchMethodException | InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 		}
