@@ -94,21 +94,21 @@ public class Aegeus extends JavaPlugin {
 		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
 		getCommand("testrune").setExecutor(new CommandTestRune());
 
-		// Load spawners
-		loadSpawners();
-		loadOres();
-
-		for (Spawner s : spawners) {
-			getLogger().info(s.getList().toString());
-		}
-
-		// Clear entities
-		getLogger().info("Clearing entities...");
-		Bukkit.getWorlds().forEach(w -> w.getLivingEntities().stream()
-				.filter(e -> !(e instanceof Player)).forEach(Entity::remove));
-
 		// Done, done, and done!
 		getLogger().info("AEGEUS enabled.");
+
+		// Post loading
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			// Clear entities
+			getLogger().info("Clearing entities...");
+			Bukkit.getWorlds().forEach(w -> w.getLivingEntities().stream()
+					.filter(e -> !(e instanceof Player)).forEach(Entity::remove));
+
+			// Load game data
+			getLogger().info("Loading game data...");
+			loadSpawners();
+			loadOres();
+		});
 	}
 
 	@Override
