@@ -4,6 +4,7 @@ import com.aegeus.game.entity.Spawner;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 /**
  * Created by Silvre on 7/4/2017.
@@ -19,7 +20,7 @@ public class SpawnerSerializer implements JsonSerializer<Spawner> {
 		o.addProperty("y", spawner.getLocation().getY());
 		o.addProperty("z", spawner.getLocation().getZ());
 		JsonArray stats = new JsonArray();
-		spawner.getList().stream().map(x -> {
+		spawner.getList().stream().filter(Objects::nonNull).map(x -> {
 			if (x.getInherit() != null)
 				return new JsonPrimitive(x.getClass().getCanonicalName()
 						+ ":" + x.getInherit().getClass().getCanonicalName());
