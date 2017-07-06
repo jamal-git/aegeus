@@ -20,6 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Stats {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
+	private final Stats inherit;
 	private List<String> names = new ArrayList<>();
 	private List<EntityType> types = new ArrayList<>();
 	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
@@ -38,12 +39,15 @@ public abstract class Stats {
 	private FloatPossible rarity = new FloatPossible(0, 1);
 
 	public Stats() {
+		inherit = null;
 		prepare();
 	}
 
 	public Stats(Stats inherit) {
+		this.inherit = inherit;
 		inherit.prepare();
 		copy(inherit);
+		prepare();
 	}
 
 	public abstract void prepare();
@@ -65,6 +69,10 @@ public abstract class Stats {
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
 		this.rarity = other.rarity;
+	}
+
+	public Stats getInherit() {
+		return inherit;
 	}
 
 	public boolean hasHelmet() {
@@ -120,7 +128,7 @@ public abstract class Stats {
 	}
 
 	public EntityType getType() {
-		return !types.isEmpty() ? types.get(random.nextInt(types.size())) : null;
+		return !types.isEmpty() ? types.get(random.nextInt(types.size())) : EntityType.ZOMBIE;
 	}
 
 	public ArmorPossible getHelmet() {
