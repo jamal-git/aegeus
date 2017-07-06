@@ -62,19 +62,18 @@ public class CombatListener implements Listener {
 				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
 		}
 
-		//if (entity.getKiller() != null) {
-		//	Player player = entity.getKiller();
-		//	ItemStack mainHand = player.getInventory().getItemInMainHand();
-		//	if (mainHand != null && !mainHand.getType().equals(Material.AIR)) {
-		//		Weapon weapon = new Weapon(mainHand);
-		//		int xp = 45 + ((int) Math.round(entity.getMaxHealth() / 300));
-		//		weapon.addXp(xp);
-		//		if (weapon.getXp()
-		//			player.sendMessage(Util.colorCodes("&6Your weapon has reached &lLevel " + (levels.getLevel() + 1) + "&6."));
-		//		weapon.setLevelInfo(levels);
-		//		player.getInventory().setItemInMainHand(weapon.build());
-		//	}
-		//}
+		if (entity.getKiller() != null) {
+			Player player = entity.getKiller();
+			ItemStack tool = player.getInventory().getItemInMainHand();
+			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
+				Weapon weapon = new Weapon(tool);
+				int xp = 45 + ((int) Math.round(entity.getMaxHealth() / 300));
+				weapon.addXp(xp);
+				if (weapon.getXp() >= weapon.getMaxXp())
+					player.sendMessage(Util.colorCodes("&6Your weapon has reached &lLevel " + (weapon.getLevel() + 1) + "&6."));
+				player.getInventory().setItemInMainHand(weapon.build());
+			}
+		}
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
