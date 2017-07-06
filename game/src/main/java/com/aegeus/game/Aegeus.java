@@ -190,7 +190,7 @@ public class Aegeus extends JavaPlugin {
 
 	public void loadSpawners() {
 		try (FileReader fr = new FileReader(getDataFolder() + "/spawners.json")) {
-			spawners = GSON.fromJson(fr, new TypeToken<List<Spawner>>() {
+			spawners = GSON.fromJson(fr, new TypeToken<ArrayList<Spawner>>() {
 			}.getType());
 		} catch (IOException e) {
 			e.printStackTrace();
