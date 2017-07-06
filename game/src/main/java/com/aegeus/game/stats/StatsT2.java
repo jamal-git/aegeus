@@ -21,21 +21,25 @@ public class StatsT2 extends Stats {
 
 		ArmorPossible helmet = new ArmorPossible();
 		helmet.material = Material.CHAINMAIL_HELMET;
+		helmet.name = "&aChainmail Helmet";
 		helmet.hp = new IntPossible(32, 180);
 		addHelmet(helmet);
 
 		ArmorPossible chestplate = new ArmorPossible();
 		chestplate.material = Material.CHAINMAIL_CHESTPLATE;
+		chestplate.name = "&aChainmail Chestplate";
 		chestplate.hp = new IntPossible(59, 330);
 		addChestplate(chestplate);
 
 		ArmorPossible leggings = new ArmorPossible();
 		leggings.material = Material.CHAINMAIL_LEGGINGS;
+		leggings.name = "&aChainmail Leggings";
 		leggings.hp = new IntPossible(58, 320);
 		addLeggings(leggings);
 
 		ArmorPossible boots = new ArmorPossible();
 		boots.material = Material.CHAINMAIL_BOOTS;
+		boots.name = "&aChainmail Boots";
 		boots.hp = new IntPossible(31, 170);
 		addBoots(boots);
 
@@ -46,16 +50,18 @@ public class StatsT2 extends Stats {
 		getDefaultWeapon().pureDmg = new IntPossible(1, 6);
 		getDefaultWeapon().lifeSteal = new FloatPossible(0.01f, 0.2f);
 		getDefaultWeapon().trueHearts = new FloatPossible(0.01f, 0.04f);
-		getDefaultWeapon().blind = new FloatPossible(0.01f, 0.25f);
+		getDefaultWeapon().blind = new FloatPossible(0.01f, 0.14f);
 
 		WeaponPossible sword = new WeaponPossible();
 		sword.material = Material.STONE_SWORD;
+		sword.name = "&aStone Sword";
 		sword.dmg = new IntPossible(10, 30);
 		sword.range = new IntPossible(0, 10);
 		addWeapon(sword);
 
 		WeaponPossible axe = new WeaponPossible();
 		axe.material = Material.STONE_AXE;
+		axe.name = "&aStone Axe";
 		axe.dmg = new IntPossible(11, 35);
 		axe.range = new IntPossible(0, 12);
 		addWeapon(axe);

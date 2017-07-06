@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,6 +219,8 @@ public abstract class Stats {
 	public Weapon get(WeaponPossible p, float f) {
 		Weapon weapon = new Weapon(p.material);
 		if (!p.name.isEmpty()) weapon.setName(Util.colorCodes(p.name));
+		else weapon.setName(Util.colorCodes("&f" + Util.getName(weapon.getItem())));
+
 		weapon.setTier(tier);
 		weapon.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
 
@@ -230,7 +233,7 @@ public abstract class Stats {
 		if (random.nextFloat() <= p.statChance)
 			weapon.setVitality(p.vitality.get());
 
-		int min = Math.round(f * (p.dmg.getMax() - p.dmg.getMin())) + p.dmg.getMin();
+		int min = Math.round((p.dmg.getDiff() * f) + p.dmg.getMin());
 		int max = min + p.range.get();
 		weapon.setDmg(min, max);
 
@@ -257,6 +260,8 @@ public abstract class Stats {
 	public Armor get(ArmorPossible p, float f) {
 		Armor armor = new Armor(p.material);
 		if (!p.name.isEmpty()) armor.setName(Util.colorCodes(p.name));
+		else armor.setName(Util.colorCodes("&f" + Util.getName(armor.getItem())));
+
 		armor.setTier(tier);
 		armor.setRarity(p.rarity != null ? p.rarity : Rarity.fromValue(f));
 
@@ -269,7 +274,7 @@ public abstract class Stats {
 		if (random.nextFloat() <= p.statChance)
 			armor.setVitality(p.vitality.get());
 
-		armor.setHp(Math.round(f * (p.hp.getMax() - p.hp.getMin())) + p.hp.getMin());
+		armor.setHp(Math.round((p.hp.getDiff() * f) + p.hp.getMin()));
 
 		if (p.hpRegen.getMin() > 0 && p.energyRegen.getMin() > 0) {
 			if (random.nextBoolean()) armor.setHpRegen(p.hpRegen.get());
@@ -298,6 +303,12 @@ public abstract class Stats {
 
 	public void spawn(Location location) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
+
+		if (entity.getType().equals(EntityType.ZOMBIE)) {
+			((Zombie) entity).setBaby(false);
+			((Zombie) entity).setVillagerProfession(null);
+		}
+
 		AgMonster info = Aegeus.getInstance().getMonster(entity);
 		info.setName(Util.colorCodes(getName()));
 		entity.setCustomName(info.getName());
