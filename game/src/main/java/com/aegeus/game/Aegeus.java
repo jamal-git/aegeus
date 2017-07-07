@@ -39,7 +39,6 @@ public class Aegeus extends JavaPlugin {
 	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
 	private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
-	private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
 
 	public static Aegeus getInstance() {
 		return instance;
