@@ -37,8 +37,8 @@ public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
-    private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
-    private List<Spawner> spawners = new ArrayList<>();
+	private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
+	private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -132,11 +132,11 @@ public class Aegeus extends JavaPlugin {
 		return (AgMonster) entities.get(entity);
 	}
 
-    public AgProjectile getProjectile(Projectile p) {
-        if (!projectiles.containsKey(p))
-            projectiles.put(p, new AgProjectile(p));
-        return projectiles.get(p);
-    }
+	public AgProjectile getProjectile(Projectile p) {
+		if (!projectiles.containsKey(p))
+			projectiles.put(p, new AgProjectile(p));
+		return projectiles.get(p);
+	}
 
 	public Spawner getSpawner(Location location) {
 		return spawners.stream().filter(s -> s.getLocation().equals(location))
@@ -168,9 +168,9 @@ public class Aegeus extends JavaPlugin {
 		saveSpawners();
 	}
 
-    public void removeProjectile(Projectile p) {
-        projectiles.remove(p);
-    }
+	public void removeProjectile(Projectile p) {
+		projectiles.remove(p);
+	}
 
 	public List<Spawner> getSpawners() {
 		return spawners;

@@ -45,15 +45,6 @@ public class ItemParser {
 				else if (key.equalsIgnoreCase("enchant"))
 					info.setEnchant(Integer.parseInt(value));
 
-				else if (key.equalsIgnoreCase("strength"))
-					info.setStrength(Integer.parseInt(value));
-				else if (key.equalsIgnoreCase("dexterity"))
-					info.setDexterity(Integer.parseInt(value));
-				else if (key.equalsIgnoreCase("intellect"))
-					info.setIntellect(Integer.parseInt(value));
-				else if (key.equalsIgnoreCase("vitality"))
-					info.setVitality(Integer.parseInt(value));
-
 			} catch (Exception ignored) {
 			}
 		}
@@ -160,6 +151,8 @@ public class ItemParser {
 					armor.setBlock(Float.parseFloat(value));
 				else if (key.equalsIgnoreCase("dodge"))
 					armor.setDodge(Float.parseFloat(value));
+				else if (key.equalsIgnoreCase("reflect"))
+					armor.setReflect(Float.parseFloat(value));
 
 			} catch (Exception ignored) {
 			}

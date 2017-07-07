@@ -99,11 +99,11 @@ public class ServerListener implements Listener {
 	}
 
 	@EventHandler
-    private void onChunkLoad(ChunkLoadEvent e) {
-        // Clear entities
-        Arrays.stream(e.getChunk().getEntities()).filter(a ->
-                a instanceof LivingEntity && !(a instanceof Player))
-                .forEach(Entity::remove);
-    }
+	private void onChunkLoad(ChunkLoadEvent e) {
+		// Clear entities
+		Arrays.stream(e.getChunk().getEntities()).filter(a ->
+				a instanceof LivingEntity && !(a instanceof Player))
+				.forEach(Entity::remove);
+	}
 
 }

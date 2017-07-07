@@ -3,13 +3,13 @@ package com.aegeus.game.stats;
 import org.bukkit.entity.EntityType;
 
 public class StatsBandit extends Stats {
-    public StatsBandit() {
-        super();
-    }
+	public StatsBandit() {
+		super();
+	}
 
-    public StatsBandit(Stats parent) {
-        super(parent);
-    }
+	public StatsBandit(Stats parent) {
+		super(parent);
+	}
 
 	@Override
 	public void prepare() {
@@ -22,6 +22,6 @@ public class StatsBandit extends Stats {
 		getNames().add("Ugly Bandit");
 
 		getTypes().add(EntityType.ZOMBIE);
-        getTypes().add(EntityType.SKELETON);
-    }
+		getTypes().add(EntityType.SKELETON);
+	}
 }

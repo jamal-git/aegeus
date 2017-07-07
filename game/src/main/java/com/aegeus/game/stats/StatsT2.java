@@ -16,74 +16,76 @@ public class StatsT2 extends Stats {
 	public void prepare() {
 		setTier(2);
 		setChance(0.05f);
-        setHpMultiplier(1.15f);
-        setGenName(true);
+		setHpMultiplier(1.15f);
+		setGenName(true);
 
-        getSpawnConds().add(new Condition<LivingEntity>() {
-            @Override
-            public boolean isComplete(LivingEntity entity) {
-                return entity.getType().equals(EntityType.SKELETON);
-            }
+		getSpawnConds().add(new Condition<LivingEntity>() {
+			@Override
+			public boolean isComplete(LivingEntity entity) {
+				return entity.getType().equals(EntityType.SKELETON);
+			}
 
-            @Override
-            public void onComplete(LivingEntity entity) {
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
-            }
-        });
+			@Override
+			public void onComplete(LivingEntity entity) {
+				entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
+			}
+		});
 
-		getDefArmor().hpRegen = new IntPossible(10, 20);
-		getDefArmor().energyRegen = new FloatPossible(0.01f, 0.03f);
-		getDefArmor().physRes = new FloatPossible(0.01f, 0.04f);
-		getDefArmor().magRes = new FloatPossible(0.01f, 0.04f);
-		getDefArmor().block = new FloatPossible(0.01f, 0.03f);
-		getDefArmor().dodge = new FloatPossible(0.01f, 0.03f);
+		getDefArmor().hpRegen = new IntPoss(10, 20);
+		getDefArmor().energyRegen = new FloatPoss(0.01f, 0.03f);
+		getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.08f);
+		getDefArmor().magRes = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.08f);
+		getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
+		getDefArmor().dodge = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
+		getDefArmor().reflect = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
 
 		ArmorPossible helmet = new ArmorPossible();
 		helmet.material = Material.CHAINMAIL_HELMET;
-		helmet.name = "&aChainmail Helmet";
-		helmet.hp = new IntPossible(46, 170);
+		helmet.hp = new IntPoss(46, 170);
 		getHelmets().add(helmet);
 
 		ArmorPossible chestplate = new ArmorPossible();
 		chestplate.material = Material.CHAINMAIL_CHESTPLATE;
-		chestplate.name = "&aChainmail Chestplate";
-		chestplate.hp = new IntPossible(69, 255);
+		chestplate.hp = new IntPoss(69, 255);
 		getChestplates().add(chestplate);
 
 		ArmorPossible leggings = new ArmorPossible();
 		leggings.material = Material.CHAINMAIL_LEGGINGS;
-		leggings.name = "&aChainmail Leggings";
-		leggings.hp = new IntPossible(69, 255);
+		leggings.hp = new IntPoss(69, 255);
 		getAllLeggings().add(leggings);
 
 		ArmorPossible boots = new ArmorPossible();
 		boots.material = Material.CHAINMAIL_BOOTS;
-		boots.name = "&aChainmail Boots";
-		boots.hp = new IntPossible(46, 170);
+		boots.hp = new IntPoss(46, 170);
 		getAllBoots().add(boots);
 
-		getDefWeapon().pen = new FloatPossible(0.01f, 0.07f);
-		getDefWeapon().fireDmg = new IntPossible(1, 6);
-		getDefWeapon().iceDmg = new IntPossible(1, 6);
-		getDefWeapon().poisonDmg = new IntPossible(1, 6);
-		getDefWeapon().pureDmg = new IntPossible(1, 6);
-		getDefWeapon().lifeSteal = new FloatPossible(0.01f, 0.2f);
-		getDefWeapon().trueHearts = new FloatPossible(0.01f, 0.04f);
-		getDefWeapon().blind = new FloatPossible(0.01f, 0.14f);
+		getDefWeapon().pen = new Chance<>(new FloatPoss(0.01f, 0.07f), 0.05f);
+		getDefWeapon().fireDmg = new Chance<>(new IntPoss(1, 6), 0.05f);
+		getDefWeapon().iceDmg = new Chance<>(new IntPoss(1, 6), 0.05f);
+		getDefWeapon().poisonDmg = new Chance<>(new IntPoss(1, 6), 0.05f);
+		getDefWeapon().pureDmg = new Chance<>(new IntPoss(1, 6), 0.05f);
+		getDefWeapon().lifeSteal = new Chance<>(new FloatPoss(0.01f, 0.2f), 0.05f);
+		getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.05f);
+		getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.14f), 0.05f);
 
 		WeaponPossible sword = new WeaponPossible();
 		sword.material = Material.STONE_SWORD;
-		sword.name = "&aStone Sword";
-		sword.dmg = new IntPossible(10, 30);
-		sword.range = new IntPossible(0, 10);
+		sword.dmg = new IntPoss(10, 30);
+		sword.range = new IntPoss(0, 10);
 		getWeapons().add(sword);
 
 		WeaponPossible axe = new WeaponPossible();
 		axe.material = Material.STONE_AXE;
-		axe.name = "&aStone Axe";
-		axe.dmg = new IntPossible(11, 35);
-		axe.range = new IntPossible(0, 12);
+		axe.dmg = new IntPoss(11, 35);
+		axe.range = new IntPoss(0, 8);
 		getWeapons().add(axe);
+
+		WeaponPossible bow = new WeaponPossible();
+		bow.material = Material.BOW;
+		bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
+		bow.dmg = new IntPoss(11, 35);
+		bow.range = new IntPoss(0, 6);
+		getWeapons().add(bow);
 	}
 
 	@Override

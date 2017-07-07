@@ -25,10 +25,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	// Equipment Info
 	private int tier = 0;
 	private Rarity rarity = null;
-	private int strength = 0;
-	private int dexterity = 0;
-	private int intellect = 0;
-	private int vitality = 0;
 	private int enchant = 0;
 
 	// Armor Stats
@@ -40,6 +36,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private float magRes = 0;
 	private float block = 0;
 	private float dodge = 0;
+	private float reflect = 0;
 
 	public Armor(Material material) {
 		super(new ItemStack(material));
@@ -57,10 +54,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 
 		this.tier = other.tier;
 		this.rarity = other.rarity;
-		this.strength = other.strength;
-		this.dexterity = other.dexterity;
-		this.intellect = other.intellect;
-		this.vitality = other.vitality;
 		this.enchant = other.enchant;
 
 		this.rune = other.rune;
@@ -71,6 +64,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.magRes = other.magRes;
 		this.block = other.block;
 		this.dodge = other.dodge;
+		this.reflect = other.reflect;
 	}
 
 	@Override
@@ -88,6 +82,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		magRes = (info.hasKey("magRes")) ? info.getFloat("magRes") : 0;
 		block = (info.hasKey("block")) ? info.getFloat("block") : 0;
 		dodge = (info.hasKey("dodge")) ? info.getFloat("dodge") : 0;
+		reflect = (info.hasKey("reflect")) ? info.getFloat("reflect") : 0;
 	}
 
 	@Override
@@ -106,6 +101,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		info.set("magRes", new NBTTagFloat(magRes));
 		info.set("block", new NBTTagFloat(block));
 		info.set("dodge", new NBTTagFloat(dodge));
+		info.set("reflect", new NBTTagFloat(reflect));
 		setAegeusInfo(info);
 	}
 
@@ -122,6 +118,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		if (magRes > 0) lore.add(Util.colorCodes("&cMAGIC RESIST: " + Math.round(magRes * 100) + "%"));
 		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
 		if (dodge > 0) lore.add(Util.colorCodes("&cDODGE: " + Math.round(dodge * 100) + "%"));
+		if (reflect > 0) lore.add(Util.colorCodes("&cREFLECTION: " + Math.round(reflect * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
 		if (rune != null) lore.add(Util.colorCodes("&5&oRune:&d&o " + rune.getRuneType().getName()));
 		lore.addAll(LevelInfo.buildLore(this));
@@ -208,46 +205,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.enchant = enchant;
 	}
 
-	@Override
-	public int getStrength() {
-		return strength;
-	}
-
-	@Override
-	public void setStrength(int strength) {
-		this.strength = strength;
-	}
-
-	@Override
-	public int getDexterity() {
-		return dexterity;
-	}
-
-	@Override
-	public void setDexterity(int dexterity) {
-		this.dexterity = dexterity;
-	}
-
-	@Override
-	public int getIntellect() {
-		return intellect;
-	}
-
-	@Override
-	public void setIntellect(int intellect) {
-		this.intellect = intellect;
-	}
-
-	@Override
-	public int getVitality() {
-		return vitality;
-	}
-
-	@Override
-	public void setVitality(int vitality) {
-		this.vitality = vitality;
-	}
-
 	/*
 	Armor Methods
 	 */
@@ -316,4 +273,11 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.dodge = dodge;
 	}
 
+	public float getReflect() {
+		return reflect;
+	}
+
+	public void setReflect(float reflect) {
+		this.reflect = reflect;
+	}
 }

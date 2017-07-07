@@ -26,13 +26,13 @@ public class CommandRoll implements CommandExecutor {
 
 		max = Math.min(100000, Math.max(1, max));
 		int roll = random.nextInt(max);
-		sender.sendMessage(Util.colorCodes("&7You rolled a(n) &f" + roll + "*7 out of &f" + max + "&7."));
+		sender.sendMessage(Util.colorCodes("&7You rolled a(n) &f" + roll + "&7 out of &f" + max + "&7."));
 
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			try {
 				ChatManager.sendRadial(player, Util.colorCodes(
-						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."), false);
+						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."));
 			} catch (NoneNearbyException e) {
 				player.sendMessage(Util.colorCodes(
 						"&7&oThe sound of your die rolling echoes in the wind."));
