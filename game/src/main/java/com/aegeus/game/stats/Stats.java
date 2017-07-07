@@ -2,6 +2,7 @@ package com.aegeus.game.stats;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgMonster;
+import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Rune;
@@ -363,7 +364,7 @@ public abstract class Stats {
 
 	// Generation methods
 
-	public void spawn(Location location) {
+	public void spawn(Location location, Spawner origin) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
 
 		if (entity.getType().equals(EntityType.ZOMBIE)) {
@@ -376,6 +377,7 @@ public abstract class Stats {
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
 
+		info.setOrigin(origin);
 		info.setHitConds(getHitConds());
 		info.setTier(getTier());
 		info.setChance(getChance());

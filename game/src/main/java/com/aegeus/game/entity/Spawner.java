@@ -1,19 +1,18 @@
 package com.aegeus.game.entity;
 
 import com.aegeus.game.stats.Stats;
+import com.aegeus.game.util.Util;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Spawner {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+	private int maxCount = 3;
+	private int count;
 	private final Location location;
 	private List<Stats> list = new ArrayList<>();
 
@@ -46,9 +45,43 @@ public class Spawner {
 		return list.size() < 2 ? list.get(0) : list.get(random.nextInt(list.size()));
 	}
 
+    /**
+     * Conditions to spawn a mob are:
+     *      The max amount of mobs spawned is not reached yet
+     *      Chunk is loaded
+     *      Random chance OR there is no player in a 32 block radius
+     * Basically it has to not be at max, players in area, and will occur when
+     * players are far enough away or can happen very close with a small chance.
+     * @return
+     */
 	public boolean canSpawn() {
-		Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 20, 20, 20);
-		return entities.stream().filter(e -> e instanceof LivingEntity && !(e instanceof Player)).count() < 4
-				&& entities.stream().filter(e -> e instanceof Player).count() >= 1;
+        return count < maxCount && location.getChunk().isLoaded() &&
+                (Util.getPlayersInRadius(location, 32, 32, 32).isEmpty() || (random.nextDouble() < 0.08));
 	}
+
+	public Spawner incrementCount()    {
+	    count++;
+	    return this;
+    }
+
+    public Spawner decrementCount()    {
+	    count = (count - 1) < 0 ? 0 : (count - 1);
+	    return this;
+    }
+
+    public int getMaxCount() {
+        return maxCount;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

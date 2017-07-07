@@ -4,6 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import net.minecraft.server.v1_9_R1.EntityFishingHook;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -269,241 +271,60 @@ public class Util {
 		return target;
 	}
 
+	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
+        return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
+    }
+
     public static boolean isSword(Material material) {
-        switch (material) {
-            case WOOD_SWORD:
-            case STONE_SWORD:
-            case IRON_SWORD:
-            case DIAMOND_SWORD:
-            case GOLD_SWORD:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_SWORD");
     }
 
     public static boolean isAxe(Material material) {
-        switch (material) {
-            case WOOD_AXE:
-            case STONE_AXE:
-            case IRON_AXE:
-            case DIAMOND_AXE:
-            case GOLD_AXE:
-                return true;
-            default:
-                return false;
-        }
+	    return material.toString().contains("_AXE");
     }
 
     public static boolean isSpade(Material material) {
-        switch (material) {
-            case WOOD_SPADE:
-            case STONE_SPADE:
-            case IRON_SPADE:
-            case DIAMOND_SPADE:
-            case GOLD_SPADE:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_SPADE");
     }
 
     public static boolean isHoe(Material material) {
-        switch (material) {
-            case WOOD_HOE:
-            case STONE_HOE:
-            case IRON_HOE:
-            case DIAMOND_HOE:
-            case GOLD_HOE:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_HOE");
     }
 
     public static boolean isHelmet(Material material) {
-        switch (material) {
-            case LEATHER_HELMET:
-            case CHAINMAIL_HELMET:
-            case IRON_HELMET:
-            case DIAMOND_HELMET:
-            case GOLD_HELMET:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_HELMET");
     }
 
     public static boolean isChestplate(Material material) {
-        switch (material) {
-            case LEATHER_CHESTPLATE:
-            case CHAINMAIL_CHESTPLATE:
-            case IRON_CHESTPLATE:
-            case DIAMOND_CHESTPLATE:
-            case GOLD_CHESTPLATE:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_CHESTPLATE");
     }
 
     public static boolean isLeggings(Material material) {
-        switch (material) {
-            case LEATHER_LEGGINGS:
-            case CHAINMAIL_LEGGINGS:
-            case IRON_LEGGINGS:
-            case DIAMOND_LEGGINGS:
-            case GOLD_LEGGINGS:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_LEGGINGS");
     }
 
     public static boolean isBoots(Material material) {
-        switch (material) {
-            case LEATHER_BOOTS:
-            case CHAINMAIL_BOOTS:
-            case IRON_BOOTS:
-            case DIAMOND_BOOTS:
-            case GOLD_BOOTS:
-                return true;
-            default:
-                return false;
-        }
+        return material.toString().contains("_BOOTS");
     }
 
     public static String generateName(Weapon weapon) {
-        if (isSword(weapon.getMaterial())) switch (weapon.getTier()) {
-            case 1:
-                return Util.colorCodes("&fWood Sword");
-            case 2:
-                return Util.colorCodes("&aStone Sword");
-            case 3:
-                return Util.colorCodes("&bMagic Sword");
-            case 4:
-                return Util.colorCodes("&dAncient Sword");
-            case 5:
-                return Util.colorCodes("&eLegendary Sword");
-            default:
-                return Util.colorCodes("&fCustom Sword");
-        }
-        else if (isAxe(weapon.getMaterial())) switch (weapon.getTier()) {
-            case 1:
-                return Util.colorCodes("&fWood Axe");
-            case 2:
-                return Util.colorCodes("&aStone Axe");
-            case 3:
-                return Util.colorCodes("&bMagic Axe");
-            case 4:
-                return Util.colorCodes("&dAncient Axe");
-            case 5:
-                return Util.colorCodes("&eLegendary Axe");
-            default:
-                return Util.colorCodes("&fCustom Axe");
-        }
-        else if (isSpade(weapon.getMaterial())) switch (weapon.getTier()) {
-            case 1:
-                return Util.colorCodes("&fBasic Polearm");
-            case 2:
-                return Util.colorCodes("&aAdvanced Polearm");
-            case 3:
-                return Util.colorCodes("&bMagic Polearm");
-            case 4:
-                return Util.colorCodes("&dAncient Polearm");
-            case 5:
-                return Util.colorCodes("&eLegendary Polearm");
-            default:
-                return Util.colorCodes("&fCustom Polearm");
-        }
-        else if (isHoe(weapon.getMaterial())) switch (weapon.getTier()) {
-            case 1:
-                return Util.colorCodes("&fBasic Staff");
-            case 2:
-                return Util.colorCodes("&aAdvanced Staff");
-            case 3:
-                return Util.colorCodes("&bMagic Staff");
-            case 4:
-                return Util.colorCodes("&dAncient Staff");
-            case 5:
-                return Util.colorCodes("&eLegendary Staff");
-            default:
-                return Util.colorCodes("&fCustom Staff");
-        }
-        else if (weapon.getMaterial().equals(Material.BOW)) switch (weapon.getTier()) {
-            case 1:
-                return Util.colorCodes("&fBasic Bow");
-            case 2:
-                return Util.colorCodes("&aAdvanced Bow");
-            case 3:
-                return Util.colorCodes("&bMagic Bow");
-            case 4:
-                return Util.colorCodes("&dAncient Bow");
-            case 5:
-                return Util.colorCodes("&eLegendary Bow");
-            default:
-                return Util.colorCodes("&fCustom Bow");
-        }
+	    Tier t = Tier.fromTier(weapon.getTier());
+	    Material m = weapon.getMaterial();
+        if (isSword(m))  return t.getSword();
+        else if (isAxe(m))   return t.getAxe();
+        else if (isSpade(m)) return t.getPolearm();
+        else if (isHoe(m)) return t.getStaff();
+        else if (m == Material.BOW) return t.getBow();
         else return Util.colorCodes("&fCustom Item");
     }
 
     public static String generateName(Armor armor) {
-        if (isHelmet(armor.getMaterial())) switch (armor.getTier()) {
-            case 1:
-                return Util.colorCodes("&fLeather Helmet");
-            case 2:
-                return Util.colorCodes("&aChainmail Helmet");
-            case 3:
-                return Util.colorCodes("&bMagic Helmet");
-            case 4:
-                return Util.colorCodes("&dAncient Helmet");
-            case 5:
-                return Util.colorCodes("&eLegendary Helmet");
-            default:
-                return Util.colorCodes("&fCustom Helmet");
-        }
-        else if (isChestplate(armor.getMaterial())) switch (armor.getTier()) {
-            case 1:
-                return Util.colorCodes("&fLeather Chestplate");
-            case 2:
-                return Util.colorCodes("&aChainmail Chestplate");
-            case 3:
-                return Util.colorCodes("&bMagic Chestplate");
-            case 4:
-                return Util.colorCodes("&dAncient Chestplate");
-            case 5:
-                return Util.colorCodes("&eLegendary Chestplate");
-            default:
-                return Util.colorCodes("&fCustom Chestplate");
-        }
-        else if (isLeggings(armor.getMaterial())) switch (armor.getTier()) {
-            case 1:
-                return Util.colorCodes("&fLeather Leggings");
-            case 2:
-                return Util.colorCodes("&aChainmail Leggings");
-            case 3:
-                return Util.colorCodes("&bMagic Leggings");
-            case 4:
-                return Util.colorCodes("&dAncient Leggings");
-            case 5:
-                return Util.colorCodes("&eLegendary Leggings");
-            default:
-                return Util.colorCodes("&fCustom Leggings");
-        }
-        else if (isBoots(armor.getMaterial())) switch (armor.getTier()) {
-            case 1:
-                return Util.colorCodes("&fLeather Boots");
-            case 2:
-                return Util.colorCodes("&aChainmail Boots");
-            case 3:
-                return Util.colorCodes("&bMagic Boots");
-            case 4:
-                return Util.colorCodes("&dAncient Boots");
-            case 5:
-                return Util.colorCodes("&eLegendary Boots");
-            default:
-                return Util.colorCodes("&fCustom Boots");
-        }
+	    String a = Tier.fromTier(armor.getTier()).getArmor();
+	    Material m = armor.getMaterial();
+        if (isHelmet(m)) return a + " Helmet";
+        else if (isChestplate(m)) return a + " Chestplate";
+        else if (isLeggings(m)) return a + " Leggings";
+        else if (isBoots(m))  return a + " Boots";
         else return Util.colorCodes("&fCustom Item");
     }
 }

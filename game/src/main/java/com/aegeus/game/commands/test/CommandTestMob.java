@@ -21,9 +21,9 @@ public class CommandTestMob implements CommandExecutor {
 			Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
 			if (split.length >= 2) {
 				Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
-				((Stats) (clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()))).spawn(player.getLocation());
+				((Stats) (clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()))).spawn(player.getLocation(), null);
 			} else
-				((Stats) clazz.newInstance()).spawn(player.getLocation());
+				((Stats) clazz.newInstance()).spawn(player.getLocation(), null);
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException
 				| IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();

@@ -47,6 +47,7 @@ public class CombatListener implements Listener {
 
 		if (info instanceof AgMonster) {
 			AgMonster mInfo = parent.getMonster(entity);
+			if(mInfo.getOrigin() != null)   mInfo.getOrigin().decrementCount();
 			if (random.nextFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
 				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && random.nextFloat() <= 0.45f)
