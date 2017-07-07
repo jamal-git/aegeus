@@ -19,12 +19,8 @@ public class AgEntity {
 	protected float magRes = 0;
 	protected float block = 0;
 	protected float dodge = 0;
+	protected float reflect = 0;
 	protected float critChance = 0;
-
-	protected int strength = 0;
-	protected int dexterity = 0;
-	protected int intellect = 0;
-	protected int vitality = 0;
 
 	public AgEntity(LivingEntity entity) {
 		this.entity = entity;
@@ -41,12 +37,9 @@ public class AgEntity {
 		this.physRes = other.physRes;
 		this.physRes = other.physRes;
 		this.block = other.block;
+		this.dodge = other.dodge;
+		this.reflect = other.reflect;
 		this.critChance = other.critChance;
-
-		this.strength = other.strength;
-		this.dexterity = other.dexterity;
-		this.intellect = other.intellect;
-		this.vitality = other.vitality;
 	}
 
 	private NBTTagCompound getTag() {
@@ -140,43 +133,19 @@ public class AgEntity {
 		this.dodge = dodge;
 	}
 
+	public float getReflect() {
+		return reflect;
+	}
+
+	public void setReflect(float reflect) {
+		this.reflect = reflect;
+	}
+
 	public float getCritChance() {
 		return critChance;
 	}
 
 	public void setCritChance(float crit) {
 		this.critChance = Math.min(1, crit);
-	}
-
-	public int getStrength() {
-		return strength;
-	}
-
-	public void setStrength(int strength) {
-		this.strength = strength;
-	}
-
-	public int getIntellect() {
-		return intellect;
-	}
-
-	public void setIntellect(int intellect) {
-		this.intellect = intellect;
-	}
-
-	public int getVitality() {
-		return vitality;
-	}
-
-	public void setVitality(int vitality) {
-		this.vitality = vitality;
-	}
-
-	public int getDexterity() {
-		return dexterity;
-	}
-
-	public void setDexterity(int dexterity) {
-		this.dexterity = dexterity;
 	}
 }

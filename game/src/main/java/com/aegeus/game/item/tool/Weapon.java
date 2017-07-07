@@ -28,10 +28,6 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	// Equipment Info
 	private int tier = 0;
 	private Rarity rarity = null;
-	private int strength = 0;
-	private int dexterity = 0;
-	private int intellect = 0;
-	private int vitality = 0;
 	private int enchant = 0;
 
 	// Weapon Stats
@@ -63,10 +59,6 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 		this.tier = other.tier;
 		this.rarity = other.rarity;
-		this.strength = other.strength;
-		this.dexterity = other.dexterity;
-		this.intellect = other.intellect;
-		this.vitality = other.vitality;
 		this.enchant = other.enchant;
 
 		this.rune = other.rune;
@@ -223,46 +215,6 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setEnchant(int enchant) {
 		this.enchant = enchant;
-	}
-
-	@Override
-	public int getStrength() {
-		return strength;
-	}
-
-	@Override
-	public void setStrength(int strength) {
-		this.strength = strength;
-	}
-
-	@Override
-	public int getDexterity() {
-		return dexterity;
-	}
-
-	@Override
-	public void setDexterity(int dexterity) {
-		this.dexterity = dexterity;
-	}
-
-	@Override
-	public int getIntellect() {
-		return intellect;
-	}
-
-	@Override
-	public void setIntellect(int intellect) {
-		this.intellect = intellect;
-	}
-
-	@Override
-	public int getVitality() {
-		return vitality;
-	}
-
-	@Override
-	public void setVitality(int vitality) {
-		this.vitality = vitality;
 	}
 
 	/*

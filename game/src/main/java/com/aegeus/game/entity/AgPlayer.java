@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class AgPlayer extends AgEntity {
 	private final Player player;
-	private BossBar bossBarHp;
+	private BossBar hpBar;
 
 	private int level = 0;
 	private float energy = 100;
@@ -40,7 +40,7 @@ public class AgPlayer extends AgEntity {
 	public AgPlayer(AgPlayer other) {
 		super(other);
 		this.player = other.player;
-		this.bossBarHp = other.bossBarHp;
+		this.hpBar = other.hpBar;
 
 		this.level = other.level;
 		this.energy = other.energy;
@@ -61,12 +61,12 @@ public class AgPlayer extends AgEntity {
 		return player;
 	}
 
-	public BossBar getBossBarHp() {
-		return bossBarHp;
+	public BossBar getHpBar() {
+		return hpBar;
 	}
 
-	public void setBossBarHp(BossBar bossBarHp) {
-		this.bossBarHp = bossBarHp;
+	public void setHpBar(BossBar hpBar) {
+		this.hpBar = hpBar;
 	}
 
 	public Alignment getAlignment() {

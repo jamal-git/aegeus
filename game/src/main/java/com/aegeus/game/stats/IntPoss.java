@@ -2,21 +2,21 @@ package com.aegeus.game.stats;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class IntPossible {
+public class IntPoss {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private int min = 0;
 	private int max = 1;
 
-	public IntPossible() {
+	public IntPoss() {
 
 	}
 
-	public IntPossible(int value) {
+	public IntPoss(int value) {
 		this.min = value;
 		this.max = value;
 	}
 
-	public IntPossible(int min, int max) {
+	public IntPoss(int min, int max) {
 		this.min = min;
 		this.max = max;
 	}

@@ -32,7 +32,7 @@ public class StatsListener implements Listener {
 						info.setEnergy(Math.max(0, Math.min(100, info.getEnergy() + 1.2f + (info.getEnergyRegen() * 8))));
 					else
 						info.setEnergy(Math.max(-40, Math.min(100, info.getEnergy() + 1)));
-					Util.updateEnergy(player);
+					Util.updateDisplay(player);
 				}
 			}
 		}, 1, 1);

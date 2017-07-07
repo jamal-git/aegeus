@@ -2,11 +2,11 @@ package com.aegeus.game.item;
 
 public enum Tier {
 	NONE("Custom", "Custom", "Custom Sword", "Custom Axe", "Custom Bow", "Custom Staff", "Custom Polearm"),
-	TIER_1("&fLeather", "&fWood", "&fShortsword", "&fHatchet", "&fBasic Bow", "&fBasic Staff", "&fBasic Polearm"),
-	TIER_2("&aChainmail", "&aStone", "&aLongsword", "&aGreat Axe", "&aAdvanced Bow", "&aAdvanced Staff", "&aAdvanced Polearm"),
-	TIER_3("&bMagic", "&bIron", "&bMagic Sword", "&bMagic Axe", "&bMagic Bow", "&bMagic Staff", "&bMagic Polearm"),
-	TIER_4("&dAncient", "&dDiamond", "&dAncient Sword", "&dAncient Axe", "&dAncient Bow", "&dAncient Staff", "&dAncient Polearm"),
-	TIER_5("&eLegendary", "&Gold", "&eLegendary Sword", "&eLegendary Axe", "&eLegendary Bow", "&eLegendary Staff", "&eLegendary Polearm");
+	TIER_1("&fLeather", "&fWood", "Shortsword", "Hatchet", "Basic Bow", "Basic Staff", "Basic Polearm"),
+	TIER_2("&aChainmail", "&aStone", "Longsword", "Great Axe", "Advanced Bow", "Advanced Staff", "Advanced Polearm"),
+	TIER_3("&bMagic", "&bIron", "Magic Sword", "Magic Axe", "Magic Bow", "Magic Staff", "Magic Polearm"),
+	TIER_4("&dAncient", "&dDiamond", "Ancient Sword", "Ancient Axe", "Ancient Bow", "Ancient Staff", "Ancient Polearm"),
+	TIER_5("&eLegendary", "&eGold", "Legendary Sword", "Legendary Axe", "Legendary Bow", "Legendary Staff", "Legendary Polearm");
 
 	private static final Tier[] values = values();
 

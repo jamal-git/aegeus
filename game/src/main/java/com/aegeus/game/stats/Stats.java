@@ -16,8 +16,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public abstract class Stats {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -29,8 +31,8 @@ public abstract class Stats {
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
-	private FloatPossible rarity = new FloatPossible(0, 1);
-    private boolean genName = false;
+	private FloatPoss rarity = new FloatPoss(0, 1);
+	private boolean genName = false;
 
 	// Randomizers
 	private List<String> names = new ArrayList<>();
@@ -78,6 +80,7 @@ public abstract class Stats {
 
 	/**
 	 * Copies information from another Stats object.
+	 *
 	 * @param other The stats to copy from.
 	 */
 	public void copy(Stats other) {
@@ -87,7 +90,7 @@ public abstract class Stats {
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
 		this.rarity = other.rarity;
-        this.genName = other.genName;
+		this.genName = other.genName;
 
 		this.names = other.names;
 		this.types = other.types;
@@ -150,21 +153,21 @@ public abstract class Stats {
 		this.dmgMultiplier = dmgMultiplier;
 	}
 
-	public FloatPossible getRarity() {
+	public FloatPoss getRarity() {
 		return rarity;
 	}
 
-	public void setRarity(FloatPossible rarity) {
+	public void setRarity(FloatPoss rarity) {
 		this.rarity = rarity;
 	}
 
-    public boolean getGenName() {
-        return genName;
-    }
+	public boolean getGenName() {
+		return genName;
+	}
 
-    public void setGenName(boolean genName) {
-        this.genName = genName;
-    }
+	public void setGenName(boolean genName) {
+		this.genName = genName;
+	}
 
 	// Randomizers
 
@@ -183,11 +186,27 @@ public abstract class Stats {
 				helmets.get(random.nextInt(helmets.size()));
 	}
 
+	public ArmorPossible getHelmet(EntityType type) {
+		List<ArmorPossible> helmets = this.helmets.stream().filter(i ->
+				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type)).
+				collect(Collectors.toList());
+		return helmets.isEmpty() ? defArmor : helmets.size() == 1 ? helmets.get(0) :
+				helmets.get(random.nextInt(helmets.size()));
+	}
+
 	public boolean hasHelmet() {
 		return true;
 	}
 
 	public ArmorPossible getChestplate() {
+		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
+				chestplates.get(random.nextInt(chestplates.size()));
+	}
+
+	public ArmorPossible getChestplate(EntityType type) {
+		List<ArmorPossible> chestplates = this.chestplates.stream().filter(i ->
+				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
+				.collect(Collectors.toList());
 		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
 				chestplates.get(random.nextInt(chestplates.size()));
 	}
@@ -205,6 +224,14 @@ public abstract class Stats {
 		this.leggings = leggings;
 	}
 
+	public ArmorPossible getLeggings(EntityType type) {
+		List<ArmorPossible> leggings = this.leggings.stream().filter(i ->
+				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
+				.collect(Collectors.toList());
+		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
+				leggings.get(random.nextInt(leggings.size()));
+	}
+
 	public boolean hasLeggings() {
 		return true;
 	}
@@ -218,11 +245,27 @@ public abstract class Stats {
 		this.boots = boots;
 	}
 
+	public ArmorPossible getBoots(EntityType type) {
+		List<ArmorPossible> boots = this.boots.stream().filter(i ->
+				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
+				.collect(Collectors.toList());
+		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
+				boots.get(random.nextInt(boots.size()));
+	}
+
 	public boolean hasBoots() {
 		return true;
 	}
 
 	public WeaponPossible getWeapon() {
+		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
+				weapons.get(random.nextInt(weapons.size()));
+	}
+
+	public WeaponPossible getWeapon(EntityType type) {
+		List<WeaponPossible> weapons = this.weapons.stream().filter(i ->
+				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
+				.collect(Collectors.toList());
 		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
 				weapons.get(random.nextInt(weapons.size()));
 	}
@@ -342,56 +385,49 @@ public abstract class Stats {
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
 
-		entity.getEquipment().setItemInMainHand(getWeapon().get(Util.rarity(rarity.get())).build());
+		entity.getEquipment().setItemInMainHand(getWeapon(entity.getType()).get(Util.rarity(rarity.get())).build());
 
 		if (hasHelmet())
-			entity.getEquipment().setHelmet(getHelmet().get(Util.rarity(rarity.get())).build());
+			entity.getEquipment().setHelmet(getHelmet(entity.getType()).get(Util.rarity(rarity.get())).build());
 		if (hasChestplate())
-			entity.getEquipment().setChestplate(getChestplate().get(Util.rarity(rarity.get())).build());
+			entity.getEquipment().setChestplate(getChestplate(entity.getType()).get(Util.rarity(rarity.get())).build());
 		if (hasLeggings())
-			entity.getEquipment().setLeggings(getLeggings().get(Util.rarity(rarity.get())).build());
+			entity.getEquipment().setLeggings(getLeggings(entity.getType()).get(Util.rarity(rarity.get())).build());
 		if (hasBoots())
-			entity.getEquipment().setBoots(getBoots().get(Util.rarity(rarity.get())).build());
+			entity.getEquipment().setBoots(getBoots(entity.getType()).get(Util.rarity(rarity.get())).build());
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
 
-        for (int i = getSpawnConds().size() - 1; i >= 0; i--) {
-            Condition<LivingEntity> c = getSpawnConds().get(i);
-            if (c.isComplete(entity)) {
-                c.onComplete(entity);
-                if (c.addOnComplete() != null)
-                    getSpawnConds().addAll(c.addOnComplete());
-            }
-        }
-    }
+		for (int i = getSpawnConds().size() - 1; i >= 0; i--) {
+			Condition<LivingEntity> c = getSpawnConds().get(i);
+			if (c.isComplete(entity)) {
+				c.onComplete(entity);
+				if (c.addOnComplete() != null)
+					getSpawnConds().addAll(c.addOnComplete());
+			}
+		}
+	}
 
 	public class WeaponPossible {
 		public Material material = Material.WOOD_SWORD;
-		public Rarity rarity = null;
+		public EntityType[] allowedTypes = null;
 		public String name = "";
-		public Rune rune = null;
+		public Rarity rarity = null;
 
-		public IntPossible dmg = new IntPossible(1);
-		public IntPossible range = new IntPossible(0);
+		public Chance<ListPoss<Rune>> rune = new Chance<>();
 
-		public float statChance = 0.08f;
-		public int statMax = 3;
-		public IntPossible strength = new IntPossible(0);
-		public IntPossible dexterity = new IntPossible(0);
-		public IntPossible intellect = new IntPossible(0);
-		public IntPossible vitality = new IntPossible(0);
+		public IntPoss dmg = new IntPoss(1);
+		public IntPoss range = new IntPoss(0);
 
-		public float attChance = 0.08f;
-		public int attMax = 3;
-		public FloatPossible pen = new FloatPossible(0);
-		public IntPossible fireDmg = new IntPossible(0);
-		public IntPossible iceDmg = new IntPossible(0);
-		public IntPossible poisonDmg = new IntPossible(0);
-		public IntPossible pureDmg = new IntPossible(0);
-		public FloatPossible lifeSteal = new FloatPossible(0);
-		public FloatPossible trueHearts = new FloatPossible(0);
-		public FloatPossible blind = new FloatPossible(0);
+		public Chance<FloatPoss> pen = new Chance<>();
+		public Chance<IntPoss> fireDmg = new Chance<>();
+		public Chance<IntPoss> iceDmg = new Chance<>();
+		public Chance<IntPoss> poisonDmg = new Chance<>();
+		public Chance<IntPoss> pureDmg = new Chance<>();
+		public Chance<FloatPoss> lifeSteal = new Chance<>();
+		public Chance<FloatPoss> trueHearts = new Chance<>();
+		public Chance<FloatPoss> blind = new Chance<>();
 
 		public WeaponPossible() {
 			this(false);
@@ -400,6 +436,7 @@ public abstract class Stats {
 		public WeaponPossible(boolean def) {
 			if (!def) {
 				material = defWeapon.material;
+				allowedTypes = defWeapon.allowedTypes;
 				rarity = defWeapon.rarity;
 				name = defWeapon.name;
 				rune = defWeapon.rune;
@@ -407,16 +444,7 @@ public abstract class Stats {
 				dmg = defWeapon.dmg;
 				range = defWeapon.range;
 
-				statChance = defWeapon.statChance;
-				statMax = defWeapon.attMax;
 				pen = defWeapon.pen;
-				strength = defWeapon.strength;
-				dexterity = defWeapon.dexterity;
-				intellect = defWeapon.intellect;
-				vitality = defWeapon.vitality;
-
-				attChance = defWeapon.attChance;
-				attMax = defWeapon.attMax;
 				fireDmg = defWeapon.fireDmg;
 				iceDmg = defWeapon.iceDmg;
 				poisonDmg = defWeapon.poisonDmg;
@@ -432,39 +460,40 @@ public abstract class Stats {
 			weapon.setTier(tier);
 			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
 
-            if (name == null || name.isEmpty())
-                name = Util.generateName(weapon);
-            weapon.setName(Util.colorCodes(name));
-
-			if (random.nextFloat() <= statChance)
-				weapon.setStrength(strength.get());
-			if (random.nextFloat() < statChance)
-				weapon.setDexterity(dexterity.get());
-			if (random.nextFloat() <= statChance)
-				weapon.setIntellect(intellect.get());
-			if (random.nextFloat() <= statChance)
-				weapon.setVitality(vitality.get());
+			ListPoss<Rune> rune = this.rune.get();
+			if (rune != null) weapon.setRune(rune.get());
 
 			int min = Math.round((dmg.getDiff() * f) + dmg.getMin());
 			int max = min + range.get();
 			weapon.setDmg(min, max);
 
-			if (random.nextFloat() <= attChance)
-				weapon.setPen(pen.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setFireDmg(fireDmg.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setIceDmg(iceDmg.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setPoisonDmg(poisonDmg.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setPureDmg(pureDmg.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setLifeSteal(lifeSteal.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setTrueHearts(trueHearts.get());
-			if (random.nextFloat() <= attChance)
-				weapon.setBlind(blind.get());
+			FloatPoss pen = this.pen.get();
+			if (pen != null) weapon.setPen(pen.get());
+
+			IntPoss fireDmg = this.fireDmg.get();
+			if (fireDmg != null) weapon.setFireDmg(fireDmg.get());
+
+			IntPoss iceDmg = this.iceDmg.get();
+			if (iceDmg != null) weapon.setIceDmg(iceDmg.get());
+
+			IntPoss poisonDmg = this.poisonDmg.get();
+			if (poisonDmg != null) weapon.setPoisonDmg(poisonDmg.get());
+
+			IntPoss pureDmg = this.pureDmg.get();
+			if (pureDmg != null) weapon.setPureDmg(pureDmg.get());
+
+			FloatPoss lifeSteal = this.lifeSteal.get();
+			if (lifeSteal != null) weapon.setLifeSteal(lifeSteal.get());
+
+			FloatPoss trueHearts = this.trueHearts.get();
+			if (trueHearts != null) weapon.setTrueHearts(trueHearts.get());
+
+			FloatPoss blind = this.blind.get();
+			if (blind != null) weapon.setBlind(blind.get());
+
+			if (name == null || name.isEmpty())
+				name = Util.generateName(weapon);
+			weapon.setName(Util.colorCodes(name));
 
 			return weapon;
 		}
@@ -472,27 +501,21 @@ public abstract class Stats {
 
 	public class ArmorPossible {
 		public Material material = Material.LEATHER_HELMET;
-		public Rarity rarity = null;
+		public EntityType[] allowedTypes = null;
 		public String name = "";
-		public Rune rune = null;
+		public Rarity rarity = null;
 
-		public IntPossible hp = new IntPossible(1);
-		public IntPossible hpRegen = new IntPossible(0);
-		public FloatPossible energyRegen = new FloatPossible(0);
+		public Chance<ListPoss<Rune>> rune = new Chance<>();
 
-		public float statChance = 0.08f;
-		public int statMax = 3;
-		public IntPossible strength = new IntPossible(0);
-		public IntPossible dexterity = new IntPossible(0);
-		public IntPossible intellect = new IntPossible(0);
-		public IntPossible vitality = new IntPossible(0);
+		public IntPoss hp = new IntPoss(1);
+		public IntPoss hpRegen = new IntPoss(0);
+		public FloatPoss energyRegen = new FloatPoss(0);
 
-		public float attChance = 0.08f;
-		public int attMax = 3;
-		public FloatPossible physRes = new FloatPossible(0);
-		public FloatPossible magRes = new FloatPossible(0);
-		public FloatPossible block = new FloatPossible(0);
-		public FloatPossible dodge = new FloatPossible(0);
+		public Chance<FloatPoss> physRes = new Chance<>();
+		public Chance<FloatPoss> magRes = new Chance<>();
+		public Chance<FloatPoss> block = new Chance<>();
+		public Chance<FloatPoss> dodge = new Chance<>();
+		public Chance<FloatPoss> reflect = new Chance<>();
 
 		public ArmorPossible() {
 			this(false);
@@ -501,6 +524,7 @@ public abstract class Stats {
 		public ArmorPossible(boolean def) {
 			if (!def) {
 				material = defArmor.material;
+				allowedTypes = defArmor.allowedTypes;
 				rarity = defArmor.rarity;
 				name = defArmor.name;
 				rune = defArmor.rune;
@@ -509,19 +533,11 @@ public abstract class Stats {
 				hpRegen = defArmor.hpRegen;
 				energyRegen = defArmor.energyRegen;
 
-				statChance = defArmor.statChance;
-				statMax = defArmor.statMax;
-				strength = defArmor.strength;
-				dexterity = defArmor.dexterity;
-				intellect = defArmor.intellect;
-				vitality = defArmor.vitality;
-
-				attChance = defArmor.attChance;
-				attMax = defArmor.attMax;
 				physRes = defArmor.physRes;
 				magRes = defArmor.magRes;
 				block = defArmor.block;
 				dodge = defArmor.dodge;
+				reflect = defArmor.reflect;
 			}
 		}
 
@@ -530,18 +546,8 @@ public abstract class Stats {
 			armor.setTier(tier);
 			armor.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
 
-            if (name == null || name.isEmpty())
-                name = Util.generateName(armor);
-            armor.setName(Util.colorCodes(name));
-
-			if (random.nextFloat() <= statChance)
-				armor.setStrength(strength.get());
-			if (random.nextFloat() <= statChance)
-				armor.setDexterity(dexterity.get());
-			if (random.nextFloat() <= statChance)
-				armor.setIntellect(intellect.get());
-			if (random.nextFloat() <= statChance)
-				armor.setVitality(vitality.get());
+			ListPoss<Rune> rune = this.rune.get();
+			if (rune != null) armor.setRune(rune.get());
 
 			armor.setHp(Math.round((hp.getDiff() * f) + hp.getMin()));
 
@@ -553,25 +559,28 @@ public abstract class Stats {
 			else if (energyRegen.getMin() > 0)
 				armor.setEnergyRegen(energyRegen.get());
 
-			if (random.nextFloat() <= attChance)
-				if (physRes.getMin() > 0 && magRes.getMin() > 0) {
-					if (random.nextBoolean()) armor.setPhysRes(physRes.get());
-					else armor.setMagRes(magRes.get());
-				} else if (physRes.getMin() > 0)
-					armor.setPhysRes(physRes.get());
-				else if (magRes.getMin() > 0)
-					armor.setMagRes(magRes.get());
+			FloatPoss physRes = this.physRes.get();
+			FloatPoss magRes = this.magRes.get();
+			if (physRes != null && magRes != null) {
+				if (random.nextBoolean()) armor.setPhysRes(physRes.get());
+				else armor.setMagRes(magRes.get());
+			} else if (physRes != null)
+				armor.setPhysRes(physRes.get());
+			else if (magRes != null)
+				armor.setMagRes(magRes.get());
 
-			if (random.nextFloat() <= attChance)
-				armor.setBlock(block.get());
-			if (random.nextFloat() <= attChance)
-				armor.setDodge(dodge.get());
+			FloatPoss block = this.block.get();
+			if (block != null) armor.setBlock(block.get());
+			FloatPoss dodge = this.dodge.get();
+			if (dodge != null) armor.setDodge(dodge.get());
+			FloatPoss reflect = this.reflect.get();
+			if (reflect != null) armor.setReflect(reflect.get());
+
+			if (name == null || name.isEmpty())
+				name = Util.generateName(armor);
+			armor.setName(Util.colorCodes(name));
 
 			return armor;
 		}
 	}
-
-    public class StatFloatPossible extends FloatPossible {
-
-    }
 }

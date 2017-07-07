@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -37,16 +36,16 @@ public class Util {
 	public static float rarity(float a) {
 
 		/*
-        0 - 72: 33%
+		0 - 72: 33%
 		73 - 92: 27%
 		93 - 98: 23%
 		99 - 100: 17%
 		 */
 
-        if (a < 0.73) return random.nextFloat() * 0.33f;
-        else if (a < 0.93) return (random.nextFloat() * 0.27f) + 0.33f;
-        else if (a < 0.99) return (random.nextFloat() * 0.23f) + 0.6f;
-        else return (random.nextFloat() * 0.17f) + 0.83f;
+		if (a < 0.73) return random.nextFloat() * 0.33f;
+		else if (a < 0.93) return (random.nextFloat() * 0.27f) + 0.33f;
+		else if (a < 0.99) return (random.nextFloat() * 0.23f) + 0.6f;
+		else return (random.nextFloat() * 0.17f) + 0.83f;
 	}
 
 	public static String colorCodes(String s) {
@@ -72,10 +71,8 @@ public class Util {
 		float physRes = 0;
 		float magRes = 0;
 		float block = 0;
-		int strength = 0;
-		int intellect = 0;
-		int vitality = 0;
-		int dexterity = 0;
+		float dodge = 0;
+		float reflect = 0;
 
 		AgEntity info = Aegeus.getInstance().getEntity(entity);
 
@@ -88,10 +85,8 @@ public class Util {
 				physRes += armor.getPhysRes();
 				magRes += armor.getMagRes();
 				block += armor.getBlock();
-				strength += armor.getStrength();
-				dexterity += armor.getDexterity();
-				intellect += armor.getIntellect();
-				vitality += armor.getVitality();
+				dodge += armor.getDodge();
+				reflect += armor.getReflect();
 			}
 		}
 
@@ -101,19 +96,19 @@ public class Util {
 			if (pInfo.getLegion() != null)
 				switch (pInfo.getLegion()) {
 					case FEROCIOUS: // Counter: Cryptic
-						strength += (strength * 0.2);
+						// strength += (strength * 0.2);
 						// Critical strikes with a heavy melee weapon deal 20% bonus magic damage and heal for 20% of physical damage.
 						break;
 					case NIMBLE: // Counter: Divine
-						dexterity += (dexterity * 0.2);
+						// dexterity += (dexterity * 0.2);
 						// After 4 attacks with a light melee weapon, the next attack deals bonus magic damage, equal to 30% of total damage.
 						break;
 					case CRYPTIC: // Counter: Nimble
-						intellect += (intellect * 0.2);
+						// intellect += (intellect * 0.2);
 						// Attacking with a ranged weapon deals bonus magic damage equal to 0%-30% of damage dealt, increasing with distance.
 						break;
 					case DIVINE: // Counter: Ferocious
-						vitality += (vitality * 0.2);
+						// vitality += (vitality * 0.2);
 						// Blocking attacks creates stacks of divinity, capping at 4. Each stack blocks 25% of magic damage. At 4 stacks, 25% of magic damage is reflected.
 						break;
 					default:
@@ -133,23 +128,22 @@ public class Util {
 		info.setPhysRes(physRes);
 		info.setMagRes(magRes);
 		info.setBlock(block);
-		info.setStrength(strength);
-		info.setIntellect(intellect);
-		info.setVitality(vitality);
-		info.setDexterity(dexterity);
+		info.setDodge(dodge);
+		info.setReflect(reflect);
 
 		if (entity instanceof Player) updateDisplay((Player) entity);
 	}
 
 	public static void updateDisplay(Player player) {
 		AgPlayer info = Aegeus.getInstance().getPlayer(player);
-		updateEnergy(player);
-		if (info.getBossBarHp() == null) {
+
+		if (info.getHpBar() == null) {
 			// Create a new Hp BossBar for this player
-			info.setBossBarHp(Bukkit.createBossBar("", BarColor.GREEN, BarStyle.SEGMENTED_20));
-			info.getBossBarHp().addPlayer(player);
-			info.getBossBarHp().setVisible(true);
+			info.setHpBar(Bukkit.createBossBar("", BarColor.GREEN, BarStyle.SEGMENTED_10));
+			info.getHpBar().addPlayer(player);
+			info.getHpBar().setVisible(true);
 		}
+
 		if (Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp") == null) {
 			// Create an objective for BelowNameHP
 			Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("hp", "health");
@@ -161,13 +155,10 @@ public class Util {
 		Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp").getScore(player.getName())
 				.setScore((int) Math.round(player.getHealth()));
 		// Set HP BossBar
-		info.getBossBarHp().setProgress(player.getHealth() / player.getMaxHealth());
-		info.getBossBarHp().setTitle(Util.colorCodes(
+		info.getHpBar().setProgress(player.getHealth() / player.getMaxHealth());
+		info.getHpBar().setTitle(Util.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
-	}
-
-	public static void updateEnergy(Player player) {
-		AgPlayer info = Aegeus.getInstance().getPlayer(player);
+		// Set Energy BossBar
 		player.setLevel(Math.max(1, Math.round(info.getEnergy())));
 		player.setExp(Math.max(0, (info.getEnergy() / 100)));
 	}
@@ -271,60 +262,88 @@ public class Util {
 		return target;
 	}
 
-	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
-        return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
-    }
+	public static boolean isSword(Material material) {
+		return material.toString().contains("_SWORD");
+	}
 
-    public static boolean isSword(Material material) {
-        return material.toString().contains("_SWORD");
-    }
+	public static boolean isAxe(Material material) {
+		return material.toString().contains("_AXE");
+	}
 
-    public static boolean isAxe(Material material) {
-	    return material.toString().contains("_AXE");
-    }
+	public static boolean isSpade(Material material) {
+		return material.toString().contains("_SPADE");
+	}
 
-    public static boolean isSpade(Material material) {
-        return material.toString().contains("_SPADE");
-    }
+	public static boolean isHoe(Material material) {
+		return material.toString().contains("_HOE");
+	}
 
-    public static boolean isHoe(Material material) {
-        return material.toString().contains("_HOE");
-    }
+	public static boolean isHelmet(Material material) {
+		return material.toString().contains("_HELMET");
+	}
 
-    public static boolean isHelmet(Material material) {
-        return material.toString().contains("_HELMET");
-    }
+	public static boolean isChestplate(Material material) {
+		return material.toString().contains("_CHESTPLATE");
+	}
 
-    public static boolean isChestplate(Material material) {
-        return material.toString().contains("_CHESTPLATE");
-    }
+	public static boolean isLeggings(Material material) {
+		return material.toString().contains("_LEGGINGS");
+	}
 
-    public static boolean isLeggings(Material material) {
-        return material.toString().contains("_LEGGINGS");
-    }
+	public static boolean isBoots(Material material) {
+		return material.toString().contains("_BOOTS");
+	}
 
-    public static boolean isBoots(Material material) {
-        return material.toString().contains("_BOOTS");
-    }
 
-    public static String generateName(Weapon weapon) {
-	    Tier t = Tier.fromTier(weapon.getTier());
-	    Material m = weapon.getMaterial();
-        if (isSword(m))  return t.getSword();
-        else if (isAxe(m))   return t.getAxe();
-        else if (isSpade(m)) return t.getPolearm();
-        else if (isHoe(m)) return t.getStaff();
-        else if (m == Material.BOW) return t.getBow();
-        else return Util.colorCodes("&fCustom Item");
-    }
+	public static String getTierColor(int tier) {
+		if (tier == 2) return "&a";
+		else if (tier == 3) return "&b";
+		else if (tier == 4) return "&d";
+		else if (tier == 5) return "&e";
+		else return "&f";
+	}
 
-    public static String generateName(Armor armor) {
-	    String a = Tier.fromTier(armor.getTier()).getArmor();
-	    Material m = armor.getMaterial();
-        if (isHelmet(m)) return a + " Helmet";
-        else if (isChestplate(m)) return a + " Chestplate";
-        else if (isLeggings(m)) return a + " Leggings";
-        else if (isBoots(m))  return a + " Boots";
-        else return Util.colorCodes("&fCustom Item");
-    }
+	public static String generateName(Weapon weapon) {
+		String color = Util.getTierColor(weapon.getTier());
+		List<String> prefix = new ArrayList<>();
+		List<String> suffix = new ArrayList<>();
+		String name = "Custom Weapon";
+
+		Tier t = Tier.fromTier(weapon.getTier());
+		Material m = weapon.getMaterial();
+
+		if (isSword(m)) name = t.getSword();
+		else if (isAxe(m))   return t.getAxe();
+		else if (isSpade(m)) return t.getPolearm();
+		else if (isHoe(m)) return t.getStaff();
+		else if (m == Material.BOW) return t.getBow();
+
+		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
+				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
+	}
+
+	public static String generateName(Armor armor) {
+		String color = Util.getTierColor(armor.getTier());
+		List<String> prefix = new ArrayList<>();
+		List<String> suffix = new ArrayList<>();
+		String name = "Custom Armor";
+
+		Tier t = Tier.fromTier(armor.getTier());
+		Material m = armor.getMaterial();
+
+		if (armor.getHpRegen() > 0)
+			prefix.add("Mending");
+		if (armor.getEnergyRegen() > 0)
+			suffix.add("Fortitude");
+		if (armor.getDodge() > 0)
+			prefix.add("Agile");
+
+		if (isHelmet(m)) name = t.getArmor() + " Helmet";
+		else if (isChestplate(m)) return t.getArmor() + " Chestplate";
+		else if (isLeggings(m)) return t.getArmor() + " Leggings";
+		else if (isBoots(m))  return t.getArmor() + " Boots";
+
+		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
+				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
+	}
 }

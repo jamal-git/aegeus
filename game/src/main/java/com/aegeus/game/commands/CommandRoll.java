@@ -32,7 +32,7 @@ public class CommandRoll implements CommandExecutor {
 			Player player = (Player) sender;
 			try {
 				ChatManager.sendRadial(player, Util.colorCodes(
-						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."), false);
+						"&7" + player.getDisplayName() + " rolled a &f" + roll + "&7 out of &f" + max + "&7."));
 			} catch (NoneNearbyException e) {
 				player.sendMessage(Util.colorCodes(
 						"&7&oThe sound of your die rolling echoes in the wind."));
