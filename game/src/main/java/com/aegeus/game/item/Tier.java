@@ -8,6 +8,8 @@ public enum Tier {
 	TIER_4("&dAncient", "&dDiamond", "&dAncient Sword", "&dAncient Axe", "&dAncient Bow", "&dAncient Staff", "&dAncient Polearm"),
 	TIER_5("&eLegendary", "&Gold", "&eLegendary Sword", "&eLegendary Axe", "&eLegendary Bow", "&eLegendary Staff", "&eLegendary Polearm");
 
+	private static final Tier[] values = values();
+
 	private final String armor;
 	private final String weapon;
 	private final String sword;
@@ -27,12 +29,8 @@ public enum Tier {
 	}
 
 	public static Tier fromTier(int tier) {
-		if (tier == 5) return TIER_5;
-		else if (tier == 4) return TIER_4;
-		else if (tier == 3) return TIER_3;
-		else if (tier == 2) return TIER_2;
-		else if (tier == 1) return TIER_1;
-		else return NONE;
+		if(tier > 5 || tier < 0) return NONE;
+		return values[tier];
 	}
 
 	public String getArmor() {
