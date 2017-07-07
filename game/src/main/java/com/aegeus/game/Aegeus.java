@@ -2,10 +2,7 @@ package com.aegeus.game;
 
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.*;
-import com.aegeus.game.entity.AgEntity;
-import com.aegeus.game.entity.AgMonster;
-import com.aegeus.game.entity.AgPlayer;
-import com.aegeus.game.entity.Spawner;
+import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.SpawnerDeserializer;
 import com.aegeus.game.util.SpawnerSerializer;
@@ -18,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -39,7 +37,8 @@ public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
-	private List<Spawner> spawners = new ArrayList<>();
+    private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
+    private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -133,6 +132,12 @@ public class Aegeus extends JavaPlugin {
 		return (AgMonster) entities.get(entity);
 	}
 
+    public AgProjectile getProjectile(Projectile p) {
+        if (!projectiles.containsKey(p))
+            projectiles.put(p, new AgProjectile(p));
+        return projectiles.get(p);
+    }
+
 	public Spawner getSpawner(Location location) {
 		return spawners.stream().filter(s -> s.getLocation().equals(location))
 				.findAny().orElse(null);
@@ -162,6 +167,10 @@ public class Aegeus extends JavaPlugin {
 		spawners.remove(getSpawner(location));
 		saveSpawners();
 	}
+
+    public void removeProjectile(Projectile p) {
+        projectiles.remove(p);
+    }
 
 	public List<Spawner> getSpawners() {
 		return spawners;
