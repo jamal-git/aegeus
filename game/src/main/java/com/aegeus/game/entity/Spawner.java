@@ -2,9 +2,13 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.stats.Stats;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -43,6 +47,8 @@ public class Spawner {
 	}
 
 	public boolean canSpawn() {
-		return true;
+		Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 20, 20, 20);
+		return entities.stream().filter(e -> e instanceof LivingEntity && !(e instanceof Player)).count() < 4
+				&& entities.stream().filter(e -> e instanceof Player).count() >= 1;
 	}
 }

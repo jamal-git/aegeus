@@ -33,8 +33,8 @@ public class SpawnerDeserializer implements JsonDeserializer<Spawner> {
 				String[] split = e.getAsString().split(":");
 				Class clazz = Class.forName(split[0]);
 				if (split.length >= 2) {
-					Class inherit = Class.forName(split[1]);
-					list.add((Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()));
+					Class parent = Class.forName(split[1]);
+					list.add((Stats) clazz.getConstructor(Stats.class).newInstance((Stats) parent.newInstance()));
 				} else
 					list.add((Stats) clazz.newInstance());
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
