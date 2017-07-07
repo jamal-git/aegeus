@@ -1,6 +1,11 @@
 package com.aegeus.game.stats;
 
+import com.aegeus.game.util.Condition;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,11 +16,36 @@ public class StatsT5 extends Stats {
 	public void prepare() {
 		setTier(5);
 		setChance(0.009f);
-		setGenNames(true);
+        setHpMultiplier(1.6f);
+        setGenName(true);
+
+        getSpawnConds().add(new Condition<LivingEntity>() {
+            @Override
+            public boolean isComplete(LivingEntity entity) {
+                return entity.getType().equals(EntityType.ZOMBIE);
+            }
+
+            @Override
+            public void onComplete(LivingEntity entity) {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
+            }
+        });
+
+        getSpawnConds().add(new Condition<LivingEntity>() {
+            @Override
+            public boolean isComplete(LivingEntity entity) {
+                return !entity.getType().equals(EntityType.ZOMBIE);
+            }
+
+            @Override
+            public void onComplete(LivingEntity entity) {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+            }
+        });
 
 		getDefArmor().hpRegen = new IntPossible(80, 140);
-		getDefArmor().energyRegen = new FloatPossible(0.04f, 0.08f);
-		getDefArmor().physRes = new FloatPossible(0.03f, 0.1f);
+        getDefArmor().energyRegen = new FloatPossible(0.04f, 0.07f);
+        getDefArmor().physRes = new FloatPossible(0.03f, 0.1f);
 		getDefArmor().magRes = new FloatPossible(0.03f, 0.1f);
 		getDefArmor().block = new FloatPossible(0.02f, 0.12f);
 		getDefArmor().dodge = new FloatPossible(0.02f, 0.12f);

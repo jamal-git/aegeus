@@ -1,6 +1,11 @@
 package com.aegeus.game.stats;
 
+import com.aegeus.game.util.Condition;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,7 +16,20 @@ public class StatsT4 extends Stats {
 	public void prepare() {
 		setTier(4);
 		setChance(0.012f);
-		setGenNames(true);
+        setHpMultiplier(1.45f);
+        setGenName(true);
+
+        getSpawnConds().add(new Condition<LivingEntity>() {
+            @Override
+            public boolean isComplete(LivingEntity entity) {
+                return entity.getType().equals(EntityType.ZOMBIE);
+            }
+
+            @Override
+            public void onComplete(LivingEntity entity) {
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+            }
+        });
 
 		getDefArmor().hpRegen = new IntPossible(50, 90);
 		getDefArmor().energyRegen = new FloatPossible(0.03f, 0.06f);

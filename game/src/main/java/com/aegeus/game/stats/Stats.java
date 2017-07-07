@@ -29,7 +29,7 @@ public abstract class Stats {
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
 	private FloatPossible rarity = new FloatPossible(0, 1);
-	private boolean genNames = false;
+    private boolean genName = false;
 
 	// Randomizers
 	private List<String> names = new ArrayList<>();
@@ -80,13 +80,13 @@ public abstract class Stats {
 	 * @param other The stats to copy from.
 	 */
 	public void copy(Stats other) {
-		this.genNames = other.genNames;
 		this.chance = other.chance;
 		this.tier = other.tier;
 		this.forcedHp = other.forcedHp;
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
 		this.rarity = other.rarity;
+        this.genName = other.genName;
 
 		this.names = other.names;
 		this.types = other.types;
@@ -157,13 +157,13 @@ public abstract class Stats {
 		this.rarity = rarity;
 	}
 
-	public boolean getGenNames() {
-		return genNames;
-	}
+    public boolean getGenName() {
+        return genName;
+    }
 
-	public void setGenNames(boolean genNames) {
-		this.genNames = genNames;
-	}
+    public void setGenName(boolean genName) {
+        this.genName = genName;
+    }
 
 	// Randomizers
 
@@ -353,7 +353,16 @@ public abstract class Stats {
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
-	}
+
+        for (int i = getSpawnConds().size() - 1; i >= 0; i--) {
+            Condition<LivingEntity> c = getSpawnConds().get(i);
+            if (c.isComplete(entity)) {
+                c.onComplete(entity);
+                if (c.addOnComplete() != null)
+                    getSpawnConds().addAll(c.addOnComplete());
+            }
+        }
+    }
 
 	public class WeaponPossible {
 		public Material material = Material.WOOD_SWORD;
@@ -418,11 +427,12 @@ public abstract class Stats {
 
 		public Weapon get(float f) {
 			Weapon weapon = new Weapon(material);
-			if (!name.isEmpty()) weapon.setName(Util.colorCodes(name));
-			else weapon.setName(Util.colorCodes("&f" + Util.getName(weapon.getItem())));
-
 			weapon.setTier(tier);
 			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
+
+            if (name == null || name.isEmpty())
+                name = Util.generateName(weapon);
+            weapon.setName(Util.colorCodes(name));
 
 			if (random.nextFloat() <= statChance)
 				weapon.setStrength(strength.get());
@@ -515,11 +525,12 @@ public abstract class Stats {
 
 		public Armor get(float f) {
 			Armor armor = new Armor(material);
-			if (!name.isEmpty()) armor.setName(Util.colorCodes(name));
-			else armor.setName(Util.colorCodes("&f" + Util.getName(armor.getItem())));
-
 			armor.setTier(tier);
 			armor.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
+
+            if (name == null || name.isEmpty())
+                name = Util.generateName(armor);
+            armor.setName(Util.colorCodes(name));
 
 			if (random.nextFloat() <= statChance)
 				armor.setStrength(strength.get());
@@ -557,4 +568,8 @@ public abstract class Stats {
 			return armor;
 		}
 	}
+
+    public class StatFloatPossible extends FloatPossible {
+
+    }
 }
