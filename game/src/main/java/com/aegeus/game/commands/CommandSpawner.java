@@ -36,7 +36,7 @@ public class CommandSpawner implements CommandExecutor {
 				player.sendBlockChange(s.getLocation(), Material.AIR, (byte) 0);
 			}
 			return true;
-		} else if (args[0].equalsIgnoreCase("add") && args.length == 3) {
+		} else if (args[0].equalsIgnoreCase("add") && args.length == 4) {
 			Location l;
 			if (args[1].equalsIgnoreCase("here"))
 				l = player.getLocation().getBlock().getLocation();
@@ -44,7 +44,7 @@ public class CommandSpawner implements CommandExecutor {
 				l = player.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100).getLocation();
 			else return false;
 			List<Stats> stats = new ArrayList<>();
-			Arrays.stream(args[2].split(";")).map(x -> {
+			Arrays.stream(args[3].split(";")).map(x -> {
 				try {
 					String[] split = x.split(":");
 					Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
@@ -60,6 +60,7 @@ public class CommandSpawner implements CommandExecutor {
 				return null;
 			}).forEach(stats::add);
 			Spawner spawner = new Spawner(l);
+			spawner.setMaxCount(Integer.valueOf(args[2]));
 			spawner.setList(stats);
 			Aegeus.getInstance().addSpawner(spawner);
 			player.sendMessage(Util.colorCodes("&7Added a spawner at " + l.getX() + ", " + l.getY() + ", " + l.getZ()));

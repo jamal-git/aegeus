@@ -26,6 +26,7 @@ public class SpawnerDeserializer implements JsonDeserializer<Spawner> {
 				o.get("y").getAsDouble(),
 				o.get("z").getAsDouble());
 		Spawner s = new Spawner(l);
+		s.setMaxCount(o.has("max") ? o.get("max").getAsInt() : 3);
 		List<Stats> list = new ArrayList<>();
 		JsonArray a = o.get("list").getAsJsonArray();
 		for (JsonElement e : a) {

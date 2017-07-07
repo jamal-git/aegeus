@@ -11,6 +11,7 @@ public class AgMonster extends AgEntity {
 	private String name;
 	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
 	private List<Rune> runes = new ArrayList<>();
+	private Spawner origin = null;
 	private int tier = 0;
 	private float chance = 0;
 	private int gold = 0;
@@ -64,7 +65,15 @@ public class AgMonster extends AgEntity {
 		this.runes = runes;
 	}
 
-	public int getTier() {
+    public Spawner getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Spawner origin) {
+        this.origin = origin;
+    }
+
+    public int getTier() {
 		return tier;
 	}
 

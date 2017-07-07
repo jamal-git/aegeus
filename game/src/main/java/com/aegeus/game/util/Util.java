@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -268,6 +269,10 @@ public class Util {
 		}
 		return target;
 	}
+
+	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
+        return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
+    }
 
     public static boolean isSword(Material material) {
         switch (material) {

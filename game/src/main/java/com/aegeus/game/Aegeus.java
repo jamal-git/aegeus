@@ -2,10 +2,7 @@ package com.aegeus.game;
 
 import com.aegeus.game.commands.*;
 import com.aegeus.game.commands.test.*;
-import com.aegeus.game.entity.AgEntity;
-import com.aegeus.game.entity.AgMonster;
-import com.aegeus.game.entity.AgPlayer;
-import com.aegeus.game.entity.Spawner;
+import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.SpawnerDeserializer;
 import com.aegeus.game.util.SpawnerSerializer;
@@ -18,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -40,6 +38,7 @@ public class Aegeus extends JavaPlugin {
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
+	private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -49,7 +48,6 @@ public class Aegeus extends JavaPlugin {
 	public void onEnable() {
 		// Create the singleton!
 		instance = this;
-
 		// wooOOOOOOOOO, loading up!
 		getLogger().info("AEGEUS enabling...");
 		saveDefaultConfig();
