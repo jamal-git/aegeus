@@ -300,21 +300,13 @@ public class Util {
 		return material.toString().contains("_BOOTS");
 	}
 
-	public static String getTierColor(int tier) {
-		if (tier == 2) return "&a";
-		else if (tier == 3) return "&b";
-		else if (tier == 4) return "&d";
-		else if (tier == 5) return "&e";
-		else return "&f";
-	}
-
 	public static String generateName(Weapon weapon) {
-		String color = Util.getTierColor(weapon.getTier());
 		List<String> prefix = new ArrayList<>();
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Weapon";
 
 		Tier t = Tier.fromTier(weapon.getTier());
+		String color = t.getColor();
 		Material m = weapon.getMaterial();
 
 		if (isSword(m)) name = t.getSword();
@@ -328,12 +320,12 @@ public class Util {
 	}
 
 	public static String generateName(Armor armor) {
-		String color = Util.getTierColor(armor.getTier());
 		List<String> prefix = new ArrayList<>();
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Armor";
 
 		Tier t = Tier.fromTier(armor.getTier());
+		String color = t.getColor();
 		Material m = armor.getMaterial();
 
 		if (armor.getHpRegen() > 0)
