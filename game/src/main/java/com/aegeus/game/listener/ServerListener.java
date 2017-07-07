@@ -6,6 +6,7 @@ import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +16,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ServerListener implements Listener {
@@ -97,10 +99,11 @@ public class ServerListener implements Listener {
 	}
 
 	@EventHandler
-	private void onWorldLoad(WorldLoadEvent e) {
-		// Clear entities
-		Aegeus.getInstance().getLogger().info("Cleaning world '" + e.getWorld().getName() + "'...");
-		e.getWorld().getLivingEntities().stream().filter(a -> !(a instanceof Player)).forEach(Entity::remove);
-	}
+    private void onChunkLoad(ChunkLoadEvent e) {
+        // Clear entities
+        Arrays.stream(e.getChunk().getEntities()).filter(a ->
+                a instanceof LivingEntity && !(a instanceof Player))
+                .forEach(Entity::remove);
+    }
 
 }
