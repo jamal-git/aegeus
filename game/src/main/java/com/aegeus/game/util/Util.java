@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -80,7 +81,7 @@ public class Util {
 			if (i != null && !i.getType().equals(Material.AIR)) {
 				Armor armor = new Armor(i);
 				hp += armor.getHp();
-				hpRegen = armor.getHpRegen();
+				hpRegen += armor.getHpRegen();
 				energyRegen += armor.getEnergyRegen();
 				physRes += armor.getPhysRes();
 				magRes += armor.getMagRes();
@@ -262,6 +263,11 @@ public class Util {
 		return target;
 	}
 
+	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
+		return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream()
+				.filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
+	}
+
 	public static boolean isSword(Material material) {
 		return material.toString().contains("_SWORD");
 	}
@@ -294,22 +300,13 @@ public class Util {
 		return material.toString().contains("_BOOTS");
 	}
 
-
-	public static String getTierColor(int tier) {
-		if (tier == 2) return "&a";
-		else if (tier == 3) return "&b";
-		else if (tier == 4) return "&d";
-		else if (tier == 5) return "&e";
-		else return "&f";
-	}
-
 	public static String generateName(Weapon weapon) {
-		String color = Util.getTierColor(weapon.getTier());
 		List<String> prefix = new ArrayList<>();
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Weapon";
 
 		Tier t = Tier.fromTier(weapon.getTier());
+		String color = t.getColor();
 		Material m = weapon.getMaterial();
 
 		if (isSword(m)) name = t.getSword();
@@ -323,12 +320,12 @@ public class Util {
 	}
 
 	public static String generateName(Armor armor) {
-		String color = Util.getTierColor(armor.getTier());
 		List<String> prefix = new ArrayList<>();
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Armor";
 
 		Tier t = Tier.fromTier(armor.getTier());
+		String color = t.getColor();
 		Material m = armor.getMaterial();
 
 		if (armor.getHpRegen() > 0)
