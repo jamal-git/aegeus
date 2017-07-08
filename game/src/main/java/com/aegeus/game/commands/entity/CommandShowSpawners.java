@@ -2,6 +2,7 @@ package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.Spawner;
+import com.aegeus.game.util.Util;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,8 +11,6 @@ import org.bukkit.entity.Player;
 
 /**
  * Created by Silvre on 7/5/2017.
- * Project: aegeus
- * If you are reading this - you can read this
  */
 public class CommandShowSpawners implements CommandExecutor {
 	@Override
@@ -21,6 +20,7 @@ public class CommandShowSpawners implements CommandExecutor {
 			for (Spawner s : Aegeus.getInstance().getSpawners())
 				//noinspection deprecation
 				p.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
+			p.sendMessage(Util.colorCodes("&7Showing all spawners."));
 			return true;
 		}
 		return false;

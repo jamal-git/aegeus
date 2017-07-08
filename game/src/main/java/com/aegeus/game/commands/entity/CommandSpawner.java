@@ -25,17 +25,17 @@ public class CommandSpawner implements CommandExecutor {
 		List<Spawner> list = Aegeus.getInstance().getSpawners();
 		Player player = (Player) sender;
 		if(args[0].equalsIgnoreCase("show") && args.length == 1) {
-			for (Spawner s : list) {
+			for (Spawner s : list)
 				//noinspection deprecation
 				player.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
-			}
+			player.sendMessage(Util.colorCodes("&7Showing all spawners."));
 			return true;
 		}
 		else if(args[0].equalsIgnoreCase("hide") && args.length == 1) {
-			for (Spawner s : list) {
+			for (Spawner s : list)
 				//noinspection deprecation
 				player.sendBlockChange(s.getLocation(), Material.AIR, (byte) 0);
-			}
+			player.sendMessage(Util.colorCodes("&7Hiding all spawners."));
 			return true;
 		}
 		else if(args[0].equalsIgnoreCase("add") && args.length == 4) {
@@ -83,6 +83,7 @@ public class CommandSpawner implements CommandExecutor {
 				Aegeus.getInstance().removeSpawner(l);
 				player.sendMessage(Util.colorCodes("&7Removed spawner at " + l.getX() + ", " + l.getY() + ", " + l.getZ()));
 			} else player.sendMessage(Util.colorCodes("&7A spawner does not exist!"));
+			return true;
 		}
 		else if(args[0].equalsIgnoreCase("remove") && args.length == 3) {
 		    if(args[1].equalsIgnoreCase("radius"))  {
@@ -106,6 +107,7 @@ public class CommandSpawner implements CommandExecutor {
                     }
                 }
                 else player.sendMessage(Util.colorCodes("&7Successfully removed " + removed.size() + " spawners."));
+                return true;
             }
         }
 		return false;

@@ -15,8 +15,6 @@ import java.util.Random;
 
 /**
  * Created by Silvre on 6/24/2017.
- * Project: aegeus
- * If you are reading this - you can read this
  */
 public class Pickaxe extends AgItem implements ProfessionInfo {
 

@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 /**
  * Created by Silvre on 7/7/2017.
- * Project: aegeus
- * If you are reading this - you can read this
  */
 public class Party {
 	private LinkedList<AgPlayer> members = new LinkedList<>();
