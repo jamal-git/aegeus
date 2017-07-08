@@ -1,12 +1,10 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.item.tool.Rune;
-import com.aegeus.game.util.*;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.FloatPoss;
+import com.aegeus.game.util.IntPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,18 +16,6 @@ public class StatsT1 extends Stats {
 		setTier(1);
 		setChance(0.1f);
 		setGenName(true);
-
-		getSpawnConds().add(new Condition<LivingEntity>() {
-			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return entity.getType().equals(EntityType.SKELETON);
-			}
-
-			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
-			}
-		});
 
 		getDefArmor().hpRegen = new IntPoss(5, 10);
 		getDefArmor().energyRegen = new FloatPoss(0.01f, 0.02f);

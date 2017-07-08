@@ -1,4 +1,4 @@
-package com.aegeus.game.commands;
+package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.Spawner;
@@ -13,14 +13,14 @@ import org.bukkit.entity.Player;
  * Project: aegeus
  * If you are reading this - you can read this
  */
-public class CommandHideSpawners implements CommandExecutor {
+public class CommandShowSpawners implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String st, String[] strings) {
 		if (commandSender instanceof Player && strings.length == 0 && commandSender.hasPermission("aegeus.world")) {
 			Player p = (Player) commandSender;
 			for (Spawner s : Aegeus.getInstance().getSpawners())
 				//noinspection deprecation
-				p.sendBlockChange(s.getLocation(), Material.AIR, (byte) 0);
+				p.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
 			return true;
 		}
 		return false;

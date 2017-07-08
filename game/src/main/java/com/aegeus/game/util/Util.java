@@ -263,7 +263,7 @@ public class Util {
 		return target;
 	}
 
-	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
+	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz) {
 		return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream()
 				.filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
 	}

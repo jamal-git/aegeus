@@ -1,4 +1,4 @@
-package com.aegeus.game.commands;
+package com.aegeus.game.commands.social;
 
 import com.aegeus.game.chat.ChatManager;
 import com.aegeus.game.util.Util;

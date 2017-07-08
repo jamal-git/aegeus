@@ -81,10 +81,10 @@ public class Rune extends AgItem {
 	}
 
 	public enum RuneType {
-		ARCANE_MIGHT(0, "Arcane Might", new String[] {
+		ARCANE_MIGHT(0, "Arcane Might", new String[]{
 				"Increase magic damage by 10%."},
 				Arrays.asList(Slot.ARMOR)),
-		BLOOD_HUNT(1, "Blood Hunt", new String[] {
+		BLOOD_HUNT(1, "Blood Hunt", new String[]{
 				"Increase physical damage by 10%",
 				"against targets below 20% health."},
 				Arrays.asList(Slot.WEAPON));

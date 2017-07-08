@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
  * If you are reading this - you can read this
  */
 public class Party {
-    private LinkedList<AgPlayer> members = new LinkedList<>();
+	private LinkedList<AgPlayer> members = new LinkedList<>();
 
-    public Party(AgPlayer... members)   {
-        this.members.addAll(Arrays.asList(members));
-        update();
-    }
+	public Party(AgPlayer... members) {
+		this.members.addAll(Arrays.asList(members));
+		update();
+	}
 
-    public Party(AgPlayer p)    {
-        members.add(p);
-        update();
-    }
+	public Party(AgPlayer p) {
+		members.add(p);
+		update();
+	}
 
     public void promote(AgPlayer p)   {
         if(members.contains(p)) {
@@ -37,18 +37,18 @@ public class Party {
         update();
     }
 
-    public void addPlayer(AgPlayer p)   {
-        if(!members.contains(p)) members.offer(p);
-        update();
-    }
+	public void addPlayer(AgPlayer p) {
+		if (!members.contains(p)) members.offer(p);
+		update();
+	}
 
-    public boolean hasPlayer(AgPlayer p)   {
-        return members.contains(p);
-    }
+	public boolean hasPlayer(AgPlayer p) {
+		return members.contains(p);
+	}
 
-    public AgPlayer getLeader() {
-        return members.peek();
-    }
+	public AgPlayer getLeader() {
+		return members.peek();
+	}
 
     /**
      * @param p

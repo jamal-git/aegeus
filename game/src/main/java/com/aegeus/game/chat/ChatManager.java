@@ -91,7 +91,7 @@ public class ChatManager {
 	 * @throws NoneNearbyException No players are nearby.
 	 */
 	public static void sendRadial(Player sender, String content, boolean sendToSelf) throws NoneNearbyException {
-		if(sendToSelf)  sender.sendMessage(Util.colorCodes(content));
+		if (sendToSelf) sender.sendMessage(Util.colorCodes(content));
 		List<Entity> entities = sender.getNearbyEntities(35, 35, 35);
 		if (entities.isEmpty()) throw new NoneNearbyException();
 		sender.getNearbyEntities(35, 35, 35).stream().filter(e -> e instanceof Player && !e.equals(sender))

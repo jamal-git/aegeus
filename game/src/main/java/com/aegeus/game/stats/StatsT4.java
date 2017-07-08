@@ -1,12 +1,12 @@
 package com.aegeus.game.stats;
 
 import com.aegeus.game.item.tool.Rune;
-import com.aegeus.game.util.*;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.FloatPoss;
+import com.aegeus.game.util.IntPoss;
+import com.aegeus.game.util.ListPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,18 +19,6 @@ public class StatsT4 extends Stats {
 		setChance(0.012f);
 		setHpMultiplier(1.45f);
 		setGenName(true);
-
-		getSpawnConds().add(new Condition<LivingEntity>() {
-			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return entity.getType().equals(EntityType.ZOMBIE);
-			}
-
-			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
-			}
-		});
 
 		getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.02f);
 
