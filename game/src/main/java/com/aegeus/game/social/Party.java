@@ -80,7 +80,7 @@ public class Party {
     public void sendMessage(String message, AgPlayer sender, boolean custom)    {
         for(Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))  {
             if(!(sender != null && p.equals(sender.getPlayer())))
-                if(custom)
+                if(!custom)
                     p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
                 else
                     p.sendMessage(Util.colorCodes(message));
