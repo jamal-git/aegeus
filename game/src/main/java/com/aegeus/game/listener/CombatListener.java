@@ -8,7 +8,6 @@ import com.aegeus.game.entity.AgProjectile;
 import com.aegeus.game.item.ItemGold;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
-import com.aegeus.game.util.Condition;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -66,11 +65,6 @@ public class CombatListener implements Listener {
 
 			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
 				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
-
-			for (int i = mInfo.getDeathConds().size() - 1; i >= 0; i--) {
-				Condition<EntityDeathEvent> c = mInfo.getDeathConds().get(i);
-				if (c.isComplete(e)) c.onComplete(e);
-			}
 		}
 
 		if (entity.getKiller() != null) {
@@ -91,7 +85,7 @@ public class CombatListener implements Listener {
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
-			Bukkit.getScheduler().runTaskLater(parent, () -> parent.removeEntity(entity), 2);
+			Bukkit.getScheduler().runTaskLater(parent, () -> parent.removeEntity(entity), 5);
 
 	}
 
@@ -248,22 +242,6 @@ public class CombatListener implements Listener {
 
 			if (aInfo instanceof AgMonster)
 				e.setDamage(e.getDamage() * ((AgMonster) aInfo).getDmgMultiplier());
-			if (vInfo instanceof AgMonster) {
-				AgMonster mInfo = (AgMonster) vInfo;
-				for (int i = mInfo.getHitConds().size() - 1; i >= 0; i--) {
-					Condition<EntityDamageEvent> c = mInfo.getHitConds().get(i);
-					if (c.isComplete(e)) {
-						c.onComplete(e);
-						if (c.addOnComplete() != null)
-							mInfo.getHitConds().addAll(c.addOnComplete());
-						if (c.removeOnComplete()) {
-							mInfo.getHitConds().remove(c);
-							i--;
-						}
-					}
-				}
-
-			}
 
 			if (lAttacker instanceof Player && ((Player) lAttacker).isSneaking())
 				e.setDamage(e.getDamage() / 2);
@@ -271,7 +249,7 @@ public class CombatListener implements Listener {
 
 			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
 				LivingEntity lDamaged = (LivingEntity) damaged;
-				lDamaged.damage(e.getDamage());
+				lDamaged.damage(e.getDamage(), attacker);
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
 

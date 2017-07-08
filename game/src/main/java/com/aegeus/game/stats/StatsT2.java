@@ -20,18 +20,6 @@ public class StatsT2 extends Stats {
 		setHpMultiplier(1.15f);
 		setGenName(true);
 
-		getSpawnConds().add(new Condition<LivingEntity>() {
-			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return entity.getType().equals(EntityType.SKELETON);
-			}
-
-			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
-			}
-		});
-
 		getDefArmor().hpRegen = new IntPoss(10, 20);
 		getDefArmor().energyRegen = new FloatPoss(0.01f, 0.03f);
 		getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.08f);

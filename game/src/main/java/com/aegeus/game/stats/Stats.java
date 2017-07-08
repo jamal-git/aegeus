@@ -13,8 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,11 +45,6 @@ public abstract class Stats {
 	// Defaults
 	private ArmorPossible defArmor = new ArmorPossible(true);
 	private WeaponPossible defWeapon = new WeaponPossible(true);
-
-	// Conditions
-	private List<Condition<LivingEntity>> spawnConds = new ArrayList<>();
-	private List<Condition<EntityDamageEvent>> hitConds = new ArrayList<>();
-	private List<Condition<EntityDeathEvent>> deathConds = new ArrayList<>();
 
 	/**
 	 * Creates an instance of Stats without a parent.
@@ -95,7 +88,6 @@ public abstract class Stats {
 
 		this.names = other.names;
 		this.types = other.types;
-		this.hitConds = other.hitConds;
 		this.helmets = other.helmets;
 		this.chestplates = other.chestplates;
 		this.leggings = other.leggings;
@@ -104,10 +96,6 @@ public abstract class Stats {
 
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
-
-		this.spawnConds = other.spawnConds;
-		this.hitConds = other.hitConds;
-		this.deathConds = other.deathConds;
 	}
 
 	public Stats getParent() {
@@ -337,32 +325,6 @@ public abstract class Stats {
 		this.defWeapon = defWeapon;
 	}
 
-	// Conditions
-
-	public List<Condition<LivingEntity>> getSpawnConds() {
-		return spawnConds;
-	}
-
-	public void setSpawnConds(List<Condition<LivingEntity>> spawnConds) {
-		this.spawnConds = spawnConds;
-	}
-
-	public List<Condition<EntityDamageEvent>> getHitConds() {
-		return hitConds;
-	}
-
-	public void setHitConds(List<Condition<EntityDamageEvent>> hitConds) {
-		this.hitConds = hitConds;
-	}
-
-	public List<Condition<EntityDeathEvent>> getDeathConds() {
-		return deathConds;
-	}
-
-	public void setDeathConds(List<Condition<EntityDeathEvent>> deathConds) {
-		this.deathConds = deathConds;
-	}
-
 	// Generation methods
 
 	public LivingEntity spawn(Location location) {
@@ -383,8 +345,6 @@ public abstract class Stats {
 		entity.setCustomNameVisible(true);
 
 		info.setOrigin(origin);
-		info.setHitConds(getHitConds());
-		info.setDeathConds(getDeathConds());
 		info.setTier(getTier());
 		info.setChance(getChance());
 		info.setForcedHp(getForcedHp());
@@ -404,15 +364,6 @@ public abstract class Stats {
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
-
-		for (int i = getSpawnConds().size() - 1; i >= 0; i--) {
-			Condition<LivingEntity> c = getSpawnConds().get(i);
-			if (c.isComplete(entity)) {
-				c.onComplete(entity);
-				if (c.addOnComplete() != null)
-					getSpawnConds().addAll(c.addOnComplete());
-			}
-		}
 
 		return entity;
 	}

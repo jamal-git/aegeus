@@ -20,30 +20,6 @@ public class StatsT5 extends Stats {
 		setHpMultiplier(1.6f);
 		setGenName(true);
 
-		getSpawnConds().add(new Condition<LivingEntity>() {
-			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return entity.getType().equals(EntityType.ZOMBIE);
-			}
-
-			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
-			}
-		});
-
-		getSpawnConds().add(new Condition<LivingEntity>() {
-			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return !entity.getType().equals(EntityType.ZOMBIE);
-			}
-
-			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
-			}
-		});
-
 		getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.03f);
 
 		getDefArmor().hpRegen = new IntPoss(80, 140);
