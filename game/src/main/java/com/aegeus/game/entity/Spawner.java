@@ -2,6 +2,7 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.stats.Stats;
 import com.aegeus.game.util.Util;
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class Spawner {
 	 */
 	public boolean canSpawn() {
 		return count < maxCount && location.getChunk().isLoaded() &&
+                location.getWorld().getDifficulty() != Difficulty.PEACEFUL &&
 				(Util.getPlayersInRadius(location, 24, 24, 24).isEmpty() || (random.nextDouble() < 0.04));
 	}
 

@@ -87,7 +87,8 @@ public class CommandSpawner implements CommandExecutor {
 		else if(args[0].equalsIgnoreCase("remove") && args.length == 3) {
 		    if(args[1].equalsIgnoreCase("radius"))  {
 		        int radius = Integer.valueOf(args[2]);
-		        Aegeus.getInstance().getSpawners().stream().map(Spawner::getLocation).filter(l -> l.distance(player.getLocation()) < radius).forEach(e -> Aegeus.getInstance().removeSpawner(e));
+		        Aegeus.getInstance().getSpawners().stream().map(Spawner::getLocation).filter(l -> l.getWorld().equals(player.getWorld()) &&
+                        l.distance(player.getLocation()) < radius).forEach(e -> Aegeus.getInstance().removeSpawner(e));
             }
         }
 		return false;
