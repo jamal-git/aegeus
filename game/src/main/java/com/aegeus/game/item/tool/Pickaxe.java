@@ -49,7 +49,7 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	 * <p>
 	 * I KNOW THAT SOUNDS VERY CONFUSING BUT TRUST ME IT WORKS.  MAYBE ONE DAY I WILL
 	 * UPDATE THE VARIABLE AND METHOD NAMES SO IT WILL NOT BE AS CONFUSING AS IT
-	 * IS IN THE CURRENT STATE THE CODE
+	 * IS IN THE CURRENT STATE OF THE CODE
 	 */
 
 	public Pickaxe(ItemStack stack) {

@@ -56,7 +56,7 @@ public class Spawner {
      */
 	public boolean canSpawn() {
         return count < maxCount && location.getChunk().isLoaded() &&
-                (Util.getPlayersInRadius(location, 32, 32, 32).isEmpty() || (random.nextDouble() < 0.08));
+                (Util.getPlayersInRadius(location, 24, 24, 24).isEmpty() || (random.nextDouble() < 0.04));
 	}
 
 	public Spawner incrementCount()    {

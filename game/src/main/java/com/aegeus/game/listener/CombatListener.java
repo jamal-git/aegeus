@@ -92,6 +92,10 @@ public class CombatListener implements Listener {
 				? (EntityDamageByEntityEvent) e : null;
 		Entity victim = e.getEntity();
 		Entity attacker = ee != null ? ee.getDamager() : null;
+		if(victim instanceof Player && attacker instanceof Player && Aegeus.getInstance().getPlayer((Player victim).getParty() != null && Aegeus.getInstance().getPlayer((Player) victim).getParty().hasPlayer(Aegeus.getInstance().getPlayer((Player) attacker))) {
+		    e.setCancelled(true);
+		    return;
+        }
 		ItemStack tool = attacker instanceof LivingEntity ?
 				((LivingEntity) attacker).getEquipment().getItemInMainHand() : null;
 

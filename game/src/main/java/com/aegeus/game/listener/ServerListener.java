@@ -73,7 +73,12 @@ public class ServerListener implements Listener {
 	@EventHandler
 	// Clear user information and punish combat loggers
 	private void onLogout(PlayerQuitEvent e) {
-		e.setQuitMessage("");
+	    AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
+	    if(player.getParty() != null)   {
+	        player.getParty().removePlayer(player);
+	        player.setParty(null);
+        }
+        e.setQuitMessage("");
 	}
 
 	@EventHandler

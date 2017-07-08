@@ -81,6 +81,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("addore").setExecutor(new CommandAddOre());
 		getCommand("showspawners").setExecutor(new CommandShowSpawners());
 		getCommand("hidespawners").setExecutor(new CommandHideSpawners());
+		getCommand("party").setExecutor(new CommandParty());
 
 		// Register test commands
 		getLogger().info("Registering test commands...");

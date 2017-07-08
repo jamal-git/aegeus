@@ -1,6 +1,7 @@
 name: AEGEUS
 version: dev
 description: We need a boat.
+depend: [GlowAPI]
 authors: [VarusMain, Silvre]
 main: com.aegeus.game.Aegeus
 
@@ -34,6 +35,9 @@ commands:
     addore:
       description: Set the block to a minable ore at the currently facing block.
       usage: /addore
+    party:
+      description: PARTY ROOT COMMAND BOIZ
+      aliases: p
     testarmor:
       description: Test armor.
     testenchant:

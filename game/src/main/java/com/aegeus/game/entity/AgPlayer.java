@@ -4,6 +4,7 @@ import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
 import com.aegeus.game.chat.ChatChannel;
+import com.aegeus.game.social.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -20,6 +21,8 @@ public class AgPlayer extends AgEntity {
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
+	private Party party = null;
+	private Party invitedParty = null;
 //	private Mount mount = null;
 //	private Story story = new Story(this);
 //	private BankListener bank = new BankListener(this);
@@ -129,4 +132,20 @@ public class AgPlayer extends AgEntity {
 	public void setChatChannel(ChatChannel chatChannel) {
 		this.chatChannel = chatChannel;
 	}
+
+	public Party getParty() {
+	    return party;
+    }
+
+    public void setParty(Party p)   {
+	    party = p;
+    }
+
+    public void setInvitedParty(Party invitedParty) {
+        this.invitedParty = invitedParty;
+    }
+
+    public Party getInvitedParty() {
+        return invitedParty;
+    }
 }
