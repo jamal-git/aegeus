@@ -87,8 +87,25 @@ public class CommandSpawner implements CommandExecutor {
 		else if(args[0].equalsIgnoreCase("remove") && args.length == 3) {
 		    if(args[1].equalsIgnoreCase("radius"))  {
 		        int radius = Integer.valueOf(args[2]);
-		        Aegeus.getInstance().getSpawners().stream().map(Spawner::getLocation).filter(l -> l.getWorld().equals(player.getWorld()) &&
-                        l.distance(player.getLocation()) < radius).forEach(e -> Aegeus.getInstance().removeSpawner(e));
+		        List<Spawner> spawners = Aegeus.getInstance().getSpawners();
+		        List<Spawner> removed = new ArrayList<>();
+                for (int i = 0; i < spawners.size(); i++) {
+                    Location l = spawners.get(i).getLocation();
+                    if(l.getWorld().equals(player.getWorld()) && player.getLocation().distance(l) <= radius)    {
+                        //noinspection deprecation
+                        player.sendBlockChange(spawners.get(i).getLocation(), Material.AIR, (byte) 0);
+                        removed.add(spawners.get(i));
+                        spawners.remove(spawners.get(i));
+                        i--;
+                    }
+                }
+                if(removed.size() < 20) {
+                    for(Spawner s : removed)    {
+                        Location l = s.getLocation();
+                        player.sendMessage(Util.colorCodes("&7Removed spawner at " + l.getX() + ", " + l.getY() + ", " + l.getZ()));
+                    }
+                }
+                else player.sendMessage(Util.colorCodes("&7Successfully removed " + removed.size() + " spawners."));
             }
         }
 		return false;
