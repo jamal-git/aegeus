@@ -1,6 +1,7 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.util.Condition;
+import com.aegeus.game.item.tool.Rune;
+import com.aegeus.game.util.*;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -31,6 +32,8 @@ public class StatsT4 extends Stats {
 			}
 		});
 
+		getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.02f);
+
 		getDefArmor().hpRegen = new IntPoss(50, 90);
 		getDefArmor().energyRegen = new FloatPoss(0.04f, 0.07f);
 		getDefArmor().physRes = new Chance<>(new FloatPoss(0.02f, 0.07f), 0.16f);
@@ -58,6 +61,8 @@ public class StatsT4 extends Stats {
 		boots.material = Material.DIAMOND_BOOTS;
 		boots.hp = new IntPoss(524, 1920);
 		getAllBoots().add(boots);
+
+		getDefWeapon().rune = new Chance<>(new ListPoss<>(Rune.RuneType.BLOOD_HUNT), 0.02f);
 
 		getDefWeapon().pen = new Chance<>(new FloatPoss(0.01f, 0.12f), 0.05f);
 		getDefWeapon().fireDmg = new Chance<>(new IntPoss(3, 18), 0.05f);

@@ -1,6 +1,7 @@
-package com.aegeus.game.stats;
+package com.aegeus.game.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,6 +18,10 @@ public class ListPoss<T> extends ArrayList<T> {
 
 	public ListPoss(Collection<? extends T> c) {
 		super(c);
+	}
+
+	public ListPoss(T... ts) {
+		this(Arrays.asList(ts));
 	}
 
 	public T get() {

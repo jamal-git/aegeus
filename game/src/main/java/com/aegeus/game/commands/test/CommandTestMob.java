@@ -14,16 +14,17 @@ public class CommandTestMob implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
 		if (!sender.hasPermission("aegeus.test")) return false;
+		if (args.length < 1) return false;
 
 		Player player = (Player) sender;
 		try {
 			String[] split = args[0].split(":");
 			Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
 			if (split.length >= 2) {
-				Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
-				((Stats) (clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()))).spawn(player.getLocation(), null);
+				Class parent = Class.forName("com.aegeus.game.stats." + split[1]);
+				((Stats) (clazz.getConstructor(Stats.class).newInstance((Stats) parent.newInstance()))).spawn(player.getLocation());
 			} else
-				((Stats) clazz.newInstance()).spawn(player.getLocation(), null);
+				((Stats) clazz.newInstance()).spawn(player.getLocation());
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException
 				| IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();

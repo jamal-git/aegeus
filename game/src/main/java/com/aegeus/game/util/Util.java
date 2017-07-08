@@ -54,7 +54,7 @@ public class Util {
 	}
 
 	public static String colorCodes(String s, char c) {
-		return ChatColor.translateAlternateColorCodes(c, s);
+		return s == null ? "" : ChatColor.translateAlternateColorCodes(c, s);
 	}
 
 	public static long calcMaxXP(int level) {
@@ -310,10 +310,10 @@ public class Util {
 		Material m = weapon.getMaterial();
 
 		if (isSword(m)) name = t.getSword();
-		else if (isAxe(m))   return t.getAxe();
-		else if (isSpade(m)) return t.getPolearm();
-		else if (isHoe(m)) return t.getStaff();
-		else if (m == Material.BOW) return t.getBow();
+		else if (isAxe(m)) name = t.getAxe();
+		else if (isSpade(m)) name = t.getPolearm();
+		else if (isHoe(m)) name = t.getStaff();
+		else if (m == Material.BOW) name = t.getBow();
 
 		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
 				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
@@ -336,9 +336,9 @@ public class Util {
 			prefix.add("Agile");
 
 		if (isHelmet(m)) name = t.getArmor() + " Helmet";
-		else if (isChestplate(m)) return t.getArmor() + " Chestplate";
-		else if (isLeggings(m)) return t.getArmor() + " Leggings";
-		else if (isBoots(m))  return t.getArmor() + " Boots";
+		else if (isChestplate(m)) name = t.getArmor() + " Chestplate";
+		else if (isLeggings(m)) name = t.getArmor() + " Leggings";
+		else if (isBoots(m)) name = t.getArmor() + " Boots";
 
 		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
 				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));

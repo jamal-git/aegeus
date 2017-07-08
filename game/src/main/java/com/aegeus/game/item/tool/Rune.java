@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,9 +61,12 @@ public class Rune extends AgItem {
 
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(Util.colorCodes("&f&lRune:&d " + runeType.getName()));
-		meta.setLore(Arrays.asList(Util.colorCodes("&7" + runeType.getDescription()),
-				Util.colorCodes("&8Slots: &f" + runeType.getSlots().stream().map(RuneType.Slot::name)
-						.collect(Collectors.joining(", ")))));
+
+		List<String> lore = new ArrayList<>();
+		Arrays.stream(runeType.getDesc()).forEach(s -> lore.add(Util.colorCodes("&7" + s)));
+		lore.add(Util.colorCodes("&fSlots: &7" + runeType.getSlots().stream().map(RuneType.Slot::name).collect(Collectors.joining(", "))));
+		meta.setLore(lore);
+
 		item.setItemMeta(meta);
 
 		return item;
@@ -77,19 +81,23 @@ public class Rune extends AgItem {
 	}
 
 	public enum RuneType {
-		ARCANE_MIGHT(0, "Arcane Might", "Increase magic damage by 5%.", Arrays.asList(Slot.ARMOR)),
-		BLOOD_HUNT(1, "Blood Hunt", "Increase damage by 10% against\ntargets below 20% health.", Arrays.asList(Slot.WEAPON));
-
+		ARCANE_MIGHT(0, "Arcane Might", new String[] {
+				"Increase magic damage by 10%."},
+				Arrays.asList(Slot.ARMOR)),
+		BLOOD_HUNT(1, "Blood Hunt", new String[] {
+				"Increase physical damage by 10%",
+				"against targets below 20% health."},
+				Arrays.asList(Slot.WEAPON));
 
 		private final int id;
 		private final String name;
-		private final String description;
+		private final String[] desc;
 		private final List<Slot> slots;
 
-		RuneType(int id, String name, String description, List<Slot> slots) {
+		RuneType(int id, String name, String[] desc, List<Slot> slots) {
 			this.id = id;
 			this.name = name;
-			this.description = description;
+			this.desc = desc;
 			this.slots = slots;
 		}
 
@@ -107,8 +115,8 @@ public class Rune extends AgItem {
 			return name;
 		}
 
-		public String getDescription() {
-			return description;
+		public String[] getDesc() {
+			return desc;
 		}
 
 		public List<Slot> getSlots() {

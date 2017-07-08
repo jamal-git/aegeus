@@ -21,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -47,7 +48,9 @@ public class CombatListener implements Listener {
 
 		if (info instanceof AgMonster) {
 			AgMonster mInfo = parent.getMonster(entity);
-			if(mInfo.getOrigin() != null)   mInfo.getOrigin().decrementCount();
+
+			if(mInfo.getOrigin() != null) mInfo.getOrigin().decrementCount();
+
 			if (random.nextFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
 				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && random.nextFloat() <= 0.45f)
@@ -60,8 +63,14 @@ public class CombatListener implements Listener {
 					entity.getWorld().dropItemNaturally(entity.getLocation(), items.get(random.nextInt(items.size())));
 				}
 			}
+
 			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
 				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
+
+			for (int i = mInfo.getDeathConds().size() - 1; i >= 0; i--) {
+				Condition<EntityDeathEvent> c = mInfo.getDeathConds().get(i);
+				if (c.isComplete(e)) c.onComplete(e);
+			}
 		}
 
 		if (entity.getKiller() != null) {
@@ -87,11 +96,25 @@ public class CombatListener implements Listener {
 	}
 
 	@EventHandler
+	private void onChunkUnload(ChunkUnloadEvent e) {
+		for (Entity entity : e.getChunk().getEntities()) {
+			if (entity instanceof Projectile)
+				parent.removeProjectile((Projectile) entity);
+			else if (entity instanceof LivingEntity) {
+				onDeath(new EntityDeathEvent((LivingEntity) entity, null));
+				parent.removeEntity((LivingEntity) entity);
+			}
+		}
+	}
+
+	@EventHandler
 	private void onDamage(EntityDamageEvent e) {
 		EntityDamageByEntityEvent ee = e instanceof EntityDamageByEntityEvent
 				? (EntityDamageByEntityEvent) e : null;
 		Entity victim = e.getEntity();
+		Entity damaged = e.getEntity();
 		Entity attacker = ee != null ? ee.getDamager() : null;
+
 		ItemStack tool = attacker instanceof LivingEntity ?
 				((LivingEntity) attacker).getEquipment().getItemInMainHand() : null;
 
@@ -194,8 +217,6 @@ public class CombatListener implements Listener {
 				if (healing > 0) Util.heal(lAttacker, healing);
 			}
 
-			LivingEntity damaged = lVictim;
-
 			if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
 				physDmg = 0;
 				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
@@ -206,14 +227,14 @@ public class CombatListener implements Listener {
 			} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
 				physDmg = 0;
 				magDmg = 0;
-				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_SHULKER_BULLET_HURT, 1, 1);
+				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
 				if (attacker instanceof Player)
 					attacker.sendMessage(Util.colorCodes("              &c&l*** OPPONENT DODGED&c!&l ***"));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("              &a&l*** DODGED&e!&l ***"));
 			} else if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
 				damaged = lAttacker;
-				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_SHULKER_BULLET_HURT, 1, 1);
+				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
 				if (attacker instanceof Player)
 					attacker.sendMessage(Util.colorCodes("              &c&l*** OPPONENT REFLECTED&c!&l ***"));
 				if (victim instanceof Player)
@@ -227,9 +248,9 @@ public class CombatListener implements Listener {
 			if (vInfo instanceof AgMonster) {
 				AgMonster mInfo = (AgMonster) vInfo;
 				for (int i = mInfo.getHitConds().size() - 1; i >= 0; i--) {
-					Condition<LivingEntity> c = mInfo.getHitConds().get(i);
-					if (c.isComplete(lVictim)) {
-						c.onComplete(lVictim);
+					Condition<EntityDamageEvent> c = mInfo.getHitConds().get(i);
+					if (c.isComplete(e)) {
+						c.onComplete(e);
 						if (c.addOnComplete() != null)
 							mInfo.getHitConds().addAll(c.addOnComplete());
 						if (c.removeOnComplete()) {
@@ -245,10 +266,11 @@ public class CombatListener implements Listener {
 				e.setDamage(e.getDamage() / 2);
 			e.setDamage(Math.max(1, e.getDamage()));
 
-			if (e.getDamage() > 0) {
-				damaged.damage(e.getDamage());
-				damaged.setLastDamage(e.getDamage());
-				damaged.setLastDamageCause(e);
+			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
+				LivingEntity lDamaged = (LivingEntity) damaged;
+				lDamaged.damage(e.getDamage());
+				lDamaged.setLastDamage(e.getDamage());
+				lDamaged.setLastDamageCause(e);
 
 				if (damaged.equals(lVictim)) {
 					float multiply = 0.04f;
@@ -261,23 +283,23 @@ public class CombatListener implements Listener {
 			}
 		}
 
-		if (victim instanceof LivingEntity) {
-			LivingEntity lVictim = (LivingEntity) victim;
-			AgEntity vInfo = parent.getEntity(lVictim);
+		if (damaged instanceof LivingEntity) {
+			LivingEntity lDamaged = (LivingEntity) damaged;
+			AgEntity vInfo = parent.getEntity(lDamaged);
 			vInfo.inCombat();
 
-			lVictim.setMaximumNoDamageTicks(3);
-			lVictim.setNoDamageTicks(lVictim.getMaximumNoDamageTicks());
-			lVictim.setCustomNameVisible(true);
+			lDamaged.setMaximumNoDamageTicks(3);
+			lDamaged.setNoDamageTicks(lDamaged.getMaximumNoDamageTicks());
+			lDamaged.setCustomNameVisible(true);
 
-			if (lVictim.getHealth() >= lVictim.getMaxHealth() * 0.75) {
-				lVictim.setCustomName(Util.colorCodes("&7- &a" + Math.round(lVictim.getHealth()) + " &lHP&7 -"));
-			} else if (lVictim.getHealth() >= lVictim.getMaxHealth() * 0.50) {
-				lVictim.setCustomName(Util.colorCodes("&7- &e" + Math.round(lVictim.getHealth()) + " &lHP&7 -"));
-			} else if (lVictim.getHealth() >= lVictim.getMaxHealth() * 0.25) {
-				lVictim.setCustomName(Util.colorCodes("&7- &6" + Math.round(lVictim.getHealth()) + " &lHP&7 -"));
+			if (lDamaged.getHealth() >= lDamaged.getMaxHealth() * 0.75) {
+				lDamaged.setCustomName(Util.colorCodes("&7- &a" + Math.round(lDamaged.getHealth()) + " &lHP&7 -"));
+			} else if (lDamaged.getHealth() >= lDamaged.getMaxHealth() * 0.50) {
+				lDamaged.setCustomName(Util.colorCodes("&7- &e" + Math.round(lDamaged.getHealth()) + " &lHP&7 -"));
+			} else if (lDamaged.getHealth() >= lDamaged.getMaxHealth() * 0.25) {
+				lDamaged.setCustomName(Util.colorCodes("&7- &6" + Math.round(lDamaged.getHealth()) + " &lHP&7 -"));
 			} else {
-				lVictim.setCustomName(Util.colorCodes("&7- &c" + Math.round(lVictim.getHealth()) + " &lHP&7 -"));
+				lDamaged.setCustomName(Util.colorCodes("&7- &c" + Math.round(lDamaged.getHealth()) + " &lHP&7 -"));
 			}
 		}
 
@@ -287,10 +309,11 @@ public class CombatListener implements Listener {
 			aInfo.inCombat();
 		}
 
-		if (victim instanceof Player && e.getDamage() > 0) {
+		if (damaged instanceof Player && e.getDamage() > 0) {
+			Entity finalDamaged = damaged;
 			Bukkit.getScheduler().runTaskLater(parent, () -> {
-				Util.notifyAttacked((Player) victim, e.getDamage());
-				Util.updateDisplay((Player) victim);
+				Util.notifyAttacked((Player) finalDamaged, e.getDamage());
+				Util.updateDisplay((Player) finalDamaged);
 			}, 1);
 		}
 		if (attacker instanceof Player && victim instanceof LivingEntity && e.getDamage() > 0) {
