@@ -41,9 +41,14 @@ public class CommandParty implements CommandExecutor {
             if(invitee.getInvitedParty() == null) {
                 if (agplayer.getParty() == null) agplayer.setParty(new Party(agplayer));
                 Party host = agplayer.getParty();
-                invitee.setInvitedParty(host);
-                p.sendMessage(Util.colorCodes("&a&l" + play.getDisplayName() + "&r&a has invited you to their party. Use &l/p accept&r&a to join their party."));
-                play.sendMessage(Util.colorCodes("&aYou have invited &l" + p.getDisplayName() + "&r&a to join your party."));
+                if(!host.getLeader().equals(agplayer))  {
+                    play.sendMessage(Util.colorCodes("&cYou are not the leader of the party!"));
+                }
+                else {
+                    invitee.setInvitedParty(host);
+                    p.sendMessage(Util.colorCodes("&a&l" + play.getDisplayName() + "&r&a has invited you to their party. Use &l/p accept&r&a to join their party."));
+                    play.sendMessage(Util.colorCodes("&aYou have invited &l" + p.getDisplayName() + "&r&a to join your party."));
+                }
             }
             else if(agplayer.getParty().equals(invitee.getInvitedParty()))  play.sendMessage(Util.colorCodes("&cYou already invited this player to the party!"));
             else if(!agplayer.getParty().equals(invitee.getInvitedParty())) play.sendMessage(Util.colorCodes("&cThat player has already been invited to another party!"));
@@ -64,6 +69,8 @@ public class CommandParty implements CommandExecutor {
                 Party party = agplayer.getInvitedParty();
                 agplayer.setParty(party);
                 party.addPlayer(agplayer);
+                play.sendMessage(Util.colorCodes("&7You joined &a&l" + party.getLeader().getPlayer().getDisplayName() + "&7's party!"));
+
                 agplayer.setInvitedParty(null);
             }
             return true;
@@ -79,6 +86,24 @@ public class CommandParty implements CommandExecutor {
                 else play.sendMessage(Util.colorCodes("&cThat player is not in your party!"));
             }
             return true;
+        }
+        else if(args[0].equalsIgnoreCase("decline") && args.length == 1)    {
+            if(agplayer.getInvitedParty() == null)  {
+                play.sendMessage(Util.colorCodes("&cYou dont have a pending party invite!"));
+            }
+            else    {
+                agplayer.getInvitedParty().getLeader().getPlayer().sendMessage("&c&l" + agplayer.getPlayer().getDisplayName() + "&r&c has declined the party invite.");
+                agplayer.setInvitedParty(null);
+            }
+        }
+        else if(args[0].equalsIgnoreCase("quit") && args.length == 1)   {
+            if(agplayer.getParty() == null) {
+                play.sendMessage(Util.colorCodes("&cYou are currently not in a party!"));
+            }
+            else    {
+                agplayer.getInvitedParty().removePlayer(agplayer);
+                agplayer.setParty(null);
+            }
         }
         return false;
     }

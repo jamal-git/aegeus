@@ -32,6 +32,7 @@ public class Party {
         if(members.contains(p)) {
             members.remove(p);
             members.addFirst(p);
+            sendMessage(Util.colorCodes("&a&l" + members.peek().getPlayer().getDisplayName() + "&r&d has been promoted to the party leader."), true);
         }
         update();
     }
@@ -57,17 +58,33 @@ public class Party {
         List<Player> list = members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList());
         for(Player ap : list) GlowAPI.setGlowing(ap, false, p.getPlayer());
         GlowAPI.setGlowing(p.getPlayer(), false, list);
+        for(Player ap : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))   {
+            ap.sendMessage(Util.colorCodes("&a&l" + p.getPlayer().getName() + "&r&a has left the party."));
+        }
         if(members.peek().equals(p))    {
             members.remove(p);
             update();
+            members.peek().getPlayer().sendMessage("&dYou have been promoted to party leader.");
+            sendMessage("&a&l" + members.peek().getPlayer().getDisplayName() + "&r&d has been promoted to party leader.", members.peek(), true);
             return true;
         }
         members.remove(p);
         update();
-        for(Player ap : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))   {
-            ap.sendMessage(Util.colorCodes("&a&l" + p.getPlayer().getName() + "&r&a has left the party."));
-        }
         return false;
+    }
+
+    public void sendMessage(String message, boolean custom) {
+        sendMessage(message, null, custom);
+    }
+
+    public void sendMessage(String message, AgPlayer sender, boolean custom)    {
+        for(Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))  {
+            if(!(sender != null && p.equals(sender.getPlayer())))
+                if(custom)
+                    p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+                else
+                    p.sendMessage(Util.colorCodes(message));
+        }
     }
 
     public void update()    {
