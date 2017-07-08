@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -143,6 +144,10 @@ public class Aegeus extends JavaPlugin {
 				.findAny().orElse(null);
 	}
 
+	public void setEntity(LivingEntity entity, AgEntity info) {
+		entities.put(entity, info);
+	}
+
 	public void addSpawner(Spawner spawner) {
 		spawners.add(spawner);
 		saveSpawners();
@@ -178,6 +183,18 @@ public class Aegeus extends JavaPlugin {
 
 	public List<AgEntity> getEntities() {
 		return new ArrayList<>(entities.values());
+	}
+
+	public Map<LivingEntity, AgEntity> getEntityMap() {
+		return entities;
+	}
+
+	public List<AgProjectile> getProjectiles() {
+		return new ArrayList<>(projectiles.values());
+	}
+
+	public Map<Projectile, AgProjectile> getProjectileMap() {
+		return projectiles;
 	}
 
 	public Map<Location, Material> getOres() {

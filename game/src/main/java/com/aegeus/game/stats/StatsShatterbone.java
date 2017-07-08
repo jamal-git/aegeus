@@ -1,27 +1,40 @@
 package com.aegeus.game.stats;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.entity.AgMonster;
+import com.aegeus.game.entity.Shatterbone;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.Condition;
-import com.aegeus.game.util.Util;
+import com.aegeus.game.util.FloatPoss;
+import com.aegeus.game.util.IntPoss;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StatsShatterbone extends Stats {
+	public StatsShatterbone() {
+	}
+
+	public StatsShatterbone(Stats parent) {
+		super(parent);
+	}
+
 	@Override
 	public void prepare() {
 		setTier(3);
 		setChance(0.86f);
-		setForcedHp(19000);
-		setDmgMultiplier(4f);
+		setForcedHp(20000);
+		setDmgMultiplier(3f);
 
 		getNames().add("&b&lShatterbone");
 
@@ -29,10 +42,17 @@ public class StatsShatterbone extends Stats {
 
 		getDefArmor().rarity = Rarity.DUNGEON;
 
-		getHitConds().add(new Condition<LivingEntity>() {
+		getSpawnConds().add(new Condition<LivingEntity>() {
 			@Override
 			public void onComplete(LivingEntity entity) {
-				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0.7f);
+				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 1));
+			}
+		});
+
+		getHitConds().add(new Condition<EntityDamageEvent>() {
+			@Override
+			public void onComplete(EntityDamageEvent e) {
+				e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0.7f);
 			}
 
 			@Override
@@ -40,39 +60,48 @@ public class StatsShatterbone extends Stats {
 				return false;
 			}
 		});
-		getHitConds().add(new Condition<LivingEntity>() {
+		getHitConds().add(new Condition<EntityDamageEvent>() {
 			@Override
-			public boolean isComplete(LivingEntity entity) {
-				return entity.getHealth() <= 4000;
+			public boolean isComplete(EntityDamageEvent e) {
+				return ((LivingEntity) e.getEntity()).getHealth() <= 12000;
 			}
 
 			@Override
-			public void onComplete(LivingEntity entity) {
-				entity.setHealth(entity.getMaxHealth());
-				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITHER_SHOOT, 1, 0);
-			}
+			public void onComplete(EntityDamageEvent e) {
+				LivingEntity entity = (LivingEntity) e.getEntity();
+				entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999, 0));
+				entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 2));
+				entity.setInvulnerable(true);
 
-			@Override
-			public List<Condition<LivingEntity>> addOnComplete() {
-				List<Condition<LivingEntity>> conditions = new ArrayList<>();
-				conditions.add(new Condition<LivingEntity>() {
-					@Override
-					public boolean isComplete(LivingEntity entity) {
-						return entity.getHealth() <= 3000;
-					}
+				Shatterbone info = new Shatterbone(Aegeus.getInstance().getMonster(entity));
+				for (int i = 0; i < 4; i++) {
+					Stats stats = new StatsSkeleton(new StatsT3());
+					stats.setChance(0);
+					stats.setHpMultiplier(1.7f);
+					stats.setDmgMultiplier(1.15f);
+					stats.getDeathConds().add(new Condition<EntityDeathEvent>() {
+						@Override
+						public void onComplete(EntityDeathEvent e) {
+							LivingEntity entity2 = e.getEntity();
+							info.getMinions().remove(entity2);
+						}
+					});
+					stats.getDeathConds().add(new Condition<EntityDeathEvent>() {
+						@Override
+						public boolean isComplete(EntityDeathEvent e) {
+							return info.getMinions().isEmpty();
+						}
 
-					@Override
-					public void onComplete(LivingEntity entity) {
-						AgMonster info = Aegeus.getInstance().getMonster(entity);
-						entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 5));
-						info.setName(Util.colorCodes("&6&lEnraged Shatterbone"));
-						info.setDmgMultiplier(8f);
-						info.setPhysRes(0.35f);
-						info.setBlock(0.3f);
-						entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_WITCH_HURT, 1, 0);
-					}
-				});
-				return conditions;
+						@Override
+						public void onComplete(EntityDeathEvent e) {
+							entity.setInvulnerable(false);
+							entity.removePotionEffect(PotionEffectType.INVISIBILITY);
+							entity.removePotionEffect(PotionEffectType.SLOW);
+						}
+					});
+					info.getMinions().add(stats.spawn(entity.getLocation(), null));
+				}
+				Aegeus.getInstance().setEntity(entity, info);
 			}
 		});
 

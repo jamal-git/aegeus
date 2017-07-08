@@ -7,13 +7,14 @@ import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.item.tool.Weapon;
-import com.aegeus.game.util.Condition;
-import com.aegeus.game.util.Util;
+import com.aegeus.game.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,9 +49,9 @@ public abstract class Stats {
 	private WeaponPossible defWeapon = new WeaponPossible(true);
 
 	// Conditions
-	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
-	private List<Condition<LivingEntity>> deathConds = new ArrayList<>();
 	private List<Condition<LivingEntity>> spawnConds = new ArrayList<>();
+	private List<Condition<EntityDamageEvent>> hitConds = new ArrayList<>();
+	private List<Condition<EntityDeathEvent>> deathConds = new ArrayList<>();
 
 	/**
 	 * Creates an instance of Stats without a parent.
@@ -104,9 +105,9 @@ public abstract class Stats {
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
 
+		this.spawnConds = other.spawnConds;
 		this.hitConds = other.hitConds;
 		this.deathConds = other.deathConds;
-		this.spawnConds = other.spawnConds;
 	}
 
 	public Stats getParent() {
@@ -338,22 +339,6 @@ public abstract class Stats {
 
 	// Conditions
 
-	public List<Condition<LivingEntity>> getHitConds() {
-		return hitConds;
-	}
-
-	public void setHitConds(List<Condition<LivingEntity>> hitConds) {
-		this.hitConds = hitConds;
-	}
-
-	public List<Condition<LivingEntity>> getDeathConds() {
-		return deathConds;
-	}
-
-	public void setDeathConds(List<Condition<LivingEntity>> deathConds) {
-		this.deathConds = deathConds;
-	}
-
 	public List<Condition<LivingEntity>> getSpawnConds() {
 		return spawnConds;
 	}
@@ -362,9 +347,29 @@ public abstract class Stats {
 		this.spawnConds = spawnConds;
 	}
 
+	public List<Condition<EntityDamageEvent>> getHitConds() {
+		return hitConds;
+	}
+
+	public void setHitConds(List<Condition<EntityDamageEvent>> hitConds) {
+		this.hitConds = hitConds;
+	}
+
+	public List<Condition<EntityDeathEvent>> getDeathConds() {
+		return deathConds;
+	}
+
+	public void setDeathConds(List<Condition<EntityDeathEvent>> deathConds) {
+		this.deathConds = deathConds;
+	}
+
 	// Generation methods
 
-	public void spawn(Location location, Spawner origin) {
+	public LivingEntity spawn(Location location) {
+		return spawn(location, null);
+	}
+
+	public LivingEntity spawn(Location location, Spawner origin) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
 
 		if (entity.getType().equals(EntityType.ZOMBIE)) {
@@ -379,6 +384,7 @@ public abstract class Stats {
 
 		info.setOrigin(origin);
 		info.setHitConds(getHitConds());
+		info.setDeathConds(getDeathConds());
 		info.setTier(getTier());
 		info.setChance(getChance());
 		info.setForcedHp(getForcedHp());
@@ -407,6 +413,8 @@ public abstract class Stats {
 					getSpawnConds().addAll(c.addOnComplete());
 			}
 		}
+
+		return entity;
 	}
 
 	public class WeaponPossible {
@@ -415,7 +423,7 @@ public abstract class Stats {
 		public String name = "";
 		public Rarity rarity = null;
 
-		public Chance<ListPoss<Rune>> rune = new Chance<>();
+		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
 
 		public IntPoss dmg = new IntPoss(1);
 		public IntPoss range = new IntPoss(0);
@@ -460,8 +468,8 @@ public abstract class Stats {
 			weapon.setTier(tier);
 			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
 
-			ListPoss<Rune> rune = this.rune.get();
-			if (rune != null) weapon.setRune(rune.get());
+			ListPoss<Rune.RuneType> rune = this.rune.get();
+			if (rune != null) weapon.setRune(new Rune(rune.get()));
 
 			int min = Math.round((dmg.getDiff() * f) + dmg.getMin());
 			int max = min + range.get();
@@ -505,7 +513,7 @@ public abstract class Stats {
 		public String name = "";
 		public Rarity rarity = null;
 
-		public Chance<ListPoss<Rune>> rune = new Chance<>();
+		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
 
 		public IntPoss hp = new IntPoss(1);
 		public IntPoss hpRegen = new IntPoss(0);
@@ -546,8 +554,8 @@ public abstract class Stats {
 			armor.setTier(tier);
 			armor.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
 
-			ListPoss<Rune> rune = this.rune.get();
-			if (rune != null) armor.setRune(rune.get());
+			ListPoss<Rune.RuneType> rune = this.rune.get();
+			if (rune != null) armor.setRune(new Rune(rune.get()));
 
 			armor.setHp(Math.round((hp.getDiff() * f) + hp.getMin()));
 

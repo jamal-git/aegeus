@@ -1,4 +1,4 @@
-package com.aegeus.game.stats;
+package com.aegeus.game.util;
 
 import java.util.concurrent.ThreadLocalRandom;
 

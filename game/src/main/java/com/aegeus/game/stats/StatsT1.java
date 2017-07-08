@@ -1,6 +1,7 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.util.Condition;
+import com.aegeus.game.item.tool.Rune;
+import com.aegeus.game.util.*;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;

@@ -3,13 +3,16 @@ package com.aegeus.game.entity;
 import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.util.Condition;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AgMonster extends AgEntity {
 	private String name;
-	private List<Condition<LivingEntity>> hitConds = new ArrayList<>();
+	private List<Condition<EntityDamageEvent>> hitConds = new ArrayList<>();
+	private List<Condition<EntityDeathEvent>> deathConds = new ArrayList<>();
 	private List<Rune> runes = new ArrayList<>();
 	private Spawner origin = null;
 	private int tier = 0;
@@ -32,6 +35,7 @@ public class AgMonster extends AgEntity {
 		super(other);
 		this.name = other.name;
 		this.hitConds = other.hitConds;
+		this.deathConds = other.deathConds;
 		this.runes = other.runes;
 		this.tier = other.tier;
 		this.chance = other.chance;
@@ -49,12 +53,20 @@ public class AgMonster extends AgEntity {
 		this.name = name;
 	}
 
-	public List<Condition<LivingEntity>> getHitConds() {
+	public List<Condition<EntityDamageEvent>> getHitConds() {
 		return hitConds;
 	}
 
-	public void setHitConds(List<Condition<LivingEntity>> hitConds) {
+	public void setHitConds(List<Condition<EntityDamageEvent>> hitConds) {
 		this.hitConds = hitConds;
+	}
+
+	public List<Condition<EntityDeathEvent>> getDeathConds() {
+		return deathConds;
+	}
+
+	public void setDeathConds(List<Condition<EntityDeathEvent>> deathConds) {
+		this.deathConds = deathConds;
 	}
 
 	public List<Rune> getRunes() {
