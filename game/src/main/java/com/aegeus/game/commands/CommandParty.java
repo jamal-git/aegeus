@@ -44,12 +44,6 @@ public class CommandParty implements CommandExecutor {
                 invitee.setInvitedParty(host);
                 p.sendMessage(Util.colorCodes("&a&l" + play.getDisplayName() + "&r&a has invited you to their party. Use &l/p accept&r&a to join their party."));
                 play.sendMessage(Util.colorCodes("&aYou have invited &l" + p.getDisplayName() + "&r&a to join your party."));
-                Aegeus.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Aegeus.getInstance(), () -> {
-                    if (invitee.getInvitedParty().equals(host)) {
-                        invitee.setInvitedParty(null);
-                        p.sendMessage(Util.colorCodes("&cThe party invite has &nexpired&r&c."));
-                    }
-                }, 1200);
             }
             else if(agplayer.getParty().equals(invitee.getInvitedParty()))  play.sendMessage(Util.colorCodes("&cYou already invited this player to the party!"));
             else if(!agplayer.getParty().equals(invitee.getInvitedParty())) play.sendMessage(Util.colorCodes("&cThat player has already been invited to another party!"));
