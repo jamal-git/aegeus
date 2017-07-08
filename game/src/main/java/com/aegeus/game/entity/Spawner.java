@@ -21,27 +21,51 @@ public class Spawner {
 		this.location = location;
 	}
 
+    /**
+     * Get the location of the spawner
+     * @return Location of the spawner
+     */
 	public Location getLocation() {
 		return location;
 	}
 
+    /**
+     * Get the list of mobs this spawner can spawn
+     * @return List of Stats
+     */
 	public List<Stats> getList() {
 		return list;
 	}
 
+    /**
+     * Overwrite the mobs this spawner can spawn.
+     * @param list of Stats this spawner will spawn
+     */
 	public void setList(List<Stats> list) {
 		this.list = list;
 	}
 
+    /**
+     * Set the types of mobs this spawner can spawn after clearing the original list
+     * @param stats
+     */
 	public void set(Stats... stats) {
 		list.clear();
 		list.addAll(Arrays.asList(stats));
 	}
 
+    /**
+     * Add another type of mob that can be spawned by this spawner.
+     * @param stats
+     */
 	public void add(Stats... stats) {
 		list.addAll(Arrays.asList(stats));
 	}
 
+    /**
+     * Get a random Stats from the list of spawnable mobs from this spawner.
+     * @return
+     */
 	public Stats get() {
 		return list.size() < 2 ? list.get(0) : list.get(random.nextInt(list.size()));
 	}
@@ -62,28 +86,52 @@ public class Spawner {
 				(Util.getPlayersInRadius(location, 24, 24, 24).isEmpty() || (random.nextDouble() < 0.04));
 	}
 
+    /**
+     * Increment the count of monster spawned by this spawner
+     * @return Spawner
+     */
 	public Spawner incrementCount() {
 		count++;
 		return this;
 	}
 
+    /**
+     * Decrement the count of monsters currently spawned by this spawner
+     * @return Spawner
+     */
 	public Spawner decrementCount() {
 		count = (count - 1) < 0 ? 0 : (count - 1);
 		return this;
 	}
 
+    /**
+     * Get the max count of mobs this spawner can have spawned at one time
+     * @return Max count of mobs that this spawner can have in the world at one time
+     */
 	public int getMaxCount() {
 		return maxCount;
 	}
 
+    /**
+     * Set the max count of mobs this spawner can have spawned at one time
+     * @param maxCount of mobs that this spawner can have in the world at one time.
+     */
 	public void setMaxCount(int maxCount) {
 		this.maxCount = maxCount;
 	}
 
+    /**
+     * Get the current amount of mobs spawned by this spawner.
+     * @return Current mobs in the world spawned by this spawner
+     */
 	public int getCount() {
 		return count;
 	}
 
+    /**
+     * Set the current amount of mobs spawned by this spawner.
+     * @param count of mobs currently spawned by this spawner
+     */
 	public void setCount(int count) {
 		this.count = count;
 	}
