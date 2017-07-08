@@ -48,7 +48,7 @@ public class CombatListener implements Listener {
 		if (info instanceof AgMonster) {
 			AgMonster mInfo = parent.getMonster(entity);
 
-			if(mInfo.getOrigin() != null) mInfo.getOrigin().decrementCount();
+			if (mInfo.getOrigin() != null) mInfo.getOrigin().decrementCount();
 
 			if (random.nextFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
@@ -120,10 +120,10 @@ public class CombatListener implements Listener {
 
 		if (victim instanceof LivingEntity && attacker instanceof LivingEntity
 				&& !victim.isDead() && !attacker.isDead()) {
-            if(victim instanceof Player && attacker instanceof Player && Aegeus.getInstance().getPlayer((Player) victim).getParty() != null && Aegeus.getInstance().getPlayer((Player) victim).getParty().hasPlayer(Aegeus.getInstance().getPlayer((Player) attacker))) {
-                e.setCancelled(true);
-                return;
-            }
+			if (victim instanceof Player && attacker instanceof Player && Aegeus.getInstance().getPlayer((Player) victim).getParty() != null && Aegeus.getInstance().getPlayer((Player) victim).getParty().hasPlayer(Aegeus.getInstance().getPlayer((Player) attacker))) {
+				e.setCancelled(true);
+				return;
+			}
 			LivingEntity lVictim = (LivingEntity) victim;
 			LivingEntity lAttacker = (LivingEntity) attacker;
 			AgEntity vInfo = parent.getEntity(lVictim);

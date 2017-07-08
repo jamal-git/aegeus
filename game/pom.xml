@@ -1,35 +1,35 @@
 <?xml version="1.0"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-		 xmlns="http://maven.apache.org/POM/4.0.0">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<parent>
-		<groupId>com.aegeus</groupId>
-		<artifactId>aegeus</artifactId>
-		<version>0.0.1</version>
-	</parent>
-	
-	<artifactId>game</artifactId>
-	<packaging>jar</packaging>
-	<name>Game</name>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.9.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
-			<version>1.9.2-R0.1-SNAPSHOT</version>
-		</dependency>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.aegeus</groupId>
+        <artifactId>aegeus</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>game</artifactId>
+    <packaging>jar</packaging>
+    <name>Game</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.9.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.9.2-R0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.aegeus</groupId>
             <artifactId>common</artifactId>
@@ -41,5 +41,5 @@
             <version>1.4.4</version>
         </dependency>
     </dependencies>
-	
+
 </project>

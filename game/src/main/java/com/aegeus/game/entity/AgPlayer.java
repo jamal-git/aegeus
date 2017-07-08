@@ -134,18 +134,18 @@ public class AgPlayer extends AgEntity {
 	}
 
 	public Party getParty() {
-	    return party;
-    }
+		return party;
+	}
 
-    public void setParty(Party p)   {
-	    party = p;
-    }
+	public void setParty(Party p) {
+		party = p;
+	}
 
-    public void setInvitedParty(Party invitedParty) {
-        this.invitedParty = invitedParty;
-    }
+	public Party getInvitedParty() {
+		return invitedParty;
+	}
 
-    public Party getInvitedParty() {
-        return invitedParty;
-    }
+	public void setInvitedParty(Party invitedParty) {
+		this.invitedParty = invitedParty;
+	}
 }

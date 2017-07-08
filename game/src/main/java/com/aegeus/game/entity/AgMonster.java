@@ -2,8 +2,6 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.item.tool.Rune;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,15 +54,15 @@ public class AgMonster extends AgEntity {
 		this.runes = runes;
 	}
 
-    public Spawner getOrigin() {
-        return origin;
-    }
+	public Spawner getOrigin() {
+		return origin;
+	}
 
-    public void setOrigin(Spawner origin) {
-        this.origin = origin;
-    }
+	public void setOrigin(Spawner origin) {
+		this.origin = origin;
+	}
 
-    public int getTier() {
+	public int getTier() {
 		return tier;
 	}
 

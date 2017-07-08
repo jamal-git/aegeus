@@ -20,7 +20,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
@@ -28,7 +27,6 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -265,7 +263,7 @@ public class Util {
 		return target;
 	}
 
-	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz)  {
+	public static List<Player> getPlayersInRadius(Location center, double rx, double ry, double rz) {
 		return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream()
 				.filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
 	}

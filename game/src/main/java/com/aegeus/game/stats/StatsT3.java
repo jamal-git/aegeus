@@ -1,12 +1,12 @@
 package com.aegeus.game.stats;
 
 import com.aegeus.game.item.tool.Rune;
-import com.aegeus.game.util.*;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.FloatPoss;
+import com.aegeus.game.util.IntPoss;
+import com.aegeus.game.util.ListPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ThreadLocalRandom;
 

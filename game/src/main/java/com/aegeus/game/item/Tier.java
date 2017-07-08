@@ -31,7 +31,7 @@ public enum Tier {
 	}
 
 	public static Tier fromTier(int tier) {
-		if(tier > 5 || tier < 0) return NONE;
+		if (tier > 5 || tier < 0) return NONE;
 		return values[tier];
 	}
 
@@ -55,15 +55,15 @@ public enum Tier {
 		return axe;
 	}
 
-    public String getBow() {
-        return bow;
-    }
+	public String getBow() {
+		return bow;
+	}
 
-    public String getStaff() {
-        return staff;
-    }
+	public String getStaff() {
+		return staff;
+	}
 
-    public String getPolearm() {
-        return polearm;
-    }
+	public String getPolearm() {
+		return polearm;
+	}
 }
