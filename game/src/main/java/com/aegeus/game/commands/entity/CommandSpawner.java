@@ -24,19 +24,21 @@ public class CommandSpawner implements CommandExecutor {
 		if (!sender.hasPermission("aegeus.world")) return false;
 		List<Spawner> list = Aegeus.getInstance().getSpawners();
 		Player player = (Player) sender;
-		if (args[0].equalsIgnoreCase("show") && args.length == 1) {
+		if(args[0].equalsIgnoreCase("show") && args.length == 1) {
 			for (Spawner s : list) {
 				//noinspection deprecation
 				player.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
 			}
 			return true;
-		} else if (args[0].equalsIgnoreCase("hide") && args.length == 1) {
+		}
+		else if(args[0].equalsIgnoreCase("hide") && args.length == 1) {
 			for (Spawner s : list) {
 				//noinspection deprecation
 				player.sendBlockChange(s.getLocation(), Material.AIR, (byte) 0);
 			}
 			return true;
-		} else if (args[0].equalsIgnoreCase("add") && args.length == 4) {
+		}
+		else if(args[0].equalsIgnoreCase("add") && args.length == 4) {
 			Location l;
 			if (args[1].equalsIgnoreCase("here"))
 				l = player.getLocation().getBlock().getLocation();
@@ -67,18 +69,27 @@ public class CommandSpawner implements CommandExecutor {
 			//noinspection deprecation
 			player.sendBlockChange(l, Material.MOB_SPAWNER, (byte) 0);
 			return true;
-		} else if (args[0].equalsIgnoreCase("remove") && args.length == 2) {
+		}
+		else if(args[0].equalsIgnoreCase("remove") && args.length == 2) {
 			Location l;
 			if (args[1].equalsIgnoreCase("here")) {
 				l = player.getLocation().getBlock().getLocation();
 			} else if (args[1].equalsIgnoreCase("target")) {
 				l = player.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100).getLocation();
-			} else return false;
+
+			}
+			else return false;
 			if (Aegeus.getInstance().getSpawner(l) != null) {
 				Aegeus.getInstance().removeSpawner(l);
 				player.sendMessage(Util.colorCodes("&7Removed spawner at " + l.getX() + ", " + l.getY() + ", " + l.getZ()));
 			} else player.sendMessage(Util.colorCodes("&7A spawner does not exist!"));
 		}
+		else if(args[0].equalsIgnoreCase("remove") && args.length == 3) {
+		    if(args[1].equalsIgnoreCase("radius"))  {
+		        int radius = Integer.valueOf(args[2]);
+		        Aegeus.getInstance().getSpawners().stream().map(Spawner::getLocation).filter(l -> l.distance(player.getLocation()) < radius).forEach(e -> Aegeus.getInstance().removeSpawner(e));
+            }
+        }
 		return false;
 	}
 }
