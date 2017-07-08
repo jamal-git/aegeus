@@ -120,6 +120,7 @@ public class CommandSpawner implements CommandExecutor {
                     }
                 }
                 else player.sendMessage(Util.colorCodes("&7Successfully removed " + removed.size() + " spawners."));
+                Aegeus.getInstance().saveSpawners();
                 return true;
             }
         }
