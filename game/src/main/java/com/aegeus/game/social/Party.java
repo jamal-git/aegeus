@@ -18,17 +18,17 @@ import java.util.stream.Collectors;
 public class Party {
     private LinkedList<AgPlayer> members = new LinkedList<>();
 
-    public Party(AgPlayer... members)   {
+    public Party(AgPlayer... members) {
         this.members.addAll(Arrays.asList(members));
         update();
     }
 
-    public Party(AgPlayer p)    {
+    public Party(AgPlayer p) {
         members.add(p);
         update();
     }
 
-    public void promote(AgPlayer p)   {
+    public void promote(AgPlayer p) {
         if(members.contains(p)) {
             members.remove(p);
             members.addFirst(p);
@@ -49,7 +49,11 @@ public class Party {
         return members.peek();
     }
 
-    /**
+	public LinkedList<AgPlayer> getMembers() {
+		return members;
+	}
+
+	/**
      * @param p
      * @return True if the removed player was the leader
      */
