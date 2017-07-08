@@ -1,4 +1,4 @@
-package com.aegeus.game.commands.test;
+package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.stats.Stats;
 import org.bukkit.command.Command;
@@ -8,12 +8,12 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class CommandTestMob implements CommandExecutor {
+public class CommandMob implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
-		if (!sender.hasPermission("aegeus.test")) return false;
+		if (!sender.hasPermission("aegeus.entity")) return false;
 		if (args.length < 1) return false;
 
 		Player player = (Player) sender;

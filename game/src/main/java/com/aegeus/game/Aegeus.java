@@ -1,7 +1,9 @@
 package com.aegeus.game;
 
-import com.aegeus.game.commands.*;
-import com.aegeus.game.commands.test.*;
+import com.aegeus.game.commands.entity.*;
+import com.aegeus.game.commands.item.CommandCreate;
+import com.aegeus.game.commands.social.*;
+import com.aegeus.game.commands.world.CommandAddOre;
 import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.SpawnerDeserializer;
@@ -70,31 +72,31 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
 		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 
-		// Register game commands
+		// Register commands
 		getLogger().info("Registering commands...");
+
+		// entity
+		getCommand("mob").setExecutor(new CommandMob());
+		getCommand("spawner").setExecutor(new CommandSpawner());
+		getCommand("openentity").setExecutor(new CommandOpenEntity());
+		getCommand("showspawners").setExecutor(new CommandShowSpawners());
+		getCommand("hidespawners").setExecutor(new CommandHideSpawners());
+
+		// item
+		getCommand("create").setExecutor(new CommandCreate());
+
+		// social
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());
 		getCommand("global").setExecutor(new CommandGlobal());
 		getCommand("message").setExecutor(new CommandMessage());
-		getCommand("openentity").setExecutor(new CommandOpenEntity());
-		getCommand("roll").setExecutor(new CommandRoll());
-		getCommand("spawner").setExecutor(new CommandSpawner());
-		getCommand("addore").setExecutor(new CommandAddOre());
-		getCommand("showspawners").setExecutor(new CommandShowSpawners());
-		getCommand("hidespawners").setExecutor(new CommandHideSpawners());
 		getCommand("party").setExecutor(new CommandParty());
+		getCommand("roll").setExecutor(new CommandRoll());
 
-		// Register test commands
-		getLogger().info("Registering test commands...");
-		getCommand("testarmor").setExecutor(new CommandTestArmor());
-		getCommand("testenchant").setExecutor(new CommandTestEnchant());
-		getCommand("testweapon").setExecutor(new CommandTestWeapon());
-		getCommand("testrod").setExecutor(new CommandTestRod());
-		getCommand("testmob").setExecutor(new CommandTestMob());
-		getCommand("testpickaxe").setExecutor(new CommandTestPickaxe());
-		getCommand("testrune").setExecutor(new CommandTestRune());
+		// world
+		getCommand("addore").setExecutor(new CommandAddOre());
 
 		// Done, done, and done!
-		getLogger().info("AEGEUS enabled.");
+		getLogger().info("Load complete.");
 
 		// Post loading
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -102,6 +104,8 @@ public class Aegeus extends JavaPlugin {
 			getLogger().info("Loading game data...");
 			loadSpawners();
 			loadOres();
+
+			getLogger().info("Post-load complete.");
 		});
 	}
 

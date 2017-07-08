@@ -1,4 +1,4 @@
-package com.aegeus.game.commands;
+package com.aegeus.game.commands.social;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;

@@ -6,49 +6,22 @@ authors: [VarusMain, Silvre]
 main: com.aegeus.game.Aegeus
 
 commands:
-    chatchannel:
-      description: Changes your default chat channel.
-      aliases: [cc, chat, channel]
-      usage: /chatchannel <local / global>
-    global:
-      description: Send a message to all players on the server.
-      aliases: gl
-      usage: /global <message>
-    message:
-      description: Send a private message to a specified player.
-      aliases: [msg, m, whisper, tell, pm]
-      usage: /message <player> <message>
+    # entity
+    mob:
     openentity:
-      description: Opens an entity's inventory.
-    roll:
-      description: Roll a random number.
-      usage: /roll [max number]
-    spawner:
-      description: Creates a spawner at the current location.
-      usage: /spawner
-    showspawners:
-      description: Show all spawners as a mob spawner.
-      usage: /showspawners
     hidespawners:
-      description: Hides all spawners that were previously mob spawners.
-      usage: /hidespawners
-    addore:
-      description: Set the block to a minable ore at the currently facing block.
-      usage: /addore
+    showspawners:
+    spawner:
+
+    # social
+    global:
+    message:
     party:
-      description: PARTY ROOT COMMAND BOIZ
-      aliases: p
-    testarmor:
-      description: Test armor.
-    testenchant:
-      description: Test enchants.
-    testmob:
-      description: Test entities.
-    testweapon:
-      description: Test weapons.
-    testrod:
-      description: Test fishing rods.
-    testpickaxe:
-      description: Test pickaxes.
-    testrune:
-      description: Test runes.
+    chatchannel:
+    roll:
+
+    # world
+    addore:
+
+    # item
+    create:

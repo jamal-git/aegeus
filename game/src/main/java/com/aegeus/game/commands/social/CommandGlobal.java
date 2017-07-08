@@ -1,23 +1,25 @@
-package com.aegeus.game.commands.test;
+package com.aegeus.game.commands.social;
 
-import com.aegeus.game.item.tool.Rune;
+import com.aegeus.game.chat.ChatManager;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandTestRune implements CommandExecutor {
+public class CommandGlobal implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
-		if (!sender.hasPermission("aegeus.test")) return false;
 		if (args.length < 1) return false;
 
 		Player player = (Player) sender;
-		Rune rune = new Rune(Rune.RuneType.fromId(Integer.parseInt(args[0])));
-		player.getInventory().addItem(rune.build());
+		String msg = StringUtils.join(args, " ");
+
+		ChatManager.sendAuto(player, msg.trim());
 
 		return true;
 	}
+
 }
