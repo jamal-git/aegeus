@@ -14,7 +14,6 @@ public class StatsSkeleton extends Stats {
 	@Override
 	public void prepare() {
 		getNames().add("Skeleton");
-
 		getTypes().add(EntityType.SKELETON);
 	}
 }
