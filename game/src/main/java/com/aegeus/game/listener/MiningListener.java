@@ -37,12 +37,14 @@ public class MiningListener implements Listener {
 		try {
 			NBTTagCompound tag = CraftItemStack.asNMSCopy(p.getEquipment().getItemInMainHand()).getTag();
 			if (tag.hasKey("AegeusInfo") && tag.getCompound("AegeusInfo").getString("type").equalsIgnoreCase("pickaxe")) {
+			    //Verify held item is a pickaxe
 				Pickaxe pick = new Pickaxe(p.getEquipment().getItemInMainHand());
 				Location l = b.getLocation();
 				pick.impo();
 				Ore o = Ore.getOreByMaterial(b.getType());
 				if (o != null) p.playSound(p.getLocation(), Sound.BLOCK_STONE_BREAK, 0.7f, 1.0f);
 				if (o != null && parent.getOres().containsKey(new Location(l.getWorld(), l.getX(), l.getY(), l.getZ())) && o.isMinable(pick)) {
+				    //Mined block is a registered ore and was mined with a pick, give do stuff.
 					b.setType(Material.STONE);
 					if (!o.sameTier(pick) || random.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
 						b.setType(Material.STONE);
@@ -52,21 +54,27 @@ public class MiningListener implements Listener {
 						int amount = 1;
 						boolean isDense = false;
 						if (pick.getDoubleOre() > 0 && random.nextDouble() <= pick.getDoubleOre()) {
+						    //Triple ore proc
 							amount++;
 							p.sendMessage(Util.colorCodes("       &e&l*** DOUBLE ORE(x2) ***"));
 						}
 						if (pick.getTripleOre() > 0 && random.nextDouble() <= pick.getTripleOre()) {
+						    //Triple ore proc
 							amount += 2;
 							p.sendMessage(Util.colorCodes("       &e&l*** TRIPLE ORE(x3) ***"));
 						}
 						if (pick.getDenseFind() > 0 && random.nextDouble() <= pick.getDenseFind()) {
+						    //Dense find proc
 							isDense = true;
 							p.sendMessage(Util.colorCodes("       &e&l*** DENSE FIND ***"));
 						}
 						if (pick.getGemFind() > 0 && random.nextDouble() <= pick.getGemFind()) {
-							int goldDrop = (int) (o.getRandomGold() * (isDense ? Math.max(Math.log(pick.getDenseMultiplier() / Math.log(2)), 1.5) : 1));
+						    //Gem find proc
+                            //Dense find and multiplier affects the amount of gold drop, logarithmically base 10.
+							int goldDrop = (int) (o.getRandomGold() * (isDense ? Math.max(Math.log(pick.getDenseMultiplier()), 1.5) : 1));
 							p.sendMessage(Util.colorCodes("       &a&l*** GOLD FIND +" + goldDrop + "G ***"));
 							while (goldDrop > 64) {
+							    //Drop multiple stacks if the amount of gold to drop is greater than one stack
 								b.getWorld().dropItem(b.getLocation(), new ItemGold(64).build());
 								goldDrop -= 64;
 							}
@@ -85,10 +93,13 @@ public class MiningListener implements Listener {
 						}
 						int expGained = o.getRandom();
 						if (pick.getLevel() != 100) {
+						    //Add exp if the level is less than 100.
 							if (pick.addExp(expGained)) {
+                                //Pickaxe has levelled up, send a message
 								p.sendMessage(Util.colorCodes("              &6&l*** LEVEL UP!&6 [&l" + pick.getTier().getColor() + pick.getLevel() + "&6] &l***"));
 							}
 							if (pick.checkForNextTier()) {
+							    //The pickaxe has ascended to a new tier, shoot a firework and send a message.
 								p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.7f);
 								Firework f = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
 								FireworkMeta fm = f.getFireworkMeta();
@@ -98,12 +109,16 @@ public class MiningListener implements Listener {
 								p.sendMessage(Util.colorCodes("&7&oYour pick has ascended and is now a(n) " + pick.getTier().getColor() + "&n&o" + pick.getTier().getPickaxeName() + "&7&o!"));
 							}
 						}
+						//Message exp gained, plus progress
 						p.sendMessage(Util.colorCodes("              &e+" + expGained + " &lXP&7 [" + pick.getXp() + " / " + pick.getRequiredXp() + "]"));
 					} else {
+					    //Ore failed to be mined, better luck next time!
 						p.sendMessage(Util.colorCodes("&7&oThe ore was destroyed while attempting the mine it."));
 					}
+					//Set respawn timer to respective time.
 					parent.getServer().getScheduler().scheduleSyncDelayedTask(parent, () -> b.setType(o.getOre()), o.getRespawnTime());
 				} else if (o != null && !o.isMinable(pick) && parent.getOres().containsKey(b.getLocation())) {
+				    //Player is trying to mine ore with a pickaxe that is not strong enough.
 					p.sendMessage(Util.colorCodes("&c&nYour pickaxe is not powerful enough to mine that yet!"));
 				}
 				p.getEquipment().setItemInMainHand(pick.build());

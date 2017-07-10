@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 public class SpawnerListener implements Listener {
@@ -29,10 +30,15 @@ public class SpawnerListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onChunkUnload(ChunkUnloadEvent e) {
-		for (Spawner s : parent.getSpawners())
-			if (s.getLocation().getChunk().equals(e.getChunk())) s.setCount(0);
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent e)   {
+	    for(Spawner s : parent.getSpawners())
+	        if(s.getLocation().getChunk().equals(e.getChunk())) s.setCount(0);
+    }
 
-	}
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent e)   {
+	    for(Spawner s : parent.getSpawners())
+	        if(s.getLocation().getChunk().equals(e.getChunk()) && s.canSpawn()) s.incrementCount().get().spawn(s.getLocation(), s);
+    }
 }

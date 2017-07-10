@@ -11,7 +11,8 @@ commands:
     openentity:
     hidespawners:
     showspawners:
-    spawner:
+    spawners:
+      aliases: spawner
 
     # social
     global:

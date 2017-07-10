@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 /**
  * Created by Silvre on 7/7/2017.
- * Project: aegeus
- * If you are reading this - you can read this
  */
 public class Party {
 	private LinkedList<AgPlayer> members = new LinkedList<>();
@@ -28,13 +26,14 @@ public class Party {
 		update();
 	}
 
-	public void promote(AgPlayer p) {
-		if (members.contains(p)) {
-			members.remove(p);
-			members.addFirst(p);
-		}
-		update();
-	}
+    public void promote(AgPlayer p)   {
+        if(members.contains(p)) {
+            members.remove(p);
+            members.addFirst(p);
+            sendMessage(Util.colorCodes("&a&l" + members.peek().getPlayer().getDisplayName() + "&r&d has been promoted to the party leader."), true);
+        }
+        update();
+    }
 
 	public void addPlayer(AgPlayer p) {
 		if (!members.contains(p)) members.offer(p);
@@ -49,33 +48,45 @@ public class Party {
 		return members.peek();
 	}
 
-	public LinkedList<AgPlayer> getMembers() {
-		return members;
-	}
+    /**
+     * @param p
+     * @return True if the removed player was the leader
+     */
+    public boolean removePlayer(AgPlayer p)    {
+        List<Player> list = members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList());
+        for(Player ap : list) GlowAPI.setGlowing(ap, false, p.getPlayer());
+        GlowAPI.setGlowing(p.getPlayer(), false, list);
+        for(Player ap : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))   {
+            ap.sendMessage(Util.colorCodes("&a&l" + p.getPlayer().getName() + "&r&a has left the party."));
+        }
+        if(members.peek().equals(p))    {
+            members.remove(p);
+            update();
+            members.peek().getPlayer().sendMessage("&dYou have been promoted to party leader.");
+            sendMessage("&a&l" + members.peek().getPlayer().getDisplayName() + "&r&d has been promoted to party leader.", members.peek(), true);
+            return true;
+        }
+        members.remove(p);
+        update();
+        return false;
+    }
 
-	/**
-	 * @param p
-	 * @return True if the removed player was the leader
-	 */
-	public boolean removePlayer(AgPlayer p) {
-		List<Player> list = members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList());
-		for (Player ap : list) GlowAPI.setGlowing(ap, false, p.getPlayer());
-		GlowAPI.setGlowing(p.getPlayer(), false, list);
-		if (members.peek().equals(p)) {
-			members.remove(p);
-			update();
-			return true;
-		}
-		members.remove(p);
-		update();
-		for (Player ap : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList())) {
-			ap.sendMessage(Util.colorCodes("&a&l" + p.getPlayer().getName() + "&r&a has left the party."));
-		}
-		return false;
-	}
+    public void sendMessage(String message, boolean custom) {
+        sendMessage(message, null, custom);
+    }
 
-	public void update() {
-		List<Player> list = members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList());
-		for (Player p : list) GlowAPI.setGlowing(p, GlowAPI.Color.PURPLE, list);
-	}
+    public void sendMessage(String message, AgPlayer sender, boolean custom)    {
+        for(Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList()))  {
+            if(!(sender != null && p.equals(sender.getPlayer())))
+                if(!custom)
+                    p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+                else
+                    p.sendMessage(Util.colorCodes(message));
+        }
+    }
+
+    public void update()    {
+        List<Player> list = members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList());
+        for(Player p : list) GlowAPI.setGlowing(p, GlowAPI.Color.PURPLE, list);
+    }
 }

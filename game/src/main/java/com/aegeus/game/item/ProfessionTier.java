@@ -5,8 +5,6 @@ import org.bukkit.Material;
 
 /**
  * Created by Silvre on 7/1/2017.
- * Project: aegeus
- * If you are reading this - you can read this
  */
 public enum ProfessionTier {
 	BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.RED, 500),
