@@ -18,6 +18,7 @@ commands:
     global:
     message:
     party:
+      aliases: p
     chatchannel:
     roll:
 
