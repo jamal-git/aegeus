@@ -21,6 +21,7 @@ commands:
       aliases: p
     chatchannel:
     roll:
+    broadcast:
 
     # world
     addore:
