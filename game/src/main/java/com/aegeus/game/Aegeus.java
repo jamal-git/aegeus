@@ -2,6 +2,7 @@ package com.aegeus.game;
 
 import com.aegeus.game.commands.entity.*;
 import com.aegeus.game.commands.item.CommandCreate;
+import com.aegeus.game.commands.item.CommandGenerate;
 import com.aegeus.game.commands.social.*;
 import com.aegeus.game.commands.world.CommandAddOre;
 import com.aegeus.game.entity.*;
@@ -84,6 +85,7 @@ public class Aegeus extends JavaPlugin {
 
 		// item
 		getCommand("create").setExecutor(new CommandCreate());
+		getCommand("generate").setExecutor(new CommandGenerate());
 
 		// social
 		getCommand("chatchannel").setExecutor(new CommandChatChannel());

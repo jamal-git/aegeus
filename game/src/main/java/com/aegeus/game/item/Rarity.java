@@ -33,10 +33,10 @@ public enum Rarity {
 	}
 
 	public static Rarity fromValue(float f) {
-		if (f <= 0.62) return Rarity.COMMON;
-		else if (f <= 0.86) return Rarity.UNCOMMON;
-		else if (f <= 0.97) return Rarity.RARE;
-		else return Rarity.UNIQUE;
+		if (f < 0.33) return COMMON;
+		else if (f < 0.6) return UNCOMMON;
+		else if (f < 0.83) return RARE;
+		else return UNIQUE;
 	}
 
 	public int getId() {

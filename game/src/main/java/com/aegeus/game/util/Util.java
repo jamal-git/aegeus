@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-	public static float rarity(float a) {
+	public static float rarity(float f) {
 
 		/*
 		0 - 72: 33%
@@ -43,9 +43,9 @@ public class Util {
 		99 - 100: 17%
 		 */
 
-		if (a < 0.73) return random.nextFloat() * 0.33f;
-		else if (a < 0.93) return (random.nextFloat() * 0.27f) + 0.33f;
-		else if (a < 0.99) return (random.nextFloat() * 0.23f) + 0.6f;
+		if (f < 0.73) return random.nextFloat() * 0.33f;
+		else if (f < 0.93) return (random.nextFloat() * 0.27f) + 0.33f;
+		else if (f < 0.99) return (random.nextFloat() * 0.23f) + 0.6f;
 		else return (random.nextFloat() * 0.17f) + 0.83f;
 	}
 
