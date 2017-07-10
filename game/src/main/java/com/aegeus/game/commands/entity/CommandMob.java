@@ -23,11 +23,8 @@ public class CommandMob implements CommandExecutor {
 		else
 			stats = Stats.fromName(split[0]);
 
-		if (stats == null)
-			return false;
-		else {
-			stats.spawn(player.getLocation());
-		}
+		if (stats == null) return false;
+		else stats.spawn(player.getLocation());
 
 		return true;
 	}

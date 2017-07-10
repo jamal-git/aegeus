@@ -16,6 +16,8 @@ public class AgPlayer extends AgEntity {
 	private BossBar hpBar;
 
 	private int level = 0;
+	private int xp = 0;
+	private int soulpoints = 0;
 	private float energy = 100;
 
 	private Alignment alignment = Alignment.LAWFUL;
@@ -46,6 +48,8 @@ public class AgPlayer extends AgEntity {
 		this.hpBar = other.hpBar;
 
 		this.level = other.level;
+		this.xp = other.xp;
+		this.soulpoints = other.soulpoints;
 		this.energy = other.energy;
 
 		this.alignment = other.alignment;
@@ -91,6 +95,22 @@ public class AgPlayer extends AgEntity {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public int getXp() {
+		return xp;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
+	}
+
+	public int getSoulpoints() {
+		return soulpoints;
+	}
+
+	public void setSoulpoints(int soulpoints) {
+		this.soulpoints = soulpoints;
 	}
 
 	public float getEnergy() {

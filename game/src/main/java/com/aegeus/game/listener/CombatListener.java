@@ -165,6 +165,7 @@ public class CombatListener implements Listener {
 				if (weapon.getPoisonDmg() > 0) {
 					magDmg += weapon.getPoisonDmg();
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1));
+					//lVictim.getWorld().spawnParticle(Particle.SPELL, );
 					lVictim.getWorld().playSound(lVictim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 				}
 				if (weapon.getPureDmg() > 0) {
@@ -174,18 +175,18 @@ public class CombatListener implements Listener {
 					physDmg += weapon.getPureDmg() * (matches / 4);
 				}
 				if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
-					physDmg += lVictim.getMaxHealth() * (0.005 * weapon.getTier());
+					physDmg += lVictim.getMaxHealth() * (0.01 * weapon.getTier());
 					if (victim instanceof Player)
-						victim.sendMessage(Util.colorCodes("              &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
+						victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
 					if (attacker instanceof Player)
-						attacker.sendMessage(Util.colorCodes("              &e&l*** TRUE HEARTS&e!&l ***"));
+						attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
 				}
 				if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1));
 					if (victim instanceof Player)
-						victim.sendMessage(Util.colorCodes("              &c&l*** OPPONENT BLINDNESS&c!&l ***"));
+						victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
 					if (attacker instanceof Player)
-						attacker.sendMessage(Util.colorCodes("              &e&l*** BLINDNESS&e!&l ***"));
+						attacker.sendMessage(Util.colorCodes("            &e&l*** BLINDNESS&e!&l ***"));
 				}
 				if (weapon.getLifeSteal() > 0) {
 					healing += physDmg * weapon.getLifeSteal();
@@ -193,11 +194,11 @@ public class CombatListener implements Listener {
 
 				float critChance = aInfo.getCritChance() + (Util.isAxe(tool.getType()) ? 0.05f : 0);
 				if (critChance > 0 && random.nextFloat() <= critChance) {
-					physDmg *= 1.25;
+					physDmg *= 1.75;
 					if (victim instanceof Player)
-						victim.sendMessage(Util.colorCodes("              &c&l*** OPPONENT CRITICAL&c!&l ***"));
+						victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT CRITICAL&c!&l ***"));
 					if (attacker instanceof Player)
-						attacker.sendMessage(Util.colorCodes("              &e&l*** CRITICAL&e!&l ***"));
+						attacker.sendMessage(Util.colorCodes("            &e&l*** CRITICAL&e!&l ***"));
 				}
 
 				physDmg *= 1 - Math.max(0, vInfo.getPhysRes() - weapon.getPen());
@@ -210,24 +211,24 @@ public class CombatListener implements Listener {
 				physDmg = 0;
 				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
 				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("              &c&l*** OPPONENT BLOCKED&c!&l ***"));
+					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLOCKED&c!&l ***"));
 				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("              &a&l*** BLOCKED&e!&l ***"));
+					victim.sendMessage(Util.colorCodes("            &e&l*** BLOCKED&e!&l ***"));
 			} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
 				physDmg = 0;
 				magDmg = 0;
 				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
 				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("              &c&l*** OPPONENT DODGED&c!&l ***"));
+					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT DODGED&c!&l ***"));
 				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("              &a&l*** DODGED&e!&l ***"));
+					victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
 			} else if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
 				damaged = lAttacker;
 				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
 				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("              &c&l*** OPPONENT REFLECTED&c!&l ***"));
+					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT REFLECTED&c!&l ***"));
 				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("              &a&l*** REFLECTED&e!&l ***"));
+					victim.sendMessage(Util.colorCodes("            &e&l*** REFLECTED&e!&l ***"));
 			}
 
 			e.setDamage(physDmg + magDmg);
@@ -242,16 +243,7 @@ public class CombatListener implements Listener {
 			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
 				LivingEntity lDamaged = (LivingEntity) damaged;
 
-				if (vInfo instanceof AgMonster && lDamaged.getHealth() - e.getDamage() <= 0
-						&& ((AgMonster) vInfo).getTier() >= 3
-						&& random.nextFloat() <= (0.012 * ((AgMonster) vInfo).getTier())) {
-					lDamaged.getWorld().playSound(lDamaged.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
-					lDamaged.setHealth(lDamaged.getMaxHealth() * 0.5);
-					((AgMonster) vInfo).setDmgMultiplier(((AgMonster) vInfo).getDmgMultiplier() + 0.2f);
-				} else {
-					lDamaged.damage(e.getDamage());
-				}
-
+				lDamaged.damage(e.getDamage());
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
 

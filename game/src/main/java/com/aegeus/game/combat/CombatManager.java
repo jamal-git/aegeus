@@ -13,7 +13,7 @@ public class CombatManager {
 	public static void takeEnergy(Player player, ItemStack tool) {
 		AgPlayer info = Aegeus.getInstance().getPlayer(player);
 		Weapon weapon = tool != null && new Weapon(tool).verify() ? new Weapon(tool) : null;
-		int energy = weapon != null ? 6 + (4 * (weapon.getTier() - 1)) : 6;
+		float energy = weapon != null ? 6.5f + (3.5f * (weapon.getTier() - 1)) : 6;
 
 		info.setEnergy(info.getEnergy() - energy);
 

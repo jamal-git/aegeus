@@ -14,6 +14,8 @@ public class StatsListener implements Listener {
 
 	public StatsListener(Aegeus parent) {
 		this.parent = parent;
+
+		// Health regeneration
 		Bukkit.getScheduler().runTaskTimer(parent, () -> {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				AgPlayer info = parent.getPlayer(player);
@@ -24,6 +26,7 @@ public class StatsListener implements Listener {
 			}
 		}, 20, 20);
 
+		// Energy regeneration
 		Bukkit.getScheduler().runTaskTimer(parent, () -> {
 			for (Player player : Bukkit.getOnlinePlayers()) {
 				AgPlayer info = parent.getPlayer(player);
