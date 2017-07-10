@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class CommandCreate implements CommandExecutor {
 
@@ -39,16 +38,15 @@ public class CommandCreate implements CommandExecutor {
 		} else if (args[0].equalsIgnoreCase("enchant")) {
 			try {
 				int amount = args.length < 4 ? 1 : Integer.parseInt(args[3]);
-				ItemStack enchant;
 
 				if (args[1].equalsIgnoreCase("armor")) {
-					enchant = new ArmorEnchant(Integer.parseInt(args[2])).build();
+					for (int i = 0; i < amount; i++)
+						player.getInventory().addItem(new ArmorEnchant(Integer.parseInt(args[2])).build());
 				} else if (args[1].equalsIgnoreCase("weapon")) {
-					enchant = new WeaponEnchant(Integer.parseInt(args[2])).build();
+					for (int i = 0; i < amount; i++)
+						player.getInventory().addItem(new WeaponEnchant(Integer.parseInt(args[2])).build());
 				} else return false;
 
-				enchant.setAmount(amount);
-				player.getInventory().addItem(enchant);
 			} catch (NumberFormatException e) {
 				return false;
 			}

@@ -2,8 +2,10 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.LevelInfo;
+import com.aegeus.game.item.info.SingletonInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
@@ -14,11 +16,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
+public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo, SingletonInfo {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	// Level Info
@@ -29,6 +32,13 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	private int tier = 0;
 	private Rarity rarity = null;
 	private int enchant = 0;
+
+	// Dura Info
+	private int maxDura = 0;
+	private int dura = 0;
+
+	// Singleton Info
+	private LocalDateTime time = LocalDateTime.now();
 
 	// Weapon Stats
 	private Rune rune = null;
@@ -61,6 +71,11 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		this.rarity = other.rarity;
 		this.enchant = other.enchant;
 
+		this.maxDura = other.maxDura;
+		this.dura = other.dura;
+
+		this.time = other.time;
+
 		this.rune = other.rune;
 		this.minDmg = other.minDmg;
 		this.maxDmg = other.maxDmg;
@@ -79,6 +94,8 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		super.impo();
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
+		DuraInfo.impo(this);
+		SingletonInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
@@ -99,6 +116,8 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		super.store();
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
+		DuraInfo.store(this);
+		SingletonInfo.store(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("weapon"));
@@ -217,6 +236,36 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 		this.enchant = enchant;
 	}
 
+	@Override
+	public int getMaxDura() {
+		return maxDura;
+	}
+
+	@Override
+	public void setMaxDura(int maxDura) {
+		this.maxDura = maxDura;
+	}
+
+	@Override
+	public int getDura() {
+		return dura;
+	}
+
+	@Override
+	public void setDura(int dura) {
+		this.dura = dura;
+	}
+
+	@Override
+	public LocalDateTime getTime() {
+		return time;
+	}
+
+	@Override
+	public void setTime(LocalDateTime time) {
+		this.time = time;
+	}
+
 	/*
 	Weapon Methods
 	 */
@@ -321,5 +370,4 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	public void setBlind(float blind) {
 		this.blind = blind;
 	}
-
 }

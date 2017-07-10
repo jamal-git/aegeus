@@ -19,11 +19,11 @@ public class AgItem {
 	private List<String> lore = new ArrayList<>();
 
 	public AgItem(Material material) {
-		this.item = new ItemStack(material);
+		this(new ItemStack(material));
 	}
 
 	public AgItem(Material material, int amount) {
-		this.item = new ItemStack(material, amount);
+		this(new ItemStack(material, amount));
 	}
 
 	public AgItem(ItemStack item) {

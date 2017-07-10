@@ -142,7 +142,6 @@ public class CombatListener implements Listener {
 			int healing = 0;
 
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
-				tool.setDurability((short) 0);
 				if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 					if (tool.getType().equals(Material.BOW))
 						return;
@@ -151,6 +150,9 @@ public class CombatListener implements Listener {
 				}
 
 				Weapon weapon = new Weapon(tool);
+				if (lAttacker instanceof Player) CombatManager.weaponDura((Player) lAttacker, weapon);
+				if (lVictim instanceof Player) CombatManager.armorDura((Player) lVictim);
+
 				physDmg = weapon.getDmg();
 
 				if (weapon.getFireDmg() > 0) {
@@ -308,13 +310,16 @@ public class CombatListener implements Listener {
 	@EventHandler
 	private void onInteract(PlayerInteractEvent e) {
 		if (e.getItem() != null && e.getItem().getType().equals(Material.BOW)) {
+			AgPlayer info = parent.getPlayer(e.getPlayer());
 			e.setCancelled(true);
 			e.setUseItemInHand(Event.Result.ALLOW);
 
-			if (e.getAction().equals(Action.RIGHT_CLICK_AIR)
-					|| e.getAction().equals(Action.RIGHT_CLICK_BLOCK)
-					&& e.getHand().equals(EquipmentSlot.HAND))
-				e.getPlayer().launchProjectile(Arrow.class);
+			if ((e.getAction().equals(Action.RIGHT_CLICK_AIR)
+					|| e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+					&& e.getHand().equals(EquipmentSlot.HAND)) {
+				if (info.getEnergy() > 0) e.getPlayer().launchProjectile(Arrow.class);
+				else CombatManager.exhaust(e.getPlayer());
+			}
 		}
 	}
 
@@ -338,6 +343,12 @@ public class CombatListener implements Listener {
 			AgProjectile p = parent.getProjectile(e.getEntity());
 			p.setFiredWith(entity.getEquipment().getItemInMainHand());
 		}
+	}
+
+	@EventHandler
+	private void onShootBow(EntityShootBowEvent e) {
+		if (e.getEntity() instanceof Player)
+			e.setCancelled(true);
 	}
 
 }

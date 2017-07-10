@@ -2,6 +2,7 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.util.Util;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
+public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo {
 	// Level Info
 	private int level = 0;
 	private int xp = 0;
@@ -26,6 +27,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	private int tier = 0;
 	private Rarity rarity = null;
 	private int enchant = 0;
+
+	// Dura Info
+	private int maxDura = 0;
+	private int dura = 0;
 
 	// Armor Stats
 	private Rune rune = null;
@@ -56,6 +61,9 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		this.rarity = other.rarity;
 		this.enchant = other.enchant;
 
+		this.maxDura = other.maxDura;
+		this.dura = other.dura;
+
 		this.rune = other.rune;
 		this.hp = other.hp;
 		this.hpRegen = other.hpRegen;
@@ -72,6 +80,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		super.impo();
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
+		DuraInfo.impo(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
@@ -90,6 +99,7 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 		super.store();
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
+		DuraInfo.store(this);
 
 		NBTTagCompound info = getAegeusInfo();
 		info.set("type", new NBTTagString("armor"));
@@ -203,6 +213,28 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo {
 	@Override
 	public void setEnchant(int enchant) {
 		this.enchant = enchant;
+	}
+
+	@Override
+	public int getMaxDura() {
+		return maxDura;
+	}
+
+	@Override
+	public void setMaxDura(int maxDura) {
+		this.maxDura = maxDura;
+		DuraInfo.update(this);
+	}
+
+	@Override
+	public int getDura() {
+		return dura;
+	}
+
+	@Override
+	public void setDura(int dura) {
+		this.dura = dura;
+		DuraInfo.update(this);
 	}
 
 	/*
