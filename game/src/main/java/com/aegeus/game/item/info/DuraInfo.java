@@ -19,8 +19,8 @@ public interface DuraInfo {
 
 	static <T extends AgItem & DuraInfo> void update(T t) {
 		if (t.getMaterial().getMaxDurability() > 0 && t.getMaxDura() > 0) {
-			t.getItem().setDurability((short) (((t.getDura() / t.getMaxDura()) * 0.999)
-					* t.getMaterial().getMaxDurability()));
+			t.getItem().setDurability((short) (t.getMaterial().getMaxDurability()
+					- (((float) t.getDura() / (float) t.getMaxDura()) * t.getMaterial().getMaxDurability())));
 		}
 	}
 

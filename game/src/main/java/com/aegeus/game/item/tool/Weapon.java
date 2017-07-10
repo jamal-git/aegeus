@@ -2,6 +2,7 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.AgItem;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.LevelInfo;
@@ -55,6 +56,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 
 	public Weapon(Material material) {
 		super(new ItemStack(material));
+		setMaxDura(Tier.fromTier(tier).getWepDura());
 	}
 
 	public Weapon(ItemStack item) {
@@ -214,6 +216,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	@Override
 	public void setTier(int tier) {
 		this.tier = tier;
+		setMaxDura(Tier.fromTier(tier).getWepDura());
 	}
 
 	@Override
@@ -244,6 +247,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	@Override
 	public void setMaxDura(int maxDura) {
 		this.maxDura = maxDura;
+		setDura(getMaxDura());
 	}
 
 	@Override
@@ -254,6 +258,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	@Override
 	public void setDura(int dura) {
 		this.dura = dura;
+		DuraInfo.update(this);
 	}
 
 	@Override

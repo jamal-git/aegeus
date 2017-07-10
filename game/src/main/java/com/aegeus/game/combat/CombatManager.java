@@ -5,6 +5,7 @@ import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -13,7 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 public class CombatManager {
 	public static void takeEnergy(Player player, ItemStack tool) {
 		AgPlayer info = Aegeus.getInstance().getPlayer(player);
-		Weapon weapon = tool != null && new Weapon(tool).verify() ? new Weapon(tool) : null;
+		Weapon weapon = tool != null && !tool.getType().equals(Material.AIR)
+				&& new Weapon(tool).verify() ? new Weapon(tool) : null;
 		float energy = weapon != null ? 6.5f + (3.5f * (weapon.getTier() - 1)) : 6;
 
 		info.setEnergy(info.getEnergy() - energy);
@@ -30,27 +32,38 @@ public class CombatManager {
 	}
 
 	public static void weaponDura(Player player, Weapon weapon) {
-		for (int i = 0; i < player.getInventory().getSize(); i++) {
-			ItemStack item = player.getInventory().getItem(i);
-			if (item != null && new Weapon(item).getTime().equals(weapon.getTime())) {
-				weapon.subtractDura(1);
-				player.getInventory().setItem(i, weapon.build());
+		if (weapon.getMaxDura() > 0) {
+			for (int i = 0; i < player.getInventory().getSize(); i++) {
+				ItemStack item = player.getInventory().getItem(i);
+				if (item != null && new Weapon(item).getTime().equals(weapon.getTime())) {
+					weapon.subtractDura(1);
+					if (weapon.getDura() <= 0)
+						player.getInventory().setItem(i, new ItemStack(Material.AIR));
+					else
+						player.getInventory().setItem(i, weapon.build());
+				}
 			}
 		}
 	}
 
 	public static void armorDura(Player player) {
-		player.getInventory().setHelmet(armorDura(player, player.getInventory().getHelmet()));
-		player.getInventory().setChestplate(armorDura(player, player.getInventory().getChestplate()));
-		player.getInventory().setLeggings(armorDura(player, player.getInventory().getLeggings()));
-		player.getInventory().setBoots(armorDura(player, player.getInventory().getBoots()));
+		player.getInventory().setHelmet(armorDura(player.getInventory().getHelmet()));
+		player.getInventory().setChestplate(armorDura(player.getInventory().getChestplate()));
+		player.getInventory().setLeggings(armorDura(player.getInventory().getLeggings()));
+		player.getInventory().setBoots(armorDura(player.getInventory().getBoots()));
 	}
 
-	public static ItemStack armorDura(Player player, ItemStack item) {
+	public static ItemStack armorDura(ItemStack item) {
 		if (item != null && new Armor(item).verify()) {
 			Armor armor = new Armor(item);
-			armor.subtractDura(1);
+			if (armor.getMaxDura() > 0) {
+				armor.subtractDura(1);
+				if (armor.getDura() <= 0)
+					return new ItemStack(Material.AIR);
+			}
 			return armor.build();
-		} else return item;
+		}
+
+		return item;
 	}
 }

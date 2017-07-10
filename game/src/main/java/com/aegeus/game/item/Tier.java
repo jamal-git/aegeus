@@ -10,9 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 public enum Tier {
-	NONE(1000, 1000, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
+	NONE(0, 0, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
 			"Custom Bow", "Custom Staff", "Custom Polearm"),
-	TIER_1(1000, 1000, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
+	TIER_1(675, 750, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
 			"Basic Bow", "Basic Staff", "Basic Polearm") {
 		@Override
 		public Stats getStats() {
@@ -82,7 +82,7 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_2(2200, 2200, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
+	TIER_2(1215, 1350, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
 			"Advanced Bow", "Advanced Staff", "Advanced Polearm") {
 		@Override
 		public Stats getStats() {
@@ -153,7 +153,7 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_3(3400, 3400, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
+	TIER_3(1830, 2030, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
 			"Magic Bow", "Magic Staff", "Magic Polearm") {
 		@Override
 		public Stats getStats() {
@@ -228,7 +228,7 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_4(4600, 4600, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
+	TIER_4(2745, 3050, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
 			"Ancient Bow", "Ancient Staff", "Ancient Polearm") {
 		@Override
 		public Stats getStats() {
@@ -303,7 +303,7 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_5(5800, 5800, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
+	TIER_5(4120, 4575, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
 			"Legendary Bow", "Legendary Staff", "Legendary Polearm") {
 		@Override
 		public Stats getStats() {
