@@ -128,7 +128,7 @@ public class CommandParty implements CommandExecutor {
             }
             else    {
                 //Leave the party. Bye
-                agplayer.getInvitedParty().removePlayer(agplayer);
+                agplayer.getParty().removePlayer(agplayer);
                 agplayer.setParty(null);
             }
         }

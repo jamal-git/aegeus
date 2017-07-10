@@ -31,7 +31,10 @@ public class MiningListener implements Listener {
 
 	@EventHandler
 	public void onMine(BlockBreakEvent e) {
-		e.setCancelled(true);
+		if(e.getPlayer().getGameMode() == GameMode.CREATIVE)    {
+		    return;
+        }
+        e.setCancelled(true);
 		Block b = e.getBlock();
 		Player p = e.getPlayer();
 		try {
