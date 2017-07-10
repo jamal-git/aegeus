@@ -6,8 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class CommandMob implements CommandExecutor {
 
 	@Override
@@ -17,17 +15,18 @@ public class CommandMob implements CommandExecutor {
 		if (args.length < 1) return false;
 
 		Player player = (Player) sender;
-		try {
-			String[] split = args[0].split(":");
-			Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
-			if (split.length >= 2) {
-				Class parent = Class.forName("com.aegeus.game.stats." + split[1]);
-				((Stats) (clazz.getConstructor(Stats.class).newInstance((Stats) parent.newInstance()))).spawn(player.getLocation());
-			} else
-				((Stats) clazz.newInstance()).spawn(player.getLocation());
-		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException
-				| IllegalAccessException | ClassNotFoundException e) {
-			e.printStackTrace();
+		Stats stats;
+		String[] split = args[0].split(":");
+
+		if (split.length >= 2)
+			stats = Stats.fromName(split[0], split[1]);
+		else
+			stats = Stats.fromName(split[0]);
+
+		if (stats == null)
+			return false;
+		else {
+			stats.spawn(player.getLocation());
 		}
 
 		return true;

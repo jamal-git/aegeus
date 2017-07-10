@@ -23,7 +23,7 @@ public class CommandCreate implements CommandExecutor {
 
 			if (args[0].equalsIgnoreCase("armor"))
 				player.getInventory().addItem(ItemParser.parseArmor(new Armor(material), args).build());
-			if (args[0].equalsIgnoreCase("armor"))
+			if (args[0].equalsIgnoreCase("weapon"))
 				player.getInventory().addItem(ItemParser.parseWeapon(new Weapon(material), args).build());
 		} else if (args[0].equalsIgnoreCase("pickaxe")) {
 			player.getInventory().addItem(ItemParser.parsePick(new Pickaxe(), args).build());

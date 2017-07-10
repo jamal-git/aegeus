@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +66,25 @@ public abstract class Stats {
 			copy(parent);
 		}
 		prepare();
+	}
+
+	public static Stats fromName(String name) {
+		try {
+			return (Stats) Class.forName("com.aegeus.game.stats." + name).newInstance();
+		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+			return null;
+		}
+	}
+
+	public static Stats fromName(String name, String parentName) {
+		try {
+			Class stats = Class.forName("com.aegeus.game.stats." + name);
+			Class parent = Class.forName("com.aegeus.game.stats." + parentName);
+			return (Stats) stats.getConstructor(Stats.class).newInstance((Stats) parent.newInstance());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+				| NoSuchMethodException | InvocationTargetException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -150,6 +170,8 @@ public abstract class Stats {
 		this.rarity = rarity;
 	}
 
+	// Randomizers
+
 	public boolean getGenName() {
 		return genName;
 	}
@@ -157,8 +179,6 @@ public abstract class Stats {
 	public void setGenName(boolean genName) {
 		this.genName = genName;
 	}
-
-	// Randomizers
 
 	public String getName() {
 		return names.isEmpty() ? null : names.size() == 1 ? names.get(0) :
@@ -299,6 +319,8 @@ public abstract class Stats {
 		return boots;
 	}
 
+	// Defaults
+
 	public List<WeaponPossible> getWeapons() {
 		return weapons;
 	}
@@ -306,8 +328,6 @@ public abstract class Stats {
 	public void setWeapons(List<WeaponPossible> weapons) {
 		this.weapons = weapons;
 	}
-
-	// Defaults
 
 	public ArmorPossible getDefArmor() {
 		return defArmor;
@@ -317,6 +337,8 @@ public abstract class Stats {
 		this.defArmor = defArmor;
 	}
 
+	// Generation methods
+
 	public WeaponPossible getDefWeapon() {
 		return defWeapon;
 	}
@@ -324,8 +346,6 @@ public abstract class Stats {
 	public void setDefWeapon(WeaponPossible defWeapon) {
 		this.defWeapon = defWeapon;
 	}
-
-	// Generation methods
 
 	public LivingEntity spawn(Location location) {
 		return spawn(location, null);

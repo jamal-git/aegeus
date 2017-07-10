@@ -58,11 +58,7 @@ public class Util {
 	}
 
 	public static long calcMaxXP(int level) {
-		return 300 + Math.round(Math.pow(74 * level, 1.28));
-	}
-
-	public static int calcLevelBuff(int value, int level) {
-		return Math.round((value * level) / 65);
+		return 300 + Math.round(Math.pow(74 * level, 1.08));
 	}
 
 	public static void updateStats(LivingEntity entity) {

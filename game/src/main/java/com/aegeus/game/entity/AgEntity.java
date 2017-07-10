@@ -3,6 +3,7 @@ package com.aegeus.game.entity;
 import net.minecraft.server.v1_9_R1.EntityLiving;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class AgEntity {
 	protected final LivingEntity entity;
 	protected final UUID uuid;
 	protected LocalDateTime combatDate;
+	protected Entity attacker;
 
 	protected int hpRegen = 0;
 	protected float energyRegen = 0;
@@ -31,6 +33,7 @@ public class AgEntity {
 		this.entity = other.entity;
 		this.uuid = other.uuid;
 		this.combatDate = other.combatDate;
+		this.attacker = other.attacker;
 
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
@@ -77,6 +80,14 @@ public class AgEntity {
 		return combatDate;
 	}
 
+	public Entity getAttacker() {
+		return attacker;
+	}
+
+	public void setAttacker(Entity attacker) {
+		this.attacker = attacker;
+	}
+
 	public void inCombat() {
 		combatDate = LocalDateTime.now();
 	}
@@ -110,11 +121,11 @@ public class AgEntity {
 	}
 
 	public float getMagRes() {
-		return physRes;
+		return magRes;
 	}
 
-	public void setMagRes(float physRes) {
-		this.physRes = physRes;
+	public void setMagRes(float magRes) {
+		this.magRes = magRes;
 	}
 
 	public float getBlock() {

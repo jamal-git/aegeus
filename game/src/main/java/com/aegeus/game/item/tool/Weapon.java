@@ -122,7 +122,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		lore.add(Util.colorCodes("&cDMG: " + minDmg + " - " + maxDmg));
+		lore.add(Util.colorCodes("&cDMG: " + minDmg + " - " + maxDmg + (getLevelDmg() <= 0 ? "" : "&6 (+" + getLevelDmg() + ")")));
 		if (pen > 0) lore.add(Util.colorCodes("&cPENETRATION: " + Math.round(pen * 100) + "%"));
 		if (fireDmg > 0) lore.add(Util.colorCodes("&cFIRE DMG: +" + fireDmg));
 		if (iceDmg > 0) lore.add(Util.colorCodes("&cICE DMG: +" + iceDmg));
@@ -230,7 +230,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 	}
 
 	public int getDmg() {
-		return getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg() + 1);
+		return (getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg() + 1)) + getLevelDmg();
 	}
 
 	public void setDmg(int minDmg, int maxDmg) {
@@ -252,6 +252,10 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo {
 
 	public void setMaxDmg(int maxDmg) {
 		this.maxDmg = maxDmg;
+	}
+
+	public int getLevelDmg() {
+		return (int) Math.round(getLevel() * (0.15 * getTier()));
 	}
 
 	public float getPen() {

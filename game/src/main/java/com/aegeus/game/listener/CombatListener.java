@@ -1,6 +1,7 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.combat.CombatManager;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
@@ -67,8 +68,8 @@ public class CombatListener implements Listener {
 				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
 		}
 
-		if (entity.getKiller() != null) {
-			Player player = entity.getKiller();
+		if (info.getAttacker() instanceof Player) {
+			Player player = (Player) info.getAttacker();
 			ItemStack tool = player.getInventory().getItemInMainHand();
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
 				Weapon weapon = new Weapon(tool);
@@ -130,19 +131,10 @@ public class CombatListener implements Listener {
 			AgEntity aInfo = parent.getEntity(lAttacker);
 
 			e.setCancelled(true);
-			if (aInfo instanceof AgPlayer) {
-				AgPlayer pInfo = (AgPlayer) aInfo;
-				if (pInfo.getEnergy() > 0) {
-					pInfo.setEnergy(pInfo.getEnergy() - 9);
-					Util.updateDisplay(pInfo.getPlayer());
-				}
-				if (pInfo.getEnergy() <= 0) {
-					pInfo.setEnergy(-40);
-					lAttacker.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 4));
-					Util.updateDisplay(pInfo.getPlayer());
-					return;
-				}
-				Util.updateDisplay(pInfo.getPlayer());
+			if (attacker instanceof Player) {
+				AgPlayer pInfo = parent.getPlayer((Player) attacker);
+				CombatManager.takeEnergy((Player) attacker, tool);
+				if (pInfo.getEnergy() <= 0) return;
 			}
 
 			int physDmg = 0;
@@ -157,7 +149,6 @@ public class CombatListener implements Listener {
 					if (Util.distance(victim.getLocation(), attacker.getLocation()) > 3.5)
 						return;
 				}
-
 
 				Weapon weapon = new Weapon(tool);
 				physDmg = weapon.getDmg();
@@ -250,7 +241,17 @@ public class CombatListener implements Listener {
 
 			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
 				LivingEntity lDamaged = (LivingEntity) damaged;
-				lDamaged.damage(e.getDamage(), attacker);
+
+				if (vInfo instanceof AgMonster && lDamaged.getHealth() - e.getDamage() <= 0
+						&& ((AgMonster) vInfo).getTier() >= 3
+						&& random.nextFloat() <= (0.012 * ((AgMonster) vInfo).getTier())) {
+					lDamaged.getWorld().playSound(lDamaged.getLocation(), Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+					lDamaged.setHealth(lDamaged.getMaxHealth() * 0.5);
+					((AgMonster) vInfo).setDmgMultiplier(((AgMonster) vInfo).getDmgMultiplier() + 0.2f);
+				} else {
+					lDamaged.damage(e.getDamage());
+				}
+
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
 
@@ -267,8 +268,6 @@ public class CombatListener implements Listener {
 
 		if (damaged instanceof LivingEntity) {
 			LivingEntity lDamaged = (LivingEntity) damaged;
-			AgEntity vInfo = parent.getEntity(lDamaged);
-			vInfo.inCombat();
 
 			lDamaged.setMaximumNoDamageTicks(3);
 			lDamaged.setNoDamageTicks(lDamaged.getMaximumNoDamageTicks());
@@ -289,6 +288,13 @@ public class CombatListener implements Listener {
 			LivingEntity lAttacker = (LivingEntity) attacker;
 			AgEntity aInfo = parent.getEntity(lAttacker);
 			aInfo.inCombat();
+		}
+
+		if (victim instanceof LivingEntity) {
+			LivingEntity lVictim = (LivingEntity) victim;
+			AgEntity vInfo = parent.getEntity(lVictim);
+			vInfo.setAttacker(attacker);
+			vInfo.inCombat();
 		}
 
 		if (damaged instanceof Player && e.getDamage() > 0) {
