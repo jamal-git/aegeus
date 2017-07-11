@@ -32,6 +32,6 @@ commands:
 
     # item
     create:
-      aliases: cc
+      aliases: cr
     generate:
       aliases: gen
