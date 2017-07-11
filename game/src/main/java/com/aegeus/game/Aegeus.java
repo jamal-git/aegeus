@@ -93,6 +93,7 @@ public class Aegeus extends JavaPlugin {
 		getCommand("message").setExecutor(new CommandMessage());
 		getCommand("party").setExecutor(new CommandParty());
 		getCommand("roll").setExecutor(new CommandRoll());
+		getCommand("broadcast").setExecutor(new CommandBroadcast());
 
 		// world
 		getCommand("addore").setExecutor(new CommandAddOre());
