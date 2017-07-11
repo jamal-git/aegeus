@@ -1,4 +1,4 @@
-package com.aegeus.game.chat;
+package com.aegeus.game.social;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.util.Util;

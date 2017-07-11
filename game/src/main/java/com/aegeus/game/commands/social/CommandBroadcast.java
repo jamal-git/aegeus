@@ -1,7 +1,7 @@
 package com.aegeus.game.commands.social;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.chat.ChatManager;
+import com.aegeus.game.social.ChatManager;
 import com.aegeus.game.util.Util;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;

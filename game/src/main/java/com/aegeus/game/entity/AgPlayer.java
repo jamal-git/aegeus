@@ -3,7 +3,7 @@ package com.aegeus.game.entity;
 import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
-import com.aegeus.game.chat.ChatChannel;
+import com.aegeus.game.social.ChatChannel;
 import com.aegeus.game.social.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;

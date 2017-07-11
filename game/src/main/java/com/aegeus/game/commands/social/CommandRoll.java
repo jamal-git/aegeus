@@ -1,6 +1,6 @@
 package com.aegeus.game.commands.social;
 
-import com.aegeus.game.chat.ChatManager;
+import com.aegeus.game.social.ChatManager;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.NoneNearbyException;
 import org.bukkit.command.Command;

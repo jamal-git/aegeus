@@ -1,4 +1,4 @@
-package com.aegeus.game.chat;
+package com.aegeus.game.social;
 
 public enum ChatChannel {
 	LOCAL(0, "Local"), // Nearby

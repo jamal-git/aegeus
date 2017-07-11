@@ -1,8 +1,8 @@
 package com.aegeus.game.commands.social;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.chat.ChatChannel;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.social.ChatChannel;
 import com.aegeus.game.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

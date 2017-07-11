@@ -1,8 +1,8 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.chat.ChatManager;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.social.ChatManager;
 import com.aegeus.game.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
