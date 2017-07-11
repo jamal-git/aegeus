@@ -1,6 +1,7 @@
 package com.aegeus.game.stats;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.Rarity;
@@ -17,9 +18,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -37,9 +36,14 @@ public abstract class Stats {
 	private boolean glowing = false;
 	private boolean genName = false;
 
+	// Actions
+	private List<Action<LivingEntity>> spawnActions = new ArrayList<>();
+
 	// Randomizers
 	private List<String> names = new ArrayList<>();
 	private List<EntityType> types = new ArrayList<>();
+	private List<Ability> abils = new ArrayList<>();
+	private IntPoss abilCount = null;
 	private List<ArmorPossible> helmets = new ArrayList<>();
 	private List<ArmorPossible> chestplates = new ArrayList<>();
 	private List<ArmorPossible> leggings = new ArrayList<>();
@@ -62,6 +66,7 @@ public abstract class Stats {
 	 *
 	 * @param parent The parent.
 	 */
+	@SuppressWarnings("IncompleteCopyConstructor")
 	public Stats(Stats parent) {
 		this.parent = parent;
 		if (parent != null) {
@@ -107,16 +112,18 @@ public abstract class Stats {
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
 		this.rarity = other.rarity;
+		this.glowing = other.glowing;
 		this.genName = other.genName;
-
+		this.spawnActions = other.spawnActions;
 		this.names = other.names;
 		this.types = other.types;
+		this.abils = other.abils;
+		this.abilCount = other.abilCount;
 		this.helmets = other.helmets;
 		this.chestplates = other.chestplates;
 		this.leggings = other.leggings;
 		this.boots = other.boots;
 		this.weapons = other.weapons;
-
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
 	}
@@ -187,6 +194,16 @@ public abstract class Stats {
 
 	public void setGlowing(boolean glowing) {
 		this.glowing = glowing;
+	}
+
+	// Actions
+
+	public List<Action<LivingEntity>> getSpawnActions() {
+		return spawnActions;
+	}
+
+	public void setSpawnActions(List<Action<LivingEntity>> spawnActions) {
+		this.spawnActions = spawnActions;
 	}
 
 	// Randomizers
@@ -306,6 +323,22 @@ public abstract class Stats {
 		this.types = types;
 	}
 
+	public List<Ability> getAbils() {
+		return abils;
+	}
+
+	public void setAbils(List<Ability> abils) {
+		this.abils = abils;
+	}
+
+	public IntPoss getAbilCount() {
+		return abilCount;
+	}
+
+	public void setAbilCount(IntPoss abilCount) {
+		this.abilCount = abilCount;
+	}
+
 	public List<ArmorPossible> getHelmets() {
 		return helmets;
 	}
@@ -388,6 +421,14 @@ public abstract class Stats {
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
 
+		if (!abils.isEmpty()) {
+			Collections.shuffle(abils);
+			if (abilCount == null)
+				info.setAbils(new ArrayList<>(abils));
+			else info.setAbils(abils.stream().filter(Objects::nonNull)
+					.limit(getAbilCount().get()).collect(Collectors.toList()));
+		}
+
 		entity.getEquipment().setItemInMainHand(getWeapon(entity.getType())
 				.get(Util.rarity(rarity.get())).build());
 
@@ -410,6 +451,8 @@ public abstract class Stats {
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
+
+		spawnActions.forEach(a -> a.activate(entity));
 
 		return entity;
 	}

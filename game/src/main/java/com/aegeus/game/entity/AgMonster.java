@@ -1,6 +1,9 @@
 package com.aegeus.game.entity;
 
+import com.aegeus.game.ability.Ability;
+import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.item.tool.Rune;
+import com.aegeus.game.util.Action;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -8,7 +11,16 @@ import java.util.List;
 
 public class AgMonster extends AgEntity {
 	private String name;
+
+	private List<Ability> abils = new ArrayList<>();
+	private Ability activeAbil = null;
+	private float abilChance = 0.2f;
+
 	private List<Rune> runes = new ArrayList<>();
+
+	private List<Action<CombatInfo>> onHit = new ArrayList<>();
+	private List<Action<CombatInfo>> onDamaged = new ArrayList<>();
+
 	private Spawner origin = null;
 	private int tier = 0;
 	private float chance = 0;
@@ -29,10 +41,17 @@ public class AgMonster extends AgEntity {
 	public AgMonster(AgMonster other) {
 		super(other);
 		this.name = other.name;
+		this.abils = other.abils;
+		this.activeAbil = other.activeAbil;
+		this.abilChance = other.abilChance;
 		this.runes = other.runes;
+		this.onHit = other.onHit;
+		this.onDamaged = other.onDamaged;
+		this.origin = other.origin;
 		this.tier = other.tier;
 		this.chance = other.chance;
 		this.gold = other.gold;
+		this.goldChance = other.goldChance;
 		this.forcedHp = other.forcedHp;
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
@@ -46,12 +65,52 @@ public class AgMonster extends AgEntity {
 		this.name = name;
 	}
 
+	public List<Ability> getAbils() {
+		return abils;
+	}
+
+	public void setAbils(List<Ability> abils) {
+		this.abils = abils;
+	}
+
+	public Ability getActiveAbil() {
+		return activeAbil;
+	}
+
+	public void setActiveAbil(Ability activeAbil) {
+		this.activeAbil = activeAbil;
+	}
+
+	public float getAbilChance() {
+		return abilChance;
+	}
+
+	public void setAbilChance(float abilChance) {
+		this.abilChance = abilChance;
+	}
+
 	public List<Rune> getRunes() {
 		return runes;
 	}
 
 	public void setRunes(List<Rune> runes) {
 		this.runes = runes;
+	}
+
+	public List<Action<CombatInfo>> getOnHit() {
+		return onHit;
+	}
+
+	public void setOnHit(List<Action<CombatInfo>> onHit) {
+		this.onHit = onHit;
+	}
+
+	public List<Action<CombatInfo>> getOnDamaged() {
+		return onDamaged;
+	}
+
+	public void setOnDamaged(List<Action<CombatInfo>> onDamaged) {
+		this.onDamaged = onDamaged;
 	}
 
 	public Spawner getOrigin() {

@@ -10,19 +10,19 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AgEntity {
-	protected final LivingEntity entity;
-	protected final UUID uuid;
-	protected LocalDateTime combatDate;
-	protected Entity attacker;
+	private final LivingEntity entity;
+	private final UUID uuid;
+	private LocalDateTime combatDate;
+	private Entity attacker;
 
-	protected int hpRegen = 0;
-	protected float energyRegen = 0;
-	protected float physRes = 0;
-	protected float magRes = 0;
-	protected float block = 0;
-	protected float dodge = 0;
-	protected float reflect = 0;
-	protected float critChance = 0;
+	private int hpRegen = 0;
+	private float energyRegen = 0;
+	private float physRes = 0;
+	private float magRes = 0;
+	private float block = 0;
+	private float dodge = 0;
+	private float reflect = 0;
+	private float critChance = 0;
 
 	public AgEntity(LivingEntity entity) {
 		this.entity = entity;
@@ -38,7 +38,7 @@ public class AgEntity {
 		this.hpRegen = other.hpRegen;
 		this.energyRegen = other.energyRegen;
 		this.physRes = other.physRes;
-		this.physRes = other.physRes;
+		this.magRes = other.magRes;
 		this.block = other.block;
 		this.dodge = other.dodge;
 		this.reflect = other.reflect;

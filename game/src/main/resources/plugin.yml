@@ -16,16 +16,22 @@ commands:
 
     # social
     global:
+      aliases: gl
     message:
+      aliases: m
     party:
       aliases: p
     chatchannel:
+      aliases: cc
     roll:
     broadcast:
+      aliases: bc
 
     # world
     addore:
 
     # item
     create:
+      aliases: cc
     generate:
+      aliases: gen

@@ -1,18 +1,134 @@
 package com.aegeus.game.combat;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.ability.Ability;
+import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class CombatManager {
-	public static void takeEnergy(Player player, ItemStack tool) {
+	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+
+	public static CombatInfo get(LivingEntity victim, LivingEntity attacker, ItemStack tool) {
+		CombatInfo cInfo = new CombatInfo(victim, attacker);
+		AgEntity vInfo = Aegeus.getInstance().getEntity(victim);
+		AgEntity aInfo = Aegeus.getInstance().getEntity(attacker);
+
+		if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
+			Weapon weapon = new Weapon(tool);
+
+			if (attacker instanceof Player) weaponDura((Player) attacker, weapon);
+			if (victim instanceof Player) armorDura((Player) victim);
+
+			cInfo.setPhysDmg(weapon.getDmg());
+
+			if (weapon.getFireDmg() > 0) {
+				cInfo.addMagDmg(weapon.getFireDmg());
+				cInfo.addEffect(() -> victim.setFireTicks(38 + (weapon.getTier() * 7)));
+			}
+
+			if (weapon.getIceDmg() > 0) {
+				cInfo.addMagDmg(weapon.getIceDmg());
+				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(
+						PotionEffectType.SLOW, 10 + (weapon.getTier() * 4), 2)));
+				cInfo.addSound(cInfo.getTarget().getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
+			}
+
+			if (weapon.getPoisonDmg() > 0) {
+				cInfo.addMagDmg(weapon.getPoisonDmg());
+				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1)));
+				cInfo.addSound(victim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
+			}
+			if (weapon.getPureDmg() > 0) {
+				int matches = (int) Arrays.stream(victim.getEquipment().getArmorContents())
+						.filter(i -> i != null && !i.getType().equals(Material.AIR) && new Armor(i).verify())
+						.map(Armor::new).count();
+				cInfo.addPhysDmg(weapon.getPureDmg() * (matches / 4));
+			}
+			if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
+				cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier()));
+				if (victim instanceof Player)
+					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
+				if (attacker instanceof Player)
+					attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
+			}
+			if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
+				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1)));
+				if (victim instanceof Player)
+					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
+				if (attacker instanceof Player)
+					attacker.sendMessage(Util.colorCodes("            &e&l*** BLINDNESS&e!&l ***"));
+			}
+			if (weapon.getLifeSteal() > 0) {
+				cInfo.addHealing(cInfo.getPhysDmg() * weapon.getLifeSteal());
+			}
+
+			float critChance = aInfo.getCritChance() + (Util.isAxe(tool.getType()) ? 0.05f : 0);
+			if (critChance > 0 && random.nextFloat() <= critChance) {
+				cInfo.multPhysDmg(1.75);
+				if (victim instanceof Player)
+					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT CRITICAL&c!&l ***"));
+				if (attacker instanceof Player)
+					attacker.sendMessage(Util.colorCodes("            &e&l*** CRITICAL&e!&l ***"));
+			}
+
+			cInfo.multPhysDmg(1 - Math.max(0, vInfo.getPhysRes() - weapon.getPen()));
+			cInfo.multMagDmg(1 - Math.max(0, vInfo.getMagRes()));
+		}
+
+		if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
+			cInfo.setTarget(attacker);
+
+			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
+			//		40, 0.25, 0.8, 0.25, 0.2, new MaterialData(Material.EMERALD_BLOCK));
+			cInfo.addSound(victim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
+			if (attacker instanceof Player)
+				attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT REFLECTED&c!&l ***"));
+			if (victim instanceof Player)
+				victim.sendMessage(Util.colorCodes("            &e&l*** REFLECTED&e!&l ***"));
+		} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
+			cInfo.setPhysDmg(0);
+			cInfo.setMagDmg(0);
+
+			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
+			//		40, 0.25, 0.8, 0.25, 0.15, new MaterialData(Material.STONE));
+			cInfo.addSound(victim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
+			if (attacker instanceof Player)
+				attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT DODGED&c!&l ***"));
+			if (victim instanceof Player)
+				victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
+		} else if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
+			cInfo.setPhysDmg(0);
+
+			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
+			//		40, 0.25, 0.8, 0.25, 0.1, new MaterialData(Material.BEDROCK));
+			cInfo.addSound(victim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
+			if (attacker instanceof Player)
+				attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLOCKED&c!&l ***"));
+			if (victim instanceof Player)
+				victim.sendMessage(Util.colorCodes("            &e&l*** BLOCKED&e!&l ***"));
+		}
+
+		return cInfo;
+	}
+
+	public static float takeEnergy(Player player, ItemStack tool) {
 		AgPlayer info = Aegeus.getInstance().getPlayer(player);
 		Weapon weapon = tool != null && !tool.getType().equals(Material.AIR)
 				&& new Weapon(tool).verify() ? new Weapon(tool) : null;
@@ -23,6 +139,8 @@ public class CombatManager {
 		if (info.getEnergy() <= 0) exhaust(player);
 
 		Util.updateDisplay(info.getPlayer());
+
+		return info.getEnergy();
 	}
 
 	public static void exhaust(Player player) {
@@ -65,5 +183,31 @@ public class CombatManager {
 		}
 
 		return item;
+	}
+
+	public static void useAbility(AgMonster info) {
+		if (!info.getAbils().isEmpty() && info.getActiveAbil() == null) {
+			Ability ability = info.getAbils().get(random.nextInt(info.getAbils().size()));
+			info.setActiveAbil(ability);
+			info.getEntity().getWorld().playSound(info.getEntity().getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 0.5f + (info.getTier() * 0.05f), 2);
+			info.getEntity().setCustomName(Util.colorCodes("&d&l" + ability.getName()));
+			ability.activate(info);
+		}
+	}
+
+	public static void updateName(LivingEntity entity) {
+		AgEntity info = Aegeus.getInstance().getEntity(entity);
+
+		if (info instanceof AgMonster && ((AgMonster) info).getActiveAbil() != null)
+			entity.setCustomName(Util.colorCodes("&d&l** " + ((AgMonster) info).getActiveAbil().getName() + "&d&l **"));
+
+		else if (entity.getHealth() >= entity.getMaxHealth() * 0.75)
+			entity.setCustomName(Util.colorCodes("&7- &a" + Math.round(entity.getHealth()) + " &lHP&7 -"));
+		else if (entity.getHealth() >= entity.getMaxHealth() * 0.50)
+			entity.setCustomName(Util.colorCodes("&7- &e" + Math.round(entity.getHealth()) + " &lHP&7 -"));
+		else if (entity.getHealth() >= entity.getMaxHealth() * 0.25)
+			entity.setCustomName(Util.colorCodes("&7- &6" + Math.round(entity.getHealth()) + " &lHP&7 -"));
+		else
+			entity.setCustomName(Util.colorCodes("&7- &c" + Math.round(entity.getHealth()) + " &lHP&7 -"));
 	}
 }

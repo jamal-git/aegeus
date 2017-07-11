@@ -1,13 +1,16 @@
 package com.aegeus.game.item;
 
+import com.aegeus.game.ability.Ability;
 import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.stats.Stats;
-import com.aegeus.game.util.Chance;
-import com.aegeus.game.util.FloatPoss;
-import com.aegeus.game.util.IntPoss;
-import com.aegeus.game.util.ListPoss;
+import com.aegeus.game.util.*;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Arrays;
 
 public enum Tier {
 	NONE(0, 0, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
@@ -21,7 +24,16 @@ public enum Tier {
 				public void prepare() {
 					setTier(1);
 					setChance(0.4f);
+					setAbils(Arrays.asList(Ability.values()));
+					setAbilCount(new IntPoss(1));
 					setGenName(true);
+
+					getSpawnActions().add(new Action<LivingEntity>() {
+						@Override
+						public void activate(LivingEntity entity) {
+							entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
+						}
+					});
 
 					getDefArmor().hpRegen = new IntPoss(5, 10);
 					getDefArmor().energyRegen = new FloatPoss(0.01f, 0.02f);
@@ -91,8 +103,17 @@ public enum Tier {
 				public void prepare() {
 					setTier(2);
 					setChance(0.2f);
-					setHpMultiplier(1.15f);
+					setHpMultiplier(1.1f);
+					setAbils(Arrays.asList(Ability.values()));
+					setAbilCount(new IntPoss(1));
 					setGenName(true);
+
+					getSpawnActions().add(new Action<LivingEntity>() {
+						@Override
+						public void activate(LivingEntity entity) {
+							entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
+						}
+					});
 
 					getDefArmor().hpRegen = new IntPoss(10, 20);
 					getDefArmor().energyRegen = new FloatPoss(0.01f, 0.03f);
@@ -162,8 +183,17 @@ public enum Tier {
 				public void prepare() {
 					setTier(3);
 					setChance(0.1f);
-					setHpMultiplier(1.3f);
+					setHpMultiplier(1.2f);
+					setAbils(Arrays.asList(Ability.values()));
+					setAbilCount(new IntPoss(1, 2));
 					setGenName(true);
+
+					getSpawnActions().add(new Action<LivingEntity>() {
+						@Override
+						public void activate(LivingEntity entity) {
+							entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+						}
+					});
 
 					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.01f);
 
@@ -237,8 +267,20 @@ public enum Tier {
 				public void prepare() {
 					setTier(4);
 					setChance(0.048f);
-					setHpMultiplier(1.45f);
+					setHpMultiplier(1.3f);
+					setAbils(Arrays.asList(Ability.values()));
+					setAbilCount(new IntPoss(2, 3));
 					setGenName(true);
+
+					getSpawnActions().add(new Action<LivingEntity>() {
+						@Override
+						public void activate(LivingEntity entity) {
+							if (entity.getType().equals(EntityType.SKELETON))
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+							else
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
+						}
+					});
 
 					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.02f);
 
@@ -312,11 +354,22 @@ public enum Tier {
 				public void prepare() {
 					setTier(5);
 					setChance(0.036f);
-					setHpMultiplier(1.6f);
+					setHpMultiplier(1.5f);
+					setAbils(Arrays.asList(Ability.values()));
+					setAbilCount(new IntPoss(3));
 					setGenName(true);
 
-					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.03f);
+					getSpawnActions().add(new Action<LivingEntity>() {
+						@Override
+						public void activate(LivingEntity entity) {
+							if (entity.getType().equals(EntityType.SKELETON))
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+							else
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
+						}
+					});
 
+					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.03f);
 					getDefArmor().hpRegen = new IntPoss(80, 140);
 					getDefArmor().energyRegen = new FloatPoss(0.05f, 0.08f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.03f, 0.1f), 0.2f);
