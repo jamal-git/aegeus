@@ -10,9 +10,11 @@ import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public abstract class Stats {
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
 	private FloatPoss rarity = new FloatPoss(0, 1);
+	private boolean glowing = false;
 	private boolean genName = false;
 
 	// Randomizers
@@ -44,8 +47,8 @@ public abstract class Stats {
 	private List<WeaponPossible> weapons = new ArrayList<>();
 
 	// Defaults
-	private ArmorPossible defArmor = new ArmorPossible(true);
-	private WeaponPossible defWeapon = new WeaponPossible(true);
+	private ArmorPossible defArmor = new ArmorPossible(null);
+	private WeaponPossible defWeapon = new WeaponPossible(null);
 
 	/**
 	 * Creates an instance of Stats without a parent.
@@ -170,8 +173,6 @@ public abstract class Stats {
 		this.rarity = rarity;
 	}
 
-	// Randomizers
-
 	public boolean getGenName() {
 		return genName;
 	}
@@ -179,6 +180,16 @@ public abstract class Stats {
 	public void setGenName(boolean genName) {
 		this.genName = genName;
 	}
+
+	public boolean getGlowing() {
+		return glowing;
+	}
+
+	public void setGlowing(boolean glowing) {
+		this.glowing = glowing;
+	}
+
+	// Randomizers
 
 	public String getName() {
 		return names.isEmpty() ? null : names.size() == 1 ? names.get(0) :
@@ -337,14 +348,20 @@ public abstract class Stats {
 		this.defArmor = defArmor;
 	}
 
-	// Generation methods
-
 	public WeaponPossible getDefWeapon() {
 		return defWeapon;
 	}
 
 	public void setDefWeapon(WeaponPossible defWeapon) {
 		this.defWeapon = defWeapon;
+	}
+
+	// Generation methods
+
+	public ItemStack applyGlow(ItemStack item) {
+		if (item != null && !item.getType().equals(Material.AIR))
+			item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+		return item;
 	}
 
 	public LivingEntity spawn(Location location) {
@@ -371,16 +388,25 @@ public abstract class Stats {
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
 
-		entity.getEquipment().setItemInMainHand(getWeapon(entity.getType()).get(Util.rarity(rarity.get())).build());
+		entity.getEquipment().setItemInMainHand(getWeapon(entity.getType())
+				.get(Util.rarity(rarity.get())).build());
 
-		if (hasHelmet())
-			entity.getEquipment().setHelmet(getHelmet(entity.getType()).get(Util.rarity(rarity.get())).build());
-		if (hasChestplate())
-			entity.getEquipment().setChestplate(getChestplate(entity.getType()).get(Util.rarity(rarity.get())).build());
-		if (hasLeggings())
-			entity.getEquipment().setLeggings(getLeggings(entity.getType()).get(Util.rarity(rarity.get())).build());
-		if (hasBoots())
-			entity.getEquipment().setBoots(getBoots(entity.getType()).get(Util.rarity(rarity.get())).build());
+		if (hasHelmet()) entity.getEquipment().setHelmet(getHelmet(entity.getType())
+				.get(Util.rarity(rarity.get())).build());
+		if (hasChestplate()) entity.getEquipment().setChestplate(getChestplate(entity.getType())
+				.get(Util.rarity(rarity.get())).build());
+		if (hasLeggings()) entity.getEquipment().setLeggings(getLeggings(entity.getType())
+				.get(Util.rarity(rarity.get())).build());
+		if (hasBoots()) entity.getEquipment().setBoots(getBoots(entity.getType())
+				.get(Util.rarity(rarity.get())).build());
+
+		if (getGlowing()) {
+			entity.getEquipment().setItemInMainHand(applyGlow(entity.getEquipment().getItemInMainHand()));
+			entity.getEquipment().setHelmet(applyGlow(entity.getEquipment().getHelmet()));
+			entity.getEquipment().setChestplate(applyGlow(entity.getEquipment().getChestplate()));
+			entity.getEquipment().setLeggings(applyGlow(entity.getEquipment().getLeggings()));
+			entity.getEquipment().setBoots(applyGlow(entity.getEquipment().getBoots()));
+		}
 
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
@@ -397,7 +423,7 @@ public abstract class Stats {
 		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
 
 		public IntPoss dmg = new IntPoss(1);
-		public IntPoss range = new IntPoss(0);
+		public IntPoss range = new IntPoss();
 
 		public Chance<FloatPoss> pen = new Chance<>();
 		public Chance<IntPoss> fireDmg = new Chance<>();
@@ -409,28 +435,26 @@ public abstract class Stats {
 		public Chance<FloatPoss> blind = new Chance<>();
 
 		public WeaponPossible() {
-			this(false);
+			this(defWeapon);
 		}
 
-		public WeaponPossible(boolean def) {
-			if (!def) {
-				material = defWeapon.material;
-				allowedTypes = defWeapon.allowedTypes;
-				rarity = defWeapon.rarity;
-				name = defWeapon.name;
-				rune = defWeapon.rune;
-
-				dmg = defWeapon.dmg;
-				range = defWeapon.range;
-
-				pen = defWeapon.pen;
-				fireDmg = defWeapon.fireDmg;
-				iceDmg = defWeapon.iceDmg;
-				poisonDmg = defWeapon.poisonDmg;
-				pureDmg = defWeapon.pureDmg;
-				lifeSteal = defWeapon.lifeSteal;
-				trueHearts = defWeapon.trueHearts;
-				blind = defWeapon.blind;
+		public WeaponPossible(WeaponPossible other) {
+			if (other != null) {
+				this.material = other.material;
+				this.allowedTypes = other.allowedTypes;
+				this.name = other.name;
+				this.rarity = other.rarity;
+				this.rune = other.rune;
+				this.dmg = other.dmg;
+				this.range = other.range;
+				this.pen = other.pen;
+				this.fireDmg = other.fireDmg;
+				this.iceDmg = other.iceDmg;
+				this.poisonDmg = other.poisonDmg;
+				this.pureDmg = other.pureDmg;
+				this.lifeSteal = other.lifeSteal;
+				this.trueHearts = other.trueHearts;
+				this.blind = other.blind;
 			}
 		}
 
@@ -487,8 +511,8 @@ public abstract class Stats {
 		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
 
 		public IntPoss hp = new IntPoss(1);
-		public IntPoss hpRegen = new IntPoss(0);
-		public FloatPoss energyRegen = new FloatPoss(0);
+		public IntPoss hpRegen = new IntPoss();
+		public FloatPoss energyRegen = new FloatPoss();
 
 		public Chance<FloatPoss> physRes = new Chance<>();
 		public Chance<FloatPoss> magRes = new Chance<>();
@@ -497,26 +521,24 @@ public abstract class Stats {
 		public Chance<FloatPoss> reflect = new Chance<>();
 
 		public ArmorPossible() {
-			this(false);
+			this(defArmor);
 		}
 
-		public ArmorPossible(boolean def) {
-			if (!def) {
-				material = defArmor.material;
-				allowedTypes = defArmor.allowedTypes;
-				rarity = defArmor.rarity;
-				name = defArmor.name;
-				rune = defArmor.rune;
-
-				hp = defArmor.hp;
-				hpRegen = defArmor.hpRegen;
-				energyRegen = defArmor.energyRegen;
-
-				physRes = defArmor.physRes;
-				magRes = defArmor.magRes;
-				block = defArmor.block;
-				dodge = defArmor.dodge;
-				reflect = defArmor.reflect;
+		public ArmorPossible(ArmorPossible other) {
+			if (other != null) {
+				this.material = other.material;
+				this.allowedTypes = other.allowedTypes;
+				this.name = other.name;
+				this.rarity = other.rarity;
+				this.rune = other.rune;
+				this.hp = other.hp;
+				this.hpRegen = other.hpRegen;
+				this.energyRegen = other.energyRegen;
+				this.physRes = other.physRes;
+				this.magRes = other.magRes;
+				this.block = other.block;
+				this.dodge = other.dodge;
+				this.reflect = other.reflect;
 			}
 		}
 

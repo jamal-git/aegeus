@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Chance<T> {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private T object;
-	private T fallback;
 	private float chance = 1f;
 
 	public Chance() {
@@ -14,12 +13,6 @@ public class Chance<T> {
 
 	public Chance(T object, float chance) {
 		this.object = object;
-		this.chance = chance;
-	}
-
-	public Chance(T object, T fallback, float chance) {
-		this.object = object;
-		this.fallback = fallback;
 		this.chance = chance;
 	}
 
@@ -39,15 +32,11 @@ public class Chance<T> {
 		this.object = object;
 	}
 
-	public T getFallback() {
-		return fallback;
-	}
-
-	public void setFallback(T fallback) {
-		this.fallback = fallback;
-	}
-
 	public T get() {
-		return random.nextFloat() <= chance ? object : fallback;
+		return get(null);
+	}
+
+	public T get(T def) {
+		return random.nextFloat() <= chance ? object : def;
 	}
 }
