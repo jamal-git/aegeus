@@ -1,10 +1,12 @@
 package com.aegeus.game.item;
 
+import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.item.info.ProfessionInfo;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Pickaxe;
+import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 
@@ -69,6 +71,24 @@ public class ItemParser {
 		return info;
 	}
 
+	private static DuraInfo parseDura(DuraInfo info, String[] args) {
+		for (String arg : args) {
+			try {
+				String[] pair = arg.split("=");
+				String key = pair[0];
+				String value = pair[1];
+
+				if (key.equalsIgnoreCase("maxdura"))
+					info.setMaxDura(Integer.parseInt(value));
+				else if (key.equalsIgnoreCase("dura"))
+					info.setDura(Integer.parseInt(value));
+
+			} catch (Exception ignored) {
+			}
+		}
+		return info;
+	}
+
 	private static ProfessionInfo parseProfession(ProfessionInfo info, String[] args) {
 		for (String arg : args) {
 			try {
@@ -91,6 +111,7 @@ public class ItemParser {
 		weapon = (Weapon) parseItem(weapon, args);
 		weapon = (Weapon) parseEquipment(weapon, args);
 		weapon = (Weapon) parseLevel(weapon, args);
+		weapon = (Weapon) parseDura(weapon, args);
 
 		for (String arg : args) {
 			try {
@@ -98,7 +119,10 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 
-				if (key.equalsIgnoreCase("dmg")) {
+				if (key.equalsIgnoreCase("rune"))
+					weapon.setRune(new Rune(Rune.RuneType.fromId(Integer.parseInt(value))));
+
+				else if (key.equalsIgnoreCase("dmg")) {
 					String[] vals = value.split(";");
 					weapon.setDmg(Integer.parseInt(vals[0]), Integer.parseInt(vals[1]));
 				} else if (key.equalsIgnoreCase("pen"))
@@ -130,6 +154,7 @@ public class ItemParser {
 		armor = (Armor) parseItem(armor, args);
 		armor = (Armor) parseEquipment(armor, args);
 		armor = (Armor) parseLevel(armor, args);
+		armor = (Armor) parseDura(armor, args);
 
 		for (String arg : args) {
 			try {
@@ -137,7 +162,9 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 
-				if (key.equalsIgnoreCase("hp"))
+				if (key.equalsIgnoreCase("rune"))
+					armor.setRune(new Rune(Rune.RuneType.fromId(Integer.parseInt(value))));
+				else if (key.equalsIgnoreCase("hp"))
 					armor.setHp(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("hpregen"))
 					armor.setHpRegen(Integer.parseInt(value));
