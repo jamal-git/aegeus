@@ -12,6 +12,7 @@ import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -167,7 +169,6 @@ public class CombatListener implements Listener {
 				if (weapon.getPoisonDmg() > 0) {
 					magDmg += weapon.getPoisonDmg();
 					lVictim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1));
-					//lVictim.getWorld().spawnParticle(Particle.SPELL, );
 					lVictim.getWorld().playSound(lVictim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 				}
 				if (weapon.getPureDmg() > 0) {
@@ -209,28 +210,40 @@ public class CombatListener implements Listener {
 				if (healing > 0) Util.heal(lAttacker, healing);
 			}
 
-			if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
-				physDmg = 0;
-				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
-				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLOCKED&c!&l ***"));
-				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("            &e&l*** BLOCKED&e!&l ***"));
-			} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
-				physDmg = 0;
-				magDmg = 0;
-				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
-				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT DODGED&c!&l ***"));
-				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
-			} else if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
+			if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
 				damaged = lAttacker;
+
+				lVictim.getWorld().spawnParticle(Particle.BLOCK_DUST, lVictim.getLocation(),
+						40, 0.25, 0.8, 0.25, 0.2, new MaterialData(Material.EMERALD_BLOCK));
 				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
 				if (attacker instanceof Player)
 					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT REFLECTED&c!&l ***"));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &e&l*** REFLECTED&e!&l ***"));
+			} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
+				physDmg = 0;
+				magDmg = 0;
+
+				lVictim.getWorld().spawnParticle(Particle.BLOCK_DUST, lVictim.getLocation(),
+						40, 0.25, 0.8, 0.25, 0.15, new MaterialData(Material.STONE));
+				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
+				if (attacker instanceof Player)
+					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT DODGED&c!&l ***"));
+				if (victim instanceof Player)
+					victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
+			} else if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
+				physDmg = 0;
+
+				lVictim.getWorld().spawnParticle(Particle.BLOCK_DUST, lVictim.getLocation(),
+						40, 0.25, 0.8, 0.25, 0.1, new MaterialData(Material.BEDROCK));
+				lVictim.getWorld().playSound(lVictim.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 1);
+
+				if (attacker instanceof Player)
+					attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLOCKED&c!&l ***"));
+				if (victim instanceof Player)
+					victim.sendMessage(Util.colorCodes("            &e&l*** BLOCKED&e!&l ***"));
 			}
 
 			e.setDamage(physDmg + magDmg);
@@ -245,6 +258,8 @@ public class CombatListener implements Listener {
 			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
 				LivingEntity lDamaged = (LivingEntity) damaged;
 
+				lDamaged.getWorld().spawnParticle(Particle.BLOCK_CRACK, lDamaged.getLocation(),
+						110, 0.25, 0.8, 0.25, new MaterialData(Material.getMaterial(55)));
 				lDamaged.damage(e.getDamage());
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
