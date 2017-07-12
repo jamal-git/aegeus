@@ -86,6 +86,8 @@ public class CombatManager {
 
 			cInfo.multPhysDmg(1 - Math.max(0, vInfo.getPhysRes() - weapon.getPen()));
 			cInfo.multMagDmg(1 - Math.max(0, vInfo.getMagRes()));
+
+			if (cInfo.getHealing() > 0) cInfo.getEffects().add(() -> Util.heal(attacker, cInfo.getHealing()));
 		}
 
 		if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {

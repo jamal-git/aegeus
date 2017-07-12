@@ -155,6 +155,7 @@ public class Util {
 	}
 
 	public static void heal(LivingEntity entity, double amount) {
+		amount = Math.max(1, amount);
 		if (entity.getHealth() < entity.getMaxHealth()) {
 			entity.setHealth(Math.min(entity.getMaxHealth(), entity.getHealth() + amount));
 			if (entity instanceof Player) {
