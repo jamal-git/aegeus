@@ -1,11 +1,17 @@
 package com.aegeus.game.stats;
 
+import com.aegeus.game.ability.AbilityConcuss;
+import com.aegeus.game.ability.AbilityDetonate;
+import com.aegeus.game.ability.AbilityResolve;
+import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.FloatPoss;
 import com.aegeus.game.util.IntPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+
+import java.util.Arrays;
 
 public class StatsViktor extends Stats {
 	@Override
@@ -20,6 +26,8 @@ public class StatsViktor extends Stats {
 		getTypes().add(EntityType.SKELETON);
 
 		getNames().add("&e&lViktor the Conqueror");
+		setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
+				new AbilityResolve(), new AbilityTackle()));
 
 		getDefArmor().rarity = Rarity.UNIQUE;
 		getDefArmor().hpRegen = new IntPoss(80, 120);
