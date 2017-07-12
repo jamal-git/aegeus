@@ -3,11 +3,17 @@ package com.aegeus.game.dungeon;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
 import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.data.DataException;
+import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.apache.commons.io.IOUtils;
 
 import java.awt.geom.Point2D;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
@@ -20,18 +26,19 @@ public class Dungeon {
     String[][] layout;
     private static transient Aegeus parent = Aegeus.getInstance();
     private transient ThreadLocalRandom random = ThreadLocalRandom.current();
+    private transient WorldEditPlugin worldedit = Aegeus.getWorldEdit();
     private File directory;
-    private List<CuboidClipboard> starts;
-    private List<CuboidClipboard> straights;
-    private List<CuboidClipboard> turns;
-    private List<CuboidClipboard> trijunctions;
-    private List<CuboidClipboard> quadjunctions;
-    private List<CuboidClipboard> keys;
-    private int length;
+    private List<CuboidClipboard> starts = new ArrayList<>();
+    private List<CuboidClipboard> straights = new ArrayList<>();
+    private List<CuboidClipboard> turns = new ArrayList<>();
+    private List<CuboidClipboard> trijunctions = new ArrayList<>();
+    private List<CuboidClipboard> quadjunctions = new ArrayList<>();
+    private List<CuboidClipboard> keys = new ArrayList<>();
+    private List<CuboidClipboard> exits = new ArrayList<>();
+    private transient int length = 5;
 
-    public Dungeon(String directory, int length) throws DungeonLoadingException, IOException {
+    public Dungeon(String directory, int length) throws DungeonLoadingException, IOException, DataException {
         File temp = new File(parent.getDataFolder() + "/dungeons/zips/" + directory + ".zip");
-        this.length = 5;
         if(!temp.exists() || temp.isDirectory())   {
             throw new DungeonLoadingException("The dungeon selected does not exist or has been corrupted.");
         }
@@ -58,14 +65,54 @@ public class Dungeon {
                 }
             } catch (IOException e) {
                 parent.getLogger().log(Level.SEVERE, "Could not load dungeon", e);
+                return;
             }
-            parent.getLogger().info("Finished unzipping, initializing...");
+            parent.getLogger().info("Finished unzipping, initializing dungeon...");
         }
         else    {
-            parent.getLogger().info("Unzipped dungeon already, skipping...");
+            parent.getLogger().info("Unzipped dungeon already, initializing dungeon...");
         }
-        parent.getLogger().info("DEPTH FIRST SEARCH");
+        //noinspection ConstantConditions
+        for(File folder : new File(Aegeus.getInstance().getDataFolder() + "/dungeons/" + directory + "/").listFiles())   {
+            //noinspection ConstantConditions
+            for(File f : folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".schematic")))
+                switch (f.getParentFile().getName()) {
+                    case "starts":
+                        starts.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a start variation");
+                        break;
+                    case "exits":
+                        exits.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded an exit variation");
+                        break;
+                    case "keys":
+                        keys.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a key variation");
+                        break;
+                    case "straights":
+                        straights.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a straight variation");
+                        break;
+                    case "turns":
+                        turns.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a turn variation");
+                        break;
+                    case "tris":
+                        trijunctions.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a tri junction variation");
+                        break;
+                    case "quads":
+                        quadjunctions.add(SchematicFormat.MCEDIT.load(f));
+                        parent.getLogger().info("Loaded a quad junction variation");
+                        break;
+                    default:
+                        parent.getLogger().log(Level.SEVERE, "FAILED TO LOAD DUNGEON", new DungeonLoadingException("Invalid Zip file, check for any random or missing files!"));
+                        return;
+                }
+        }
+        parent.getLogger().info("Finished importing schematics, generating dungeon layout...");
         dfs();
+        printArray(layout);
     }
 
     public void dfs()    {
@@ -92,7 +139,7 @@ public class Dungeon {
             dfsrecursive(sx, sy, maze);
             maze[sx][sy] = "S";
         } while(!validateAndMap(maze));
-        printArray(layout);
+        parent.getLogger().info("SUCCESSFULLY CREATED DUNGEON!");
     }
 
     private boolean dfsrecursive(int x, int y, String[][] maze)   {
@@ -133,62 +180,62 @@ public class Dungeon {
         return false;
     }
 
-    private void bfs()    {
-        String[][] maze ={
-                {"0","0","0","0","0"},
-                {"0","0","0","0","0"},
-                {"0","0","0","0","0"},
-                {"0","0","0","0","0"},
-                {"0","0","0","0","0"}};
-        int sx, sy, ex, ey;
-        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
-        maze[sx][sy] = "S";
-        maze[ex][ey] = "E";
-        List<Node> nodes = new ArrayList<>();
-        LinkedList<Node> queue = new LinkedList<>();
-        queue.add(new Node(sx, sy, null));
-        nodes.add(queue.peek());
-        while(!queue.isEmpty()) {
-            System.out.println(queue.size());
-            Node n = queue.poll();
-            if(maze[n.getX()][n.getY()].equalsIgnoreCase("E"))  {
-                List<Node> path = new ArrayList<>();
-                Node step = n.getParent();
-                while(step != null) {
-                    path.add(step);
-                    if(!maze[step.getX()][step.getY()].equalsIgnoreCase("S"))
-                        maze[step.getX()][step.getY()] = "P";
-                    step = step.getParent();
-                }
-                printArray(maze);
-                return;
-            }
-            int x = n.getX(), y = n.getY();
-            Node child;
-            child = new Node(x + 1, y, n);
-            if(x < 6 && !nodes.contains(child)) {
-                nodes.add(child);
-                queue.offer(child);
-            }
-            child = new Node(x - 1, y, n);
-            if(x > 0 && !nodes.contains(child)) {
-                nodes.add(child);
-                queue.offer(child);
-            }
-            child = new Node(x, y - 1, n);
-            if(y > 0 && !nodes.contains(child)) {
-                nodes.add(child);
-                queue.offer(child);
-            }
-            child = new Node(x, y + 1, n);
-            if(y < 6 && !nodes.contains(child)) {
-                nodes.add(child);
-                queue.offer(child);
-            }
-        }
-        printArray(maze);
-        return;
-    }
+//    private void bfs()    {
+//        String[][] maze ={
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"}};
+//        int sx, sy, ex, ey;
+//        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
+//        maze[sx][sy] = "S";
+//        maze[ex][ey] = "E";
+//        List<Node> nodes = new ArrayList<>();
+//        LinkedList<Node> queue = new LinkedList<>();
+//        queue.add(new Node(sx, sy, null));
+//        nodes.add(queue.peek());
+//        while(!queue.isEmpty()) {
+//            System.out.println(queue.size());
+//            Node n = queue.poll();
+//            if(maze[n.getX()][n.getY()].equalsIgnoreCase("E"))  {
+//                List<Node> path = new ArrayList<>();
+//                Node step = n.getParent();
+//                while(step != null) {
+//                    path.add(step);
+//                    if(!maze[step.getX()][step.getY()].equalsIgnoreCase("S"))
+//                        maze[step.getX()][step.getY()] = "P";
+//                    step = step.getParent();
+//                }
+//                printArray(maze);
+//                return;
+//            }
+//            int x = n.getX(), y = n.getY();
+//            Node child;
+//            child = new Node(x + 1, y, n);
+//            if(x < 6 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x - 1, y, n);
+//            if(x > 0 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x, y - 1, n);
+//            if(y > 0 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x, y + 1, n);
+//            if(y < 6 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//        }
+//        printArray(maze);
+//        return;
+//    }
 
     private boolean isValid(String[][] maze)    {
         int count = 0;
@@ -229,29 +276,68 @@ public class Dungeon {
                     int count = getDirectionalCount(i, j, maze);
                     if(surround == 2) {
                         if(count == 4)
-                            map[i][j] = "V"; //UP DOWN STRAIGHT
+                            map[i][j] = "VS"; //UP DOWN STRAIGHT
                         else if(count == 8)
-                            map[i][j] = "H"; //LEFT RIGHT STRAIGHT
+                            map[i][j] = "HS"; //LEFT RIGHT STRAIGHT
                         else if(count == 7)
-                            map[i][j] = "D"; //SOUTH EAST TURN
+                            map[i][j] = "DT"; //SOUTH EAST TURN
                         else if(count == 9)
-                            map[i][j] = "R"; //NORTH EAST TURN
+                            map[i][j] = "RT"; //NORTH EAST TURN
                         else if(count == 5)
-                            map[i][j] = "U"; //NORTH WEST TURN
+                            map[i][j] = "UT"; //NORTH WEST TURN
                         else if(count == 3)
-                            map[i][j] = "L"; //SOUTH WEST TURN
+                            map[i][j] = "LT"; //SOUTH WEST TURN
                     }
                     if(surround == 3)   {
                         if(count == 9)
-                            map[i][j] = "So"; //WEST SOUTH EAST JUNCTION
+                            map[i][j] = "SJ"; //WEST SOUTH EAST JUNCTION
                         if(count == 10)
-                            map[i][j] = "Ea"; //SOUTH EAST NORTH JUNCTION
+                            map[i][j] = "EJ"; //SOUTH EAST NORTH JUNCTION
                         if(count == 11)
-                            map[i][j] = "N"; //EAST NORTH WEST JUNCTION
+                            map[i][j] = "NJ"; //EAST NORTH WEST JUNCTION
                         if(count == 6)
-                            map[i][j] = "W"; //NORTH WEST SOUTH JUNCTION
+                            map[i][j] = "WJ"; //NORTH WEST SOUTH JUNCTION
+                    }
+                    if(surround == 4)   {
+                        map[i][j] = "QQ"; //4-WAY QUAD JUNCTION
                     }
                 }
+                else if(maze[i][j].matches("[KkSsEe]")) {
+                    String s = maze[i][j];
+                    switch(getDirectionalCount(i, j, maze)) {
+                        case 1:
+                            if(s.matches("[Kk]")) //SOUTH
+                                map[i][j] = "SK";
+                            else if(s.matches("[Ss]"))
+                                map[i][j] = "SS";
+                            else map[i][j] = "SE";
+                            break;
+                        case 3:
+                            if(s.matches("[Kk]")) //NORTH
+                                map[i][j] = "NK";
+                            else if(s.matches("[Ss]"))
+                                map[i][j] = "NS";
+                            else map[i][j] = "NE";
+                            break;
+                        case 2:
+                            if(s.matches("[Kk]")) //WEST
+                                map[i][j] = "WK";
+                            else if(s.matches("[Ss]"))
+                                map[i][j] = "WS";
+                            else map[i][j] = "WE";
+                            break;
+                        case 6:
+                            if(s.matches("[Kk]")) //EAST
+                                map[i][j] = "EK";
+                            else if(s.matches("[Ss]"))
+                                map[i][j] = "ES";
+                            else map[i][j] = "EE";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else map[i][j] = "00";
             }
         }
         layout = map;
