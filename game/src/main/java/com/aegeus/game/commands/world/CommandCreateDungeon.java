@@ -1,9 +1,9 @@
 package com.aegeus.game.commands.world;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.dungeon.Dungeon;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
-import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.data.DataException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,18 +32,18 @@ public class CommandCreateDungeon implements CommandExecutor {
             return false;
         }
         Player p = (Player) sender;
-        try {
-            Dungeon d = new Dungeon(args[0], Integer.valueOf(args[1]), p.getWorld(), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]));
-            d.build(p.getLocation());
-        } catch (DungeonLoadingException e) {
-            e.printStackTrace();
-        } catch (DataException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MaxChangedBlocksException e) {
-            e.printStackTrace();
-        }
+
+            Aegeus.getInstance().getServer().getScheduler().runTaskAsynchronously(Aegeus.getInstance(), () -> {
+                try {
+                    Dungeon d = new Dungeon(p.getLocation(), args[0], Integer.valueOf(args[1]), p.getWorld(), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]));
+                } catch (DungeonLoadingException e) {
+                    e.printStackTrace();
+                } catch (DataException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         return true;
     }
 }

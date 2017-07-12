@@ -44,6 +44,7 @@ public class Dungeon {
     private transient int distance = 5;
     private transient int segments = 10;
     private transient int segmentSize = 5;
+    private transient Location origin;
 
     private World world;
     private File directory;
@@ -56,7 +57,8 @@ public class Dungeon {
     private List<CuboidClipboard> keys = new ArrayList<>();
     private List<CuboidClipboard> exits = new ArrayList<>();
 
-    public Dungeon(String directory, int distance, World w, int size, int segments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
+    public Dungeon(Location l, String directory, int distance, World w, int size, int segments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
+        origin = l;
         this.distance = distance;
         world = w;
         this.size = size;
@@ -138,6 +140,13 @@ public class Dungeon {
         parent.getLogger().info("Finished importing schematics, generating dungeon layout...");
         dfs();
         printArray(layout);
+        parent.getServer().getScheduler().runTask(parent, () -> {
+            try {
+                build(origin);
+            } catch (DungeonLoadingException | MaxChangedBlocksException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void build(Location l) throws DungeonLoadingException, MaxChangedBlocksException {
@@ -383,7 +392,7 @@ public class Dungeon {
                             map[i][j] = "WJ"; //NORTH WEST SOUTH JUNCTION
                     }
                     if(surround == 4)   {
-                        map[i][j] = "QQ"; //4-WAY QUAD JUNCTION
+                        map[i][j] = "SQ"; //4-WAY QUAD JUNCTION
                     }
                 }
                 else if(maze[i][j].matches("[KkSsEe]")) {
