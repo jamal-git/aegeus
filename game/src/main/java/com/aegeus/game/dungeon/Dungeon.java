@@ -7,6 +7,7 @@ import com.sk89q.worldedit.CuboidClipboard;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,6 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Silvre on 7/10/2017.
  */
 public class Dungeon {
+    String[][] layout;
     private static transient Aegeus parent = Aegeus.getInstance();
     private transient ThreadLocalRandom random = ThreadLocalRandom.current();
     private File directory;
@@ -37,8 +39,6 @@ public class Dungeon {
 //        }
         parent.getLogger().info("DEPTH FIRST SEARCH");
         dfs();
-        parent.getLogger().info("BREADTH FIRST SEARCH");
-        bfs();
     }
 
     public void dfs()    {
@@ -62,8 +62,8 @@ public class Dungeon {
             maze[ex][ey] = "E";
             dfsrecursive(sx, sy, maze);
             maze[sx][sy] = "S";
-        } while(!isValid(maze));
-        printArray(maze);
+        } while(!validateAndMap(maze));
+        printArray(layout);
     }
 
     private boolean dfsrecursive(int x, int y, String[][] maze)   {
@@ -173,12 +173,71 @@ public class Dungeon {
         return true;
     }
 
+    private boolean validateAndMap(String[][] maze)    {
+        if(!isValid(maze)) return false;
+        String[][] map = new String[5][5];
+        for (int i = 0; i < maze.length; i++)
+            map[i] = Arrays.copyOf(maze[i], maze[i].length);
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                if(maze[i][j].equalsIgnoreCase("P"))    {
+                    int surround = nearby(i, j, maze);
+                    int count = getDirectionalCount(i, j, maze);
+                    if(surround == 2) {
+                        if(count == 4)
+                            map[i][j] = "V"; //UP DOWN STRAIGHT
+                        else if(count == 8)
+                            map[i][j] = "H"; //LEFT RIGHT STRAIGHT
+                        else if(count == 7)
+                            map[i][j] = "D"; //SOUTH EAST TURN
+                        else if(count == 9)
+                            map[i][j] = "R"; //NORTH EAST TURN
+                        else if(count == 5)
+                            map[i][j] = "U"; //NORTH WEST TURN
+                        else if(count == 3)
+                            map[i][j] = "L"; //SOUTH WEST TURN
+                    }
+                    if(surround == 3)   {
+                        if(count == 9)
+                            map[i][j] = "S"; //WEST SOUTH EAST JUNCTION
+                        if(count == 10)
+                            map[i][j] = "E"; //SOUTH EAST NORTH JUNCTION
+                        if(count == 11)
+                            map[i][j] = "N"; //EAST NORTH WEST JUNCTION
+                        if(count == 6)
+                            map[i][j] = "W"; //NORTH WEST SOUTH JUNCTION
+                    }
+                }
+            }
+        }
+        layout = map;
+        return true;
+    }
+
+    private String getDirection(int x, int y, String[][] maze, Direction d)   {
+        if(d == Direction.NORTH && x > 0) return maze[x - 1][y];
+        if(d == Direction.SOUTH && x < 4) return maze[x + 1][y];
+        if(d == Direction.EAST && y < 4) return maze[x][y + 1];
+        if(d == Direction.WEST && y > 0) return maze[x][y - 1];
+        return "";
+    }
+
+
+    private int getDirectionalCount(int x, int y, String[][] maze)   {
+        int count = 0;
+        if(x < 4 && maze[x + 1][y].matches("[PpKkSsEe]")) count += 1; //SOUTH
+        if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count += 3; //NORTH
+        if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count += 2; //WEST
+        if(y < 4 && maze[x][y + 1].matches("[PpKkSsEe]")) count += 6; //EAST
+        return count;
+    }
+
     private int nearby(int x, int y, String[][] maze)  {
         int count = 0;
-        if(x > 0 && maze[x - 1][y].equalsIgnoreCase("P")) count++;
-        if(x < 4 && maze[x + 1][y].equalsIgnoreCase("P")) count++;
-        if(y > 0 && maze[x][y - 1].equalsIgnoreCase("P")) count++;
-        if(y < 4 && maze[x][y + 1].equalsIgnoreCase("P")) count++;
+        if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count++;
+        if(x < 4 && maze[x + 1][y].matches("[PpKkSsEe]")) count++;
+        if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count++;
+        if(y < 4 && maze[x][y + 1].matches("[PpKkSsEe]")) count++;
         return count;
     }
 
