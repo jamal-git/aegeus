@@ -1,7 +1,7 @@
 name: AEGEUS
 version: dev
 description: We need a boat.
-depend: [GlowAPI]
+depend: [GlowAPI, WorldEdit]
 authors: [VarusMain, Silvre]
 main: com.aegeus.game.Aegeus
 
@@ -29,6 +29,7 @@ commands:
 
     # world
     addore:
+    createdungeon:
 
     # item
     create:

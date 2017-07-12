@@ -5,6 +5,7 @@ import com.aegeus.game.commands.item.CommandCreate;
 import com.aegeus.game.commands.item.CommandGenerate;
 import com.aegeus.game.commands.social.*;
 import com.aegeus.game.commands.world.CommandAddOre;
+import com.aegeus.game.commands.world.CommandCreateDungeon;
 import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.SpawnerDeserializer;
@@ -12,6 +13,7 @@ import com.aegeus.game.util.SpawnerSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,10 +44,15 @@ public class Aegeus extends JavaPlugin {
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<Entity, AgEntity> entities = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
+	private static WorldEditPlugin worldedit;
 
 	public static Aegeus getInstance() {
 		return instance;
 	}
+
+	public static WorldEditPlugin getWorldEdit()    {
+	    return worldedit;
+    }
 
 	@Override
 	public void onEnable() {
@@ -61,6 +68,9 @@ public class Aegeus extends JavaPlugin {
 		b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
 		b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
 		GSON = b.create();
+
+		//Register APIS
+        worldedit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
 		// Register plugin events
 		getLogger().info("Registering event listener...");
@@ -97,6 +107,7 @@ public class Aegeus extends JavaPlugin {
 
 		// world
 		getCommand("addore").setExecutor(new CommandAddOre());
+		getCommand("createdungeon").setExecutor(new CommandCreateDungeon());
 
 		// Done, done, and done!
 		getLogger().info("Load complete.");
