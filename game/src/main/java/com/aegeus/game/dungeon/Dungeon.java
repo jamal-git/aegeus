@@ -43,6 +43,7 @@ public class Dungeon {
     private int size = 7;
     private transient int distance = 5;
     private transient int segments = 10;
+    private transient int segmentSize = 5;
 
     private World world;
     private File directory;
@@ -55,11 +56,12 @@ public class Dungeon {
     private List<CuboidClipboard> keys = new ArrayList<>();
     private List<CuboidClipboard> exits = new ArrayList<>();
 
-    public Dungeon(String directory, int distance, World w, int size, int segments) throws DungeonLoadingException, IOException, DataException {
+    public Dungeon(String directory, int distance, World w, int size, int segments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
         this.distance = distance;
         world = w;
         this.size = size;
         this.segments = segments;
+        this.segmentSize = segmentSize;
         editSession = new EditSession(new BukkitWorld(world), worldedit.getLocalConfiguration().maxChangeLimit);
         File temp = new File(parent.getDataFolder() + "/dungeons/zips/" + directory + ".zip");
         if(!temp.exists() || temp.isDirectory())   {
@@ -179,7 +181,7 @@ public class Dungeon {
 						default:
                             throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
                     }
-                    Vector spot = new Vector(l.getBlockX() + 5 * j, l.getBlockY(), l.getBlockZ() + 5 * i);
+                    Vector spot = new Vector(l.getBlockX() + segmentSize * j, l.getBlockY(), l.getBlockZ() + segmentSize * i);
                     clipboard.rotate2D(direction.getRotateValue());
                     clipboard.paste(editSession, spot, false);
                     clipboard.rotate2D(360 - direction.getRotateValue());

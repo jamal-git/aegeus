@@ -27,13 +27,13 @@ public class CommandCreateDungeon implements CommandExecutor {
             sender.sendMessage(Util.colorCodes("&cYou can't execute this command through the console! Get into the game!"));
             return false;
         }
-        if(args.length != 4)    {
-            sender.sendMessage(Util.colorCodes("&cInvalid arguments! Use /dungeon <directory> <length> <array size> <number of segments>"));
+        if(args.length != 5)    {
+            sender.sendMessage(Util.colorCodes("&cInvalid arguments! Use /dungeon <directory> <length> <array size> <number of segments> <schematic size>"));
             return false;
         }
         Player p = (Player) sender;
         try {
-            Dungeon d = new Dungeon(args[0], Integer.valueOf(args[1]), p.getWorld(), Integer.valueOf(args[2]), Integer.valueOf(args[3]));
+            Dungeon d = new Dungeon(args[0], Integer.valueOf(args[1]), p.getWorld(), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]));
             d.build(p.getLocation());
         } catch (DungeonLoadingException e) {
             e.printStackTrace();
