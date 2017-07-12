@@ -3,11 +3,13 @@ package com.aegeus.game.commands.world;
 import com.aegeus.game.dungeon.Dungeon;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.data.DataException;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.IOException;
 
@@ -29,13 +31,17 @@ public class CommandCreateDungeon implements CommandExecutor {
             sender.sendMessage(Util.colorCodes("&cInvalid arguments! Use /dungeon <directory> <length>"));
             return false;
         }
+        Player p = (Player) sender;
         try {
-            Dungeon d = new Dungeon(args[0], Integer.valueOf(args[1]));
+            Dungeon d = new Dungeon(args[0], Integer.valueOf(args[1]), p.getWorld());
+            d.build(p.getLocation());
         } catch (DungeonLoadingException e) {
             e.printStackTrace();
         } catch (DataException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         }
         return true;

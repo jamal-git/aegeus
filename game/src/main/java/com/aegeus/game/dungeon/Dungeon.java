@@ -2,11 +2,14 @@ package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
-import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.apache.commons.io.IOUtils;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.awt.geom.Point2D;
 import java.io.*;
@@ -27,6 +30,8 @@ public class Dungeon {
     private static transient Aegeus parent = Aegeus.getInstance();
     private transient ThreadLocalRandom random = ThreadLocalRandom.current();
     private transient WorldEditPlugin worldedit = Aegeus.getWorldEdit();
+    private transient EditSession editSession;
+    private World world;
     private File directory;
     private List<CuboidClipboard> starts = new ArrayList<>();
     private List<CuboidClipboard> straights = new ArrayList<>();
@@ -37,7 +42,9 @@ public class Dungeon {
     private List<CuboidClipboard> exits = new ArrayList<>();
     private transient int length = 5;
 
-    public Dungeon(String directory, int length) throws DungeonLoadingException, IOException, DataException {
+    public Dungeon(String directory, int length, World w) throws DungeonLoadingException, IOException, DataException {
+        world = w;
+        editSession = new EditSession(new BukkitWorld(world), worldedit.getLocalConfiguration().maxChangeLimit);
         File temp = new File(parent.getDataFolder() + "/dungeons/zips/" + directory + ".zip");
         if(!temp.exists() || temp.isDirectory())   {
             throw new DungeonLoadingException("The dungeon selected does not exist or has been corrupted.");
@@ -113,6 +120,56 @@ public class Dungeon {
         parent.getLogger().info("Finished importing schematics, generating dungeon layout...");
         dfs();
         printArray(layout);
+    }
+
+    public void build(Location l) throws DungeonLoadingException, MaxChangedBlocksException {
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                if(!layout[i][j].equalsIgnoreCase("00")) {
+                    CuboidClipboard clipboard;
+                    Direction direction = null;
+                    char character = layout[i][j].charAt(0);
+                    for(Direction d : Direction.values())   {
+                        if(character == d.getChar())    {
+                            direction = d;
+                            break;
+                        }
+                    }
+                    if(direction == null)   {
+                        throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
+                    }
+                    switch (layout[i][j].charAt(1)) {
+                        case 'S':
+                            clipboard = starts.get(random.nextInt(starts.size()));
+                            break;
+                        case 'K':
+                            clipboard = keys.get(random.nextInt(keys.size()));
+                            break;
+                        case 'E':
+                            clipboard = exits.get(random.nextInt(keys.size()));
+                            break;
+                        case 'I':
+                            clipboard = straights.get(random.nextInt(straights.size()));
+                            break;
+                        case 'T':
+                            clipboard = turns.get(random.nextInt(turns.size()));
+                            break;
+                        case 'J':
+                            clipboard = trijunctions.get(random.nextInt(trijunctions.size()));
+                            break;
+                        case 'Q':
+                            clipboard = quadjunctions.get(random.nextInt(quadjunctions.size()));
+                        default:
+                            throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
+                    }
+                    Vector spot = new Vector(l.getBlockX() + 5 * j, l.getBlockY(), l.getBlockZ() + 5 * i);
+                    clipboard.rotate2D(direction.getRotateValue());
+                    clipboard.paste(editSession, spot, false);
+                    clipboard.rotate2D(360 - direction.getRotateValue());
+                }
+            }
+        }
+
     }
 
     public void dfs()    {
@@ -276,17 +333,17 @@ public class Dungeon {
                     int count = getDirectionalCount(i, j, maze);
                     if(surround == 2) {
                         if(count == 4)
-                            map[i][j] = "VS"; //UP DOWN STRAIGHT
+                            map[i][j] = "SI"; //UP DOWN STRAIGHT
                         else if(count == 8)
-                            map[i][j] = "HS"; //LEFT RIGHT STRAIGHT
+                            map[i][j] = "EI"; //LEFT RIGHT STRAIGHT
                         else if(count == 7)
-                            map[i][j] = "DT"; //SOUTH EAST TURN
+                            map[i][j] = "ST"; //SOUTH EAST TURN
                         else if(count == 9)
-                            map[i][j] = "RT"; //NORTH EAST TURN
+                            map[i][j] = "ET"; //NORTH EAST TURN
                         else if(count == 5)
-                            map[i][j] = "UT"; //NORTH WEST TURN
+                            map[i][j] = "NT"; //NORTH WEST TURN
                         else if(count == 3)
-                            map[i][j] = "LT"; //SOUTH WEST TURN
+                            map[i][j] = "WT"; //SOUTH WEST TURN
                     }
                     if(surround == 3)   {
                         if(count == 9)
@@ -410,18 +467,30 @@ public class Dungeon {
     }
 
     private enum Direction  {
-        NORTH(1),
-        SOUTH(1),
-        WEST(2),
-        EAST(2);
+        NORTH(1, 'N', 180),
+        SOUTH(1, 'S', 0),
+        WEST(2, 'W', 90),
+        EAST(2, 'E', 270);
 
         private int direction;
-        Direction(int value)  {
+        private char c;
+        private int rotateValue;
+        Direction(int value, char c, int rotateValue)  {
             this.direction = value;
+            this.c = c;
+            this.rotateValue = rotateValue;
         }
 
         public int getDirection() {
             return direction;
+        }
+
+        public char getChar()   {
+            return c;
+        }
+
+        public int getRotateValue() {
+            return rotateValue;
         }
     }
 }
