@@ -74,6 +74,25 @@ public enum Ability {
 				}, i * 10);
 			}
 		}
+	},
+	RESOLVE("Resolve", "Physical and magic resist is increased for a short duration.") {
+		@Override
+		public void activate(AgMonster info) {
+			float phys = (0.05f + info.getPhysRes()) * (1 + (0.3f * info.getTier()));
+			float mag = (0.05f + info.getMagRes()) * (1 + (0.3f * info.getTier()));
+
+			info.setPhysRes(info.getPhysRes() + phys);
+			info.setMagRes(info.getMagRes() + mag);
+
+			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
+				if (Aegeus.getInstance().getEntities().contains(info)) {
+					info.setPhysRes(info.getPhysRes() - phys);
+					info.setMagRes(info.getMagRes() - mag);
+					info.setActiveAbil(null);
+					CombatManager.updateName(info.getEntity());
+				}
+			}, 60);
+		}
 	};
 
 	private final String name;
