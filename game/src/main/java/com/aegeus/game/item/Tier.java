@@ -36,7 +36,6 @@ public enum Tier {
 					});
 
 					getDefArmor().hpRegen = new IntPoss(5, 10);
-					getDefArmor().energyRegen = new FloatPoss(0.01f, 0.02f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
 					getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.02f), 0.02f);
@@ -116,7 +115,6 @@ public enum Tier {
 					});
 
 					getDefArmor().hpRegen = new IntPoss(10, 20);
-					getDefArmor().energyRegen = new FloatPoss(0.01f, 0.03f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.08f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.08f);
 					getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
@@ -198,7 +196,6 @@ public enum Tier {
 					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.01f);
 
 					getDefArmor().hpRegen = new IntPoss(15, 40);
-					getDefArmor().energyRegen = new FloatPoss(0.02f, 0.05f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.05f), 0.12f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.01f, 0.05f), 0.12f);
 					getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.06f), 0.06f);
@@ -285,7 +282,6 @@ public enum Tier {
 					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.02f);
 
 					getDefArmor().hpRegen = new IntPoss(50, 90);
-					getDefArmor().energyRegen = new FloatPoss(0.04f, 0.07f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.02f, 0.07f), 0.16f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.02f, 0.07f), 0.16f);
 					getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.1f), 0.08f);
@@ -371,7 +367,6 @@ public enum Tier {
 
 					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.03f);
 					getDefArmor().hpRegen = new IntPoss(80, 140);
-					getDefArmor().energyRegen = new FloatPoss(0.05f, 0.08f);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.03f, 0.1f), 0.2f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.03f, 0.1f), 0.2f);
 					getDefArmor().block = new Chance<>(new FloatPoss(0.02f, 0.12f), 0.1f);

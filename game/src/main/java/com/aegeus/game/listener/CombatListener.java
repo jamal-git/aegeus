@@ -5,7 +5,6 @@ import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.combat.CombatManager;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
-import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.AgProjectile;
 import com.aegeus.game.item.ItemGold;
 import com.aegeus.game.item.tool.Weapon;
@@ -134,9 +133,6 @@ public class CombatListener implements Listener {
 			AgEntity aInfo = parent.getEntity(lAttacker);
 
 			e.setCancelled(true);
-			if (attacker instanceof Player)
-				if (CombatManager.takeEnergy((Player) attacker, tool) <= 0)
-					return;
 
 			if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 				if (tool != null && tool.getType().equals(Material.BOW))
@@ -230,15 +226,13 @@ public class CombatListener implements Listener {
 	@EventHandler
 	private void onInteract(PlayerInteractEvent e) {
 		if (e.getItem() != null && e.getItem().getType().equals(Material.BOW)) {
-			AgPlayer info = parent.getPlayer(e.getPlayer());
 			e.setCancelled(true);
 			e.setUseItemInHand(Event.Result.ALLOW);
 
 			if ((e.getAction().equals(org.bukkit.event.block.Action.RIGHT_CLICK_AIR)
 					|| e.getAction().equals(org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK))
 					&& e.getHand().equals(EquipmentSlot.HAND)) {
-				if (info.getEnergy() > 0) e.getPlayer().launchProjectile(Arrow.class);
-				else CombatManager.exhaust(e.getPlayer());
+				e.getPlayer().launchProjectile(Arrow.class);
 			}
 		}
 	}

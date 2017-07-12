@@ -16,7 +16,6 @@ public class AgEntity {
 	private Entity attacker;
 
 	private int hpRegen = 0;
-	private float energyRegen = 0;
 	private float physRes = 0;
 	private float magRes = 0;
 	private float block = 0;
@@ -36,7 +35,6 @@ public class AgEntity {
 		this.attacker = other.attacker;
 
 		this.hpRegen = other.hpRegen;
-		this.energyRegen = other.energyRegen;
 		this.physRes = other.physRes;
 		this.magRes = other.magRes;
 		this.block = other.block;
@@ -102,14 +100,6 @@ public class AgEntity {
 
 	public void setHpRegen(int hpRegen) {
 		this.hpRegen = hpRegen;
-	}
-
-	public float getEnergyRegen() {
-		return energyRegen;
-	}
-
-	public void setEnergyRegen(float energyRegen) {
-		this.energyRegen = energyRegen;
 	}
 
 	public float getPhysRes() {

@@ -22,7 +22,7 @@ public class StatsViktor extends Stats {
 		getNames().add("&e&lViktor the Conqueror");
 
 		getDefArmor().rarity = Rarity.UNIQUE;
-		getDefArmor().energyRegen = new FloatPoss(0.07f, 0.09f);
+		getDefArmor().hpRegen = new IntPoss(80, 120);
 		getDefArmor().physRes = new Chance<>(new FloatPoss(0.07f, 0.12f), 0.78f);
 		getDefArmor().block = new Chance<>(new FloatPoss(0.06f, 0.11f), 0.67f);
 

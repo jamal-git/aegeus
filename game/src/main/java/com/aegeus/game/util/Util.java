@@ -64,7 +64,6 @@ public class Util {
 	public static void updateStats(LivingEntity entity) {
 		int hp = 0;
 		int hpRegen = 0;
-		float energyRegen = 0;
 		float physRes = 0;
 		float magRes = 0;
 		float block = 0;
@@ -78,7 +77,6 @@ public class Util {
 				Armor armor = new Armor(i);
 				hp += armor.getHp();
 				hpRegen += armor.getHpRegen();
-				energyRegen += armor.getEnergyRegen();
 				physRes += armor.getPhysRes();
 				magRes += armor.getMagRes();
 				block += armor.getBlock();
@@ -121,7 +119,6 @@ public class Util {
 
 		entity.setMaxHealth(Math.max(1, hp));
 		info.setHpRegen(hpRegen);
-		info.setEnergyRegen(energyRegen);
 		info.setPhysRes(physRes);
 		info.setMagRes(magRes);
 		info.setBlock(block);
@@ -155,9 +152,6 @@ public class Util {
 		info.getHpBar().setProgress(player.getHealth() / player.getMaxHealth());
 		info.getHpBar().setTitle(Util.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
-		// Set Energy BossBar
-		player.setLevel(Math.max(1, Math.round(info.getEnergy())));
-		player.setExp(Math.max(0, (info.getEnergy() / 100)));
 	}
 
 	public static void heal(LivingEntity entity, double amount) {
@@ -326,8 +320,6 @@ public class Util {
 
 		if (armor.getHpRegen() > 0)
 			prefix.add("Mending");
-		if (armor.getEnergyRegen() > 0)
-			suffix.add("Fortitude");
 		if (armor.getDodge() > 0)
 			prefix.add("Agile");
 

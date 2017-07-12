@@ -37,7 +37,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 	private Rune rune = null;
 	private int hp = 0;
 	private int hpRegen = 0;
-	private float energyRegen = 0;
 	private float physRes = 0;
 	private float magRes = 0;
 	private float block = 0;
@@ -69,7 +68,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		this.rune = other.rune;
 		this.hp = other.hp;
 		this.hpRegen = other.hpRegen;
-		this.energyRegen = other.energyRegen;
 		this.physRes = other.physRes;
 		this.magRes = other.magRes;
 		this.block = other.block;
@@ -88,7 +86,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
 		hp = (info.hasKey("hp")) ? info.getInt("hp") : 0;
 		hpRegen = (info.hasKey("hpRegen")) ? info.getInt("hpRegen") : 0;
-		energyRegen = (info.hasKey("energyRegen")) ? info.getFloat("energyRegen") : 0;
 		physRes = (info.hasKey("physRes")) ? info.getFloat("physRes") : 0;
 		magRes = (info.hasKey("magRes")) ? info.getFloat("magRes") : 0;
 		block = (info.hasKey("block")) ? info.getFloat("block") : 0;
@@ -108,7 +105,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		info.set("runeType", rune == null ? new NBTTagInt(-1) : new NBTTagInt(rune.getRuneType().getId()));
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
-		info.set("energyRegen", new NBTTagFloat(energyRegen));
 		info.set("physRes", new NBTTagFloat(physRes));
 		info.set("magRes", new NBTTagFloat(magRes));
 		info.set("block", new NBTTagFloat(block));
@@ -125,7 +121,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		List<String> lore = new ArrayList<>();
 		lore.add(Util.colorCodes("&cHP: +" + hp));
 		if (hpRegen > 0) lore.add(Util.colorCodes("&cHP REGEN: +" + hpRegen + "/s"));
-		if (energyRegen > 0) lore.add(Util.colorCodes("&cENERGY REGEN: +" + Math.round(energyRegen * 100) + "%"));
 		if (physRes > 0) lore.add(Util.colorCodes("&cPHYSICAL RESIST: " + Math.round(physRes * 100) + "%"));
 		if (magRes > 0) lore.add(Util.colorCodes("&cMAGIC RESIST: " + Math.round(magRes * 100) + "%"));
 		if (block > 0) lore.add(Util.colorCodes("&cBLOCK: " + Math.round(block * 100) + "%"));
@@ -266,14 +261,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 
 	public void setHpRegen(int hpRegen) {
 		this.hpRegen = hpRegen;
-	}
-
-	public float getEnergyRegen() {
-		return energyRegen;
-	}
-
-	public void setEnergyRegen(float energyRegen) {
-		this.energyRegen = energyRegen;
 	}
 
 	public float getPhysRes() {

@@ -112,9 +112,7 @@ public class EnchantListener implements Listener {
 						e.setCursor(new ItemStack(Material.AIR));
 						if (armor.getEnchant() < 3 || random.nextFloat() <= (1.01 - (armor.getEnchant() / 12)) * 0.4) {
 							armor.setHp((int) (Math.floor(armor.getHp() * 1.05f) + 1));
-							if (armor.getHpRegen() > 0)
-								armor.setHpRegen((int) (Math.floor(armor.getHpRegen() * 1.05f) + 1));
-							if (armor.getEnergyRegen() > 0) armor.setEnergyRegen(armor.getEnergyRegen() + 0.01f);
+							armor.setHpRegen((int) (Math.floor(armor.getHpRegen() * 1.05f) + 1));
 							armor.addEnchant(1);
 							e.setCurrentItem(armor.build());
 							enchantSuccess(player, armor.getEnchant());

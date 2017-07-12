@@ -18,7 +18,6 @@ public class AgPlayer extends AgEntity {
 	private int level = 0;
 	private int xp = 0;
 	private int soulpoints = 0;
-	private float energy = 100;
 
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
@@ -50,7 +49,6 @@ public class AgPlayer extends AgEntity {
 		this.level = other.level;
 		this.xp = other.xp;
 		this.soulpoints = other.soulpoints;
-		this.energy = other.energy;
 
 		this.alignment = other.alignment;
 		this.division = other.division;
@@ -111,14 +109,6 @@ public class AgPlayer extends AgEntity {
 
 	public void setSoulpoints(int soulpoints) {
 		this.soulpoints = soulpoints;
-	}
-
-	public float getEnergy() {
-		return energy;
-	}
-
-	public void setEnergy(float energy) {
-		this.energy = energy;
 	}
 
 	public Division getDivision() {

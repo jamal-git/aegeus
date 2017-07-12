@@ -29,20 +29,6 @@ public class StatsListener implements Listener {
 				}
 			}
 		}, 20, 20);
-
-		// Energy regeneration
-		Bukkit.getScheduler().runTaskTimer(parent, () -> {
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				AgPlayer info = parent.getPlayer(player);
-				if (!player.isDead()) {
-					if (info.getEnergy() >= 0)
-						info.setEnergy(Math.max(0, Math.min(100, info.getEnergy() + 1.2f + (info.getEnergyRegen() * 10))));
-					else
-						info.setEnergy(Math.max(-40, Math.min(100, info.getEnergy() + 1)));
-					Util.updateDisplay(player);
-				}
-			}
-		}, 1, 1);
 	}
 
 	@EventHandler

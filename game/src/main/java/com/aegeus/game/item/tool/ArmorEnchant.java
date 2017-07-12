@@ -21,8 +21,6 @@ public class ArmorEnchant extends AgItem implements SingletonInfo {
 		setName("&f&lEnchant:&7 " + t.getColor() + t.getArmor() + " Armor");
 		addLore("&c+5% HP");
 		addLore("&c+5% HP REGEN");
-		addLore("    &7- &oOR&7 -");
-		addLore("&c+1% ENERGY REGEN");
 		addLore("&7&oArmor will VANISH if enchant above +3 FAILS.");
 		this.tier = tier;
 	}

@@ -168,8 +168,6 @@ public class ItemParser {
 					armor.setHp(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("hpregen"))
 					armor.setHpRegen(Integer.parseInt(value));
-				else if (key.equalsIgnoreCase("energyregen"))
-					armor.setEnergyRegen(Float.parseFloat(value));
 				else if (key.equalsIgnoreCase("physres"))
 					armor.setPhysRes(Float.parseFloat(value));
 				else if (key.equalsIgnoreCase("magres"))

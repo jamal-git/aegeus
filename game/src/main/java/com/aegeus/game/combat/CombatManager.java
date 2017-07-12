@@ -4,7 +4,6 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
-import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
@@ -126,27 +125,6 @@ public class CombatManager {
 		}
 
 		return cInfo;
-	}
-
-	public static float takeEnergy(Player player, ItemStack tool) {
-		AgPlayer info = Aegeus.getInstance().getPlayer(player);
-		Weapon weapon = tool != null && !tool.getType().equals(Material.AIR)
-				&& new Weapon(tool).verify() ? new Weapon(tool) : null;
-		float energy = weapon != null ? 6.5f + (3.5f * (weapon.getTier() - 1)) : 6;
-
-		info.setEnergy(info.getEnergy() - energy);
-
-		if (info.getEnergy() <= 0) exhaust(player);
-
-		Util.updateDisplay(info.getPlayer());
-
-		return info.getEnergy();
-	}
-
-	public static void exhaust(Player player) {
-		AgPlayer info = Aegeus.getInstance().getPlayer(player);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 55, 4));
-		info.setEnergy(-40);
 	}
 
 	public static void weaponDura(Player player, Weapon weapon) {

@@ -554,8 +554,7 @@ public abstract class Stats {
 		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
 
 		public IntPoss hp = new IntPoss(1);
-		public IntPoss hpRegen = new IntPoss();
-		public FloatPoss energyRegen = new FloatPoss();
+		public IntPoss hpRegen = new IntPoss(1);
 
 		public Chance<FloatPoss> physRes = new Chance<>();
 		public Chance<FloatPoss> magRes = new Chance<>();
@@ -576,7 +575,6 @@ public abstract class Stats {
 				this.rune = other.rune;
 				this.hp = other.hp;
 				this.hpRegen = other.hpRegen;
-				this.energyRegen = other.energyRegen;
 				this.physRes = other.physRes;
 				this.magRes = other.magRes;
 				this.block = other.block;
@@ -594,14 +592,7 @@ public abstract class Stats {
 			if (rune != null) armor.setRune(new Rune(rune.get()));
 
 			armor.setHp(Math.round((hp.getDiff() * f) + hp.getMin()));
-
-			if (hpRegen.getMin() > 0 && energyRegen.getMin() > 0) {
-				if (random.nextBoolean()) armor.setHpRegen(hpRegen.get());
-				else armor.setEnergyRegen(energyRegen.get());
-			} else if (hpRegen.getMin() > 0)
-				armor.setHpRegen(hpRegen.get());
-			else if (energyRegen.getMin() > 0)
-				armor.setEnergyRegen(energyRegen.get());
+			armor.setHpRegen(hpRegen.get());
 
 			FloatPoss physRes = this.physRes.get();
 			FloatPoss magRes = this.magRes.get();
