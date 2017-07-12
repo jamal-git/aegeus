@@ -58,12 +58,14 @@ public class CommandParty implements CommandExecutor {
                 }
             }
             //The person has already been invited to the party, don't spam.
-            else if(agplayer.getParty().equals(invitee.getInvitedParty()))  play.sendMessage(Util.colorCodes("&cYou already invited this player to the party!"));
-            //The person has been invited to another party, they will have to decline to accept more party invites.
+			else if (agplayer.getParty().equals(invitee.getInvitedParty()))
+				play.sendMessage(Util.colorCodes("&cYou already invited this player to the party!"));
+				//The person has been invited to another party, they will have to decline to accept more party invites.
             else if(!agplayer.getParty().equals(invitee.getInvitedParty())) play.sendMessage(Util.colorCodes("&cThat player has already been invited to another party!"));
             //The player is already in a party, cannot invite.
-            else if(invitee.getParty() != null)   play.sendMessage(Util.colorCodes("&cThat player is already in a party!"));
-            return true;
+			else if (invitee.getParty() != null)
+				play.sendMessage(Util.colorCodes("&cThat player is already in a party!"));
+			return true;
         }
         else if(args[0].equalsIgnoreCase("accept") && args.length == 1) {
             //Accept a pending party invite.
@@ -74,17 +76,13 @@ public class CommandParty implements CommandExecutor {
             else if(agplayer.getParty() != null) {
                 //The player is already in a party
                 play.sendMessage(Util.colorCodes("&cYou are already in a party!"));
-            }
-            else if(agplayer.getInvitedParty().hasPlayer(agplayer)) {
-                //The player is already in the invited party.
+            } else if (agplayer.getInvitedParty().contains(agplayer)) {
+				//The player is already in the invited party.
                 play.sendMessage(Util.colorCodes("&cYou are already in that party!"));
             }
             else    {
-                Party party = agplayer.getInvitedParty();
-                agplayer.setParty(party);
-                party.addPlayer(agplayer);
-                play.sendMessage(Util.colorCodes("&7You joined &a&l" + party.getLeader().getPlayer().getDisplayName() + "&7's party!"));
-            }
+				agplayer.getInvitedParty().add(agplayer);
+			}
             agplayer.setInvitedParty(null);
             return true;
         }
@@ -96,11 +94,10 @@ public class CommandParty implements CommandExecutor {
                     //Attempting to kick player but is not the leader.
                     play.sendMessage(Util.colorCodes("&cYou are not the leader of your party!"));
                 }
-                if(agplayer.getParty().hasPlayer(kickedfag))   {
-                    //Kick that player lol
-                    agplayer.getParty().removePlayer(kickedfag);
-                    kickedfag.setParty(null);
-                    kickedfag.getPlayer().sendMessage(Util.colorCodes("&c&lYou have been kicked from the party."));
+				if (agplayer.getParty().contains(kickedfag)) {
+					//Kick that player lol
+					agplayer.getParty().remove(kickedfag);
+					kickedfag.getPlayer().sendMessage(Util.colorCodes("&c&lYou have been kicked from the party."));
                 }
                 //The player is not in the party.
                 else play.sendMessage(Util.colorCodes("&cThat player is not in your party!"));
@@ -128,9 +125,8 @@ public class CommandParty implements CommandExecutor {
             }
             else    {
                 //Leave the party. Bye
-                agplayer.getParty().removePlayer(agplayer);
-                agplayer.setParty(null);
-            }
+				agplayer.getParty().remove(agplayer);
+			}
         }
         return false;
     }

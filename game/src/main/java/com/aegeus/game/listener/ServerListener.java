@@ -68,16 +68,14 @@ public class ServerListener implements Listener {
 		Player player = e.getPlayer();
 		Util.updateStats(player);
 		player.setHealth(player.getMaxHealth());
+		Util.updateDisplay(player);
 	}
 
 	@EventHandler
 	// Clear user information and punish combat loggers
 	private void onLogout(PlayerQuitEvent e) {
 		AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
-		if (player.getParty() != null) {
-			player.getParty().removePlayer(player);
-			player.setParty(null);
-		}
+		if (player.getParty() != null) player.getParty().remove(player);
 		e.setQuitMessage("");
 	}
 

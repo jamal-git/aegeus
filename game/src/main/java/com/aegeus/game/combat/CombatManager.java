@@ -7,6 +7,7 @@ import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
@@ -178,16 +179,21 @@ public class CombatManager {
 	public static void updateName(LivingEntity entity) {
 		AgEntity info = Aegeus.getInstance().getEntity(entity);
 
+		ChatColor color = getHealthColor(entity);
 		if (info instanceof AgMonster && ((AgMonster) info).getActiveAbil() != null)
-			entity.setCustomName(Util.colorCodes("&d&l** " + ((AgMonster) info).getActiveAbil().getName() + "&d&l **"));
-
-		else if (entity.getHealth() >= entity.getMaxHealth() * 0.75)
-			entity.setCustomName(Util.colorCodes("&7- &a" + Math.round(entity.getHealth()) + " &lHP&7 -"));
-		else if (entity.getHealth() >= entity.getMaxHealth() * 0.50)
-			entity.setCustomName(Util.colorCodes("&7- &e" + Math.round(entity.getHealth()) + " &lHP&7 -"));
-		else if (entity.getHealth() >= entity.getMaxHealth() * 0.25)
-			entity.setCustomName(Util.colorCodes("&7- &6" + Math.round(entity.getHealth()) + " &lHP&7 -"));
+			entity.setCustomName(Util.colorCodes(color + "&l** " + ((AgMonster) info).getActiveAbil().getName() + color + "&l **"));
 		else
-			entity.setCustomName(Util.colorCodes("&7- &c" + Math.round(entity.getHealth()) + " &lHP&7 -"));
+			entity.setCustomName(Util.colorCodes("&7- " + color + Math.round(entity.getHealth()) + " &lHP&7 -"));
+	}
+
+	public static ChatColor getHealthColor(LivingEntity entity) {
+		if (entity.getHealth() <= entity.getMaxHealth() * 0.25)
+			return ChatColor.RED;
+		else if (entity.getHealth() <= entity.getMaxHealth() * 0.5)
+			return ChatColor.GOLD;
+		else if (entity.getHealth() <= entity.getMaxHealth() * 0.75)
+			return ChatColor.YELLOW;
+		else
+			return ChatColor.GREEN;
 	}
 }

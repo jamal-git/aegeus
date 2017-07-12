@@ -5,6 +5,7 @@ import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.combat.CombatManager;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.AgMonster;
+import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.AgProjectile;
 import com.aegeus.game.item.ItemGold;
 import com.aegeus.game.item.tool.Weapon;
@@ -121,11 +122,15 @@ public class CombatListener implements Listener {
 				&& !victim.isDead() && !attacker.isDead()) {
 			e.setCancelled(true);
 
-			if (victim instanceof Player && attacker instanceof Player
-					&& Aegeus.getInstance().getPlayer((Player) victim).getParty() != null
-					&& Aegeus.getInstance().getPlayer((Player) victim).getParty()
-					.hasPlayer(Aegeus.getInstance().getPlayer((Player) attacker)))
-				return;
+			if (victim instanceof Player && attacker instanceof Player) {
+				AgPlayer vPInfo = parent.getPlayer((Player) victim);
+				AgPlayer vAInfo = parent.getPlayer((Player) attacker);
+
+				if (vPInfo.getParty() != null && vAInfo.getParty() != null
+						&& vPInfo.getParty().equals(vAInfo.getParty()))
+					return;
+			}
+
 
 			LivingEntity lVictim = (LivingEntity) victim;
 			LivingEntity lAttacker = (LivingEntity) attacker;

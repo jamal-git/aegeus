@@ -149,4 +149,14 @@ public class AgEntity {
 	public void setCritChance(float crit) {
 		this.critChance = Math.min(1, crit);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return getEntity().equals(obj);
+	}
+
+	@Override
+	public String toString() {
+		return getEntity().toString();
+	}
 }

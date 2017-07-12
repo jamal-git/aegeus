@@ -145,13 +145,18 @@ public class Util {
 					.setDisplayName(Util.colorCodes("&c&lHP&c"));
 			Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp").setDisplaySlot(DisplaySlot.BELOW_NAME);
 		}
+
 		// Set BelowNameHP
 		Bukkit.getScoreboardManager().getMainScoreboard().getObjective("hp").getScore(player.getName())
 				.setScore((int) Math.round(player.getHealth()));
+
 		// Set HP BossBar
 		info.getHpBar().setProgress(player.getHealth() / player.getMaxHealth());
 		info.getHpBar().setTitle(Util.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
+
+		// Update party glow
+		if (info.getParty() != null) info.getParty().update(player);
 	}
 
 	public static void heal(LivingEntity entity, double amount) {
