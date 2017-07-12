@@ -30,7 +30,7 @@ public class Dungeon {
 
     public Dungeon(String directory, int length) throws DungeonLoadingException {
         File temp = new File(Aegeus.getInstance().getDataFolder() + "/dungeons/" + directory + "/");
-        this.length = 4;
+        this.length = 5;
 //        if(!temp.exists() || !temp.isDirectory())   {
 //            throw new DungeonLoadingException("The directory selected does not exist or has been corrupted.");
 //        }
@@ -43,11 +43,13 @@ public class Dungeon {
 
     public void dfs()    {
         String[][] maze = {
-                {"0", "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0"}};
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"},
+                {"0", "0", "0", "0", "0", "0", "0"}};
         do {
             for (int i = 0; i < maze.length; i++) {
                 for (int i1 = 0; i1 < maze[i].length; i1++) {
@@ -56,7 +58,7 @@ public class Dungeon {
             }
             int sx, sy, ex, ey;
             //noinspection ControlFlowStatementWithoutBraces
-            while (Point2D.distance(sx = random.nextInt(5), sy = random.nextInt(5), ex = random.nextInt(5), ey = random.nextInt(5)) < length || sx == ex || sy == ey)
+            while (Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey)
                 ;
             maze[sx][sy] = "S";
             maze[ex][ey] = "E";
@@ -67,12 +69,12 @@ public class Dungeon {
     }
 
     private boolean dfsrecursive(int x, int y, String[][] maze)   {
-        if(x < 0 || y < 0 || x > 4 || y > 4)    return false;
+        if(x < 0 || y < 0 || x > 6 || y > 6)    return false;
         if(maze[x][y].equalsIgnoreCase("E")) return true;
         if(maze[x][y].equalsIgnoreCase("P")) return false;
         maze[x][y] = "P";
-        if((x < 4 && maze[x + 1][y].equalsIgnoreCase("E")) || (x > 0 && maze[x - 1][y].equalsIgnoreCase("E"))
-                || (y < 4 && maze[x][y + 1].equalsIgnoreCase("E")) || (y > 0 && maze[x][y - 1].equalsIgnoreCase("E"))) {
+        if((x < 6 && maze[x + 1][y].equalsIgnoreCase("E")) || (x > 0 && maze[x - 1][y].equalsIgnoreCase("E"))
+                || (y < 6 && maze[x][y + 1].equalsIgnoreCase("E")) || (y > 0 && maze[x][y - 1].equalsIgnoreCase("E"))) {
             return true;
         }
         if(nearby(x, y, maze) > 1) {
@@ -112,7 +114,7 @@ public class Dungeon {
                 {"0","0","0","0","0"},
                 {"0","0","0","0","0"}};
         int sx, sy, ex, ey;
-        while(Point2D.distance(sx = random.nextInt(5), sy = random.nextInt(5), ex = random.nextInt(5), ey = random.nextInt(5)) < length || sx == ex || sy == ey);
+        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
         maze[sx][sy] = "S";
         maze[ex][ey] = "E";
         List<Node> nodes = new ArrayList<>();
@@ -137,7 +139,7 @@ public class Dungeon {
             int x = n.getX(), y = n.getY();
             Node child;
             child = new Node(x + 1, y, n);
-            if(x < 4 && !nodes.contains(child)) {
+            if(x < 6 && !nodes.contains(child)) {
                 nodes.add(child);
                 queue.offer(child);
             }
@@ -152,7 +154,7 @@ public class Dungeon {
                 queue.offer(child);
             }
             child = new Node(x, y + 1, n);
-            if(y < 4 && !nodes.contains(child)) {
+            if(y < 6 && !nodes.contains(child)) {
                 nodes.add(child);
                 queue.offer(child);
             }
@@ -166,7 +168,7 @@ public class Dungeon {
         for(String[] arr : maze)
             for(String s : arr)
                 if(s.equalsIgnoreCase("P")) count++;
-        if(count != 8) return false;
+        if(count != 10) return false;
         for (int i = 0; i < maze.length; i++)
             for (int j = 0; j < maze[i].length; j++)
                 if(nearby(i,j, maze) > 2) return false;
@@ -175,7 +177,22 @@ public class Dungeon {
 
     private boolean validateAndMap(String[][] maze)    {
         if(!isValid(maze)) return false;
-        String[][] map = new String[5][5];
+        String[][] map = new String[7][7];
+        int keysToPlace = 2;
+        while(keysToPlace != 0) {
+            int x,y;
+            //noinspection ControlFlowStatementWithoutBraces
+            boolean success = false;
+            for (int i = 0; i < 100; i++) {
+                if(maze[x = random.nextInt(7)][y = random.nextInt(7)].equalsIgnoreCase("0") && nearby(x, y, maze) == 1 && notNearbyStartOrExitOrKey(x, y, maze))  {
+                    success = true;
+                    maze[x][y] = "K";
+                    break;
+                }
+            }
+            if(!success) return false;
+            keysToPlace--;
+        }
         for (int i = 0; i < maze.length; i++)
             map[i] = Arrays.copyOf(maze[i], maze[i].length);
         for (int i = 0; i < maze.length; i++) {
@@ -199,9 +216,9 @@ public class Dungeon {
                     }
                     if(surround == 3)   {
                         if(count == 9)
-                            map[i][j] = "S"; //WEST SOUTH EAST JUNCTION
+                            map[i][j] = "So"; //WEST SOUTH EAST JUNCTION
                         if(count == 10)
-                            map[i][j] = "E"; //SOUTH EAST NORTH JUNCTION
+                            map[i][j] = "Ea"; //SOUTH EAST NORTH JUNCTION
                         if(count == 11)
                             map[i][j] = "N"; //EAST NORTH WEST JUNCTION
                         if(count == 6)
@@ -216,8 +233,8 @@ public class Dungeon {
 
     private String getDirection(int x, int y, String[][] maze, Direction d)   {
         if(d == Direction.NORTH && x > 0) return maze[x - 1][y];
-        if(d == Direction.SOUTH && x < 4) return maze[x + 1][y];
-        if(d == Direction.EAST && y < 4) return maze[x][y + 1];
+        if(d == Direction.SOUTH && x < 6) return maze[x + 1][y];
+        if(d == Direction.EAST && y < 6) return maze[x][y + 1];
         if(d == Direction.WEST && y > 0) return maze[x][y - 1];
         return "";
     }
@@ -225,20 +242,25 @@ public class Dungeon {
 
     private int getDirectionalCount(int x, int y, String[][] maze)   {
         int count = 0;
-        if(x < 4 && maze[x + 1][y].matches("[PpKkSsEe]")) count += 1; //SOUTH
+        if(x < 6 && maze[x + 1][y].matches("[PpKkSsEe]")) count += 1; //SOUTH
         if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count += 3; //NORTH
         if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count += 2; //WEST
-        if(y < 4 && maze[x][y + 1].matches("[PpKkSsEe]")) count += 6; //EAST
+        if(y < 6 && maze[x][y + 1].matches("[PpKkSsEe]")) count += 6; //EAST
         return count;
     }
 
     private int nearby(int x, int y, String[][] maze)  {
         int count = 0;
         if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count++;
-        if(x < 4 && maze[x + 1][y].matches("[PpKkSsEe]")) count++;
+        if(x < 6 && maze[x + 1][y].matches("[PpKkSsEe]")) count++;
         if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count++;
-        if(y < 4 && maze[x][y + 1].matches("[PpKkSsEe]")) count++;
+        if(y < 6 && maze[x][y + 1].matches("[PpKkSsEe]")) count++;
         return count;
+    }
+
+    public boolean notNearbyStartOrExitOrKey(int x, int y, String[][] maze)  {
+        return !(getDirection(x, y, maze, Direction.SOUTH).matches("[SsEeKk]") || getDirection(x, y, maze, Direction.EAST).matches("[SsEeKk]") ||
+                getDirection(x, y, maze, Direction.WEST).matches("[SsEeKk]") || getDirection(x, y, maze, Direction.NORTH).matches("[SsEeKk]"));
     }
 
     private void printArray(String[][] array)   {

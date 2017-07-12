@@ -187,7 +187,6 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 			if (level % 20 == 0) {
 				tier = tier.next();
 				setMaterial(tier.getPickaxeMaterial());
-				//todo implement stats.
 				tieredUp = true;
 				int j = 1;
 				switch (getTier()) {
