@@ -1,15 +1,22 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.stats.StatsSkeleton;
+import com.aegeus.game.stats.StatsT3;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
-import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.awt.geom.Point2D;
 import java.io.*;
@@ -26,9 +33,9 @@ import java.util.zip.ZipFile;
  * Created by Silvre on 7/10/2017.
  */
 public class Dungeon {
-    String[][] layout;
     private static transient Aegeus parent = Aegeus.getInstance();
-    private transient ThreadLocalRandom random = ThreadLocalRandom.current();
+	String[][] layout;
+	private transient ThreadLocalRandom random = ThreadLocalRandom.current();
     private transient WorldEditPlugin worldedit = Aegeus.getWorldEdit();
     private transient EditSession editSession;
     private World world;
@@ -159,14 +166,24 @@ public class Dungeon {
                             break;
                         case 'Q':
                             clipboard = quadjunctions.get(random.nextInt(quadjunctions.size()));
-                        default:
+							break;
+						default:
                             throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
                     }
                     Vector spot = new Vector(l.getBlockX() + 5 * j, l.getBlockY(), l.getBlockZ() + 5 * i);
                     clipboard.rotate2D(direction.getRotateValue());
                     clipboard.paste(editSession, spot, false);
                     clipboard.rotate2D(360 - direction.getRotateValue());
-                }
+					for (int x = spot.getBlockX() - 2; x < spot.getX() + 2; x++)
+						for (int y = spot.getBlockY() - 2; y < spot.getY() + 2; y++)
+							for (int z = spot.getBlockZ() - 2; z < spot.getZ() + 2; z++) {
+								Block b = l.getWorld().getBlockAt(x, y, z);
+								if (b != null && b.getType().equals(Material.PUMPKIN)) {
+									new StatsSkeleton(new StatsT3()).spawn(new Location(l.getWorld(), x, y, z));
+									b.setType(Material.AIR);
+								}
+							}
+				}
             }
         }
 
@@ -439,33 +456,6 @@ public class Dungeon {
         }
     }
 
-    private class Node   {
-        private int x,y;
-        private Node parent;
-        public Node(int x, int y, Node parent)   {
-            this.x = x;
-            this.y = y;
-            this.parent = parent;
-        }
-
-        public Node getParent() {
-            return parent;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof Node && ((Node) obj).getX() == x && ((Node) obj).getY() == y;
-        }
-    }
-
     private enum Direction  {
         NORTH(1, 'N', 180),
         SOUTH(1, 'S', 0),
@@ -493,4 +483,32 @@ public class Dungeon {
             return rotateValue;
         }
     }
+
+	private class Node {
+		private int x, y;
+		private Node parent;
+
+		public Node(int x, int y, Node parent) {
+			this.x = x;
+			this.y = y;
+			this.parent = parent;
+		}
+
+		public Node getParent() {
+			return parent;
+		}
+
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof Node && ((Node) obj).getX() == x && ((Node) obj).getY() == y;
+		}
+	}
 }
