@@ -4,6 +4,7 @@ import com.aegeus.game.commands.entity.*;
 import com.aegeus.game.commands.item.CommandCreate;
 import com.aegeus.game.commands.social.*;
 import com.aegeus.game.commands.world.CommandAddOre;
+import com.aegeus.game.commands.world.CommandCreateDungeon;
 import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.SpawnerDeserializer;
@@ -94,6 +95,7 @@ public class Aegeus extends JavaPlugin {
 
 		// world
 		getCommand("addore").setExecutor(new CommandAddOre());
+		getCommand("createdungeon").setExecutor(new CommandCreateDungeon());
 
 		// Done, done, and done!
 		getLogger().info("Load complete.");
