@@ -4,6 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +38,7 @@ public class StatsListener implements Listener {
 			Util.updateStats(e.getWhoClicked());
 			ItemStack item = e.getCurrentItem();
 
-			if (item != null) {
+			if (!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE) && item != null) {
 				if (item.getType().equals(Material.PUMPKIN)
 						&& e.getSlotType().equals(InventoryType.SlotType.ARMOR))
 					item.setType(Material.JACK_O_LANTERN);

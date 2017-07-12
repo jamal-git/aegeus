@@ -2,14 +2,18 @@ package com.aegeus.game.stats;
 
 import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
-import com.aegeus.game.ability.AbilityResolve;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.util.Action;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.FloatPoss;
 import com.aegeus.game.util.IntPoss;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.Arrays;
 
@@ -27,7 +31,17 @@ public class StatsViktor extends Stats {
 
 		getNames().add("&e&lViktor the Conqueror");
 		setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-				new AbilityResolve(), new AbilityTackle()));
+				new AbilityTackle()));
+		getSpawnActions().add(new Action<LivingEntity>() {
+			@Override
+			public void activate(LivingEntity e) {
+				for (ItemStack i : e.getEquipment().getArmorContents()) {
+					LeatherArmorMeta meta = (LeatherArmorMeta) i.getItemMeta();
+					meta.setColor(Color.BLACK);
+					i.setItemMeta(meta);
+				}
+			}
+		});
 
 		getDefArmor().rarity = Rarity.UNIQUE;
 		getDefArmor().hpRegen = new IntPoss(80, 120);
@@ -42,19 +56,19 @@ public class StatsViktor extends Stats {
 		getHelmets().add(helmet);
 
 		ArmorPossible chestplate = new ArmorPossible();
-		chestplate.material = Material.GOLD_CHESTPLATE;
+		chestplate.material = Material.LEATHER_CHESTPLATE;
 		chestplate.name = "&eViktor's Chestplate";
 		chestplate.hp = new IntPoss(3490, 4140);
 		getChestplates().add(chestplate);
 
 		ArmorPossible leggings = new ArmorPossible();
-		leggings.material = Material.GOLD_LEGGINGS;
+		leggings.material = Material.LEATHER_LEGGINGS;
 		leggings.name = "&eViktor's Leggings";
 		leggings.hp = new IntPoss(3490, 4140);
 		getAllLeggings().add(leggings);
 
 		ArmorPossible boots = new ArmorPossible();
-		boots.material = Material.GOLD_BOOTS;
+		boots.material = Material.LEATHER_BOOTS;
 		boots.name = "&eViktor's Boots";
 		boots.hp = new IntPoss(2115, 2760);
 		getAllBoots().add(boots);
