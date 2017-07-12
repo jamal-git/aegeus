@@ -3,14 +3,15 @@ package com.aegeus.game.dungeon;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
 import com.sk89q.worldedit.CuboidClipboard;
+import org.apache.commons.io.IOUtils;
 
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Created by Silvre on 7/10/2017.
@@ -28,15 +29,41 @@ public class Dungeon {
     private List<CuboidClipboard> keys;
     private int length;
 
-    public Dungeon(String directory, int length) throws DungeonLoadingException {
-        File temp = new File(Aegeus.getInstance().getDataFolder() + "/dungeons/" + directory + "/");
+    public Dungeon(String directory, int length) throws DungeonLoadingException, IOException {
+        File temp = new File(parent.getDataFolder() + "/dungeons/zips/" + directory + ".zip");
         this.length = 5;
-//        if(!temp.exists() || !temp.isDirectory())   {
-//            throw new DungeonLoadingException("The directory selected does not exist or has been corrupted.");
-//        }
-//        else    {
-//            this.directory = temp;
-//        }
+        if(!temp.exists() || temp.isDirectory())   {
+            throw new DungeonLoadingException("The dungeon selected does not exist or has been corrupted.");
+        }
+        else if(!new File(parent.getDataFolder() + "/dungeons/" + directory).exists())    {
+            parent.getLogger().info("Unzipping dungeon...");
+            this.directory = temp;
+            //noinspection ResultOfMethodCallIgnored
+            new File(parent.getDataFolder() + "/dungeons/" + directory + "/").mkdir();
+            try(ZipFile zipfile = new ZipFile(temp))    {
+                Enumeration<? extends ZipEntry> entries = zipfile.entries();
+                while (entries.hasMoreElements())   {
+                    ZipEntry entry = entries.nextElement();
+                    File entryDestination = new File(Aegeus.getInstance().getDataFolder() + "/dungeons/" + directory + "/", entry.getName());
+                    if (entry.isDirectory())
+                        entryDestination.mkdirs();
+                    else    {
+                        entryDestination.getParentFile().mkdirs();
+                        InputStream in = zipfile.getInputStream(entry);
+                        OutputStream out = new FileOutputStream(entryDestination);
+                        IOUtils.copy(in, out);
+                        IOUtils.closeQuietly(in);
+                        out.close();
+                    }
+                }
+            } catch (IOException e) {
+                parent.getLogger().log(Level.SEVERE, "Could not load dungeon", e);
+            }
+            parent.getLogger().info("Finished unzipping, initializing...");
+        }
+        else    {
+            parent.getLogger().info("Unzipped dungeon already, skipping...");
+        }
         parent.getLogger().info("DEPTH FIRST SEARCH");
         dfs();
     }
