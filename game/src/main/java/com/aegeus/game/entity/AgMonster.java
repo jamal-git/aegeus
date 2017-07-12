@@ -9,7 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AgMonster extends AgEntity {
+public class AgMonster extends AgLiving {
 	private String name;
 
 	private List<Ability> abils = new ArrayList<>();
@@ -35,6 +35,10 @@ public class AgMonster extends AgEntity {
 	}
 
 	public AgMonster(AgEntity info) {
+		super(info);
+	}
+
+	public AgMonster(AgLiving info) {
 		super(info);
 	}
 

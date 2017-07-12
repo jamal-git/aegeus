@@ -19,7 +19,7 @@ public class AbilityResolve extends Ability {
 		info.setMagRes(info.getMagRes() + mag);
 
 		Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
-			if (Aegeus.getInstance().getEntities().contains(info)) {
+			if (Aegeus.getInstance().contains(info)) {
 				info.setPhysRes(info.getPhysRes() - phys);
 				info.setMagRes(info.getMagRes() - mag);
 				info.setActiveAbil(null);

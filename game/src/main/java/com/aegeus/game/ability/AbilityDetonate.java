@@ -19,7 +19,7 @@ public class AbilityDetonate extends Ability {
 		for (int i = 0; i < 5; i++) {
 			int finalI = i;
 			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
-				if (Aegeus.getInstance().getEntities().contains(info)) {
+				if (Aegeus.getInstance().contains(info)) {
 					LivingEntity entity = info.getEntity();
 					int dist = Math.round(1 + (info.getTier() * 0.2f));
 					entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_CREEPER_HURT, 1, 1);

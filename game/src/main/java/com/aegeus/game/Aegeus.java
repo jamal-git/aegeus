@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -39,8 +40,7 @@ public class Aegeus extends JavaPlugin {
 	public static Gson GSON;
 	private static Aegeus instance;
 	private final Map<Location, Material> ores = new HashMap<>();
-	private final Map<LivingEntity, AgEntity> entities = new HashMap<>();
-	private final Map<Projectile, AgProjectile> projectiles = new HashMap<>();
+	private final Map<Entity, AgEntity> entities = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
@@ -117,41 +117,71 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("AEGEUS disabled.");
 	}
 
-	public AgEntity getEntity(LivingEntity entity) {
-		if (!entities.containsKey(entity))
-			entities.put(entity, new AgEntity(entity));
-		return entities.get(entity);
+	public AgEntity get(Entity e) {
+		if (!contains(e)) add(e);
+		return entities.get(e);
 	}
 
-	public AgPlayer getPlayer(Player player) {
-		if (!entities.containsKey(player))
-			entities.put(player, new AgPlayer(player));
-		else if (!(entities.get(player) instanceof AgPlayer))
-			entities.put(player, new AgPlayer(entities.get(player), player));
-		return (AgPlayer) entities.get(player);
+	public AgPlayer getPlayer(Player p) {
+		AgEntity info = get(p);
+		if (!(info instanceof AgPlayer))
+			info = put(p, new AgPlayer(info));
+		return (AgPlayer) info;
 	}
 
-	public AgMonster getMonster(LivingEntity entity) {
-		if (!entities.containsKey(entity))
-			entities.put(entity, new AgMonster(entity));
-		else if (!(entities.get(entity) instanceof AgMonster))
-			entities.put(entity, new AgMonster(entities.get(entity)));
-		return (AgMonster) entities.get(entity);
+	public AgLiving getLiving(LivingEntity e) {
+		AgEntity info = get(e);
+		if (!(info instanceof AgLiving))
+			info = put(e, new AgLiving(info));
+		return (AgLiving) info;
+	}
+
+	public AgMonster getMonster(LivingEntity e) {
+		AgEntity info = get(e);
+		if (!(info instanceof AgMonster))
+			info = put(e, new AgMonster(info));
+		return (AgMonster) info;
 	}
 
 	public AgProjectile getProjectile(Projectile p) {
-		if (!projectiles.containsKey(p))
-			projectiles.put(p, new AgProjectile(p));
-		return projectiles.get(p);
+		AgEntity info = get(p);
+		if (!(info instanceof AgProjectile))
+			info = put(p, new AgProjectile(info));
+		return (AgProjectile) info;
+	}
+
+	public void add(Entity e) {
+		if (!contains(e)) entities.put(e, new AgEntity(e));
+	}
+
+	public void add(AgEntity e) {
+		add(e.getEntity());
+	}
+
+	public void remove(Entity e) {
+		entities.remove(e);
+	}
+
+	public void remove(AgEntity e) {
+		remove(e.getEntity());
+	}
+
+	public boolean contains(Entity e) {
+		return entities.containsKey(e);
+	}
+
+	public boolean contains(AgEntity e) {
+		return entities.containsValue(e);
+	}
+
+	public AgEntity put(Entity e, AgEntity info) {
+		entities.put(e, info);
+		return entities.get(e);
 	}
 
 	public Spawner getSpawner(Location location) {
 		return spawners.stream().filter(s -> s.getLocation().equals(location))
 				.findAny().orElse(null);
-	}
-
-	public void setEntity(LivingEntity entity, AgEntity info) {
-		entities.put(entity, info);
 	}
 
 	public void addSpawner(Spawner spawner) {
@@ -170,37 +200,13 @@ public class Aegeus extends JavaPlugin {
 		saveOres();
 	}
 
-	public void removeEntity(LivingEntity entity) {
-		entities.remove(entity);
-	}
-
 	public void removeSpawner(Location location) {
 		spawners.remove(getSpawner(location));
 		saveSpawners();
 	}
 
-	public void removeProjectile(Projectile p) {
-		projectiles.remove(p);
-	}
-
 	public List<Spawner> getSpawners() {
 		return spawners;
-	}
-
-	public List<AgEntity> getEntities() {
-		return new ArrayList<>(entities.values());
-	}
-
-	public Map<LivingEntity, AgEntity> getEntityMap() {
-		return entities;
-	}
-
-	public List<AgProjectile> getProjectiles() {
-		return new ArrayList<>(projectiles.values());
-	}
-
-	public Map<Projectile, AgProjectile> getProjectileMap() {
-		return projectiles;
 	}
 
 	public Map<Location, Material> getOres() {

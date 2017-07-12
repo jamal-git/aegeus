@@ -2,8 +2,9 @@ package com.aegeus.game.combat;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.ability.Ability;
-import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
+import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
@@ -24,8 +25,8 @@ public class CombatManager {
 
 	public static CombatInfo get(LivingEntity victim, LivingEntity attacker, ItemStack tool) {
 		CombatInfo cInfo = new CombatInfo(victim, attacker);
-		AgEntity vInfo = Aegeus.getInstance().getEntity(victim);
-		AgEntity aInfo = Aegeus.getInstance().getEntity(attacker);
+		AgLiving vInfo = Aegeus.getInstance().getLiving(victim);
+		AgLiving aInfo = Aegeus.getInstance().getLiving(attacker);
 
 		if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
 			Weapon weapon = new Weapon(tool);
@@ -76,7 +77,7 @@ public class CombatManager {
 				cInfo.addHealing(cInfo.getPhysDmg() * weapon.getLifeSteal());
 			}
 
-			float critChance = aInfo.getCritChance() + (Util.isAxe(tool.getType()) ? 0.05f : 0);
+			float critChance = Util.isAxe(tool.getType()) ? 0.05f : 0;
 			if (critChance > 0 && random.nextFloat() <= critChance) {
 				cInfo.multPhysDmg(1.75);
 				if (victim instanceof Player)
@@ -177,10 +178,14 @@ public class CombatManager {
 	}
 
 	public static void updateName(LivingEntity entity) {
-		AgEntity info = Aegeus.getInstance().getEntity(entity);
+		AgLiving info = Aegeus.getInstance().getLiving(entity);
 
 		ChatColor color = getHealthColor(entity);
-		if (info instanceof AgMonster && ((AgMonster) info).getActiveAbil() != null)
+		if (entity.isDead() && info.getAttacker() instanceof Player &&
+				getLevelInfo(((Player) info.getAttacker()).getInventory().getItemInMainHand()) != null) {
+			LevelInfo level = getLevelInfo(((Player) info.getAttacker()).getInventory().getItemInMainHand());
+			entity.setCustomName(Util.colorCodes("&e+" + getXpGain(entity) + " &lXP&7 (" + level.getXpPercent() + "%)"));
+		} else if (info instanceof AgMonster && ((AgMonster) info).getActiveAbil() != null)
 			entity.setCustomName(Util.colorCodes(color + "&l** " + ((AgMonster) info).getActiveAbil().getName() + color + "&l **"));
 		else
 			entity.setCustomName(Util.colorCodes("&7- " + color + Math.round(entity.getHealth()) + " &lHP&7 -"));
@@ -195,5 +200,17 @@ public class CombatManager {
 			return ChatColor.YELLOW;
 		else
 			return ChatColor.GREEN;
+	}
+
+	public static int getXpGain(LivingEntity entity) {
+		return 45 + ((int) Math.round(entity.getMaxHealth() / 10));
+	}
+
+	public static LevelInfo getLevelInfo(ItemStack tool) {
+		if (tool != null && !tool.getType().equals(Material.AIR)) {
+			if (new Weapon(tool).verify()) return new Weapon(tool);
+			if (new Armor(tool).verify()) return new Armor(tool);
+		}
+		return null;
 	}
 }

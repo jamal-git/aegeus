@@ -30,15 +30,16 @@ public class SpawnerListener implements Listener {
 		}
 	}
 
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent e)   {
-	    for(Spawner s : parent.getSpawners())
-	        if(s.getLocation().getChunk().equals(e.getChunk())) s.setCount(0);
-    }
+	@EventHandler
+	public void onChunkUnload(ChunkUnloadEvent e) {
+		for (Spawner s : parent.getSpawners())
+			if (s.getLocation().getChunk().equals(e.getChunk())) s.setCount(0);
+	}
 
-    @EventHandler
-    public void onChunkLoad(ChunkLoadEvent e)   {
-	    for(Spawner s : parent.getSpawners())
-	        if(s.getLocation().getChunk().equals(e.getChunk()) && s.canSpawn()) s.incrementCount().get().spawn(s.getLocation(), s);
-    }
+	@EventHandler
+	public void onChunkLoad(ChunkLoadEvent e) {
+		for (Spawner s : parent.getSpawners())
+			if (s.getLocation().getChunk().equals(e.getChunk()) && s.canSpawn())
+				s.incrementCount().get().spawn(s.getLocation(), s);
+	}
 }

@@ -2,7 +2,6 @@ package com.aegeus.game.item;
 
 import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
-import com.aegeus.game.ability.AbilityResolve;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.stats.Stats;
@@ -28,7 +27,7 @@ public enum Tier {
 					setTier(1);
 					setChance(0.4f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-							new AbilityResolve(), new AbilityTackle()));
+							new AbilityTackle()));
 					setAbilCount(new IntPoss(1));
 					setGenName(true);
 
@@ -108,7 +107,7 @@ public enum Tier {
 					setChance(0.2f);
 					setHpMultiplier(1.1f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-							new AbilityResolve(), new AbilityTackle()));
+							new AbilityTackle()));
 					setAbilCount(new IntPoss(1));
 					setGenName(true);
 
@@ -188,7 +187,7 @@ public enum Tier {
 					setChance(0.1f);
 					setHpMultiplier(1.2f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-							new AbilityResolve(), new AbilityTackle()));
+							new AbilityTackle()));
 					setAbilCount(new IntPoss(1, 2));
 					setGenName(true);
 
@@ -272,7 +271,7 @@ public enum Tier {
 					setChance(0.048f);
 					setHpMultiplier(1.3f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-							new AbilityResolve(), new AbilityTackle()));
+							new AbilityTackle()));
 					setAbilCount(new IntPoss(2, 3));
 					setGenName(true);
 
@@ -359,7 +358,7 @@ public enum Tier {
 					setChance(0.036f);
 					setHpMultiplier(1.5f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-							new AbilityResolve(), new AbilityTackle()));
+							new AbilityTackle()));
 					setAbilCount(new IntPoss(3));
 					setGenName(true);
 

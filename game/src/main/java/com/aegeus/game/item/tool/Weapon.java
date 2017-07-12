@@ -205,7 +205,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 
 	@Override
 	public int getMaxXp() {
-		return (int) Util.calcMaxXP(getLevel());
+		return (int) Util.calcMaxXP(getLevel(), getTier());
 	}
 
 	@Override

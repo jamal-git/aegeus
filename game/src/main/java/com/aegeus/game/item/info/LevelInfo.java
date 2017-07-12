@@ -40,8 +40,6 @@ public interface LevelInfo {
 
 	void setXp(int xp);
 
-	int getMaxXp();
-
 	default void addXp(int i) {
 		setXp(getXp() + i);
 	}
@@ -49,4 +47,11 @@ public interface LevelInfo {
 	default void subtractXp(int i) {
 		setXp(getXp() - i);
 	}
+
+	default int getXpPercent() {
+		return Math.round(((float) getXp() / (float) getMaxXp()) * 100);
+	}
+
+	int getMaxXp();
+
 }

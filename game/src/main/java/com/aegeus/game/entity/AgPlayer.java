@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class AgPlayer extends AgEntity {
+public class AgPlayer extends AgLiving {
 	private final Player player;
 	private BossBar hpBar;
 
@@ -36,9 +36,14 @@ public class AgPlayer extends AgEntity {
 		this.player = player;
 	}
 
-	public AgPlayer(AgEntity info, Player player) {
+	public AgPlayer(AgEntity info) {
 		super(info);
-		this.player = player;
+		this.player = (Player) info.getEntity();
+	}
+
+	public AgPlayer(AgLiving info) {
+		super(info);
+		this.player = (Player) info.getEntity();
 	}
 
 	public AgPlayer(AgPlayer other) {

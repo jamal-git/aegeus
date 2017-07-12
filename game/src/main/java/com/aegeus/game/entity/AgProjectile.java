@@ -3,16 +3,28 @@ package com.aegeus.game.entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 
-public class AgProjectile {
-	private final Projectile proj;
+public class AgProjectile extends AgEntity {
+	private final Projectile projectile;
 	private ItemStack firedWith;
 
-	public AgProjectile(Projectile proj) {
-		this.proj = proj;
+	public AgProjectile(Projectile projectile) {
+		super(projectile);
+		this.projectile = projectile;
+	}
+
+	public AgProjectile(AgEntity info) {
+		super(info);
+		this.projectile = (Projectile) info.getEntity();
+	}
+
+	public AgProjectile(AgProjectile other) {
+		super(other);
+		this.projectile = other.projectile;
+		this.firedWith = other.firedWith;
 	}
 
 	public Projectile getProjectile() {
-		return proj;
+		return projectile;
 	}
 
 	public ItemStack getFiredWith() {

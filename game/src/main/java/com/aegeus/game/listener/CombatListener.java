@@ -3,7 +3,7 @@ package com.aegeus.game.listener;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.combat.CombatManager;
-import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.AgProjectile;
@@ -43,7 +43,7 @@ public class CombatListener implements Listener {
 	@EventHandler
 	private void onDeath(EntityDeathEvent e) {
 		LivingEntity entity = e.getEntity();
-		AgEntity info = parent.getEntity(entity);
+		AgLiving info = parent.getLiving(entity);
 
 		if (info instanceof AgMonster) {
 			AgMonster mInfo = parent.getMonster(entity);
@@ -72,7 +72,7 @@ public class CombatListener implements Listener {
 			ItemStack tool = player.getInventory().getItemInMainHand();
 			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
 				Weapon weapon = new Weapon(tool);
-				int xp = 45 + ((int) Math.round(entity.getMaxHealth() / 300));
+				int xp = CombatManager.getXpGain(entity);
 				weapon.addXp(xp);
 				if (weapon.getXp() >= weapon.getMaxXp()) {
 					weapon.addLevel(1);
@@ -85,18 +85,16 @@ public class CombatListener implements Listener {
 
 		// Clear entity's data if not player
 		if (!(entity instanceof Player))
-			Bukkit.getScheduler().runTaskLater(parent, () -> parent.removeEntity(entity), 5);
+			Bukkit.getScheduler().runTaskLater(parent, () -> parent.remove(entity), 5);
 
 	}
 
 	@EventHandler
 	private void onChunkUnload(ChunkUnloadEvent e) {
 		for (Entity entity : e.getChunk().getEntities()) {
-			if (entity instanceof Projectile)
-				parent.removeProjectile((Projectile) entity);
-			else if (entity instanceof LivingEntity) {
-				onDeath(new EntityDeathEvent((LivingEntity) entity, null));
-				parent.removeEntity((LivingEntity) entity);
+			if (!(entity instanceof Player) && parent.contains(entity)) {
+				parent.remove(entity);
+				entity.remove();
 			}
 		}
 	}
@@ -134,8 +132,8 @@ public class CombatListener implements Listener {
 
 			LivingEntity lVictim = (LivingEntity) victim;
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity vInfo = parent.getEntity(lVictim);
-			AgEntity aInfo = parent.getEntity(lAttacker);
+			AgLiving vInfo = parent.getLiving(lVictim);
+			AgLiving aInfo = parent.getLiving(lAttacker);
 
 			e.setCancelled(true);
 
@@ -163,15 +161,14 @@ public class CombatListener implements Listener {
 			cInfo.getEffects().forEach(Runnable::run);
 			cInfo.getSounds().forEach(s -> s.loc.getWorld().playSound(s.loc, s.sound, s.vol, s.pitch));
 
+			LivingEntity lDamaged = cInfo.getTarget();
 			e.setDamage(cInfo.getPhysDmg() + cInfo.getMagDmg());
 
 			if (lAttacker instanceof Player && ((Player) lAttacker).isSneaking())
 				e.setDamage(e.getDamage() / 2);
 			e.setDamage(Math.max(1, e.getDamage()));
 
-			if (e.getDamage() > 0 && damaged instanceof LivingEntity) {
-				LivingEntity lDamaged = (LivingEntity) damaged;
-
+			if (e.getDamage() > 0) {
 				lDamaged.getWorld().spawnParticle(Particle.BLOCK_CRACK, lDamaged.getLocation(),
 						110, 0.25, 0.8, 0.25, new MaterialData(Material.getMaterial(55)));
 				lDamaged.damage(e.getDamage());
@@ -202,13 +199,13 @@ public class CombatListener implements Listener {
 
 		if (attacker instanceof LivingEntity) {
 			LivingEntity lAttacker = (LivingEntity) attacker;
-			AgEntity aInfo = parent.getEntity(lAttacker);
+			AgLiving aInfo = parent.getLiving(lAttacker);
 			aInfo.inCombat();
 		}
 
 		if (victim instanceof LivingEntity) {
 			LivingEntity lVictim = (LivingEntity) victim;
-			AgEntity vInfo = parent.getEntity(lVictim);
+			AgLiving vInfo = parent.getLiving(lVictim);
 			vInfo.setAttacker(attacker);
 			vInfo.inCombat();
 		}
@@ -245,7 +242,7 @@ public class CombatListener implements Listener {
 	@EventHandler
 	private void onProjectileHit(ProjectileHitEvent e) {
 		Bukkit.getScheduler().runTaskLater(parent, () -> {
-			parent.removeProjectile(e.getEntity());
+			parent.remove(e.getEntity());
 			e.getEntity().remove();
 		}, 1);
 	}

@@ -1,7 +1,7 @@
 package com.aegeus.game.util;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.Tier;
@@ -57,8 +57,8 @@ public class Util {
 		return s == null ? "" : ChatColor.translateAlternateColorCodes(c, s);
 	}
 
-	public static long calcMaxXP(int level) {
-		return 300 + Math.round(Math.pow(74 * level, 1.08));
+	public static long calcMaxXP(int level, int tier) {
+		return Math.round(Math.pow(386 * level, 1.17) * (tier * 0.75));
 	}
 
 	public static void updateStats(LivingEntity entity) {
@@ -70,7 +70,7 @@ public class Util {
 		float dodge = 0;
 		float reflect = 0;
 
-		AgEntity info = Aegeus.getInstance().getEntity(entity);
+		AgLiving info = Aegeus.getInstance().getLiving(entity);
 
 		for (ItemStack i : entity.getEquipment().getArmorContents()) {
 			if (i != null && !i.getType().equals(Material.AIR)) {
@@ -178,7 +178,7 @@ public class Util {
 	}
 
 	public static void notifyAttack(Player attacker, LivingEntity victim, double damage) {
-		AgEntity info = Aegeus.getInstance().getEntity(victim);
+		AgLiving info = Aegeus.getInstance().getLiving(victim);
 		String name = (info instanceof AgMonster) ? ((AgMonster) info).getName() : victim.getName();
 		long hp = Math.round(Math.ceil(victim.getHealth()));
 		long maxHp = Math.round(Math.ceil(victim.getMaxHealth()));
