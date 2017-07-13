@@ -62,7 +62,7 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("AEGEUS enabling...");
 		saveDefaultConfig();
 
-		// LOaDin uO GsOn SeriAliZiNg aNd DeseriAlizinG adapters!
+		// LOaDin uP GsOn SeriAliZiNg aNd DeseriAlizinG adapters!
 		GsonBuilder b = new GsonBuilder();
 		b.setPrettyPrinting();
 		b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());

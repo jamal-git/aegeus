@@ -345,7 +345,7 @@ public class Dungeon {
     private boolean validateAndMap(String[][] maze)    {
         if(!isValid(maze)) return false;
         String[][] map = new String[size][size];
-        int keysToPlace = 2;
+        int keysToPlace = (int) Math.ceil(segments / 5.0);
         while(keysToPlace != 0) {
             int x,y;
             //noinspection ControlFlowStatementWithoutBraces
