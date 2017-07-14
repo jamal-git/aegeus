@@ -1,17 +1,13 @@
 package com.aegeus.game.item;
 
-import com.aegeus.game.item.info.DuraInfo;
-import com.aegeus.game.item.info.EquipmentInfo;
-import com.aegeus.game.item.info.LevelInfo;
-import com.aegeus.game.item.info.ProfessionInfo;
+import com.aegeus.game.item.info.*;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Pickaxe;
-import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 
 public class ItemParser {
-	public static AgItem parseItem(AgItem item, String[] args) {
+	public static ItemInfo parseItem(ItemInfo info, String[] args) {
 		for (String arg : args) {
 			try {
 				String[] pair = arg.split("=");
@@ -19,18 +15,18 @@ public class ItemParser {
 				String value = pair[1];
 
 				if (key.equalsIgnoreCase("material"))
-					item.setMaterial(Material.getMaterial(value));
+					info.setMaterial(Material.getMaterial(value));
 				else if (key.equalsIgnoreCase("name"))
-					item.setName(value.replace("_", " "));
+					info.setName(value.replace("_", " "));
 				else if (key.equalsIgnoreCase("lore")) {
 					for (String line : value.split("||"))
-						item.addLore(line.replace("_", " "));
+						info.addLore(line.replace("_", " "));
 				}
 
 			} catch (Exception ignored) {
 			}
 		}
-		return item;
+		return info;
 	}
 
 	private static EquipmentInfo parseEquipment(EquipmentInfo info, String[] args) {
@@ -41,7 +37,7 @@ public class ItemParser {
 				String value = pair[1];
 
 				if (key.equalsIgnoreCase("tier"))
-					info.setTier(Integer.parseInt(value));
+					info.setTier(Tier.fromTier(Integer.parseInt(value)));
 				else if (key.equalsIgnoreCase("rarity"))
 					info.setRarity(Rarity.fromName(value));
 				else if (key.equalsIgnoreCase("enchant"))
@@ -119,10 +115,7 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 
-				if (key.equalsIgnoreCase("rune"))
-					weapon.setRune(new Rune(Rune.RuneType.fromId(Integer.parseInt(value))));
-
-				else if (key.equalsIgnoreCase("dmg")) {
+				if (key.equalsIgnoreCase("dmg")) {
 					String[] vals = value.split(";");
 					weapon.setDmg(Integer.parseInt(vals[0]), Integer.parseInt(vals[1]));
 				} else if (key.equalsIgnoreCase("pen"))
@@ -162,9 +155,7 @@ public class ItemParser {
 				String key = pair[0];
 				String value = pair[1];
 
-				if (key.equalsIgnoreCase("rune"))
-					armor.setRune(new Rune(Rune.RuneType.fromId(Integer.parseInt(value))));
-				else if (key.equalsIgnoreCase("hp"))
+				if (key.equalsIgnoreCase("hp"))
 					armor.setHp(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("hpregen"))
 					armor.setHpRegen(Integer.parseInt(value));

@@ -2,7 +2,7 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.combat.CombatInfo;
-import com.aegeus.game.item.tool.Rune;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.util.Action;
 import org.bukkit.entity.LivingEntity;
 
@@ -16,13 +16,11 @@ public class AgMonster extends AgLiving {
 	private Ability activeAbil = null;
 	private float abilChance = 0.2f;
 
-	private List<Rune> runes = new ArrayList<>();
-
 	private List<Action<CombatInfo>> onHit = new ArrayList<>();
 	private List<Action<CombatInfo>> onDamaged = new ArrayList<>();
 
 	private Spawner origin = null;
-	private int tier = 0;
+	private Tier tier = null;
 	private float chance = 0;
 	private int gold = 0;
 	private float goldChance = 0;
@@ -48,7 +46,6 @@ public class AgMonster extends AgLiving {
 		this.abils = other.abils;
 		this.activeAbil = other.activeAbil;
 		this.abilChance = other.abilChance;
-		this.runes = other.runes;
 		this.onHit = other.onHit;
 		this.onDamaged = other.onDamaged;
 		this.origin = other.origin;
@@ -93,14 +90,6 @@ public class AgMonster extends AgLiving {
 		this.abilChance = abilChance;
 	}
 
-	public List<Rune> getRunes() {
-		return runes;
-	}
-
-	public void setRunes(List<Rune> runes) {
-		this.runes = runes;
-	}
-
 	public List<Action<CombatInfo>> getOnHit() {
 		return onHit;
 	}
@@ -125,11 +114,11 @@ public class AgMonster extends AgLiving {
 		this.origin = origin;
 	}
 
-	public int getTier() {
+	public Tier getTier() {
 		return tier;
 	}
 
-	public void setTier(int tier) {
+	public void setTier(Tier tier) {
 		this.tier = tier;
 	}
 

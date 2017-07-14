@@ -1,13 +1,13 @@
 package com.aegeus.game.item.tool;
 
-import com.aegeus.game.item.AgItem;
+import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.ProfessionTier;
+import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.ProfessionInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
-import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -16,10 +16,12 @@ import java.util.Random;
 /**
  * Created by Silvre on 6/24/2017.
  */
-public class Pickaxe extends AgItem implements ProfessionInfo {
+public class Pickaxe implements ProfessionInfo {
 
 	private static final double CONSTANT = 1.114;
 	private static final Random r = new Random();
+
+	private ItemStack item;
 
 	private int level;
 	private int xp;
@@ -50,20 +52,21 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	 * IS IN THE CURRENT STATE OF THE CODE
 	 */
 
-	public Pickaxe(ItemStack stack) {
-		super(stack);
-	}
-
 	public Pickaxe() {
 		this(1);
 	}
 
 	public Pickaxe(int level) {
-		super(ProfessionTier.getTierByLevel(level).getPickaxeMaterial());
+		this.item = new ItemStack(ProfessionTier.getTierByLevel(level).getPickaxeMaterial());
 		this.level = level;
 		tier = ProfessionTier.getTierByLevel(level);
 		xp = 0;
 		requiredxp = getXPRequired(level + 1);
+	}
+
+	public Pickaxe(ItemStack item) {
+		this.item = item;
+		impo();
 	}
 
 	public static int getXPRequired(int targetLevel) {
@@ -76,6 +79,21 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		if (targetLevel >= 11) xp += 300 * targetLevel;
 		xp += 100 * targetLevel;
 		return (int) Math.round(xp);
+	}
+
+	public static boolean hasPickaxeInfo(ItemStack item) {
+		return ItemUtils.getTag(item).hasKey("PickaxeInfo");
+	}
+
+	public static NBTTagCompound getPickaxeInfo(ItemStack item) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		return hasPickaxeInfo(item) ? tag.getCompound("PickaxeInfo") : new NBTTagCompound();
+	}
+
+	public static ItemStack setPickaxeInfo(ItemStack item, NBTTagCompound info) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		tag.set("PickaxeInfo", info);
+		return ItemUtils.setTag(item, tag);
 	}
 
 	public int getTierAsInt() {
@@ -118,15 +136,12 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		return requiredxp;
 	}
 
-	public int getXPRequired() {
-		return requiredxp;
-	}
-
 	@Override
 	public void impo() {
+		ItemInfo.impo(this);
 		ProfessionInfo.impo(this);
 
-		NBTTagCompound info = getAegeusInfo();
+		NBTTagCompound info = getPickaxeInfo(item);
 		setMiningSuccess(info.hasKey("miningSuccess") ? info.getFloat("miningSuccess") : 0);
 		setDenseFind(info.hasKey("denseFind") ? info.getFloat("denseFind") : 0);
 		setDenseMultiplier(info.hasKey("denseMultiplier") ? info.getInt("denseMultiplier") : 0);
@@ -141,8 +156,7 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	public void store() {
 		ProfessionInfo.store(this);
 
-		NBTTagCompound info = getAegeusInfo();
-		info.set("type", new NBTTagString("pickaxe"));
+		NBTTagCompound info = getPickaxeInfo(item);
 		info.set("miningSuccess", new NBTTagFloat(getMiningSuccess()));
 		info.set("denseFind", new NBTTagFloat(getDenseFind()));
 		info.set("denseMultiplier", new NBTTagInt(getDenseMultiplier()));
@@ -150,7 +164,7 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		info.set("tripleOre", new NBTTagFloat(getTripleOre()));
 		info.set("gemFind", new NBTTagFloat(getGemFind()));
 		info.set("durability", new NBTTagFloat(getDurabilityEnchant()));
-		setAegeusInfo(info);
+		item = setPickaxeInfo(item, info);
 	}
 
 	public List<String> buildLore() {
@@ -166,17 +180,11 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 	}
 
 	@Override
-	public boolean verify() {
-		NBTTagCompound info = getAegeusInfo();
-		return info.hasKey("type") && info.getString("type").equalsIgnoreCase("pickaxe");
-	}
-
-	@Override
 	public ItemStack build() {
 		store();
 		setLore(buildLore());
 		setName(tier.getColor() + tier.getPickaxeName());
-		return super.build();
+		return ItemInfo.build(this);
 	}
 
 	public boolean addExp(int i) {
@@ -255,13 +263,23 @@ public class Pickaxe extends AgItem implements ProfessionInfo {
 		return false;
 	}
 
+	/*
+	 * Encapsulations
+     */
+
 	public boolean checkForNextTier() {
 		return !(tieredUp ^= true);
 	}
 
-    /*
-	 * Encapsulations
-     */
+	@Override
+	public ItemStack getItem() {
+		return item;
+	}
+
+	@Override
+	public void setItem(ItemStack item) {
+		this.item = item;
+	}
 
 	public float getMiningSuccess() {
 		return miningSuccess;

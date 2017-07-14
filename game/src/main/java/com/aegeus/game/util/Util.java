@@ -301,7 +301,7 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Weapon";
 
-		Tier t = Tier.fromTier(weapon.getTier());
+		Tier t = weapon.getTier();
 		String color = t.getColor();
 		Material m = weapon.getMaterial();
 
@@ -320,7 +320,7 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Armor";
 
-		Tier t = Tier.fromTier(armor.getTier());
+		Tier t = armor.getTier();
 		String color = t.getColor();
 		Material m = armor.getMaterial();
 

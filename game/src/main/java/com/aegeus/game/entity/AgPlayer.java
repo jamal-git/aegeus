@@ -9,6 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class AgPlayer extends AgLiving {
@@ -154,6 +157,10 @@ public class AgPlayer extends AgLiving {
 
 	public void setParty(Party p) {
 		party = p;
+	}
+
+	public List<AgPlayer> getPartyMembers() {
+		return getParty() != null ? getParty().getMembers() : new ArrayList<>(Arrays.asList(this));
 	}
 
 	public Party getInvitedParty() {

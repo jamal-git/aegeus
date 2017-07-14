@@ -1,7 +1,11 @@
 package com.aegeus.game.commands.item;
 
 import com.aegeus.game.item.ItemParser;
-import com.aegeus.game.item.tool.*;
+import com.aegeus.game.item.Tier;
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Enchant;
+import com.aegeus.game.item.tool.Pickaxe;
+import com.aegeus.game.item.tool.Weapon;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,31 +30,13 @@ public class CommandCreate implements CommandExecutor {
 				player.getInventory().addItem(ItemParser.parseWeapon(new Weapon(material), args).build());
 		} else if (args[0].equalsIgnoreCase("pickaxe")) {
 			player.getInventory().addItem(ItemParser.parsePick(new Pickaxe(), args).build());
-			//	} else if (args[0].equalsIgnoreCase("rod")) {
-			//		player.getInventory().addItem(ItemParser.parseRod(new FishRod(), args).build());
-		} else if (args[0].equalsIgnoreCase("rune")) {
-			try {
-				Rune.RuneType type = Rune.RuneType.fromId(Integer.parseInt(args[1]));
-				player.getInventory().addItem(new Rune(type).build());
-			} catch (NumberFormatException e) {
-				return false;
-			}
 		} else if (args[0].equalsIgnoreCase("enchant")) {
-			try {
-				int amount = args.length < 4 ? 1 : Integer.parseInt(args[3]);
+			Tier tier = Tier.fromTier(Integer.parseInt(args[1]));
+			int type = Integer.parseInt(args[2]);
+			int amount = args.length < 4 ? 1 : Integer.parseInt(args[3]);
 
-				if (args[1].equalsIgnoreCase("armor")) {
-					for (int i = 0; i < amount; i++)
-						player.getInventory().addItem(new ArmorEnchant(Integer.parseInt(args[2])).build());
-				} else if (args[1].equalsIgnoreCase("weapon")) {
-					for (int i = 0; i < amount; i++)
-						player.getInventory().addItem(new WeaponEnchant(Integer.parseInt(args[2])).build());
-				} else return false;
-
-			} catch (NumberFormatException e) {
-				return false;
-			}
-		} else return false;
+			player.getInventory().addItem(new Enchant(tier, type, amount).build());
+		}
 
 		return true;
 	}

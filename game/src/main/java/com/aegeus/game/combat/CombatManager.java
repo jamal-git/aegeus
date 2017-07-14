@@ -28,7 +28,7 @@ public class CombatManager {
 		AgLiving vInfo = Aegeus.getInstance().getLiving(victim);
 		AgLiving aInfo = Aegeus.getInstance().getLiving(attacker);
 
-		if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
+		if (tool != null && !tool.getType().equals(Material.AIR) && Weapon.hasWeaponInfo(tool)) {
 			Weapon weapon = new Weapon(tool);
 
 			if (attacker instanceof Player) weaponDura((Player) attacker, weapon);
@@ -38,36 +38,36 @@ public class CombatManager {
 
 			if (weapon.getFireDmg() > 0) {
 				cInfo.addMagDmg(weapon.getFireDmg());
-				cInfo.addEffect(() -> victim.setFireTicks(38 + (weapon.getTier() * 7)));
+				cInfo.addEffect(() -> victim.setFireTicks(38 + (weapon.getTier().getLevel() * 7)));
 			}
 
 			if (weapon.getIceDmg() > 0) {
 				cInfo.addMagDmg(weapon.getIceDmg());
 				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(
-						PotionEffectType.SLOW, 10 + (weapon.getTier() * 4), 2)));
+						PotionEffectType.SLOW, 10 + (weapon.getTier().getLevel() * 4), 2)));
 				cInfo.addSound(cInfo.getTarget().getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 			}
 
 			if (weapon.getPoisonDmg() > 0) {
 				cInfo.addMagDmg(weapon.getPoisonDmg());
-				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1)));
+				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier().getLevel() * 12), 1)));
 				cInfo.addSound(victim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 			}
 			if (weapon.getPureDmg() > 0) {
 				int matches = (int) Arrays.stream(victim.getEquipment().getArmorContents())
-						.filter(i -> i != null && !i.getType().equals(Material.AIR) && new Armor(i).verify())
+						.filter(i -> i != null && !i.getType().equals(Material.AIR) && Armor.hasArmorInfo(i))
 						.map(Armor::new).count();
 				cInfo.addPhysDmg(weapon.getPureDmg() * (matches / 4));
 			}
 			if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
-				cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier()));
+				cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier().getLevel()));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
 				if (attacker instanceof Player)
 					attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
 			}
 			if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
-				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1)));
+				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier().getLevel() * 6), 1)));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
 				if (attacker instanceof Player)
@@ -135,7 +135,7 @@ public class CombatManager {
 		if (weapon.getMaxDura() > 0) {
 			for (int i = 0; i < player.getInventory().getSize(); i++) {
 				ItemStack item = player.getInventory().getItem(i);
-				if (item != null && new Weapon(item).getTime().equals(weapon.getTime())) {
+				if (item.equals(weapon.getItem())) {
 					weapon.subtractDura(1);
 					if (weapon.getDura() <= 0)
 						player.getInventory().setItem(i, new ItemStack(Material.AIR));
@@ -154,7 +154,7 @@ public class CombatManager {
 	}
 
 	public static ItemStack armorDura(ItemStack item) {
-		if (item != null && new Armor(item).verify()) {
+		if (item != null && Armor.hasArmorInfo(item)) {
 			Armor armor = new Armor(item);
 			if (armor.getMaxDura() > 0) {
 				armor.subtractDura(1);
@@ -171,7 +171,7 @@ public class CombatManager {
 		if (!info.getAbils().isEmpty() && info.getActiveAbil() == null) {
 			Ability ability = info.getAbils().get(random.nextInt(info.getAbils().size()));
 			info.setActiveAbil(ability);
-			info.getEntity().getWorld().playSound(info.getEntity().getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 0.5f + (info.getTier() * 0.05f), 2);
+			info.getEntity().getWorld().playSound(info.getEntity().getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 0.5f + (info.getTier().getLevel() * 0.05f), 2);
 			info.getEntity().setCustomName(Util.colorCodes("&d&l" + ability.getName()));
 			ability.activate(info);
 		}
@@ -206,10 +206,10 @@ public class CombatManager {
 		return 45 + ((int) Math.round(entity.getMaxHealth() / 10));
 	}
 
-	public static LevelInfo getLevelInfo(ItemStack tool) {
-		if (tool != null && !tool.getType().equals(Material.AIR)) {
-			if (new Weapon(tool).verify()) return new Weapon(tool);
-			if (new Armor(tool).verify()) return new Armor(tool);
+	public static LevelInfo getLevelInfo(ItemStack item) {
+		if (item != null && !item.getType().equals(Material.AIR)) {
+			if (Weapon.hasWeaponInfo(item)) return new Weapon(item);
+			if (Armor.hasArmorInfo(item)) return new Armor(item);
 		}
 		return null;
 	}

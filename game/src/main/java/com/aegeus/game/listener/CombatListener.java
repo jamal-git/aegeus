@@ -7,7 +7,7 @@ import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.AgProjectile;
-import com.aegeus.game.item.ItemGold;
+import com.aegeus.game.item.Items;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Action;
 import com.aegeus.game.util.Util;
@@ -64,13 +64,13 @@ public class CombatListener implements Listener {
 			}
 
 			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
-				entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemGold(mInfo.getGold()).build());
+				entity.getWorld().dropItemNaturally(entity.getLocation(), Items.getGold(mInfo.getGold()));
 		}
 
 		if (info.getAttacker() instanceof Player) {
 			Player player = (Player) info.getAttacker();
 			ItemStack tool = player.getInventory().getItemInMainHand();
-			if (tool != null && !tool.getType().equals(Material.AIR) && new Weapon(tool).verify()) {
+			if (tool != null && !tool.getType().equals(Material.AIR) && Weapon.hasWeaponInfo(tool)) {
 				Weapon weapon = new Weapon(tool);
 				int xp = CombatManager.getXpGain(entity);
 				weapon.addXp(xp);

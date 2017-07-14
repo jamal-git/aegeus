@@ -1,36 +1,37 @@
 package com.aegeus.game.item.tool;
 
-import com.aegeus.game.item.AgItem;
+import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
+import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.LevelInfo;
-import com.aegeus.game.item.info.SingletonInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
-import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo, SingletonInfo {
+public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+
+	// Item Info
+	private ItemStack item;
 
 	// Level Info
 	private int level = 0;
 	private int xp = 0;
 
 	// Equipment Info
-	private int tier = 0;
+	private Tier tier = null;
 	private Rarity rarity = null;
 	private int enchant = 0;
 
@@ -38,11 +39,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	private int maxDura = 0;
 	private int dura = 0;
 
-	// Singleton Info
-	private LocalDateTime time = LocalDateTime.now();
-
 	// Weapon Stats
-	private Rune rune = null;
 	private int minDmg = 0;
 	private int maxDmg = 0;
 	private float pen = 0;
@@ -55,52 +52,38 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	private float blind = 0;
 
 	public Weapon(Material material) {
-		super(new ItemStack(material));
-		setMaxDura(Tier.fromTier(tier).getWepDura());
+		item = new ItemStack(material);
+		setMaxDura(tier != null ? tier.getWepDura() : 0);
 	}
 
 	public Weapon(ItemStack item) {
-		super(item);
+		this.item = item;
 		impo();
 	}
 
-	public Weapon(Weapon other) {
-		super(other);
-		this.level = other.level;
-		this.xp = other.xp;
+	public static boolean hasWeaponInfo(ItemStack item) {
+		return ItemUtils.getTag(item).hasKey("WeaponInfo");
+	}
 
-		this.tier = other.tier;
-		this.rarity = other.rarity;
-		this.enchant = other.enchant;
+	public static NBTTagCompound getWeaponInfo(ItemStack item) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		return hasWeaponInfo(item) ? tag.getCompound("WeaponInfo") : new NBTTagCompound();
+	}
 
-		this.maxDura = other.maxDura;
-		this.dura = other.dura;
-
-		this.time = other.time;
-
-		this.rune = other.rune;
-		this.minDmg = other.minDmg;
-		this.maxDmg = other.maxDmg;
-		this.pen = other.pen;
-		this.fireDmg = other.fireDmg;
-		this.iceDmg = other.iceDmg;
-		this.poisonDmg = other.poisonDmg;
-		this.pureDmg = other.pureDmg;
-		this.lifeSteal = other.lifeSteal;
-		this.trueHearts = other.trueHearts;
-		this.blind = other.blind;
+	public static ItemStack setWeaponInfo(ItemStack item, NBTTagCompound info) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		tag.set("WeaponInfo", info);
+		return ItemUtils.setTag(item, tag);
 	}
 
 	@Override
 	public void impo() {
-		super.impo();
+		ItemInfo.impo(this);
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
 		DuraInfo.impo(this);
-		SingletonInfo.impo(this);
 
-		NBTTagCompound info = getAegeusInfo();
-		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
+		NBTTagCompound info = getWeaponInfo(getItem());
 		minDmg = (info.hasKey("minDmg")) ? info.getInt("minDmg") : 0;
 		maxDmg = (info.hasKey("maxDmg")) ? info.getInt("maxDmg") : 0;
 		pen = (info.hasKey("pen")) ? info.getFloat("pen") : 0;
@@ -115,15 +98,12 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 
 	@Override
 	public void store() {
-		super.store();
+		ItemInfo.store(this);
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
 		DuraInfo.store(this);
-		SingletonInfo.store(this);
 
-		NBTTagCompound info = getAegeusInfo();
-		info.set("type", new NBTTagString("weapon"));
-		info.set("runeType", rune == null ? new NBTTagInt(-1) : new NBTTagInt(rune.getRuneType().getId()));
+		NBTTagCompound info = getWeaponInfo(getItem());
 		info.set("minDmg", new NBTTagInt(minDmg));
 		info.set("maxDmg", new NBTTagInt(maxDmg));
 		info.set("pen", new NBTTagFloat(pen));
@@ -134,8 +114,12 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 		info.set("lifeSteal", new NBTTagFloat(lifeSteal));
 		info.set("trueHearts", new NBTTagFloat(trueHearts));
 		info.set("blind", new NBTTagFloat(blind));
-		setAegeusInfo(info);
+		item = setWeaponInfo(getItem(), info);
 	}
+
+	/*
+	Info Overrides
+	 */
 
 	public String buildPrefix() {
 		return EquipmentInfo.buildPrefix(this);
@@ -153,21 +137,14 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 		if (trueHearts > 0) lore.add(Util.colorCodes("&cTRUE HEARTS: " + Math.round(trueHearts * 100) + "%"));
 		if (blind > 0) lore.add(Util.colorCodes("&cBLIND: " + Math.round(blind * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
-		if (rune != null) lore.add(Util.colorCodes("&5&oRune:&d&o " + rune.getRuneType().getName()));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
 
 	@Override
-	public boolean verify() {
-		NBTTagCompound info = getAegeusInfo();
-		return info.hasKey("type") && info.getString("type").equalsIgnoreCase("weapon");
-	}
-
-	@Override
 	public ItemStack build() {
 		store();
-		ItemStack item = super.build();
+		ItemStack item = ItemInfo.build(this);
 
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(String.join("", buildPrefix(), getName()));
@@ -179,9 +156,15 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 		return item;
 	}
 
-	/*
-	Info Overrides
-	 */
+	@Override
+	public ItemStack getItem() {
+		return item;
+	}
+
+	@Override
+	public void setItem(ItemStack item) {
+		this.item = item;
+	}
 
 	@Override
 	public int getLevel() {
@@ -205,18 +188,18 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 
 	@Override
 	public int getMaxXp() {
-		return (int) Util.calcMaxXP(getLevel(), getTier());
+		return (int) Util.calcMaxXP(getLevel(), getTier().getLevel());
 	}
 
 	@Override
-	public int getTier() {
+	public Tier getTier() {
 		return tier;
 	}
 
 	@Override
-	public void setTier(int tier) {
+	public void setTier(Tier tier) {
 		this.tier = tier;
-		setMaxDura(Tier.fromTier(tier).getWepDura());
+		setMaxDura(tier.getWepDura());
 	}
 
 	@Override
@@ -244,6 +227,10 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 		return maxDura;
 	}
 
+	/*
+	Weapon Methods
+	 */
+
 	@Override
 	public void setMaxDura(int maxDura) {
 		this.maxDura = maxDura;
@@ -259,28 +246,6 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	public void setDura(int dura) {
 		this.dura = dura;
 		DuraInfo.update(this);
-	}
-
-	@Override
-	public LocalDateTime getTime() {
-		return time;
-	}
-
-	@Override
-	public void setTime(LocalDateTime time) {
-		this.time = time;
-	}
-
-	/*
-	Weapon Methods
-	 */
-
-	public Rune getRune() {
-		return rune;
-	}
-
-	public void setRune(Rune rune) {
-		this.rune = rune;
 	}
 
 	public int getDmg() {
@@ -309,7 +274,7 @@ public class Weapon extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo
 	}
 
 	public int getLevelDmg() {
-		return (int) Math.round(getLevel() * (0.15 * getTier()));
+		return Math.round(getLevel() * (0.15f * getTier().getLevel()));
 	}
 
 	public float getPen() {
