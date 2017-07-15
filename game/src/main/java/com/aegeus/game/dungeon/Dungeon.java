@@ -151,7 +151,7 @@ public class Dungeon {
     public void build(Location l) throws DungeonLoadingException, MaxChangedBlocksException {
         for (int i = 0; i < layout.length; i++) {
             for (int j = 0; j < layout.length; j++) {
-                parent.getLogger().info("" + world.loadChunk(l.getBlockX() + 16 * i, l.getBlockZ() + 16 * j, true));
+                world.loadChunk(l.getBlockX() + 16 * i, l.getBlockZ() + 16 * j, true);
             }
         }
         for (int i = 0; i < layout.length; i++) {
@@ -208,7 +208,7 @@ public class Dungeon {
                                     if(b != null && b.getType() == Material.EMERALD_BLOCK &&
                                             b2 != null && b2.getType() == Material.GLOWSTONE &&
                                             b3 != null && b3.getType() == Material.EMERALD_BLOCK)
-                                        parent.getLogger().info("Spawn location set? " + world.setSpawnLocation(x, y + 1, z));
+                                        world.setSpawnLocation(x, y + 1, z);
                                 }
                     }
 					for (int x = spot.getBlockX() - getSegmentSize() / 2; x < spot.getX() + getSegmentSize() / 2; x++)
