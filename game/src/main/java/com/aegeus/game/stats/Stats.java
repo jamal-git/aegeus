@@ -5,6 +5,7 @@ import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.*;
@@ -409,7 +410,7 @@ public abstract class Stats {
 		}
 
 		AgMonster info = Aegeus.getInstance().getMonster(entity);
-		info.setName(Util.colorCodes(getName()));
+		info.setName(Tier.fromTier(tier).getColor() + Util.colorCodes(getName()));
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
 

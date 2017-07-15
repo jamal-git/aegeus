@@ -36,7 +36,8 @@ public enum Tier {
 					getSpawnActions().add(new Action<LivingEntity>() {
 						@Override
 						public void activate(LivingEntity entity) {
-							entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
+							if (entity.getType().equals(EntityType.SKELETON))
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1));
 						}
 					});
 
@@ -116,7 +117,8 @@ public enum Tier {
 					getSpawnActions().add(new Action<LivingEntity>() {
 						@Override
 						public void activate(LivingEntity entity) {
-							entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9999, 1));
+							if (entity.getType().equals(EntityType.SKELETON))
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1));
 						}
 					});
 
@@ -196,7 +198,8 @@ public enum Tier {
 					getSpawnActions().add(new Action<LivingEntity>() {
 						@Override
 						public void activate(LivingEntity entity) {
-							entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+							if (!entity.getType().equals(EntityType.SKELETON))
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 						}
 					});
 
@@ -277,9 +280,9 @@ public enum Tier {
 						@Override
 						public void activate(LivingEntity entity) {
 							if (entity.getType().equals(EntityType.SKELETON))
-								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 							else
-								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
 						}
 					});
 
@@ -360,9 +363,9 @@ public enum Tier {
 						@Override
 						public void activate(LivingEntity entity) {
 							if (entity.getType().equals(EntityType.SKELETON))
-								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
 							else
-								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
+								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
 						}
 					});
 

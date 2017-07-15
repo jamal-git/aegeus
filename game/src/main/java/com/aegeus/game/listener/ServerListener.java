@@ -3,8 +3,12 @@ package com.aegeus.game.listener;
 import com.aegeus.common.Common;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -66,6 +70,54 @@ public class ServerListener implements Listener {
 	@EventHandler
 	private void onRespawn(PlayerRespawnEvent e) {
 		Player player = e.getPlayer();
+
+		Weapon w = new Weapon(Material.WOOD_SWORD);
+		w.setName("&fTraining Dagger");
+		w.setTier(1);
+		w.setRarity(Rarity.STARTER);
+		w.setDmg(4, 6);
+		player.getInventory().addItem(w.build());
+
+		if (player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType().equals(Material.AIR)) {
+			Armor a = new Armor(Material.LEATHER_HELMET);
+			a.setName("&fTraining Helmet");
+			a.setTier(1);
+			a.setRarity(Rarity.STARTER);
+			a.setHp(9);
+			a.setHpRegen(2);
+			player.getInventory().setHelmet(a.build());
+		}
+
+		if (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType().equals(Material.AIR)) {
+			Armor a = new Armor(Material.LEATHER_CHESTPLATE);
+			a.setName("&fTraining Chestplate");
+			a.setTier(1);
+			a.setRarity(Rarity.STARTER);
+			a.setHp(13);
+			a.setHpRegen(3);
+			player.getInventory().setChestplate(a.build());
+		}
+
+		if (player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType().equals(Material.AIR)) {
+			Armor a = new Armor(Material.LEATHER_LEGGINGS);
+			a.setName("&fTraining Leggings");
+			a.setTier(1);
+			a.setRarity(Rarity.STARTER);
+			a.setHp(13);
+			a.setHpRegen(3);
+			player.getInventory().setLeggings(a.build());
+		}
+
+		if (player.getInventory().getBoots() == null || player.getInventory().getBoots().getType().equals(Material.AIR)) {
+			Armor a = new Armor(Material.LEATHER_BOOTS);
+			a.setName("&fTraining Boots");
+			a.setTier(1);
+			a.setRarity(Rarity.STARTER);
+			a.setHp(9);
+			a.setHpRegen(2);
+			player.getInventory().setBoots(a.build());
+		}
+
 		Util.updateStats(player);
 		player.setHealth(player.getMaxHealth());
 		Util.updateDisplay(player);
@@ -82,12 +134,19 @@ public class ServerListener implements Listener {
 	@EventHandler
 	// Random, custom MOTDs
 	private void onServerListPing(ServerListPingEvent e) {
-		if (Bukkit.hasWhitelist()) e.setMotd(Util.colorCodes(
-				"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
-						+ "&cUndergoing maintenance. Stay tuned!"));
-		else e.setMotd(Util.colorCodes(
-				"&bAegeus &f&lMMORPG&7 - Patch &b" + Common.PATCH + "\n&f"
-						+ "Work in progress."));
+		String first = "&bAegeus &f&lMMORPG&7 [Patch &3" + Common.PATCH + "&7]\n";
+		if (Bukkit.hasWhitelist()) e.setMotd(Util.colorCodes(first
+				+ "&eMaintenance currently in progress."));
+		else {
+			AgPlayer info = Aegeus.getInstance().getEntities().stream().filter(i -> i instanceof AgPlayer
+					&& ((AgPlayer) i).getPlayer().getAddress().getAddress().equals(e.getAddress()))
+					.map(i -> (AgPlayer) i).findAny().orElse(null);
+			if (info != null) e.setMotd(Util.colorCodes(first
+					+ "Hello, &b&l" + info.getPlayer().getName() + "&b!&f"
+					+ " &7[&3&lLV&3 " + (info.getLevel() + 1) + "&7]"));
+			else e.setMotd(Util.colorCodes(first
+					+ "Begin your adventure, &b&lTODAY&b!"));
+		}
 	}
 
 	@EventHandler
