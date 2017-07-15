@@ -6,7 +6,6 @@ import com.sk89q.jnbt.NBTConstants;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagList;
 import net.minecraft.server.v1_9_R1.NBTTagString;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +39,6 @@ public interface ItemInfo {
 		store(t);
 
 		ItemMeta meta = t.getItem().getItemMeta();
-		Bukkit.broadcastMessage(t.getName());
 		meta.setDisplayName(t.getName());
 		meta.setLore(t.getLore());
 		meta.addItemFlags(
