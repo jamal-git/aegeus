@@ -41,10 +41,10 @@ import java.util.Map;
 public class Aegeus extends JavaPlugin {
 	public static Gson GSON;
 	private static Aegeus instance;
+	private static WorldEditPlugin worldedit;
 	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<Entity, AgEntity> entities = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
-	private static WorldEditPlugin worldedit;
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -79,7 +79,6 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new CombatListener(this), this);
 		getServer().getPluginManager().registerEvents(new EnchantListener(this), this);
-		getServer().getPluginManager().registerEvents(new FishingListener(this), this);
 		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
 		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);

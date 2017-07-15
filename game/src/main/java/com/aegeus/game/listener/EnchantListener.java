@@ -1,7 +1,9 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.item.tool.*;
+import com.aegeus.game.item.tool.Armor;
+import com.aegeus.game.item.tool.Enchant;
+import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Util;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -42,15 +44,15 @@ public class EnchantListener implements Listener {
 
 		// Weapon enchanting and runes
 		if (item != null && !item.getType().equals(Material.AIR)) {
-			if (new Weapon(item).verify()) {
-				Weapon weapon = new Weapon(item);
 
-				// Applying weapon enchantments
-				if (e.isLeftClick() && cursor != null && !cursor.getType().equals(Material.AIR)
-						&& new WeaponEnchant(cursor).verify()) {
-					WeaponEnchant enchant = new WeaponEnchant(cursor);
+			// Applying enchantments
+			if (e.isLeftClick() && cursor != null && !cursor.getType().equals(Material.AIR)
+					&& Enchant.hasEnchantInfo(cursor)) {
+				Enchant enchant = new Enchant(cursor);
 
-					// Match weapon tier to enchantment
+				// Weapon enchanting
+				if (enchant.getType() == Enchant.WEAPON && Weapon.hasWeaponInfo(item)) {
+					Weapon weapon = new Weapon(item);
 					if (weapon.getTier() != enchant.getTier())
 						player.sendMessage(Util.colorCodes("&cYou must use this enchant on a weapon of the same tier."));
 					else {
@@ -63,48 +65,14 @@ public class EnchantListener implements Listener {
 							e.setCurrentItem(weapon.build());
 							enchantSuccess(player, weapon.getEnchant());
 						} else {
-							if (weapon.getRune() != null)
-								e.setCurrentItem(weapon.getRune().build());
-							else
-								e.setCurrentItem(new ItemStack(Material.AIR));
 							enchantFailed(player);
 						}
 					}
 				}
 
-				// Equipping weapon runes
-				if (e.isLeftClick() && weapon.getRune() == null && cursor != null && !cursor.getType().equals(Material.AIR)
-						&& new Rune(cursor).verify()) {
-					Rune rune = new Rune(cursor);
-
-					if (!rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.WEAPON))
-						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on weapons."));
-					else {
-						e.setCancelled(true);
-						e.setCursor(new ItemStack(Material.AIR));
-						weapon.setRune(rune);
-						e.setCurrentItem(weapon.build());
-						player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
-					}
-				}
-
-				// Unequipping weapon runes
-				if (e.isRightClick() && weapon.getRune() != null && (cursor == null || cursor.getType().equals(Material.AIR))) {
-					e.setCancelled(true);
-					e.setCursor(weapon.getRune().build());
-					weapon.setRune(null);
-					e.setCurrentItem(weapon.build());
-					player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
-				}
-			} else if (new Armor(item).verify()) {
-				Armor armor = new Armor(item);
-
-				// Applying armor enchantments
-				if (e.isLeftClick() && cursor != null && !cursor.getType().equals(Material.AIR)
-						&& new ArmorEnchant(cursor).verify()) {
-					ArmorEnchant enchant = new ArmorEnchant(cursor);
-
-					// Match armor tier to enchantment
+				// Armor enchanting
+				if (enchant.getType() == Enchant.ARMOR && Armor.hasArmorInfo(item)) {
+					Armor armor = new Armor(item);
 					if (armor.getTier() != enchant.getTier())
 						player.sendMessage(Util.colorCodes("&cYou must use this enchant on an armor piece of the same tier."));
 					else {
@@ -117,38 +85,9 @@ public class EnchantListener implements Listener {
 							e.setCurrentItem(armor.build());
 							enchantSuccess(player, armor.getEnchant());
 						} else {
-							if (armor.getRune() != null)
-								e.setCurrentItem(armor.getRune().build());
-							else
-								e.setCurrentItem(new ItemStack(Material.AIR));
 							enchantFailed(player);
 						}
 					}
-				}
-
-				// Equipping armor runes
-				if (e.isLeftClick() && armor.getRune() == null && cursor != null && !cursor.getType().equals(Material.AIR)
-						&& new Rune(cursor).verify()) {
-					Rune rune = new Rune(cursor);
-
-					if (!rune.getRuneType().getSlots().contains(Rune.RuneType.Slot.ARMOR))
-						player.sendMessage(Util.colorCodes("&cThis rune cannot be equipped on armor pieces."));
-					else {
-						e.setCancelled(true);
-						e.setCursor(new ItemStack(Material.AIR));
-						armor.setRune(rune);
-						e.setCurrentItem(armor.build());
-						player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
-					}
-				}
-
-				// Unequipping armor runes
-				if (e.isRightClick() && armor.getRune() != null && (cursor == null || cursor.getType().equals(Material.AIR))) {
-					e.setCancelled(true);
-					e.setCursor(armor.getRune().build());
-					armor.setRune(null);
-					e.setCurrentItem(armor.build());
-					player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
 				}
 			}
 		}

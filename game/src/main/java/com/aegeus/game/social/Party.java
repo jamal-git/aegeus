@@ -16,6 +16,10 @@ public class Party {
 		add(p);
 	}
 
+	public LinkedList<AgPlayer> getMembers() {
+		return members;
+	}
+
 	public AgPlayer getLeader() {
 		return members.peekFirst();
 	}

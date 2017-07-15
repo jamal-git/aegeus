@@ -1,16 +1,16 @@
 package com.aegeus.game.item.tool;
 
-import com.aegeus.game.item.AgItem;
+import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
+import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
-import net.minecraft.server.v1_9_R1.NBTTagString;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -19,13 +19,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo {
+public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
+	// Item Info
+	private ItemStack item;
+
 	// Level Info
 	private int level = 0;
 	private int xp = 0;
 
 	// Equipment Info
-	private int tier = 0;
+	private Tier tier = null;
 	private Rarity rarity = null;
 	private int enchant = 0;
 
@@ -34,7 +37,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 	private int dura = 0;
 
 	// Armor Stats
-	private Rune rune = null;
 	private int hp = 0;
 	private int hpRegen = 0;
 	private float physRes = 0;
@@ -44,46 +46,38 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 	private float reflect = 0;
 
 	public Armor(Material material) {
-		super(new ItemStack(material));
-		setMaxDura(Tier.fromTier(tier).getArmorDura());
+		item = new ItemStack(material);
+		setMaxDura(tier != null ? tier.getArmorDura() : 0);
 	}
 
 	public Armor(ItemStack item) {
-		super(item);
+		this.item = item;
 		impo();
 	}
 
-	public Armor(Armor other) {
-		super(other);
-		this.level = other.level;
-		this.xp = other.xp;
+	public static boolean hasArmorInfo(ItemStack item) {
+		return ItemUtils.getTag(item).hasKey("ArmorInfo");
+	}
 
-		this.tier = other.tier;
-		this.rarity = other.rarity;
-		this.enchant = other.enchant;
+	public static NBTTagCompound getArmorInfo(ItemStack item) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		return hasArmorInfo(item) ? tag.getCompound("ArmorInfo") : new NBTTagCompound();
+	}
 
-		this.maxDura = other.maxDura;
-		this.dura = other.dura;
-
-		this.rune = other.rune;
-		this.hp = other.hp;
-		this.hpRegen = other.hpRegen;
-		this.physRes = other.physRes;
-		this.magRes = other.magRes;
-		this.block = other.block;
-		this.dodge = other.dodge;
-		this.reflect = other.reflect;
+	public static ItemStack setArmorInfo(ItemStack item, NBTTagCompound info) {
+		NBTTagCompound tag = ItemUtils.getTag(item);
+		tag.set("ArmorInfo", info);
+		return ItemUtils.setTag(item, tag);
 	}
 
 	@Override
 	public void impo() {
-		super.impo();
+		ItemInfo.impo(this);
 		EquipmentInfo.impo(this);
 		LevelInfo.impo(this);
 		DuraInfo.impo(this);
 
-		NBTTagCompound info = getAegeusInfo();
-		rune = info.hasKey("runeType") ? (info.getInt("runeType") == -1 ? null : new Rune(Rune.RuneType.fromId(info.getInt("runeType")))) : null;
+		NBTTagCompound info = getArmorInfo(getItem());
 		hp = (info.hasKey("hp")) ? info.getInt("hp") : 0;
 		hpRegen = (info.hasKey("hpRegen")) ? info.getInt("hpRegen") : 0;
 		physRes = (info.hasKey("physRes")) ? info.getFloat("physRes") : 0;
@@ -95,14 +89,12 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 
 	@Override
 	public void store() {
-		super.store();
+		ItemInfo.impo(this);
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
 		DuraInfo.store(this);
 
-		NBTTagCompound info = getAegeusInfo();
-		info.set("type", new NBTTagString("armor"));
-		info.set("runeType", rune == null ? new NBTTagInt(-1) : new NBTTagInt(rune.getRuneType().getId()));
+		NBTTagCompound info = getArmorInfo(getItem());
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
 		info.set("physRes", new NBTTagFloat(physRes));
@@ -110,7 +102,26 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		info.set("block", new NBTTagFloat(block));
 		info.set("dodge", new NBTTagFloat(dodge));
 		info.set("reflect", new NBTTagFloat(reflect));
-		setAegeusInfo(info);
+		item = setArmorInfo(getItem(), info);
+	}
+
+	/*
+	Info Overrides
+	 */
+
+	@Override
+	public ItemStack build() {
+		store();
+		ItemStack item = ItemInfo.build(this);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(String.join("", buildPrefix(), getName()));
+		meta.setLore(Util.union(buildLore(), getLore()));
+		item.setItemMeta(meta);
+
+		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
+		return item;
 	}
 
 	public String buildPrefix() {
@@ -127,35 +138,19 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		if (dodge > 0) lore.add(Util.colorCodes("&cDODGE: " + Math.round(dodge * 100) + "%"));
 		if (reflect > 0) lore.add(Util.colorCodes("&cREFLECTION: " + Math.round(reflect * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
-		if (rune != null) lore.add(Util.colorCodes("&5&oRune:&d&o " + rune.getRuneType().getName()));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
 
 	@Override
-	public boolean verify() {
-		NBTTagCompound info = getAegeusInfo();
-		return info.hasKey("type") && info.getString("type").equalsIgnoreCase("armor");
-	}
-
-	@Override
-	public ItemStack build() {
-		store();
-		ItemStack item = super.build();
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(String.join("", buildPrefix(), getName()));
-		meta.setLore(Util.union(buildLore(), getLore()));
-		item.setItemMeta(meta);
-
-		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
-
+	public ItemStack getItem() {
 		return item;
 	}
 
-	/*
-	Info Overrides
-	 */
+	@Override
+	public void setItem(ItemStack item) {
+		this.item = item;
+	}
 
 	@Override
 	public int getLevel() {
@@ -179,18 +174,18 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 
 	@Override
 	public int getMaxXp() {
-		return (int) Util.calcMaxXP(getLevel(), getTier());
+		return (int) Util.calcMaxXP(getLevel(), getTier().getLevel());
 	}
 
 	@Override
-	public int getTier() {
+	public Tier getTier() {
 		return tier;
 	}
 
 	@Override
-	public void setTier(int tier) {
+	public void setTier(Tier tier) {
 		this.tier = tier;
-		setMaxDura(Tier.fromTier(tier).getArmorDura());
+		setMaxDura(tier.getArmorDura());
 	}
 
 	@Override
@@ -218,6 +213,10 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 		return maxDura;
 	}
 
+	/*
+	Armor Methods
+	 */
+
 	@Override
 	public void setMaxDura(int maxDura) {
 		this.maxDura = maxDura;
@@ -233,18 +232,6 @@ public class Armor extends AgItem implements EquipmentInfo, LevelInfo, DuraInfo 
 	public void setDura(int dura) {
 		this.dura = dura;
 		DuraInfo.update(this);
-	}
-
-	/*
-	Armor Methods
-	 */
-
-	public Rune getRune() {
-		return rune;
-	}
-
-	public void setRune(Rune rune) {
-		this.rune = rune;
 	}
 
 	public int getHp() {

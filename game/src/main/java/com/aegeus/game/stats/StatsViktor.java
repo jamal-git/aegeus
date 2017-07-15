@@ -4,6 +4,7 @@ import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.util.Action;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.FloatPoss;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 public class StatsViktor extends Stats {
 	@Override
 	public void prepare() {
-		setTier(5);
+		setTier(Tier.TIER_5);
 		setChance(0.01f);
 		setDmgMultiplier(2.5f);
 		setHpMultiplier(4);

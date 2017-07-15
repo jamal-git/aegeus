@@ -5,8 +5,8 @@ import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
-import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.*;
 import org.bukkit.Location;
@@ -28,7 +28,7 @@ public abstract class Stats {
 	private final Stats parent;
 
 	private float chance = 1;
-	private int tier = 1;
+	private Tier tier = null;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
@@ -140,11 +140,11 @@ public abstract class Stats {
 		this.chance = chance;
 	}
 
-	public int getTier() {
+	public Tier getTier() {
 		return tier;
 	}
 
-	public void setTier(int tier) {
+	public void setTier(Tier tier) {
 		this.tier = tier;
 	}
 
@@ -462,8 +462,6 @@ public abstract class Stats {
 		public String name = "";
 		public Rarity rarity = null;
 
-		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
-
 		public IntPoss dmg = new IntPoss(1);
 		public IntPoss range = new IntPoss();
 
@@ -486,7 +484,6 @@ public abstract class Stats {
 				this.allowedTypes = other.allowedTypes;
 				this.name = other.name;
 				this.rarity = other.rarity;
-				this.rune = other.rune;
 				this.dmg = other.dmg;
 				this.range = other.range;
 				this.pen = other.pen;
@@ -504,9 +501,6 @@ public abstract class Stats {
 			Weapon weapon = new Weapon(material);
 			weapon.setTier(tier);
 			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
-
-			ListPoss<Rune.RuneType> rune = this.rune.get();
-			if (rune != null) weapon.setRune(new Rune(rune.get()));
 
 			int min = Math.round((dmg.getDiff() * f) + dmg.getMin());
 			int max = min + range.get();
@@ -550,8 +544,6 @@ public abstract class Stats {
 		public String name = "";
 		public Rarity rarity = null;
 
-		public Chance<ListPoss<Rune.RuneType>> rune = new Chance<>();
-
 		public IntPoss hp = new IntPoss(1);
 		public IntPoss hpRegen = new IntPoss(1);
 
@@ -571,7 +563,6 @@ public abstract class Stats {
 				this.allowedTypes = other.allowedTypes;
 				this.name = other.name;
 				this.rarity = other.rarity;
-				this.rune = other.rune;
 				this.hp = other.hp;
 				this.hpRegen = other.hpRegen;
 				this.physRes = other.physRes;
@@ -586,9 +577,6 @@ public abstract class Stats {
 			Armor armor = new Armor(material);
 			armor.setTier(tier);
 			armor.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
-
-			ListPoss<Rune.RuneType> rune = this.rune.get();
-			if (rune != null) armor.setRune(new Rune(rune.get()));
 
 			armor.setHp(Math.round((hp.getDiff() * f) + hp.getMin()));
 			armor.setHpRegen(hpRegen.get());

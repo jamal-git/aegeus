@@ -3,9 +3,11 @@ package com.aegeus.game.item;
 import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
 import com.aegeus.game.ability.AbilityTackle;
-import com.aegeus.game.item.tool.Rune;
 import com.aegeus.game.stats.Stats;
-import com.aegeus.game.util.*;
+import com.aegeus.game.util.Action;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.FloatPoss;
+import com.aegeus.game.util.IntPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -15,16 +17,14 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 
 public enum Tier {
-	NONE(0, 0, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
-			"Custom Bow", "Custom Staff", "Custom Polearm"),
-	TIER_1(675, 750, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
+	TIER_1(1, 675, 750, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
 			"Basic Bow", "Basic Staff", "Basic Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(1);
+					setTier(Tier.TIER_1);
 					setChance(0.4f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
 							new AbilityTackle()));
@@ -96,14 +96,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_2(1215, 1350, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
+	TIER_2(2, 1215, 1350, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
 			"Advanced Bow", "Advanced Staff", "Advanced Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(2);
+					setTier(Tier.TIER_2);
 					setChance(0.2f);
 					setHpMultiplier(1.1f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -176,14 +176,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_3(1830, 2030, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
+	TIER_3(3, 1830, 2030, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
 			"Magic Bow", "Magic Staff", "Magic Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(3);
+					setTier(Tier.TIER_3);
 					setChance(0.1f);
 					setHpMultiplier(1.2f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -197,8 +197,6 @@ public enum Tier {
 							entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 1));
 						}
 					});
-
-					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.01f);
 
 					getDefArmor().hpRegen = new IntPoss(15, 40);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.01f, 0.05f), 0.12f);
@@ -226,8 +224,6 @@ public enum Tier {
 					boots.material = Material.IRON_BOOTS;
 					boots.hp = new IntPoss(150, 564);
 					getAllBoots().add(boots);
-
-					getDefWeapon().rune = new Chance<>(new ListPoss<>(Rune.RuneType.BLOOD_HUNT), 0.01f);
 
 					getDefWeapon().pen = new Chance<>(new FloatPoss(0.01f, 0.1f), 0.05f);
 					getDefWeapon().fireDmg = new Chance<>(new IntPoss(2, 10), 0.05f);
@@ -260,14 +256,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_4(2745, 3050, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
+	TIER_4(4, 2745, 3050, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
 			"Ancient Bow", "Ancient Staff", "Ancient Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(4);
+					setTier(Tier.TIER_4);
 					setChance(0.048f);
 					setHpMultiplier(1.3f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -284,8 +280,6 @@ public enum Tier {
 								entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 2));
 						}
 					});
-
-					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.02f);
 
 					getDefArmor().hpRegen = new IntPoss(50, 90);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.02f, 0.07f), 0.16f);
@@ -313,8 +307,6 @@ public enum Tier {
 					boots.material = Material.DIAMOND_BOOTS;
 					boots.hp = new IntPoss(524, 1920);
 					getAllBoots().add(boots);
-
-					getDefWeapon().rune = new Chance<>(new ListPoss<>(Rune.RuneType.BLOOD_HUNT), 0.02f);
 
 					getDefWeapon().pen = new Chance<>(new FloatPoss(0.01f, 0.12f), 0.05f);
 					getDefWeapon().fireDmg = new Chance<>(new IntPoss(3, 18), 0.05f);
@@ -347,14 +339,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_5(4120, 4575, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
+	TIER_5(5, 4120, 4575, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
 			"Legendary Bow", "Legendary Staff", "Legendary Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(5);
+					setTier(Tier.TIER_5);
 					setChance(0.036f);
 					setHpMultiplier(1.5f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -372,7 +364,6 @@ public enum Tier {
 						}
 					});
 
-					getDefArmor().rune = new Chance<>(new ListPoss<>(Rune.RuneType.ARCANE_MIGHT), 0.03f);
 					getDefArmor().hpRegen = new IntPoss(80, 140);
 					getDefArmor().physRes = new Chance<>(new FloatPoss(0.03f, 0.1f), 0.2f);
 					getDefArmor().magRes = new Chance<>(new FloatPoss(0.03f, 0.1f), 0.2f);
@@ -399,8 +390,6 @@ public enum Tier {
 					boots.material = Material.GOLD_BOOTS;
 					boots.hp = new IntPoss(868, 2760);
 					getAllBoots().add(boots);
-
-					getDefWeapon().rune = new Chance<>(new ListPoss<>(Rune.RuneType.BLOOD_HUNT), 0.03f);
 
 					getDefWeapon().pen = new Chance<>(new FloatPoss(0.02f, 0.18f), 0.05f);
 					getDefWeapon().fireDmg = new Chance<>(new IntPoss(6, 25), 0.05f);
@@ -436,6 +425,7 @@ public enum Tier {
 
 	private static final Tier[] values = values();
 
+	private final int level;
 	private final int wepDura;
 	private final int armorDura;
 	private final String color;
@@ -447,8 +437,9 @@ public enum Tier {
 	private final String staff;
 	private final String polearm;
 
-	Tier(int wepDura, int armorDura, String color, String armor, String weapon,
+	Tier(int level, int wepDura, int armorDura, String color, String armor, String weapon,
 		 String sword, String axe, String bow, String staff, String polearm) {
+		this.level = level;
 		this.wepDura = wepDura;
 		this.armorDura = armorDura;
 		this.color = color;
@@ -462,8 +453,12 @@ public enum Tier {
 	}
 
 	public static Tier fromTier(int tier) {
-		if (tier > 5 || tier < 0) return NONE;
+		if (tier > values().length || tier < 0) return null;
 		return values[tier];
+	}
+
+	public int getLevel() {
+		return level;
 	}
 
 	public int getArmorDura() {

@@ -1,7 +1,7 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.item.ItemGold;
+import com.aegeus.game.item.Items;
 import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
@@ -78,10 +78,10 @@ public class MiningListener implements Listener {
 							p.sendMessage(Util.colorCodes("       &a&l*** GOLD FIND +" + goldDrop + "G ***"));
 							while (goldDrop > 64) {
 								//Drop multiple stacks if the amount of gold to drop is greater than one stack
-								b.getWorld().dropItem(b.getLocation(), new ItemGold(64).build());
+								b.getWorld().dropItem(b.getLocation(), Items.getGold(64));
 								goldDrop -= 64;
 							}
-							b.getWorld().dropItem(b.getLocation(), new ItemGold(goldDrop).build());
+							b.getWorld().dropItem(b.getLocation(), Items.getGold(goldDrop));
 						}
 						ItemStack stack = new ItemStack(o.getOre(), amount);
 						ItemMeta meta = Bukkit.getItemFactory().getItemMeta(o.getOre());
