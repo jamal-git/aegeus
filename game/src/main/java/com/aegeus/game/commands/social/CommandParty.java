@@ -26,7 +26,7 @@ public class CommandParty implements CommandExecutor {
             }
             else    {
 			    parties.registerParty(new Party(agplayer));
-			    agplayer.sendMessage(Util.colorCodes("&aYou have created a party.  Use \"/p invite <player>\" to invite them to your party."));
+			    agplayer.sendMessage(Util.colorCodes("&aYou have created a party.  Use &l\"/p invite <player>\"&r&a to invite them to your party."));
             }
 		} else if (args[0].equalsIgnoreCase("invite") && args.length == 2) {
 			//Invite a player to your current party.
@@ -34,7 +34,7 @@ public class CommandParty implements CommandExecutor {
 			Player p;
 			if(!parties.isInParty(agplayer))    {
 			    parties.registerParty(new Party(agplayer));
-			    agplayer.sendMessage(Util.colorCodes("&cYou have created a party.  Use \"/p invite <player>\" to invited them to your party."));
+			    agplayer.sendMessage(Util.colorCodes("&aYou have created a party.  Use &l\"/p invite <player>\"&r&a to invite them to your party."));
             }
 			if((p = Aegeus.getInstance().getServer().getPlayer(args[1])) == null || !p.isOnline())  {
 			    agplayer.sendMessage(Util.colorCodes("&cThat player does not exist or is offline."));

@@ -20,6 +20,7 @@ public class SpawnerSerializer implements JsonSerializer<Spawner> {
 		o.addProperty("y", spawner.getLocation().getY());
 		o.addProperty("z", spawner.getLocation().getZ());
 		o.addProperty("max", spawner.getMaxCount());
+		o.addProperty("delay", spawner.getDelayCount());
 		JsonArray stats = new JsonArray();
 		spawner.getList().stream().filter(Objects::nonNull).map(x -> {
 			if (x.getParent() != null)

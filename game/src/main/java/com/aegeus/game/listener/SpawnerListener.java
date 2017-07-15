@@ -16,10 +16,8 @@ public class SpawnerListener implements Listener {
 		this.parent = parent;
 		Bukkit.getScheduler().runTaskTimer(parent, () -> {
 			for (Spawner s : parent.getSpawners())
-				if (s.canSpawn()) {
-					s.incrementCount().get().spawn(s.getLocation(), s);
-				}
-		}, 300, 300);
+				s.delayCount();
+		}, 600, 600);
 	}
 
 	@EventHandler

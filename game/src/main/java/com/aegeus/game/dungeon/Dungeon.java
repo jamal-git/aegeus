@@ -160,12 +160,11 @@ public class Dungeon {
                     CuboidClipboard clipboard;
                     Direction direction = null;
                     char character = layout[i][j].charAt(0);
-                    for(Direction d : Direction.values())   {
+                    for(Direction d : Direction.values())
                         if(character == d.getChar())    {
                             direction = d;
                             break;
                         }
-                    }
                     if(direction == null)   {
                         throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
                     }

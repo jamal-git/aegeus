@@ -4,6 +4,8 @@ import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
 import com.aegeus.game.social.ChatChannel;
+import com.aegeus.game.social.Party;
+import com.aegeus.game.social.PartyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -21,6 +23,7 @@ public class AgPlayer extends AgLiving {
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
+	private Spawner editSpawner = null;
 //	private Mount mount = null;
 //	private Story story = new Story(this);
 //	private BankListener bank = new BankListener(this);
@@ -148,4 +151,26 @@ public class AgPlayer extends AgLiving {
 	public void setChatChannel(ChatChannel chatChannel) {
 		this.chatChannel = chatChannel;
 	}
+
+    public Spawner getEditSpawner() {
+        return editSpawner;
+    }
+
+    public void setEditSpawner(Spawner editSpawner) {
+        this.editSpawner = editSpawner;
+    }
+
+    public boolean isInParty()  {
+	    return PartyManager.getInstance().isInParty(this);
+    }
+
+    public Party getParty() {
+	    return PartyManager.getInstance().getPartyFromPlayer(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+	    if(!(o instanceof AgPlayer)) return false;
+	    else return getPlayer().getUniqueId().equals(((AgPlayer) o).getPlayer().getUniqueId());
+    }
 }

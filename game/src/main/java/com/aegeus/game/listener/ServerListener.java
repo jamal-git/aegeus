@@ -3,6 +3,8 @@ package com.aegeus.game.listener;
 import com.aegeus.common.Common;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.social.Party;
+import com.aegeus.game.social.PartyManager;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -75,7 +77,8 @@ public class ServerListener implements Listener {
 	// Clear user information and punish combat loggers
 	private void onLogout(PlayerQuitEvent e) {
 		AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
-		if (player.getParty() != null) player.getParty().remove(player);
+        Party p = PartyManager.getInstance().getPartyFromPlayer(player);
+        if(p != null) p.remove(player);
 		e.setQuitMessage("");
 	}
 

@@ -124,7 +124,7 @@ public class CombatListener implements Listener {
 				AgPlayer vPInfo = parent.getPlayer((Player) victim);
 				AgPlayer vAInfo = parent.getPlayer((Player) attacker);
 
-				if (vPInfo.getParty() != null && vAInfo.getParty() != null
+				if (vPInfo.isInParty() && vAInfo.isInParty()
 						&& vPInfo.getParty().equals(vAInfo.getParty()))
 					return;
 			}

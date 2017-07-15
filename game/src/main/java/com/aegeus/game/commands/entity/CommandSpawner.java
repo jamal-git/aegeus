@@ -1,6 +1,7 @@
 package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.stats.Stats;
 import com.aegeus.game.util.Util;
@@ -25,6 +26,7 @@ public class CommandSpawner implements CommandExecutor {
 		if (!sender.hasPermission("aegeus.world")) return false;
 		List<Spawner> list = Aegeus.getInstance().getSpawners();
 		Player player = (Player) sender;
+        AgPlayer agPlayer = Aegeus.getInstance().getPlayer(player);
 		if (args[0].equalsIgnoreCase("show") && args.length == 1) {
 			//Show the player all the spawners using sendBlockChange
 			for (Spawner s : list)
@@ -118,6 +120,16 @@ public class CommandSpawner implements CommandExecutor {
 				return true;
 			}
 		}
+		else if(args[0].equalsIgnoreCase("select") && args.length == 2) {
+		    if(args[1].equalsIgnoreCase("here"))    {
+		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
+		            if(s.getLocation().equals(player.getLocation().getBlock().getLocation()))   {
+		                agPlayer.setEditSpawner(s);
+
+                    }
+                }
+            }
+        }
 		return false;
 	}
 }

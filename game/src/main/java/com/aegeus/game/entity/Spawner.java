@@ -15,6 +15,8 @@ public class Spawner {
 	private final Location location;
 	private int maxCount = 3;
 	private int count;
+	private transient int currentDelay = 0;
+	private int delayCount = 1;
 	private List<Stats> list = new ArrayList<>();
 
 	public Spawner(Location location) {
@@ -89,8 +91,14 @@ public class Spawner {
 	public boolean canSpawn() {
 		return count < maxCount && location.getChunk().isLoaded() &&
 				location.getWorld().getDifficulty() != Difficulty.PEACEFUL &&
-				(Util.getPlayersInRadius(location, 24, 24, 24).isEmpty() || (random.nextDouble() < 0.04));
+				(Util.getPlayersInRadius(location, 16, 16, 16).isEmpty() || (random.nextDouble() < 0.04));
 	}
+
+	public void delayCount()    {
+
+	    if(currentDelay++ % delayCount == 0 && canSpawn())
+	        incrementCount().get().spawn(location, this);
+    }
 
 	/**
 	 * Increment the count of monster spawned by this spawner
@@ -147,4 +155,12 @@ public class Spawner {
 	public void setCount(int count) {
 		this.count = count;
 	}
+
+    public int getDelayCount() {
+        return delayCount;
+    }
+
+    public void setDelayCount(int delayCount) {
+        this.delayCount = delayCount;
+    }
 }

@@ -50,7 +50,6 @@ public class Party {
 	public void remove(AgPlayer p) {
 		if (members.contains(p)) {
 			members.remove(p);
-            p.getPlayer().sendMessage(Util.colorCodes("&aYou have left the party."));
             if(members.size() > 0) {
                 for (AgPlayer m : members) {
                     GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());

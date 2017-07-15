@@ -6,6 +6,7 @@ import com.aegeus.game.dungeon.Dungeon;
 import com.aegeus.game.dungeon.DungeonManager;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.social.Party;
+import com.aegeus.game.social.PartyManager;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
 import com.sk89q.worldedit.data.DataException;
@@ -43,13 +44,13 @@ public class CommandCreateDungeon implements CommandExecutor {
         Party party = player.getParty();
         if(party == null)   {
             party = new Party(player);
-            player.setParty(party);
+            PartyManager.getInstance().registerParty(party);
         }
         p.sendMessage(Util.colorCodes("&7Generating dungeon..."));
         Aegeus.getInstance().getServer().getScheduler().runTaskAsynchronously(Aegeus.getInstance(), () -> {
             try {
                 World w = new WorldCreator("dungeon" + WorldManager.getInstance().getWorlds().size()).environment(World.Environment.NORMAL).generateStructures(false).type(WorldType.FLAT).generatorSettings("1;0").createWorld();
-                Dungeon d = DungeonManager.getInstance().registerDungeon(new Dungeon(player.getParty(), w.getSpawnLocation().add(0, 64, 0), args[0], Integer.valueOf(args[1]), w, Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])));
+                Dungeon d = DungeonManager.getInstance().registerDungeon(new Dungeon(PartyManager.getInstance().getPartyFromPlayer(player), w.getSpawnLocation().add(0, 64, 0), args[0], Integer.valueOf(args[1]), w, Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])));
                 WorldManager.getInstance().addWorld(w);
             } catch (DungeonLoadingException e) {
                 e.printStackTrace();

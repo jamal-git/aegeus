@@ -77,6 +77,12 @@ public class PartyManager {
         if(!p.getLeader().equals(inviter))
             //not leader
             inviter.sendMessage(Util.colorCodes("&cYou are not the leader of the party!"));
+        else if(inviter.equals(invitee))
+            //trying to invite themself
+            inviter.sendMessage(Util.colorCodes("&cYou cannot invite yourself!"));
+        else if(invitee.isInParty())
+            //in another party
+            inviter.sendMessage(Util.colorCodes("&cThis player is already in a party!"));
         else if(invites.containsKey(invitee) && invites.get(invitee).equals(p))
             //already invited
             inviter.sendMessage(Util.colorCodes("&cThis player has already been invited to the party!"));
@@ -106,6 +112,7 @@ public class PartyManager {
         for(Party party : parties)  {
             if(party.contains(p))   {
                 party.remove(p);
+                p.sendMessage(Util.colorCodes("&cYou left the party."));
                 return;
             }
         }
