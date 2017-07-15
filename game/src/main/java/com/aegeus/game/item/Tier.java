@@ -17,14 +17,16 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 
 public enum Tier {
-	TIER_1(1, 675, 750, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
+	CUSTOM(0, 0, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
+			"Custom Bow", "Custom Staff", "Custom Polearm"),
+	TIER_1(675, 750, "&f", "Leather", "Wood", "Shortsword", "Hatchet",
 			"Basic Bow", "Basic Staff", "Basic Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(Tier.TIER_1);
+					setTier(1);
 					setChance(0.4f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
 							new AbilityTackle()));
@@ -96,14 +98,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_2(2, 1215, 1350, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
+	TIER_2(1215, 1350, "&a", "Chainmail", "Stone", "Longsword", "Great Axe",
 			"Advanced Bow", "Advanced Staff", "Advanced Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(Tier.TIER_2);
+					setTier(2);
 					setChance(0.2f);
 					setHpMultiplier(1.1f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -176,14 +178,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_3(3, 1830, 2030, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
+	TIER_3(1830, 2030, "&b", "Magic", "Iron", "Magic Sword", "Magic Axe",
 			"Magic Bow", "Magic Staff", "Magic Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(Tier.TIER_3);
+					setTier(3);
 					setChance(0.1f);
 					setHpMultiplier(1.2f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -256,14 +258,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_4(4, 2745, 3050, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
+	TIER_4(2745, 3050, "&d", "Ancient", "Diamond", "Ancient Sword", "Ancient Axe",
 			"Ancient Bow", "Ancient Staff", "Ancient Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(Tier.TIER_4);
+					setTier(4);
 					setChance(0.048f);
 					setHpMultiplier(1.3f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -339,14 +341,14 @@ public enum Tier {
 			};
 		}
 	},
-	TIER_5(5, 4120, 4575, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
+	TIER_5(4120, 4575, "&e", "Legendary", "Gold", "Legendary Sword", "Legendary Axe",
 			"Legendary Bow", "Legendary Staff", "Legendary Polearm") {
 		@Override
 		public Stats getStats() {
 			return new Stats() {
 				@Override
 				public void prepare() {
-					setTier(Tier.TIER_5);
+					setTier(5);
 					setChance(0.036f);
 					setHpMultiplier(1.5f);
 					setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
@@ -425,7 +427,6 @@ public enum Tier {
 
 	private static final Tier[] values = values();
 
-	private final int level;
 	private final int wepDura;
 	private final int armorDura;
 	private final String color;
@@ -437,9 +438,8 @@ public enum Tier {
 	private final String staff;
 	private final String polearm;
 
-	Tier(int level, int wepDura, int armorDura, String color, String armor, String weapon,
+	Tier(int wepDura, int armorDura, String color, String armor, String weapon,
 		 String sword, String axe, String bow, String staff, String polearm) {
-		this.level = level;
 		this.wepDura = wepDura;
 		this.armorDura = armorDura;
 		this.color = color;
@@ -453,12 +453,8 @@ public enum Tier {
 	}
 
 	public static Tier fromTier(int tier) {
-		if (tier > values().length || tier < 0) return null;
+		if (tier > values().length || tier < 0) return Tier.CUSTOM;
 		return values[tier];
-	}
-
-	public int getLevel() {
-		return level;
 	}
 
 	public int getArmorDura() {

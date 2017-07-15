@@ -3,27 +3,30 @@ package com.aegeus.game.item.tool;
 import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.info.ItemInfo;
+import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class Enchant implements ItemInfo {
 	public static final int WEAPON = 0;
 	public static final int ARMOR = 1;
 
 	private ItemStack item;
+	private String name;
+	private List<String> lore = new ArrayList<>();
 
-	private Tier tier;
+	private int tier;
 	private int type;
 
-	public Enchant(Tier tier, int type) {
+	public Enchant(int tier, int type) {
 		this(tier, type, 1);
 	}
 
-	public Enchant(Tier tier, int type, int amount) {
+	public Enchant(int tier, int type, int amount) {
 		this.tier = tier;
 		this.type = type;
 		this.item = new ItemStack(Material.EMPTY_MAP, amount);
@@ -54,7 +57,7 @@ public class Enchant implements ItemInfo {
 		ItemInfo.impo(this);
 
 		NBTTagCompound info = getEnchantInfo(item);
-		tier = info.hasKey("tier") ? Tier.fromTier(info.getInt("tier")) : null;
+		tier = info.hasKey("tier") ? info.getInt("tier") : 0;
 		type = info.hasKey("type") ? info.getInt("type") : WEAPON;
 	}
 
@@ -63,7 +66,7 @@ public class Enchant implements ItemInfo {
 		ItemInfo.store(this);
 
 		NBTTagCompound info = getEnchantInfo(item);
-		info.setInt("tier", tier == null ? -1 : Arrays.asList(Tier.values()).indexOf(tier));
+		info.setInt("tier", tier);
 		item = setEnchantInfo(item, info);
 	}
 
@@ -71,6 +74,7 @@ public class Enchant implements ItemInfo {
 	public ItemStack build() {
 		store();
 
+		Tier tier = Tier.fromTier(this.tier);
 		if (type == WEAPON) {
 			setName("&f&lEnchant:&7 " + tier.getColor() + tier.getWeapon() + " Weapon");
 			setLore(new ArrayList<>());
@@ -97,7 +101,27 @@ public class Enchant implements ItemInfo {
 		this.item = item;
 	}
 
-	public Tier getTier() {
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = Util.colorCodes(name);
+	}
+
+	@Override
+	public List<String> getLore() {
+		return lore;
+	}
+
+	@Override
+	public void setLore(List<String> lore) {
+		this.lore = lore;
+	}
+
+	public int getTier() {
 		return tier;
 	}
 

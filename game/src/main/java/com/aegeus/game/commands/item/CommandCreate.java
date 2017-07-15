@@ -1,7 +1,6 @@
 package com.aegeus.game.commands.item;
 
 import com.aegeus.game.item.ItemParser;
-import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Enchant;
 import com.aegeus.game.item.tool.Pickaxe;
@@ -31,7 +30,7 @@ public class CommandCreate implements CommandExecutor {
 		} else if (args[0].equalsIgnoreCase("pickaxe")) {
 			player.getInventory().addItem(ItemParser.parsePick(new Pickaxe(), args).build());
 		} else if (args[0].equalsIgnoreCase("enchant")) {
-			Tier tier = Tier.fromTier(Integer.parseInt(args[1]));
+			int tier = Integer.parseInt(args[1]);
 			int type = Integer.parseInt(args[2]);
 			int amount = args.length < 4 ? 1 : Integer.parseInt(args[3]);
 

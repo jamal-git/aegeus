@@ -5,7 +5,6 @@ import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.*;
@@ -28,7 +27,7 @@ public abstract class Stats {
 	private final Stats parent;
 
 	private float chance = 1;
-	private Tier tier = null;
+	private int tier = 0;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
@@ -140,11 +139,11 @@ public abstract class Stats {
 		this.chance = chance;
 	}
 
-	public Tier getTier() {
+	public int getTier() {
 		return tier;
 	}
 
-	public void setTier(Tier tier) {
+	public void setTier(int tier) {
 		this.tier = tier;
 	}
 

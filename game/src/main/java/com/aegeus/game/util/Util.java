@@ -238,7 +238,7 @@ public class Util {
 
 	@SafeVarargs
 	public static <T> List<T> union(List<T> t, List<T>... others) {
-		Arrays.stream(others).forEach(t::addAll);
+		Arrays.stream(others).filter(l -> l != null && !l.isEmpty()).forEach(t::addAll);
 		return t;
 	}
 
@@ -301,7 +301,7 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Weapon";
 
-		Tier t = weapon.getTier();
+		Tier t = Tier.fromTier(weapon.getTier());
 		String color = t.getColor();
 		Material m = weapon.getMaterial();
 
@@ -320,7 +320,7 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Armor";
 
-		Tier t = armor.getTier();
+		Tier t = Tier.fromTier(armor.getTier());
 		String color = t.getColor();
 		Material m = armor.getMaterial();
 

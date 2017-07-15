@@ -2,8 +2,8 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.combat.CombatInfo;
-import com.aegeus.game.item.Tier;
 import com.aegeus.game.util.Action;
+import com.aegeus.game.util.Util;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class AgMonster extends AgLiving {
 	private List<Action<CombatInfo>> onDamaged = new ArrayList<>();
 
 	private Spawner origin = null;
-	private Tier tier = null;
+	private int tier = 0;
 	private float chance = 0;
 	private int gold = 0;
 	private float goldChance = 0;
@@ -63,7 +63,7 @@ public class AgMonster extends AgLiving {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = Util.colorCodes(name);
 	}
 
 	public List<Ability> getAbils() {
@@ -114,11 +114,11 @@ public class AgMonster extends AgLiving {
 		this.origin = origin;
 	}
 
-	public Tier getTier() {
+	public int getTier() {
 		return tier;
 	}
 
-	public void setTier(Tier tier) {
+	public void setTier(int tier) {
 		this.tier = tier;
 	}
 

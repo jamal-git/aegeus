@@ -25,13 +25,15 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	// Item Info
 	private ItemStack item;
+	private String name;
+	private List<String> lore = new ArrayList<>();
 
 	// Level Info
 	private int level = 0;
 	private int xp = 0;
 
 	// Equipment Info
-	private Tier tier = null;
+	private int tier = 0;
 	private Rarity rarity = null;
 	private int enchant = 0;
 
@@ -53,7 +55,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	public Weapon(Material material) {
 		item = new ItemStack(material);
-		setMaxDura(tier != null ? tier.getWepDura() : 0);
+		setMaxDura(Tier.fromTier(tier).getWepDura());
 	}
 
 	public Weapon(ItemStack item) {
@@ -103,7 +105,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		LevelInfo.store(this);
 		DuraInfo.store(this);
 
-		NBTTagCompound info = getWeaponInfo(getItem());
+		NBTTagCompound info = getWeaponInfo(item);
 		info.set("minDmg", new NBTTagInt(minDmg));
 		info.set("maxDmg", new NBTTagInt(maxDmg));
 		info.set("pen", new NBTTagFloat(pen));
@@ -114,7 +116,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		info.set("lifeSteal", new NBTTagFloat(lifeSteal));
 		info.set("trueHearts", new NBTTagFloat(trueHearts));
 		info.set("blind", new NBTTagFloat(blind));
-		item = setWeaponInfo(getItem(), info);
+		item = setWeaponInfo(item, info);
 	}
 
 	/*
@@ -167,6 +169,26 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	}
 
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = Util.colorCodes(name);
+	}
+
+	@Override
+	public List<String> getLore() {
+		return lore;
+	}
+
+	@Override
+	public void setLore(List<String> lore) {
+		this.lore = lore;
+	}
+
+	@Override
 	public int getLevel() {
 		return level;
 	}
@@ -188,18 +210,18 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	@Override
 	public int getMaxXp() {
-		return (int) Util.calcMaxXP(getLevel(), getTier().getLevel());
+		return (int) Util.calcMaxXP(getLevel(), getTier());
 	}
 
 	@Override
-	public Tier getTier() {
+	public int getTier() {
 		return tier;
 	}
 
 	@Override
-	public void setTier(Tier tier) {
+	public void setTier(int tier) {
 		this.tier = tier;
-		setMaxDura(tier.getWepDura());
+		setMaxDura(Tier.fromTier(tier).getWepDura());
 	}
 
 	@Override
@@ -274,7 +296,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	}
 
 	public int getLevelDmg() {
-		return Math.round(getLevel() * (0.15f * getTier().getLevel()));
+		return Math.round(getLevel() * (0.15f * getTier()));
 	}
 
 	public float getPen() {

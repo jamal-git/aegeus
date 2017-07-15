@@ -1,10 +1,12 @@
 package com.aegeus.game.item.info;
 
 import com.aegeus.game.item.ItemUtils;
+import com.aegeus.game.util.Util;
 import com.sk89q.jnbt.NBTConstants;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagList;
 import net.minecraft.server.v1_9_R1.NBTTagString;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -24,10 +26,13 @@ public interface ItemInfo {
 
 	static <T extends ItemInfo> void store(T t) {
 		NBTTagCompound info = getItemInfo(t.getItem());
-		info.set("name", new NBTTagString(t.getName()));
-		NBTTagList lore = new NBTTagList();
-		t.getLore().forEach(s -> lore.add(new NBTTagString(s)));
-		info.set("lore", lore);
+		if (t.getName() != null && !t.getName().isEmpty())
+			info.set("name", new NBTTagString(t.getName()));
+		if (t.getLore() != null && !t.getLore().isEmpty()) {
+			NBTTagList lore = new NBTTagList();
+			t.getLore().forEach(s -> lore.add(new NBTTagString(s)));
+			info.set("lore", lore);
+		}
 		t.setItem(setItemInfo(t.getItem(), info));
 	}
 
@@ -35,6 +40,7 @@ public interface ItemInfo {
 		store(t);
 
 		ItemMeta meta = t.getItem().getItemMeta();
+		Bukkit.broadcastMessage(t.getName());
 		meta.setDisplayName(t.getName());
 		meta.setLore(t.getLore());
 		meta.addItemFlags(
@@ -73,42 +79,24 @@ public interface ItemInfo {
 	void setItem(ItemStack item);
 
 	default Material getMaterial() {
-		return getItem() != null ? getItem().getType() : null;
+		return getItem() != null ? getItem().getType() : Material.AIR;
 	}
 
 	default void setMaterial(Material material) {
 		if (getItem() != null) getItem().setType(material);
 	}
 
-	default String getName() {
-		return getItem() != null && getItem().hasItemMeta()
-				? getItem().getItemMeta().getDisplayName() : null;
-	}
+	String getName();
 
-	default void setName(String name) {
-		if (getItem() != null && getItem().hasItemMeta()) {
-			ItemMeta meta = getItem().getItemMeta();
-			meta.setDisplayName(name);
-			getItem().setItemMeta(meta);
-		}
-	}
+	void setName(String name);
 
-	default List<String> getLore() {
-		return getItem() != null && getItem().hasItemMeta()
-				? getItem().getItemMeta().getLore() : null;
-	}
+	List<String> getLore();
 
-	default void setLore(List<String> lore) {
-		if (getItem() != null && getItem().hasItemMeta()) {
-			ItemMeta meta = getItem().getItemMeta();
-			meta.setLore(lore);
-			getItem().setItemMeta(meta);
-		}
-	}
+	void setLore(List<String> lore);
 
 	default void addLore(String line) {
 		List<String> lore = new ArrayList<>(getLore());
-		lore.add(line);
+		lore.add(Util.colorCodes(line));
 		setLore(lore);
 	}
 }

@@ -22,13 +22,15 @@ import java.util.List;
 public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 	// Item Info
 	private ItemStack item;
+	private String name;
+	private List<String> lore = new ArrayList<>();
 
 	// Level Info
 	private int level = 0;
 	private int xp = 0;
 
 	// Equipment Info
-	private Tier tier = null;
+	private int tier = 0;
 	private Rarity rarity = null;
 	private int enchant = 0;
 
@@ -47,7 +49,7 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	public Armor(Material material) {
 		item = new ItemStack(material);
-		setMaxDura(tier != null ? tier.getArmorDura() : 0);
+		setMaxDura(Tier.fromTier(tier).getArmorDura());
 	}
 
 	public Armor(ItemStack item) {
@@ -89,12 +91,12 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	@Override
 	public void store() {
-		ItemInfo.impo(this);
+		ItemInfo.store(this);
 		EquipmentInfo.store(this);
 		LevelInfo.store(this);
 		DuraInfo.store(this);
 
-		NBTTagCompound info = getArmorInfo(getItem());
+		NBTTagCompound info = getArmorInfo(item);
 		info.set("hp", new NBTTagInt(hp));
 		info.set("hpRegen", new NBTTagInt(hpRegen));
 		info.set("physRes", new NBTTagFloat(physRes));
@@ -102,27 +104,12 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 		info.set("block", new NBTTagFloat(block));
 		info.set("dodge", new NBTTagFloat(dodge));
 		info.set("reflect", new NBTTagFloat(reflect));
-		item = setArmorInfo(getItem(), info);
+		item = setArmorInfo(item, info);
 	}
 
 	/*
 	Info Overrides
 	 */
-
-	@Override
-	public ItemStack build() {
-		store();
-		ItemStack item = ItemInfo.build(this);
-
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(String.join("", buildPrefix(), getName()));
-		meta.setLore(Util.union(buildLore(), getLore()));
-		item.setItemMeta(meta);
-
-		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
-
-		return item;
-	}
 
 	public String buildPrefix() {
 		return EquipmentInfo.buildPrefix(this);
@@ -143,6 +130,21 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 	}
 
 	@Override
+	public ItemStack build() {
+		store();
+		ItemStack item = ItemInfo.build(this);
+
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(String.join("", buildPrefix(), getName()));
+		meta.setLore(Util.union(buildLore(), getLore()));
+		item.setItemMeta(meta);
+
+		if (getEnchant() >= 4) item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+
+		return item;
+	}
+
+	@Override
 	public ItemStack getItem() {
 		return item;
 	}
@@ -150,6 +152,26 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 	@Override
 	public void setItem(ItemStack item) {
 		this.item = item;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = Util.colorCodes(name);
+	}
+
+	@Override
+	public List<String> getLore() {
+		return lore;
+	}
+
+	@Override
+	public void setLore(List<String> lore) {
+		this.lore = lore;
 	}
 
 	@Override
@@ -174,18 +196,18 @@ public class Armor implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	@Override
 	public int getMaxXp() {
-		return (int) Util.calcMaxXP(getLevel(), getTier().getLevel());
+		return (int) Util.calcMaxXP(getLevel(), getTier());
 	}
 
 	@Override
-	public Tier getTier() {
+	public int getTier() {
 		return tier;
 	}
 
 	@Override
-	public void setTier(Tier tier) {
+	public void setTier(int tier) {
 		this.tier = tier;
-		setMaxDura(tier.getArmorDura());
+		setMaxDura(Tier.fromTier(tier).getArmorDura());
 	}
 
 	@Override
