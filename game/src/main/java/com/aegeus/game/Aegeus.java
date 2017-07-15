@@ -58,6 +58,8 @@ public class Aegeus extends JavaPlugin {
 	public void onEnable() {
 		// Create the singleton!
 		instance = this;
+		WorldManager.getInstance().initialize();
+		WorldManager.getInstance().deleteDungeons();
 		// wooOOOOOOOOO, loading up!
 		getLogger().info("AEGEUS enabling...");
 		saveDefaultConfig();
@@ -73,7 +75,8 @@ public class Aegeus extends JavaPlugin {
         worldedit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
 		// Register plugin events
-		getLogger().info("Registering event listener...");
+		getLogger().info("Registering event listeners...");
+		getServer().getPluginManager().registerEvents(new MiscListener(this), this);
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 		getServer().getPluginManager().registerEvents(new CombatListener(this), this);
 		getServer().getPluginManager().registerEvents(new EnchantListener(this), this);
@@ -125,7 +128,7 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getLogger().info("AEGEUS disabled.");
+	    getLogger().info("AEGEUS disabled.");
 	}
 
 	public AgEntity get(Entity e) {

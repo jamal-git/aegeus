@@ -22,7 +22,7 @@ public class CommandParty implements CommandExecutor {
 			//Player wants to create a party.
 			//The conditions to create a party is that the player must not already be in a party.
 			if (agplayer.getParty() == null) {
-				agplayer.setParty(new Party(agplayer));
+				new Party(agplayer);
 				play.sendMessage(Util.colorCodes("&aYou created a party.  Use &l/p invite&r&a to invite players."));
 				return true;
 			} else {
@@ -115,6 +115,7 @@ public class CommandParty implements CommandExecutor {
 				play.sendMessage(Util.colorCodes("&cYou are currently not in a party!"));
 			} else {
 				//Leave the party. Bye
+                play.sendMessage(Util.colorCodes("&aYou have left the party."));
 				agplayer.getParty().remove(agplayer);
 			}
 		}

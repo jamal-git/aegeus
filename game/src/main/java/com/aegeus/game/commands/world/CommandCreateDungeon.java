@@ -1,10 +1,17 @@
 package com.aegeus.game.commands.world;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.WorldManager;
 import com.aegeus.game.dungeon.Dungeon;
+import com.aegeus.game.dungeon.DungeonManager;
+import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.social.Party;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
 import com.sk89q.worldedit.data.DataException;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,10 +39,18 @@ public class CommandCreateDungeon implements CommandExecutor {
             return false;
         }
         Player p = (Player) sender;
+        AgPlayer player = Aegeus.getInstance().getPlayer(p);
+        Party party = player.getParty();
+        if(party == null)   {
+            party = new Party(player);
+            player.setParty(party);
+        }
         p.sendMessage(Util.colorCodes("&7Generating dungeon..."));
         Aegeus.getInstance().getServer().getScheduler().runTaskAsynchronously(Aegeus.getInstance(), () -> {
             try {
-                Dungeon d = new Dungeon(p.getLocation(), args[0], Integer.valueOf(args[1]), p.getWorld(), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]));
+                World w = new WorldCreator("dungeon" + WorldManager.getInstance().getWorlds().size()).environment(World.Environment.NORMAL).generateStructures(false).type(WorldType.FLAT).generatorSettings("1;0").createWorld();
+                Dungeon d = DungeonManager.getInstance().registerDungeon(new Dungeon(player.getParty(), w.getSpawnLocation().add(0, 64, 0), args[0], Integer.valueOf(args[1]), w, Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])));
+                WorldManager.getInstance().addWorld(w);
             } catch (DungeonLoadingException e) {
                 e.printStackTrace();
             } catch (DataException e) {

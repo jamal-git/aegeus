@@ -17,7 +17,7 @@ public class Party {
 	}
 
 	public AgPlayer getLeader() {
-		return members.peek();
+		return members.peekFirst();
 	}
 
 	public void setLeader(AgPlayer p) {
@@ -50,19 +50,17 @@ public class Party {
 
 			if (p.getPlayer().isOnline())
 				p.getPlayer().sendMessage(Util.colorCodes("&aYou have left the party."));
-
-			for (AgPlayer m : members) {
-				GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
-				if (p.getPlayer().isOnline())
-					GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
-				m.getPlayer().sendMessage("&a&l" + p.getPlayer().getName() + "&a has left the party.");
-			}
-
-			if (members.size() >= 1) {
-				getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the party leader."));
-				members.stream().filter(m -> !m.equals(getLeader())).forEach(m -> m.getPlayer()
-						.sendMessage(Util.colorCodes("&a&l" + getLeader().getPlayer().getName() + "&a has been promoted to the party leader.")));
-			}
+            if(members.size() > 0) {
+                for (AgPlayer m : members) {
+                    GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
+                    if (p.getPlayer().isOnline())
+                        GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
+                    m.getPlayer().sendMessage("&a&l" + p.getPlayer().getName() + "&a has left the party.");
+                }
+                getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the party leader."));
+                members.stream().filter(m -> !m.equals(getLeader())).forEach(m -> m.getPlayer()
+                        .sendMessage(Util.colorCodes("&a&l" + getLeader().getPlayer().getName() + "&a has been promoted to the party leader.")));
+            }
 		}
 	}
 
@@ -70,12 +68,17 @@ public class Party {
 		return members.contains(p);
 	}
 
-	public void sendMessage(String message, AgPlayer sender) {
+	public void sendMessage(String message, AgPlayer sender, boolean isCustom) {
 		for (Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList())) {
 			if (!(sender != null && p.equals(sender.getPlayer())))
-				p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+				if(!isCustom)   p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+			    else p.sendMessage(Util.colorCodes(message));
 		}
 	}
+
+	public List<AgPlayer> getPlayers()  {
+	    return members;
+    }
 
 	public void update() {
 		members.stream().map(AgPlayer::getPlayer).forEach(this::update);
