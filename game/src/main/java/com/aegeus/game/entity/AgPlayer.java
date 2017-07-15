@@ -4,14 +4,10 @@ import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
 import com.aegeus.game.social.ChatChannel;
-import com.aegeus.game.social.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class AgPlayer extends AgLiving {
@@ -25,8 +21,6 @@ public class AgPlayer extends AgLiving {
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
-	private Party party = null;
-	private Party invitedParty = null;
 //	private Mount mount = null;
 //	private Story story = new Story(this);
 //	private BankListener bank = new BankListener(this);
@@ -95,6 +89,10 @@ public class AgPlayer extends AgLiving {
 //		}
 //	}
 
+    public void sendMessage(String message) {
+	    getPlayer().sendMessage(message);
+    }
+
 	public int getLevel() {
 		return level;
 	}
@@ -149,25 +147,5 @@ public class AgPlayer extends AgLiving {
 
 	public void setChatChannel(ChatChannel chatChannel) {
 		this.chatChannel = chatChannel;
-	}
-
-	public Party getParty() {
-		return party;
-	}
-
-	public void setParty(Party p) {
-		party = p;
-	}
-
-	public List<AgPlayer> getPartyMembers() {
-		return getParty() != null ? getParty().getMembers() : new ArrayList<>(Arrays.asList(this));
-	}
-
-	public Party getInvitedParty() {
-		return invitedParty;
-	}
-
-	public void setInvitedParty(Party invitedParty) {
-		this.invitedParty = invitedParty;
 	}
 }

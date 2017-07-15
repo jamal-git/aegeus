@@ -1,9 +1,13 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.social.Party;
 import com.aegeus.game.stats.StatsSkeleton;
 import com.aegeus.game.stats.StatsT3;
+import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
+import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
@@ -17,11 +21,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,11 +43,9 @@ public class Dungeon {
     private transient EditSession editSession;
 
     String[][] layout;
-    private int size = 7;
-    private transient int distance = 5;
-    private transient int segments = 10;
     private transient int segmentSize = 5;
     private transient Location origin;
+    private Party party = null;
 
     private World world;
     private File directory;
@@ -57,21 +58,19 @@ public class Dungeon {
     private List<CuboidClipboard> keys = new ArrayList<>();
     private List<CuboidClipboard> exits = new ArrayList<>();
 
-    public Dungeon(Location l, String directory, int distance, World w, int size, int segments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
-        origin = l;
-        this.distance = distance;
-        world = w;
-        this.size = size;
-        this.segments = segments;
-        this.segmentSize = segmentSize;
-        editSession = new EditSession(new BukkitWorld(world), worldedit.getLocalConfiguration().maxChangeLimit);
+    public Dungeon(Party p, Location l, String directory, int startExitDistance, World w, int arraySize, int numberOfSegments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
+        setOrigin(l);
+        setParty(p);
+        setWorld(w);
+        this.setSegmentSize(segmentSize);
+        editSession = new EditSession(new BukkitWorld(getWorld()), worldedit.getLocalConfiguration().maxChangeLimit);
         File temp = new File(parent.getDataFolder() + "/dungeons/zips/" + directory + ".zip");
         if(!temp.exists() || temp.isDirectory())   {
             throw new DungeonLoadingException("The dungeon selected does not exist or has been corrupted.");
         }
         else if(!new File(parent.getDataFolder() + "/dungeons/" + directory).exists())    {
             parent.getLogger().info("Unzipping dungeon...");
-            this.directory = temp;
+            this.setDirectory(temp);
             //noinspection ResultOfMethodCallIgnored
             new File(parent.getDataFolder() + "/dungeons/" + directory + "/").mkdir();
             try(ZipFile zipfile = new ZipFile(temp))    {
@@ -138,11 +137,11 @@ public class Dungeon {
                 }
         }
         parent.getLogger().info("Finished importing schematics, generating dungeon layout...");
-        dfs();
+        layout = new DungeonGenerator().withArraySize(arraySize).withNumberOfSegments(numberOfSegments).withStartExitDistance(startExitDistance).generateMaze();
         printArray(layout);
         parent.getServer().getScheduler().runTask(parent, () -> {
             try {
-                build(origin);
+                build(getOrigin());
             } catch (DungeonLoadingException | MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
@@ -151,8 +150,13 @@ public class Dungeon {
 
     public void build(Location l) throws DungeonLoadingException, MaxChangedBlocksException {
         for (int i = 0; i < layout.length; i++) {
-            for (int j = 0; j < layout[i].length; j++) {
-                if(!layout[i][j].equalsIgnoreCase("00")) {
+            for (int j = 0; j < layout.length; j++) {
+                world.loadChunk(l.getBlockX() + 16 * i, l.getBlockZ() + 16 * j, true);
+            }
+        }
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++)  {
+                if(!layout[i][j].equalsIgnoreCase("00"))    {
                     CuboidClipboard clipboard;
                     Direction direction = null;
                     char character = layout[i][j].charAt(0);
@@ -190,87 +194,39 @@ public class Dungeon {
 						default:
                             throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
                     }
-                    Vector spot = new Vector(l.getBlockX() + segmentSize * j, l.getBlockY(), l.getBlockZ() + segmentSize * i);
+                    Vector spot = new Vector(l.getBlockX() + getSegmentSize() * j, l.getBlockY(), l.getBlockZ() + getSegmentSize() * i);
                     clipboard.rotate2D(direction.getRotateValue());
                     clipboard.paste(editSession, spot, false);
                     clipboard.rotate2D(360 - direction.getRotateValue());
-					for (int x = spot.getBlockX() - 2; x < spot.getX() + 2; x++)
-						for (int y = spot.getBlockY() - 2; y < spot.getY() + 2; y++)
-							for (int z = spot.getBlockZ() - 2; z < spot.getZ() + 2; z++) {
+                    if(layout[i][j].charAt(1) == 'S')    {
+                        for (int x = spot.getBlockX() - getSegmentSize() / 2; x < spot.getX() + getSegmentSize() / 2; x++)
+                            for (int y = spot.getBlockY() - getSegmentSize() / 2; y < spot.getY() + getSegmentSize() / 2; y++)
+                                for (int z = spot.getBlockZ() - getSegmentSize() /2; z < spot.getZ() + getSegmentSize() / 2; z++) {
+                                    Block b = getWorld().getBlockAt(x, y, z);
+                                    Block b2 = getWorld().getBlockAt(x, y - 1, z);
+                                    Block b3 = getWorld().getBlockAt(x, y - 2, z);
+                                    if(b != null && b.getType() == Material.EMERALD_BLOCK &&
+                                            b2 != null && b2.getType() == Material.GLOWSTONE &&
+                                            b3 != null && b3.getType() == Material.EMERALD_BLOCK)
+                                        world.setSpawnLocation(x, y + 1, z);
+                                }
+                    }
+					for (int x = spot.getBlockX() - getSegmentSize() / 2; x < spot.getX() + getSegmentSize() / 2; x++)
+						for (int y = spot.getBlockY() - getSegmentSize() / 2; y < spot.getY() + getSegmentSize() / 2; y++)
+							for (int z = spot.getBlockZ() - getSegmentSize() /2; z < spot.getZ() + getSegmentSize() / 2; z++) {
 								Block b = l.getWorld().getBlockAt(x, y, z);
-								if (b != null && b.getType().equals(Material.PUMPKIN)) {
-									new StatsSkeleton(new StatsT3()).spawn(new Location(l.getWorld(), x, y, z));
+								if (b != null && b.getType() == Material.PUMPKIN) {
+									new StatsSkeleton(new StatsT3()).spawn(new Location(world, x, y, z));
 									b.setType(Material.AIR);
 								}
 							}
 				}
             }
         }
-
-    }
-
-    public void dfs()    {
-        String[][] maze = new String[size][size];
-        do {
-            for (int i = 0; i < maze.length; i++) {
-                for (int i1 = 0; i1 < maze[i].length; i1++) {
-                    maze[i][i1] = "0";
-                }
-            }
-            int sx = 0, sy = 0, ex = 0, ey = 0;
-            boolean solution = false;
-            for (int i = 0; i < 100; i++) {
-                if(Point2D.distance(sx = random.nextInt(size), sy = random.nextInt(size), ex = random.nextInt(size), ey = random.nextInt(size)) >= distance && sx != ex && sy != ey)    {
-                    solution = true;
-                    break;
-                }
-            }
-            if(solution) {
-                maze[sx][sy] = "S";
-                maze[ex][ey] = "E";
-                dfsrecursive(sx, sy, maze);
-                maze[sx][sy] = "S";
-            }
-        } while(!validateAndMap(maze));
-        parent.getLogger().info("SUCCESSFULLY CREATED DUNGEON!");
-    }
-
-    private boolean dfsrecursive(int x, int y, String[][] maze)   {
-        if(x < 0 || y < 0 || x > (size - 1) || y > (size - 1))    return false;
-        if(maze[x][y].equalsIgnoreCase("E")) return true;
-        if(maze[x][y].equalsIgnoreCase("P")) return false;
-        maze[x][y] = "P";
-        if((x < (size - 1) && maze[x + 1][y].equalsIgnoreCase("E")) || (x > 0 && maze[x - 1][y].equalsIgnoreCase("E"))
-                || (y < (size - 1) && maze[x][y + 1].equalsIgnoreCase("E")) || (y > 0 && maze[x][y - 1].equalsIgnoreCase("E"))) {
-            return true;
+        getParty().getLeader().getPlayer().sendMessage(Util.colorCodes("&7Dungeon has finished loading, teleporting in..."));
+        for(AgPlayer p : getParty().getPlayers())    {
+            p.getPlayer().teleport(getWorld().getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
-        if(nearby(x, y, maze) > 1) {
-            maze[x][y] = "0";
-            return false;
-        }
-        boolean pathFound = false;
-        switch(random.nextInt(4))    {
-            case 0:
-                pathFound = dfsrecursive(x + 1, y, maze) || dfsrecursive(x - 1, y, maze) || dfsrecursive(x, y + 1, maze) || dfsrecursive(x, y - 1, maze);
-                break;
-            case 1:
-                pathFound = dfsrecursive(x - 1, y, maze) || dfsrecursive(x, y + 1, maze) || dfsrecursive(x, y - 1, maze) || dfsrecursive(x + 1, y, maze);
-                break;
-            case 2:
-                pathFound = dfsrecursive(x, y + 1, maze) || dfsrecursive(x, y - 1, maze) || dfsrecursive(x + 1, y, maze) || dfsrecursive(x - 1, y, maze);
-                break;
-            case 3:
-                pathFound = dfsrecursive(x, y - 1, maze) || dfsrecursive(x + 1, y, maze) || dfsrecursive(x - 1, y, maze) || dfsrecursive(x, y + 1, maze);
-                break;
-            default:
-                break;
-        }
-        if(pathFound)    {
-            maze[x][y] = "P";
-            return true;
-        }
-        maze[x][y] = "0";
-        return false;
     }
 
 //    private void bfs()    {
@@ -330,177 +286,50 @@ public class Dungeon {
 //        return;
 //    }
 
-    private boolean isValid(String[][] maze)    {
-        int count = 0;
-        for(String[] arr : maze)
-            for(String s : arr)
-                if(s.equalsIgnoreCase("P")) count++;
-        if(count != segments) return false;
-        for (int i = 0; i < maze.length; i++)
-            for (int j = 0; j < maze[i].length; j++)
-                if(nearby(i,j, maze) > 2) return false;
-        return true;
-    }
-
-    private boolean validateAndMap(String[][] maze)    {
-        if(!isValid(maze)) return false;
-        String[][] map = new String[size][size];
-        int keysToPlace = (int) Math.ceil(segments / 5.0);
-        while(keysToPlace != 0) {
-            int x,y;
-            //noinspection ControlFlowStatementWithoutBraces
-            boolean success = false;
-            for (int i = 0; i < 100; i++) {
-                if(maze[x = random.nextInt(size)][y = random.nextInt(size)].equalsIgnoreCase("0") && nearby(x, y, maze) == 1 && notNearbyStartOrExitOrKey(x, y, maze))  {
-                    success = true;
-                    maze[x][y] = "K";
-                    break;
-                }
-            }
-            if(!success) return false;
-            keysToPlace--;
-        }
-        for (int i = 0; i < maze.length; i++)
-            map[i] = Arrays.copyOf(maze[i], maze[i].length);
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
-                if(maze[i][j].equalsIgnoreCase("P"))    {
-                    int surround = nearby(i, j, maze);
-                    int count = getDirectionalCount(i, j, maze);
-                    if(surround == 2) {
-                        if(count == 4)
-                            map[i][j] = "SI"; //UP DOWN STRAIGHT
-                        else if(count == 8)
-                            map[i][j] = "EI"; //LEFT RIGHT STRAIGHT
-                        else if(count == 7)
-                            map[i][j] = "ST"; //SOUTH EAST TURN
-                        else if(count == 9)
-                            map[i][j] = "ET"; //NORTH EAST TURN
-                        else if(count == 5)
-                            map[i][j] = "NT"; //NORTH WEST TURN
-                        else if(count == 3)
-                            map[i][j] = "WT"; //SOUTH WEST TURN
-                    }
-                    if(surround == 3)   {
-                        if(count == 9)
-                            map[i][j] = "SJ"; //WEST SOUTH EAST JUNCTION
-                        if(count == 10)
-                            map[i][j] = "EJ"; //SOUTH EAST NORTH JUNCTION
-                        if(count == 11)
-                            map[i][j] = "NJ"; //EAST NORTH WEST JUNCTION
-                        if(count == 6)
-                            map[i][j] = "WJ"; //NORTH WEST SOUTH JUNCTION
-                    }
-                    if(surround == 4)   {
-                        map[i][j] = "SQ"; //4-WAY QUAD JUNCTION
-                    }
-                }
-                else if(maze[i][j].matches("[KkSsEe]")) {
-                    String s = maze[i][j];
-                    switch(getDirectionalCount(i, j, maze)) {
-                        case 1:
-                            if(s.matches("[Kk]")) //SOUTH
-                                map[i][j] = "SK";
-                            else if(s.matches("[Ss]"))
-                                map[i][j] = "SS";
-                            else map[i][j] = "SE";
-                            break;
-                        case 3:
-                            if(s.matches("[Kk]")) //NORTH
-                                map[i][j] = "NK";
-                            else if(s.matches("[Ss]"))
-                                map[i][j] = "NS";
-                            else map[i][j] = "NE";
-                            break;
-                        case 2:
-                            if(s.matches("[Kk]")) //WEST
-                                map[i][j] = "WK";
-                            else if(s.matches("[Ss]"))
-                                map[i][j] = "WS";
-                            else map[i][j] = "WE";
-                            break;
-                        case 6:
-                            if(s.matches("[Kk]")) //EAST
-                                map[i][j] = "EK";
-                            else if(s.matches("[Ss]"))
-                                map[i][j] = "ES";
-                            else map[i][j] = "EE";
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else map[i][j] = "00";
-            }
-        }
-        layout = map;
-        return true;
-    }
-
-    private String getDirection(int x, int y, String[][] maze, Direction d)   {
-        if(d == Direction.NORTH && x > 0) return maze[x - 1][y];
-        if(d == Direction.SOUTH && x < (size - 1)) return maze[x + 1][y];
-        if(d == Direction.EAST && y < (size - 1)) return maze[x][y + 1];
-        if(d == Direction.WEST && y > 0) return maze[x][y - 1];
-        return "";
-    }
-
-
-    private int getDirectionalCount(int x, int y, String[][] maze)   {
-        int count = 0;
-        if(x < (size - 1) && maze[x + 1][y].matches("[PpKkSsEe]")) count += 1; //SOUTH
-        if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count += 3; //NORTH
-        if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count += 2; //WEST
-        if(y < (size - 1) && maze[x][y + 1].matches("[PpKkSsEe]")) count += 6; //EAST
-        return count;
-    }
-
-    private int nearby(int x, int y, String[][] maze)  {
-        int count = 0;
-        if(x > 0 && maze[x - 1][y].matches("[PpKkSsEe]")) count++;
-        if(x < (size - 1) && maze[x + 1][y].matches("[PpKkSsEe]")) count++;
-        if(y > 0 && maze[x][y - 1].matches("[PpKkSsEe]")) count++;
-        if(y < (size - 1) && maze[x][y + 1].matches("[PpKkSsEe]")) count++;
-        return count;
-    }
-
-    public boolean notNearbyStartOrExitOrKey(int x, int y, String[][] maze)  {
-        return !(getDirection(x, y, maze, Direction.SOUTH).matches("[SsEeKk]") || getDirection(x, y, maze, Direction.EAST).matches("[SsEeKk]") ||
-                getDirection(x, y, maze, Direction.WEST).matches("[SsEeKk]") || getDirection(x, y, maze, Direction.NORTH).matches("[SsEeKk]"));
-    }
-
     private void printArray(String[][] array)   {
         for(String[] a : array)  {
             parent.getLogger().info(String.join(" ", a));
         }
     }
 
-    private enum Direction  {
-        NORTH(1, 'N', 180),
-        SOUTH(1, 'S', 0),
-        WEST(2, 'W', 90),
-        EAST(2, 'E', 270);
+    public int getSegmentSize() {
+        return segmentSize;
+    }
 
-        private int direction;
-        private char c;
-        private int rotateValue;
-        Direction(int value, char c, int rotateValue)  {
-            this.direction = value;
-            this.c = c;
-            this.rotateValue = rotateValue;
-        }
+    private void setSegmentSize(int segmentSize) {
+        this.segmentSize = segmentSize;
+    }
 
-        public int getDirection() {
-            return direction;
-        }
+    public Location getOrigin() {
+        return origin;
+    }
 
-        public char getChar()   {
-            return c;
-        }
+    private void setOrigin(Location origin) {
+        this.origin = origin;
+    }
 
-        public int getRotateValue() {
-            return rotateValue;
-        }
+    public Party getParty() {
+        return party;
+    }
+
+    private void setParty(Party party) {
+        this.party = party;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public File getDirectory() {
+        return directory;
+    }
+
+    private void setDirectory(File directory) {
+        this.directory = directory;
     }
 
 	private class Node {

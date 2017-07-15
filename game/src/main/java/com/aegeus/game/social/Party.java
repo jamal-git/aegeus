@@ -21,28 +21,28 @@ public class Party {
 	}
 
 	public AgPlayer getLeader() {
-		return members.peek();
+		return members.peekFirst();
 	}
 
 	public void setLeader(AgPlayer p) {
+	    if(getLeader().equals(p))   {
+	        p.sendMessage(Util.colorCodes("&cYou already are the party leader!"));
+        }
 		if (members.contains(p)) {
 			AgPlayer leader = getLeader();
 			members.remove(leader);
 			members.addFirst(p);
 			members.add(leader);
 
-			leader.getPlayer().sendMessage(Util.colorCodes("&aYou have promoted &l" + p.getPlayer().getName() + "&a to the party leader."));
-			p.getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the party leader."));
-
-			members.stream().filter(m -> !m.equals(leader)).forEach(m -> m.getPlayer()
-					.sendMessage(Util.colorCodes("&a&l" + p.getPlayer().getName() + "&a has been promoted to the party leader.")));
+			leader.getPlayer().sendMessage(Util.colorCodes("&aYou have promoted &f&l" + p.getPlayer().getName() + "&r&a as the party leader."));
+			p.getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the &lPARTY LEADER&r&a."));
+            sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getDisplayName() + "&r&a has been promoted to party leader."), getLeader(), true);
 		}
 	}
 
 	public void add(AgPlayer p) {
 		if (!members.contains(p)) {
 			members.add(p);
-			p.setParty(this);
 			update();
 		}
 	}
@@ -50,23 +50,17 @@ public class Party {
 	public void remove(AgPlayer p) {
 		if (members.contains(p)) {
 			members.remove(p);
-			p.setParty(null);
-
-			if (p.getPlayer().isOnline())
-				p.getPlayer().sendMessage(Util.colorCodes("&aYou have left the party."));
-
-			for (AgPlayer m : members) {
-				GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
-				if (p.getPlayer().isOnline())
-					GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
-				m.getPlayer().sendMessage("&a&l" + p.getPlayer().getName() + "&a has left the party.");
-			}
-
-			if (members.size() >= 1) {
-				getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the party leader."));
-				members.stream().filter(m -> !m.equals(getLeader())).forEach(m -> m.getPlayer()
-						.sendMessage(Util.colorCodes("&a&l" + getLeader().getPlayer().getName() + "&a has been promoted to the party leader.")));
-			}
+            p.getPlayer().sendMessage(Util.colorCodes("&aYou have left the party."));
+            if(members.size() > 0) {
+                for (AgPlayer m : members) {
+                    GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
+                    if (p.getPlayer().isOnline())
+                        GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
+                    m.getPlayer().sendMessage("&f&l" + p.getPlayer().getName() + "&a has left the party.");
+                }
+                getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou are now the party leader."));
+                sendMessage(Util.colorCodes("&f&l" + getLeader().getPlayer().getDisplayName() + "&r&a is now the leader."), getLeader(), true);
+            }
 		}
 	}
 
@@ -74,16 +68,26 @@ public class Party {
 		return members.contains(p);
 	}
 
-	public void sendMessage(String message, AgPlayer sender) {
+	public void sendMessage(String message, AgPlayer sender, boolean isCustom) {
 		for (Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList())) {
 			if (!(sender != null && p.equals(sender.getPlayer())))
-				p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+				if(!isCustom)   p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+			    else p.sendMessage(Util.colorCodes(message));
 		}
 	}
+
+	public List<AgPlayer> getPlayers()  {
+	    return members;
+    }
+
+    public boolean isFull() {
+	    return members.size() >= 4;
+    }
 
 	public void update() {
 		members.stream().map(AgPlayer::getPlayer).forEach(this::update);
 	}
+
 
 	public void update(Player p) {
 		List<Player> list = members.stream().map(AgPlayer::getPlayer)

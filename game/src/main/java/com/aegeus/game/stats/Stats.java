@@ -403,7 +403,6 @@ public abstract class Stats {
 
 	public LivingEntity spawn(Location location, Spawner origin) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
-
 		if (entity.getType().equals(EntityType.ZOMBIE)) {
 			((Zombie) entity).setBaby(false);
 			((Zombie) entity).setVillagerProfession(null);
