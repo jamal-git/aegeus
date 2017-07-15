@@ -59,7 +59,6 @@ public class Aegeus extends JavaPlugin {
 		// Create the singleton!
 		instance = this;
 		WorldManager.getInstance().initialize();
-		WorldManager.getInstance().deleteDungeons();
 		// wooOOOOOOOOO, loading up!
 		getLogger().info("AEGEUS enabling...");
 		saveDefaultConfig();
@@ -128,6 +127,7 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+        WorldManager.getInstance().deleteDungeons();
 	    getLogger().info("AEGEUS disabled.");
 	}
 
