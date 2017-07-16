@@ -42,6 +42,7 @@ public class CombatListener implements Listener {
 
 	@EventHandler
 	private void onDeath(EntityDeathEvent e) {
+	    e.getDrops().clear();
 		LivingEntity entity = e.getEntity();
 		AgLiving info = parent.getLiving(entity);
 
