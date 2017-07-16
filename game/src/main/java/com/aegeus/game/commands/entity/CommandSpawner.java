@@ -122,13 +122,27 @@ public class CommandSpawner implements CommandExecutor {
 		}
 		else if(args[0].equalsIgnoreCase("select") && args.length == 2) {
 		    if(args[1].equalsIgnoreCase("here"))    {
+		        Location target = player.getLocation().getBlock().getLocation();
 		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
-		            if(s.getLocation().equals(player.getLocation().getBlock().getLocation()))   {
+		            if(s.getLocation().equals(target))   {
 		                agPlayer.setEditSpawner(s);
-
+                        agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
                     }
                 }
             }
+            else if(args[1].equalsIgnoreCase("target")) {
+		        Location target = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 100).getLocation();
+		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
+		            if(s.getLocation().equals(target))  {
+		                agPlayer.setEditSpawner(s);
+		                agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
+                    }
+                }
+            }
+        }
+        else if(args[0].equalsIgnoreCase("deselect") && args.length == 1)   {
+		    agPlayer.setEditSpawner(null);
+		    agPlayer.sendMessage(Util.colorCodes("&7Deselected current spawner."));
         }
 		return false;
 	}

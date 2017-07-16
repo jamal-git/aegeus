@@ -21,7 +21,7 @@ public class Party {
 	}
 
 	public AgPlayer getLeader() {
-		return members.peekFirst();
+		return members.peek();
 	}
 
 	public void setLeader(AgPlayer p) {
