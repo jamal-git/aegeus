@@ -28,10 +28,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * AEGEUS Game
@@ -220,6 +217,14 @@ public class Aegeus extends JavaPlugin {
 
 	public List<Spawner> getSpawners() {
 		return spawners;
+	}
+
+	public Map<Entity, AgEntity> getEntityMap() {
+		return entities;
+	}
+
+	public Collection<AgEntity> getEntities() {
+		return entities.values();
 	}
 
 	public Map<Location, Material> getOres() {

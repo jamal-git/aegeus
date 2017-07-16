@@ -2,26 +2,24 @@ package com.aegeus.game.item.info;
 
 import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.item.Tier;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public interface EquipmentInfo extends ItemInfo {
 	static <T extends EquipmentInfo> void impo(T t) {
 		NBTTagCompound info = getEquipmentInfo(t.getItem());
-		t.setTier((info.hasKey("tier")) ? Tier.fromTier(info.getInt("tier")) : null);
+		t.setTier((info.hasKey("tier")) ? info.getInt("tier") : 0);
 		t.setRarity((info.hasKey("rarity")) ? Rarity.fromID(info.getInt("rarity")) : null);
 		t.setEnchant((info.hasKey("enchant")) ? info.getInt("enchant") : 0);
 	}
 
 	static <T extends EquipmentInfo> void store(T t) {
 		NBTTagCompound info = getEquipmentInfo(t.getItem());
-		info.setInt("tier", t.getTier() == null ? -1 : Arrays.asList(Tier.values()).indexOf(t.getTier()));
+		info.setInt("tier", t.getTier());
 		info.setInt("rarity", t.getRarity() == null ? -1 : t.getRarity().getId());
 		info.setInt("enchant", t.getEnchant());
 		t.setItem(setEquipmentInfo(t.getItem(), info));
@@ -54,9 +52,9 @@ public interface EquipmentInfo extends ItemInfo {
 		return ItemUtils.setTag(item, tag);
 	}
 
-	Tier getTier();
+	int getTier();
 
-	void setTier(Tier tier);
+	void setTier(int tier);
 
 	Rarity getRarity();
 

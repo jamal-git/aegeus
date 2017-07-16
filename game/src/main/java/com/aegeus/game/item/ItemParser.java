@@ -4,6 +4,7 @@ import com.aegeus.game.item.info.*;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.item.tool.Weapon;
+import com.aegeus.game.util.Util;
 import org.bukkit.Material;
 
 public class ItemParser {
@@ -17,7 +18,7 @@ public class ItemParser {
 				if (key.equalsIgnoreCase("material"))
 					info.setMaterial(Material.getMaterial(value));
 				else if (key.equalsIgnoreCase("name"))
-					info.setName(value.replace("_", " "));
+					info.setName(Util.colorCodes(value.replace("_", " ")));
 				else if (key.equalsIgnoreCase("lore")) {
 					for (String line : value.split("||"))
 						info.addLore(line.replace("_", " "));
@@ -37,7 +38,7 @@ public class ItemParser {
 				String value = pair[1];
 
 				if (key.equalsIgnoreCase("tier"))
-					info.setTier(Tier.fromTier(Integer.parseInt(value)));
+					info.setTier(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("rarity"))
 					info.setRarity(Rarity.fromName(value));
 				else if (key.equalsIgnoreCase("enchant"))

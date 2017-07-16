@@ -28,7 +28,7 @@ public abstract class Stats {
 	private final Stats parent;
 
 	private float chance = 1;
-	private Tier tier = null;
+	private int tier = 0;
 	private int forcedHp = -1;
 	private float hpMultiplier = 1;
 	private float dmgMultiplier = 1;
@@ -140,11 +140,11 @@ public abstract class Stats {
 		this.chance = chance;
 	}
 
-	public Tier getTier() {
+	public int getTier() {
 		return tier;
 	}
 
-	public void setTier(Tier tier) {
+	public void setTier(int tier) {
 		this.tier = tier;
 	}
 
@@ -409,7 +409,7 @@ public abstract class Stats {
 		}
 
 		AgMonster info = Aegeus.getInstance().getMonster(entity);
-		info.setName(Util.colorCodes(getName()));
+		info.setName(Tier.fromTier(tier).getColor() + Util.colorCodes(getName()));
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
 

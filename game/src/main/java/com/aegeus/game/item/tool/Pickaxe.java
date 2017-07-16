@@ -10,6 +10,7 @@ import net.minecraft.server.v1_9_R1.NBTTagFloat;
 import net.minecraft.server.v1_9_R1.NBTTagInt;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +23,8 @@ public class Pickaxe implements ProfessionInfo {
 	private static final Random r = new Random();
 
 	private ItemStack item;
+	private String name;
+	private List<String> lore = new ArrayList<>();
 
 	private int level;
 	private int xp;
@@ -279,6 +282,26 @@ public class Pickaxe implements ProfessionInfo {
 	@Override
 	public void setItem(ItemStack item) {
 		this.item = item;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = Util.colorCodes(name);
+	}
+
+	@Override
+	public List<String> getLore() {
+		return lore;
+	}
+
+	@Override
+	public void setLore(List<String> lore) {
+		this.lore = lore;
 	}
 
 	public float getMiningSuccess() {
