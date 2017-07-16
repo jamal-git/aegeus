@@ -176,13 +176,12 @@ public class CombatListener implements Listener {
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
 
-				if (damaged.equals(lVictim)) {
-					float multiply = 0.04f;
+				if (damaged.equals(lVictim) && cInfo.getKnockback() > 0) {
+					Vector vec = lAttacker.getLocation().getDirection().multiply(cInfo.getKnockback());
 					if (((damaged instanceof Player && !((Player) damaged).isSneaking())
 							|| !(victim instanceof Player)) && damaged.isOnGround())
-						multiply += 0.17;
-					Vector vec = lAttacker.getLocation().getDirection().multiply(multiply);
-					damaged.setVelocity(vec.setY(vec.getY() + 0.08));
+						vec.setY(damaged.getVelocity().getY() + 0.2);
+					damaged.setVelocity(vec);
 				}
 			}
 		}

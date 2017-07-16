@@ -105,7 +105,7 @@ public class CombatManager {
 				victim.sendMessage(Util.colorCodes("            &e&l*** REFLECTED&e!&l ***"));
 		} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
 			cInfo.setPhysDmg(0);
-			cInfo.setMagDmg(0);
+			cInfo.setKnockback(0);
 
 			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
 			//		40, 0.25, 0.8, 0.25, 0.15, new MaterialData(Material.STONE));
@@ -117,6 +117,7 @@ public class CombatManager {
 				victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
 		} else if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
 			cInfo.setPhysDmg(0);
+			cInfo.setMagDmg(0);
 
 			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
 			//		40, 0.25, 0.8, 0.25, 0.1, new MaterialData(Material.BEDROCK));

@@ -2,6 +2,8 @@ package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.item.Items;
+import com.aegeus.game.item.tool.Enchant;
 import com.aegeus.game.social.Party;
 import com.aegeus.game.stats.StatsSkeleton;
 import com.aegeus.game.stats.StatsT3;
@@ -21,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.io.*;
@@ -210,7 +213,41 @@ public class Dungeon {
                                             b3 != null && b3.getType() == Material.EMERALD_BLOCK)
                                         world.setSpawnLocation(x, y + 1, z);
                                 }
-                    }
+                    } else if (layout[i][j].charAt(1) == 'K') {
+						for (int x = spot.getBlockX() - getSegmentSize() / 2; x < spot.getX() + getSegmentSize() / 2; x++)
+							for (int y = spot.getBlockY() - getSegmentSize() / 2; y < spot.getY() + getSegmentSize() / 2; y++)
+								for (int z = spot.getBlockZ() - getSegmentSize() /2; z < spot.getZ() + getSegmentSize() / 2; z++) {
+									Block b = getWorld().getBlockAt(x, y, z);
+									if (b != null && b.getType() == Material.CHEST) {
+										if (random.nextFloat() <= 0.4) {
+											int item = random.nextInt(5);
+											if (item == 0)
+												((Chest) b).getInventory().addItem(new StatsT3().getHelmet().get(
+														Util.rarity(random.nextFloat())).build());
+											else if (item == 1)
+												((Chest) b).getInventory().addItem(new StatsT3().getChestplate().get(
+														Util.rarity(random.nextFloat())).build());
+											else if (item == 2)
+												((Chest) b).getInventory().addItem(new StatsT3().getLeggings().get(
+														Util.rarity(random.nextFloat())).build());
+											else if (item == 3)
+												((Chest) b).getInventory().addItem(new StatsT3().getBoots().get(
+														Util.rarity(random.nextFloat())).build());
+											else if (item == 4)
+												((Chest) b).getInventory().addItem(new StatsT3().getWeapon().get(
+														Util.rarity(random.nextFloat())).build());
+										}
+
+										if (random.nextFloat() <= 0.2) {
+											((Chest) b).getInventory().addItem(new Enchant(3, random.nextInt(2)).build());
+										}
+
+										if (random.nextFloat() <= 0.7) {
+											((Chest) b).getInventory().addItem(Items.getGold(random.nextInt(1, 120)));
+										}
+									}
+								}
+					}
 					for (int x = spot.getBlockX() - getSegmentSize() / 2; x < spot.getX() + getSegmentSize() / 2; x++)
 						for (int y = spot.getBlockY() - getSegmentSize() / 2; y < spot.getY() + getSegmentSize() / 2; y++)
 							for (int z = spot.getBlockZ() - getSegmentSize() /2; z < spot.getZ() + getSegmentSize() / 2; z++) {

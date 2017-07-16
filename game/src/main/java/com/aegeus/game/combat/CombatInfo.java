@@ -15,6 +15,7 @@ public class CombatInfo {
 	private double physDmg = 0;
 	private double magDmg = 0;
 	private double healing = 0;
+	private double knockback = 0.04;
 
 	private List<Runnable> effects = new ArrayList<>();
 	private List<CombatSound> sounds = new ArrayList<>();
@@ -83,6 +84,14 @@ public class CombatInfo {
 
 	public void addHealing(double d) {
 		setHealing(getHealing() + d);
+	}
+
+	public double getKnockback() {
+		return knockback;
+	}
+
+	public void setKnockback(double knockback) {
+		this.knockback = knockback;
 	}
 
 	public List<Runnable> getEffects() {
