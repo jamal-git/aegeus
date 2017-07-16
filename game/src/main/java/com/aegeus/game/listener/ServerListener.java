@@ -6,6 +6,8 @@ import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
+import com.aegeus.game.social.Party;
+import com.aegeus.game.social.PartyManager;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
