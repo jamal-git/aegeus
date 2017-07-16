@@ -45,7 +45,6 @@ public class MiningListener implements Listener {
 				Location l = b.getLocation();
 				pick.impo();
 				Ore o = Ore.getOreByMaterial(b.getType());
-				if (o != null) p.playSound(p.getLocation(), Sound.BLOCK_STONE_BREAK, 0.7f, 1.0f);
 				if (o != null && parent.getOres().containsKey(new Location(l.getWorld(), l.getX(), l.getY(), l.getZ())) && o.isMinable(pick)) {
 					//Mined block is a registered ore and was mined with a pick, give do stuff.
 					b.setType(Material.STONE);

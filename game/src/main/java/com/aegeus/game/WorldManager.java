@@ -1,5 +1,6 @@
 package com.aegeus.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.File;
@@ -41,13 +42,17 @@ public class WorldManager {
      */
     public boolean removeWorld(File path) {
         File[] files = path.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if(files[i].isDirectory()) removeWorld(files[i]);
-            else files[i].delete();
+        for (File file : files) {
+            if (file.isDirectory()) removeWorld(file);
+            else file.delete();
         }
         return path.delete();
     }
 
+    public void removeWorld(World w)    {
+        Bukkit.unloadWorld(w, true);
+        removeWorld(w.getWorldFolder());
+    }
     public void deleteDungeons()    {
         List<World> deleted = new ArrayList<>();
         for(World w : worlds)   {
