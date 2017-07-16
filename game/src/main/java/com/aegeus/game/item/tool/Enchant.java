@@ -67,6 +67,7 @@ public class Enchant implements ItemInfo {
 
 		NBTTagCompound info = getEnchantInfo(item);
 		info.setInt("tier", tier);
+		info.setInt("type", type);
 		item = setEnchantInfo(item, info);
 	}
 
