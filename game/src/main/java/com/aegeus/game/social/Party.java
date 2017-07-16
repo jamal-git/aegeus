@@ -14,7 +14,7 @@ public class Party {
 
 	public Party(AgPlayer p) {
 		add(p);
-	}
+    }
 
 	public LinkedList<AgPlayer> getMembers() {
 		return members;
@@ -74,10 +74,6 @@ public class Party {
 			    else p.sendMessage(Util.colorCodes(message));
 		}
 	}
-
-	public List<AgPlayer> getPlayers()  {
-	    return members;
-    }
 
     public boolean isFull() {
 	    return members.size() >= 4;

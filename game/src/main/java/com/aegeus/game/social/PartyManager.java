@@ -4,23 +4,25 @@ import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Silvre on 7/15/2017.
  */
 public class PartyManager {
     private static PartyManager instance;
-    private ArrayList<Party> parties = new ArrayList<>();
+    private List<Party> parties = Collections.synchronizedList(new ArrayList<>());
     private HashMap<AgPlayer, Party> invites = new HashMap<>();
     public PartyManager()   {
         //lol singleton xd
     }
     public static PartyManager getInstance() {
-        return instance != null ? instance : new PartyManager();
+        return instance != null ? instance : (instance = new PartyManager());
     }
 
-    public ArrayList<Party> getParties() {
+    public List<Party> getParties() {
         return parties;
     }
 
@@ -30,7 +32,7 @@ public class PartyManager {
 
     public Party getPartyFromPlayer(AgPlayer player)    {
         for(Party p : parties)  {
-            if(p.getPlayers().contains(player)) return p;
+            if(p.getMembers().contains(player)) return p;
         }
         return null;
     }

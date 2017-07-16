@@ -1,12 +1,13 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
-import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.social.Party;
 import com.aegeus.game.stats.StatsSkeleton;
 import com.aegeus.game.stats.StatsT3;
+import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
+import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
@@ -59,7 +60,8 @@ public class Dungeon {
 
     public Dungeon(Party p, Location l, String directory, int startExitDistance, World w, int arraySize, int numberOfSegments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
         setOrigin(l);
-        setParty(p);
+        System.out.println(p);
+        party = p;
         setWorld(w);
         this.setSegmentSize(segmentSize);
         editSession = new EditSession(new BukkitWorld(getWorld()), worldedit.getLocalConfiguration().maxChangeLimit);
@@ -221,7 +223,8 @@ public class Dungeon {
 				}
             }
         }
-        for(AgPlayer p : getParty().getPlayers())    {
+        party.getLeader().getPlayer().sendMessage(Util.colorCodes("&7Dungeon has finished loading, teleporting in..."));
+        for(AgPlayer p : party.getMembers())    {
             p.getPlayer().teleport(getWorld().getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         }
     }

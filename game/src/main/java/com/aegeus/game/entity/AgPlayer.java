@@ -170,7 +170,7 @@ public class AgPlayer extends AgLiving {
 
     @Override
     public boolean equals(Object o) {
-	    if(!(o instanceof AgPlayer)) return false;
-	    else return getPlayer().getUniqueId().equals(((AgPlayer) o).getPlayer().getUniqueId());
+        if(!(o instanceof AgPlayer)) return false;
+        else return getPlayer().equals(((AgPlayer) o).getPlayer());
     }
 }
