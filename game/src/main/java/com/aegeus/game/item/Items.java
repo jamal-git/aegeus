@@ -12,7 +12,7 @@ public class Items {
 		ItemStack gold = new ItemStack(Material.GOLD_NUGGET, amount);
 		ItemMeta meta = gold.getItemMeta();
 		meta.setDisplayName(Util.colorCodes("&eGold"));
-		meta.setLore(Arrays.asList("&7The currency of Zelkova."));
+		meta.setLore(Arrays.asList(Util.colorCodes("&7The currency of Zelkova.")));
 		gold.setItemMeta(meta);
 		return gold;
 	}
