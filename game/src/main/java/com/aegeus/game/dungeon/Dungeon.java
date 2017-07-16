@@ -222,28 +222,28 @@ public class Dungeon {
 										if (random.nextFloat() <= 0.4) {
 											int item = random.nextInt(5);
 											if (item == 0)
-												((Chest) b).getInventory().addItem(new StatsT3().getHelmet().get(
+												((Chest) b.getState()).getInventory().addItem(new StatsT3().getHelmet().get(
 														Util.rarity(random.nextFloat())).build());
 											else if (item == 1)
-												((Chest) b).getInventory().addItem(new StatsT3().getChestplate().get(
+												((Chest) b.getState()).getInventory().addItem(new StatsT3().getChestplate().get(
 														Util.rarity(random.nextFloat())).build());
 											else if (item == 2)
-												((Chest) b).getInventory().addItem(new StatsT3().getLeggings().get(
+												((Chest) b.getState()).getInventory().addItem(new StatsT3().getLeggings().get(
 														Util.rarity(random.nextFloat())).build());
 											else if (item == 3)
-												((Chest) b).getInventory().addItem(new StatsT3().getBoots().get(
+												((Chest) b.getState()).getInventory().addItem(new StatsT3().getBoots().get(
 														Util.rarity(random.nextFloat())).build());
 											else if (item == 4)
-												((Chest) b).getInventory().addItem(new StatsT3().getWeapon().get(
+												((Chest) b.getState()).getInventory().addItem(new StatsT3().getWeapon().get(
 														Util.rarity(random.nextFloat())).build());
 										}
 
 										if (random.nextFloat() <= 0.2) {
-											((Chest) b).getInventory().addItem(new Enchant(3, random.nextInt(2)).build());
+											((Chest) b.getState()).getInventory().addItem(new Enchant(3, random.nextInt(2)).build());
 										}
 
 										if (random.nextFloat() <= 0.7) {
-											((Chest) b).getInventory().addItem(Items.getGold(random.nextInt(1, 120)));
+											((Chest) b.getState()).getInventory().addItem(Items.getGold(random.nextInt(1, 120)));
 										}
 									}
 								}
