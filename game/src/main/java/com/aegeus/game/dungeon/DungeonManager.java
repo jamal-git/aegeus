@@ -1,6 +1,7 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.social.Party;
+import org.bukkit.World;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,5 +36,12 @@ public class DungeonManager {
 
     public int numberOfDungeons()   {
         return dungeons.size();
+    }
+
+    public Dungeon getDungeonFromWorld(World w) {
+        for(Dungeon d : dungeons)   {
+            if(d.getWorld().getName().equals(w.getName())) return d;
+        }
+        return null;
     }
 }

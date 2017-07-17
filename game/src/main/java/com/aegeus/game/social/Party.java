@@ -1,5 +1,6 @@
 package com.aegeus.game.social;
 
+import com.aegeus.game.dungeon.Dungeon;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.util.Util;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class Party {
 	private final LinkedList<AgPlayer> members = new LinkedList<>();
+	private Dungeon currentDungeon = null;
 
 	public Party(AgPlayer p) {
 		add(p);
@@ -55,7 +57,7 @@ public class Party {
                     GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
                     if (p.getPlayer().isOnline())
                         GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
-                    m.getPlayer().sendMessage("&f&l" + p.getPlayer().getName() + "&a has left the party.");
+                    m.getPlayer().sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getName() + "&a has left the party."));
                 }
                 getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou are now the party leader."));
                 sendMessage(Util.colorCodes("&f&l" + getLeader().getPlayer().getDisplayName() + "&r&a is now the leader."), getLeader(), true);
@@ -79,7 +81,19 @@ public class Party {
 	    return members.size() >= 4;
     }
 
-	public void update() {
+    public boolean isInDungeon()    {
+	    return currentDungeon != null;
+    }
+
+    public void setCurrentDungeon(Dungeon currentDungeon) {
+        this.currentDungeon = currentDungeon;
+    }
+
+    public Dungeon getCurrentDungeon() {
+        return currentDungeon;
+    }
+
+    public void update() {
 		members.stream().map(AgPlayer::getPlayer).forEach(this::update);
 	}
 

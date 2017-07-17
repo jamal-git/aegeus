@@ -86,6 +86,63 @@ public class DungeonGenerator {
         return false;
     }
 
+//        private void bfs()    {
+//        String[][] maze ={
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"},
+//                {"0","0","0","0","0"}};
+//        int sx, sy, ex, ey;
+//        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
+//        maze[sx][sy] = "S";
+//        maze[ex][ey] = "E";
+//        List<Node> nodes = new ArrayList<>();
+//        LinkedList<Node> queue = new LinkedList<>();
+//        queue.add(new Node(sx, sy, null));
+//        nodes.add(queue.peek());
+//        while(!queue.isEmpty()) {
+//            System.out.println(queue.size());
+//            Node n = queue.poll();
+//            if(maze[n.getX()][n.getY()].equalsIgnoreCase("E"))  {
+//                List<Node> path = new ArrayList<>();
+//                Node step = n.getParent();
+//                while(step != null) {
+//                    path.add(step);
+//                    if(!maze[step.getX()][step.getY()].equalsIgnoreCase("S"))
+//                        maze[step.getX()][step.getY()] = "P";
+//                    step = step.getParent();
+//                }
+//                printArray(maze);
+//                return;
+//            }
+//            int x = n.getX(), y = n.getY();
+//            Node child;
+//            child = new Node(x + 1, y, n);
+//            if(x < 6 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x - 1, y, n);
+//            if(x > 0 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x, y - 1, n);
+//            if(y > 0 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//            child = new Node(x, y + 1, n);
+//            if(y < 6 && !nodes.contains(child)) {
+//                nodes.add(child);
+//                queue.offer(child);
+//            }
+//        }
+//        printArray(maze);
+//        return;
+//    }
+
     private boolean validateAndMap(String[][] maze)    {
         if(!isValid(maze)) return false;
         String[][] map = new String[arraySize][arraySize];

@@ -1,6 +1,7 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.Items;
 import com.aegeus.game.item.tool.Enchant;
@@ -9,7 +10,6 @@ import com.aegeus.game.stats.StatsSkeleton;
 import com.aegeus.game.stats.StatsT3;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
-import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
@@ -21,6 +21,7 @@ import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -49,6 +50,7 @@ public class Dungeon {
     private transient int segmentSize = 5;
     private transient Location origin;
     private Party party = null;
+    private int keysLeft = 2;
 
     private World world;
     private File directory;
@@ -64,6 +66,7 @@ public class Dungeon {
     public Dungeon(Party p, Location l, String directory, int startExitDistance, World w, int arraySize, int numberOfSegments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
         setOrigin(l);
         System.out.println(p);
+        keysLeft = (int) Math.ceil(numberOfSegments / 5.0);
         party = p;
         setWorld(w);
         this.setSegmentSize(segmentSize);
@@ -266,62 +269,20 @@ public class Dungeon {
         }
     }
 
-//    private void bfs()    {
-//        String[][] maze ={
-//                {"0","0","0","0","0"},
-//                {"0","0","0","0","0"},
-//                {"0","0","0","0","0"},
-//                {"0","0","0","0","0"},
-//                {"0","0","0","0","0"}};
-//        int sx, sy, ex, ey;
-//        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
-//        maze[sx][sy] = "S";
-//        maze[ex][ey] = "E";
-//        List<Node> nodes = new ArrayList<>();
-//        LinkedList<Node> queue = new LinkedList<>();
-//        queue.add(new Node(sx, sy, null));
-//        nodes.add(queue.peek());
-//        while(!queue.isEmpty()) {
-//            System.out.println(queue.size());
-//            Node n = queue.poll();
-//            if(maze[n.getX()][n.getY()].equalsIgnoreCase("E"))  {
-//                List<Node> path = new ArrayList<>();
-//                Node step = n.getParent();
-//                while(step != null) {
-//                    path.add(step);
-//                    if(!maze[step.getX()][step.getY()].equalsIgnoreCase("S"))
-//                        maze[step.getX()][step.getY()] = "P";
-//                    step = step.getParent();
-//                }
-//                printArray(maze);
-//                return;
-//            }
-//            int x = n.getX(), y = n.getY();
-//            Node child;
-//            child = new Node(x + 1, y, n);
-//            if(x < 6 && !nodes.contains(child)) {
-//                nodes.add(child);
-//                queue.offer(child);
-//            }
-//            child = new Node(x - 1, y, n);
-//            if(x > 0 && !nodes.contains(child)) {
-//                nodes.add(child);
-//                queue.offer(child);
-//            }
-//            child = new Node(x, y - 1, n);
-//            if(y > 0 && !nodes.contains(child)) {
-//                nodes.add(child);
-//                queue.offer(child);
-//            }
-//            child = new Node(x, y + 1, n);
-//            if(y < 6 && !nodes.contains(child)) {
-//                nodes.add(child);
-//                queue.offer(child);
-//            }
-//        }
-//        printArray(maze);
-//        return;
-//    }
+    public void useKey()    {
+        if(--keysLeft == 0) {
+            party.getMembers().stream().map(AgPlayer::getPlayer).forEach(x -> {
+                //noinspection deprecation
+                x.sendTitle(Util.colorCodes("&dDUNGEON COMPLETE!"), "");
+                x.playSound(x.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            });
+        }
+        else if(keysLeft == 1)
+            party.sendMessage(Util.colorCodes("&d1 key remains."), null, true);
+        else
+            party.sendMessage(Util.colorCodes("&d" + keysLeft + " keys remain."), null, true);
+        party.getMembers().stream().map(AgPlayer::getPlayer).forEach(x -> x.playSound(x.getLocation(), Sound.BLOCK_PISTON_CONTRACT, 1, 1));
+    }
 
     private void printArray(String[][] array)   {
         for(String[] a : array)  {
@@ -368,6 +329,7 @@ public class Dungeon {
     private void setDirectory(File directory) {
         this.directory = directory;
     }
+
 
 	private class Node {
 		private int x, y;

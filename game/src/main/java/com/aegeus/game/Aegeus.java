@@ -81,6 +81,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
 		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
+		getServer().getPluginManager().registerEvents(new DungeonListener(this), this);
 
 		// Register commands
 		getLogger().info("Registering commands...");

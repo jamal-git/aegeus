@@ -95,8 +95,8 @@ public class Spawner {
 	}
 
 	public void delayCount()    {
-
-	    if(currentDelay++ % delayCount == 0 && canSpawn())
+        currentDelay++;
+	    if((currentDelay %= delayCount) == 0 && canSpawn())
 	        incrementCount().get().spawn(location, this);
     }
 
