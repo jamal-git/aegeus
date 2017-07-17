@@ -5,7 +5,6 @@ import com.aegeus.game.commands.item.CommandCreate;
 import com.aegeus.game.commands.item.CommandGenerate;
 import com.aegeus.game.commands.item.CommandRepair;
 import com.aegeus.game.commands.social.*;
-import com.aegeus.game.commands.world.CommandAddOre;
 import com.aegeus.game.commands.world.CommandCreateDungeon;
 import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
@@ -17,15 +16,12 @@ import com.google.gson.reflect.TypeToken;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,7 +36,6 @@ public class Aegeus extends JavaPlugin {
 	public static Gson GSON;
 	private static Aegeus instance;
 	private static WorldEditPlugin worldedit;
-	private final Map<Location, Material> ores = new HashMap<>();
 	private final Map<Entity, AgEntity> entities = new HashMap<>();
 	private List<Spawner> spawners = new ArrayList<>();
 
@@ -107,7 +102,6 @@ public class Aegeus extends JavaPlugin {
 		getCommand("broadcast").setExecutor(new CommandBroadcast());
 
 		// world
-		getCommand("addore").setExecutor(new CommandAddOre());
 		getCommand("createdungeon").setExecutor(new CommandCreateDungeon());
 
 		// Done, done, and done!
@@ -118,7 +112,6 @@ public class Aegeus extends JavaPlugin {
 			// Load game data
 			getLogger().info("Loading game data...");
 			loadSpawners();
-			loadOres();
 
 			getLogger().info("Post-load complete.");
 		});
@@ -202,17 +195,6 @@ public class Aegeus extends JavaPlugin {
 		saveSpawners();
 	}
 
-	public void addOre(Block b) {
-		Location temp = b.getLocation();
-		ores.put(new Location(temp.getWorld(), temp.getX(), temp.getY(), temp.getZ()), b.getType());
-		saveOres();
-	}
-
-	public void removeOre(Location l) {
-		ores.remove(l);
-		saveOres();
-	}
-
 	public void removeSpawner(Location location) {
 		spawners.remove(getSpawner(location));
 		saveSpawners();
@@ -230,10 +212,6 @@ public class Aegeus extends JavaPlugin {
 		return entities.values();
 	}
 
-	public Map<Location, Material> getOres() {
-		return ores;
-	}
-
 	public void saveSpawners() {
 		try (FileWriter fw = new FileWriter(getDataFolder() + "/spawners.json")) {
 			GSON.toJson(spawners, fw);
@@ -246,27 +224,6 @@ public class Aegeus extends JavaPlugin {
 		try (FileReader fr = new FileReader(getDataFolder() + "/spawners.json")) {
 			spawners = GSON.fromJson(fr, new TypeToken<ArrayList<Spawner>>() {
 			}.getType());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void saveOres() {
-		try (FileWriter f = new FileWriter(getDataFolder() + "/ores.json")) {
-			for (Location l : ores.keySet()) {
-				f.write(ores.get(l).toString() + " " + l.getX() + " " + l.getY() + " " + l.getZ() + " " + l.getWorld().toString() + "\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loadOres() {
-		try (BufferedReader r = new BufferedReader(new FileReader(getDataFolder() + "/ores.json"))) {
-			while (r.ready()) {
-				String[] line = r.readLine().split(" ");
-				ores.put(new Location(getServer().getWorld(line[4].substring(line[4].indexOf("=") + 1, line[4].indexOf("}"))), Double.valueOf(line[1]), Double.valueOf(line[2]), Double.valueOf(line[3])), Material.valueOf(line[0]));
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

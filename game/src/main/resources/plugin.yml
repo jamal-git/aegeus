@@ -28,7 +28,6 @@ commands:
       aliases: bc
 
     # world
-    addore:
     createdungeon:
 
     # item

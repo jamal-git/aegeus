@@ -5,10 +5,8 @@ import com.aegeus.game.item.Items;
 import com.aegeus.game.item.tool.Pickaxe;
 import com.aegeus.game.profession.Ore;
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -37,15 +35,14 @@ public class MiningListener implements Listener {
 		e.setCancelled(true);
 		Block b = e.getBlock();
 		Player p = e.getPlayer();
+		ItemStack item = p.getInventory().getItemInMainHand();
 		try {
-			NBTTagCompound tag = CraftItemStack.asNMSCopy(p.getEquipment().getItemInMainHand()).getTag();
-			if (tag.hasKey("AegeusInfo") && tag.getCompound("AegeusInfo").getString("type").equalsIgnoreCase("pickaxe")) {
+			if (Pickaxe.hasPickaxeInfo(item)) {
 				//Verify held item is a pickaxe
-				Pickaxe pick = new Pickaxe(p.getEquipment().getItemInMainHand());
-				Location l = b.getLocation();
+				Pickaxe pick = new Pickaxe(item);
 				pick.impo();
 				Ore o = Ore.getOreByMaterial(b.getType());
-				if (o != null && parent.getOres().containsKey(new Location(l.getWorld(), l.getX(), l.getY(), l.getZ())) && o.isMinable(pick)) {
+				if (o != null && o.isMinable(pick)) {
 					//Mined block is a registered ore and was mined with a pick, give do stuff.
 					b.setType(Material.STONE);
 					if (!o.sameTier(pick) || random.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
@@ -119,7 +116,7 @@ public class MiningListener implements Listener {
 					}
 					//Set respawn timer to respective time.
 					parent.getServer().getScheduler().scheduleSyncDelayedTask(parent, () -> b.setType(o.getOre()), o.getRespawnTime());
-				} else if (o != null && !o.isMinable(pick) && parent.getOres().containsKey(b.getLocation())) {
+				} else if (o != null && !o.isMinable(pick)) {
 					//Player is trying to mine ore with a pickaxe that is not strong enough.
 					p.sendMessage(Util.colorCodes("&c&nYour pickaxe is not powerful enough to mine that yet!"));
 				}
