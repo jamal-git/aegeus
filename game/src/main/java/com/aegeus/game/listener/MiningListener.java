@@ -40,7 +40,6 @@ public class MiningListener implements Listener {
 			if (Pickaxe.hasPickaxeInfo(item)) {
 				//Verify held item is a pickaxe
 				Pickaxe pick = new Pickaxe(item);
-				pick.impo();
 				Ore o = Ore.getOreByMaterial(b.getType());
 				if (o != null && o.isMinable(pick)) {
 					//Mined block is a registered ore and was mined with a pick, give do stuff.
