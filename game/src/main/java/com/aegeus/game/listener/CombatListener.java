@@ -180,7 +180,7 @@ public class CombatListener implements Listener {
 					Vector vec = lAttacker.getLocation().getDirection().multiply(cInfo.getKnockback());
 					if (((damaged instanceof Player && !((Player) damaged).isSneaking())
 							|| !(victim instanceof Player)) && damaged.isOnGround())
-						vec.setY(damaged.getVelocity().getY() + 0.2);
+						vec.setY(damaged.getVelocity().getY() + 0.3);
 					damaged.setVelocity(vec);
 				}
 			}

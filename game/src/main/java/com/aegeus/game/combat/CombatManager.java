@@ -28,6 +28,9 @@ public class CombatManager {
 		AgLiving vInfo = Aegeus.getInstance().getLiving(victim);
 		AgLiving aInfo = Aegeus.getInstance().getLiving(attacker);
 
+		if (tool != null && tool.getType().equals(Material.BOW))
+			cInfo.multKnockback(0.5);
+
 		if (tool != null && !tool.getType().equals(Material.AIR) && Weapon.hasWeaponInfo(tool)) {
 			Weapon weapon = new Weapon(tool);
 
@@ -44,7 +47,7 @@ public class CombatManager {
 			if (weapon.getIceDmg() > 0) {
 				cInfo.addMagDmg(weapon.getIceDmg());
 				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(
-						PotionEffectType.SLOW, 10 + (weapon.getTier() * 4), 2)));
+						PotionEffectType.SLOW, 10 + (weapon.getTier() * 5), 1)));
 				cInfo.addSound(cInfo.getTarget().getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
 			}
 
