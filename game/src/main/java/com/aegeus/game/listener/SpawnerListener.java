@@ -22,7 +22,6 @@ public class SpawnerListener implements Listener {
 
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent e) {
-		parent.getLogger().info(e.getMessage());
 		if (e.getMessage().equals("/difficulty 0") && e.getPlayer().isOp()) {
 			for (Spawner s : parent.getSpawners()) s.setCount(0);
 		}

@@ -34,7 +34,7 @@ public class DungeonManager {
         return null;
     }
 
-    public int numberOfDungeons()   {
+    public int getNumberOfDungeons()   {
         return dungeons.size();
     }
 

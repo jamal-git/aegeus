@@ -89,7 +89,7 @@ public class Spawner {
 	 * @return
 	 */
 	public boolean canSpawn() {
-		return count < maxCount && location.getChunk().isLoaded() &&
+        return count < maxCount && location.getChunk().isLoaded() &&
 				location.getWorld().getDifficulty() != Difficulty.PEACEFUL &&
 				(Util.getPlayersInRadius(location, 16, 16, 16).isEmpty() || (random.nextDouble() < 0.04));
 	}
@@ -97,7 +97,7 @@ public class Spawner {
 	public void delayCount()    {
         currentDelay++;
 	    if((currentDelay %= delayCount) == 0 && canSpawn())
-	        incrementCount().get().spawn(location, this);
+            incrementCount().get().spawn(location, this);
     }
 
 	/**
@@ -162,5 +162,10 @@ public class Spawner {
 
     public void setDelayCount(int delayCount) {
         this.delayCount = delayCount;
+        currentDelay = delayCount - 1;
+    }
+
+    public int getCurrentDelay()    {
+	    return currentDelay;
     }
 }
