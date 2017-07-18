@@ -201,14 +201,6 @@ public class Util {
 		player.sendMessage(Util.colorCodes("              &6&l** LEVEL UP!&6 [&l" + level + "&6] &l**"));
 	}
 
-	public static double distance(double x1, double y1, double z1, double x2, double y2, double z2) {
-		return Math.cbrt(Math.pow((x1 - x2), 3) + Math.pow((y1 - y2), 3) + Math.pow((z1 - z2), 3));
-	}
-
-	public static double distance(Location loc1, Location loc2) {
-		return distance(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
-	}
-
 	public static void setBiteTime(FishHook hook, int time) {
 		try {
 			net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();

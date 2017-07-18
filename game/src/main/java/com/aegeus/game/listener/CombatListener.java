@@ -137,11 +137,10 @@ public class CombatListener implements Listener {
 			AgLiving aInfo = parent.getLiving(lAttacker);
 
 			e.setCancelled(true);
-
 			if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 				if (tool != null && tool.getType().equals(Material.BOW))
 					return;
-				if (Util.distance(victim.getLocation(), attacker.getLocation()) > 3.5)
+				if (victim.getLocation().distance(attacker.getLocation()) > 3.5)
 					return;
 			}
 
