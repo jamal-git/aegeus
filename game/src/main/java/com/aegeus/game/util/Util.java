@@ -8,6 +8,8 @@ import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import net.minecraft.server.v1_9_R1.EntityFishingHook;
+import net.minecraft.server.v1_9_R1.EntityLiving;
+import net.minecraft.server.v1_9_R1.GenericAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -255,6 +257,10 @@ public class Util {
 		return center.getWorld().getNearbyEntities(center, rx, ry, rz).stream()
 				.filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toList());
 	}
+
+	public static void setSpeed(Entity e, double speed) {
+        ((EntityLiving)((CraftEntity)e).getHandle()).getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
+    }
 
 	public static boolean isSword(Material material) {
 		return material.toString().contains("_SWORD");

@@ -82,6 +82,7 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Registering commands...");
 
 		// entity
+        getCommand("mount").setExecutor(new CommandMount());
 		getCommand("mob").setExecutor(new CommandMob());
 		getCommand("spawner").setExecutor(new CommandSpawner());
 		getCommand("openentity").setExecutor(new CommandOpenEntity());
