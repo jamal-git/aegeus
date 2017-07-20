@@ -122,7 +122,7 @@ public class MiningListener implements Listener {
 				p.getEquipment().setItemInMainHand(pick.build());
 			} else if (p.getGameMode() == GameMode.CREATIVE) e.setCancelled(false);
 		} catch (Exception fuckyou) {
-			//fuck exceptions i dont really givea fuck
+			fuckyou.printStackTrace();
 		}
 	}
 }

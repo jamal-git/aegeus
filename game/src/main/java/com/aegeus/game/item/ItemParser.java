@@ -205,12 +205,9 @@ public class ItemParser {
 					case "gemfind":
 						p.setGemFind(Float.valueOf(value));
 						break;
-					case "durability":
-						p.setDurabilityEnchant(Float.valueOf(value));
-						break;
 				}
 			} catch (Exception fuckexceptions) {
-				//nope
+				fuckexceptions.printStackTrace();
 			}
 		}
 		return p;
