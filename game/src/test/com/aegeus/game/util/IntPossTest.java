@@ -31,7 +31,7 @@ public class IntPossTest {
     @Test
     public void setMin() throws Exception {
         poss.setMin(5);
-        assertTrue(poss.getMin() == 5);
+        assertTrue(poss.getMin() == 4);
         poss.setMax(5);
     }
 

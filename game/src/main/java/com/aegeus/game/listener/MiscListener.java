@@ -45,4 +45,9 @@ public class MiscListener implements Listener {
     public void onHorseClick(InventoryClickEvent e) {
         if(e.getClickedInventory() instanceof HorseInventory) e.setCancelled(true);
     }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+
+    }
 }
