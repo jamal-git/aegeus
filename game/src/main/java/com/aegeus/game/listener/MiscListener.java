@@ -1,6 +1,8 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.util.InventoryBuilder;
+import com.aegeus.game.util.InventoryMenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
@@ -8,6 +10,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.HorseInventory;
@@ -48,6 +52,22 @@ public class MiscListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if(e.getClickedInventory().getType() != InventoryType.CHEST) return;
+        InventoryBuilder builder = null;
+        if((builder = InventoryMenuManager.getBuilderFromInventory(e.getClickedInventory())) != null)   {
+            e.setCancelled(true);
+            e.getWhoClicked().closeInventory();
+            InventoryMenuManager.removeInventory(builder);
+            builder.click(e.getSlot(), e);
+        }
+    }
 
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e) {
+        if(e.getInventory().getType() != InventoryType.CHEST) return;
+        InventoryBuilder b;
+        if((b = InventoryMenuManager.getBuilderFromInventory(e.getInventory())) != null)    {
+            InventoryMenuManager.removeInventory(b);
+        }
     }
 }
