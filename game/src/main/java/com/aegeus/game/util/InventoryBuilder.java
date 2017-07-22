@@ -43,6 +43,14 @@ public class InventoryBuilder {
         else throw new RuntimeException("Invalid slot number.");
     }
 
+    public InventoryBuilder setItem(int slot, ItemStack itemStack, InventoryHandler handler)    {
+        if(slot < size) {
+            items[slot] = new Pair<>(itemStack, handler);
+            return this;
+        }
+        else throw new RuntimeException("Invalid slot number.");
+    }
+
     public InventoryBuilder setOnClick(int slot, InventoryHandler runnable) {
         if(items[slot] == null || runnable == null) throw new RuntimeException("Invalid slot or runnable");
         items[slot].setValue(runnable);
