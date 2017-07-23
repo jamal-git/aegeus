@@ -25,7 +25,6 @@ public class CommandMob implements CommandExecutor {
 
 		if (stats == null) return false;
 		else stats.spawn(player.getLocation());
-
 		return true;
 	}
 

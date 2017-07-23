@@ -2,12 +2,15 @@ package com.aegeus.game.util;
 
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Silvre on 7/19/2017.
  */
+@RunWith(PowerMockRunner.class)
 public class IntPossTest {
     private IntPoss poss = new IntPoss(10, 100);
 

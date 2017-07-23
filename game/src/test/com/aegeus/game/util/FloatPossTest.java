@@ -1,12 +1,15 @@
 package com.aegeus.game.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Silvre on 7/19/2017.
  */
+@RunWith(PowerMockRunner.class)
 public class FloatPossTest {
     FloatPoss poss = new FloatPoss(0.5f, 10.5f);
     @Test

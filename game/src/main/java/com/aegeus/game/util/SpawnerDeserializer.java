@@ -1,9 +1,9 @@
 package com.aegeus.game.util;
 
-import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.stats.Stats;
 import com.google.gson.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +20,7 @@ public class SpawnerDeserializer implements JsonDeserializer<Spawner> {
 	@Override
 	public Spawner deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 		JsonObject o = jsonElement.getAsJsonObject();
-		Location l = new Location(Aegeus.getInstance().getServer().getWorld(
+		Location l = new Location(Bukkit.getServer().getWorld(
 				o.get("world").getAsString()),
 				o.get("x").getAsDouble(),
 				o.get("y").getAsDouble(),

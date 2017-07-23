@@ -168,4 +168,13 @@ public class Spawner {
     public int getCurrentDelay()    {
 	    return currentDelay;
     }
+
+    @Override
+    public boolean equals(Object o) {
+	    if(!(o instanceof Spawner)) return false;
+	    return ((Spawner) o).getLocation().equals(getLocation())
+                && ((Spawner) o).getMaxCount() == getMaxCount()
+                && ((Spawner) o).getDelayCount() == getDelayCount()
+                && ((Spawner) o).getList().equals(getList());
+    }
 }
