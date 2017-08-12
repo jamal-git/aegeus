@@ -91,7 +91,7 @@ public class Spawner {
 	public boolean canSpawn() {
         return count < maxCount && location.getChunk().isLoaded() &&
 				location.getWorld().getDifficulty() != Difficulty.PEACEFUL &&
-				(Util.getPlayersInRadius(location, 16, 16, 16).isEmpty() || (random.nextDouble() < 0.04));
+				Util.getPlayersInRadius(location, 16, 16, 16).isEmpty();
 	}
 
 	public void delayCount()    {
@@ -170,11 +170,26 @@ public class Spawner {
     }
 
     @Override
+    public String toString()    {
+	    return ("X:" + location.getX() +
+                " Y:" + location.getY() +
+                " Z:" + location.getZ() +
+                " Max:" + getMaxCount() +
+                " Delay:" + getDelayCount())
+                .trim();
+    }
+
+    @Override
     public boolean equals(Object o) {
-	    if(!(o instanceof Spawner)) return false;
-	    return ((Spawner) o).getLocation().equals(getLocation())
+        if(!(o instanceof Spawner)) return false;
+        return ((Spawner) o).getLocation().equals(getLocation())
                 && ((Spawner) o).getMaxCount() == getMaxCount()
-                && ((Spawner) o).getDelayCount() == getDelayCount()
-                && ((Spawner) o).getList().equals(getList());
+                && ((Spawner) o).getDelayCount() == getDelayCount();
+    }
+
+    @Override
+    public int hashCode()   {
+        System.out.println("hashcode");
+        return location.hashCode();
     }
 }

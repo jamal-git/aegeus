@@ -3,11 +3,9 @@ package com.aegeus.game.util;
 import com.aegeus.game.entity.Spawner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -21,17 +19,22 @@ import static org.mockito.Mockito.when;
  * Created by Silvre on 7/22/2017.
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Bukkit.class)
-public class SpawnerSerializeTest {
+@PrepareForTest({Bukkit.class, Util.class, Spawner.class, Location.class})
+public class SpawnerTest {
     private static Gson g = new GsonBuilder().setPrettyPrinting()
             .registerTypeAdapter(Spawner.class, new SpawnerDeserializer())
             .registerTypeAdapter(Spawner.class, new SpawnerSerializer())
             .create();
     private static World w = Mockito.spy(World.class);
-    private static Spawner s = new Spawner(new Location(w, 0, 0, 0));
+    private static Chunk chunk = Mockito.spy(Chunk.class);
+    private static Location unmocked = new Location(w, 0, 0, 0);
+    private static Spawner s = new Spawner(unmocked);
 
-    static {
+    @BeforeClass
+    public static void setup() {
         when(w.getName()).thenReturn("world");
+        when(w.getDifficulty()).thenReturn(Difficulty.NORMAL);
+        when(unmocked.getChunk()).thenReturn(chunk);
     }
 
     @Test
