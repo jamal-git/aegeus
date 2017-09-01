@@ -20,6 +20,9 @@ public class AgPlayer extends AgLiving {
 	private int xp = 0;
 	private int soulpoints = 0;
 
+	//temporary
+    private int logins = 0;
+
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
@@ -166,6 +169,18 @@ public class AgPlayer extends AgLiving {
 
     public Party getParty() {
 	    return PartyManager.getInstance().getPartyFromPlayer(this);
+    }
+
+    public void addLogins(int i) {
+	    logins += i;
+    }
+
+    public void setLogins(int i)    {
+	    logins = i;
+    }
+
+    public int getLogins() {
+        return logins;
     }
 
     @Override

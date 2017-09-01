@@ -8,6 +8,8 @@ import com.aegeus.game.commands.social.*;
 import com.aegeus.game.commands.world.CommandCreateDungeon;
 import com.aegeus.game.entity.*;
 import com.aegeus.game.listener.*;
+import com.aegeus.game.util.AegeusPlayerDeserializer;
+import com.aegeus.game.util.AegeusPlayerSerializer;
 import com.aegeus.game.util.SpawnerDeserializer;
 import com.aegeus.game.util.SpawnerSerializer;
 import com.google.gson.Gson;
@@ -22,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -61,6 +64,8 @@ public class Aegeus extends JavaPlugin {
 		b.setPrettyPrinting();
 		b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
 		b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
+		b.registerTypeAdapter(AgPlayer.class, new AegeusPlayerSerializer());
+		b.registerTypeAdapter(AgPlayer.class, new AegeusPlayerDeserializer());
 		GSON = b.create();
 
 		//Register APIS
@@ -229,4 +234,29 @@ public class Aegeus extends JavaPlugin {
 			e.printStackTrace();
 		}
 	}
+
+	public void savePlayer(AgPlayer p)  {
+        try(FileWriter fw = new FileWriter(getDataFolder() + "/players/" + p.getPlayer().getUniqueId() + ".json"))  {
+            GSON.toJson(p, fw);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadPlayer(Player p)    {
+	    File f = new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json");
+	    if(f.exists())  {
+	        try {
+                entities.put(p, GSON.fromJson(new FileReader(f), new TypeToken<AgPlayer>() {
+                }.getType()));
+            }
+            catch (IOException e)   {
+	            e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasPlayerData(Player p)  {
+	    return new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json").exists();
+    }
 }

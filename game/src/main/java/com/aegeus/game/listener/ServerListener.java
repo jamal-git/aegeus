@@ -39,7 +39,10 @@ public class ServerListener implements Listener {
 	// Login messages and initial player setup
 	private void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
-		AgPlayer info = parent.getPlayer(player);
+		if(!parent.contains(player) && parent.hasPlayerData(player))
+		    parent.loadPlayer(player);
+        AgPlayer info = parent.getPlayer(player);
+		info.addLogins(1);
 		e.setJoinMessage("");
 		player.setHealthScaled(true);
 		player.setHealthScale(20);
@@ -60,6 +63,7 @@ public class ServerListener implements Listener {
 							"          &7Modify game settings with &b/settings"));
 			for (int i = 0; i < 2; i++)
 				player.sendMessage(" ");
+			player.sendMessage(Util.colorCodes("&bCurrent number of logins: &e&l" + info.getLogins()));
 			if (Bukkit.getOnlinePlayers().size() == 1)
 				player.sendMessage(Util.colorCodes(
 						"&8That's strange. It's quiet around here, like everyone has gone away. Why's that..? " +
@@ -131,6 +135,7 @@ public class ServerListener implements Listener {
 		AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
         Party p = PartyManager.getInstance().getPartyFromPlayer(player);
         if(p != null) p.remove(player);
+        parent.savePlayer(player);
 		e.setQuitMessage("");
 	}
 
