@@ -114,9 +114,19 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Load complete.");
 
 		// Post loading
+
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			// Load game data
 			getLogger().info("Loading game data...");
+
+            File playerFolder = new File(getDataFolder() + "/players/");
+            //create players folder if there isnt on in the aegeus subdirectory
+            if(!playerFolder.exists())  {
+                getLogger().info("Players folder does not exist, creating it...");
+                playerFolder.mkdir();
+            }
+            else getLogger().info("Players folder already exists, skipping...");
+
 			loadSpawners();
 
 			getLogger().info("Post-load complete.");

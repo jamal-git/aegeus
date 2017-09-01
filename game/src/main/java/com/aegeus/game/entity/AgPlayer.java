@@ -188,4 +188,21 @@ public class AgPlayer extends AgLiving {
         if(!(o instanceof AgPlayer)) return false;
         else return getPlayer().equals(((AgPlayer) o).getPlayer());
     }
+
+    @Override
+    public int hashCode() {
+        int result = player.hashCode();
+        result = 31 * result + (hpBar != null ? hpBar.hashCode() : 0);
+        result = 31 * result + level;
+        result = 31 * result + xp;
+        result = 31 * result + soulpoints;
+        result = 31 * result + logins;
+        result = 31 * result + (alignment != null ? alignment.hashCode() : 0);
+        result = 31 * result + (division != null ? division.hashCode() : 0);
+        result = 31 * result + (legion != null ? legion.hashCode() : 0);
+        result = 31 * result + editSpawner.hashCode();
+        result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
+        result = 31 * result + (chatChannel != null ? chatChannel.hashCode() : 0);
+        return result;
+    }
 }

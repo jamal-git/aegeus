@@ -170,16 +170,6 @@ public class Spawner {
     }
 
     @Override
-    public String toString()    {
-	    return ("X:" + location.getX() +
-                " Y:" + location.getY() +
-                " Z:" + location.getZ() +
-                " Max:" + getMaxCount() +
-                " Delay:" + getDelayCount())
-                .trim();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if(!(o instanceof Spawner)) return false;
         return ((Spawner) o).getLocation().equals(getLocation())
@@ -188,8 +178,13 @@ public class Spawner {
     }
 
     @Override
-    public int hashCode()   {
-        System.out.println("hashcode");
-        return location.hashCode();
+    public int hashCode() {
+        int result = location.hashCode();
+        result = 31 * result + maxCount;
+        result = 31 * result + count;
+        result = 31 * result + currentDelay;
+        result = 31 * result + delayCount;
+        result = 31 * result + (list != null ? list.hashCode() : 0);
+        return result;
     }
 }

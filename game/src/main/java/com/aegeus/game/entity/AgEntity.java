@@ -22,7 +22,12 @@ public class AgEntity {
 		return entity.equals(obj);
 	}
 
-	@Override
+    @Override
+    public int hashCode() {
+        return entity != null ? entity.hashCode() : 0;
+    }
+
+    @Override
 	public String toString() {
 		return entity.toString();
 	}
