@@ -15,4 +15,12 @@ public class ItemUtils {
 		nmsStack.setTag(tag);
 		return CraftItemStack.asBukkitCopy(nmsStack);
 	}
+
+	public static boolean isDisplayItem(ItemStack item) {
+	    return getTag(item).hasKey("displayitem") && getTag(item).getBoolean("displayitem");
+    }
+
+    public static void setDisplayItem(ItemStack item, boolean b)    {
+	    getTag(item).setBoolean("displayitem", b);
+    }
 }

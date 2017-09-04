@@ -23,6 +23,7 @@ import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
 
@@ -335,4 +336,19 @@ public class Util {
 		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
 				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
 	}
+
+	public static ItemStack getCraftingCompendium() {
+	    ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(Util.colorCodes("&dCrafting Compendium"));
+        meta.setLore(Arrays.asList(Util.colorCodes("&7Store all of your crafting items"), Util.colorCodes("&7in one convenient item.")));
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public static void setDisplayName(ItemStack stack, String name) {
+	    ItemMeta meta = stack.getItemMeta();
+	    meta.setDisplayName(name);
+	    stack.setItemMeta(meta);
+    }
 }
