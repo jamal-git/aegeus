@@ -1,5 +1,7 @@
 package com.aegeus.game.util;
 
+import com.google.common.base.Objects;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Chance<T> {
@@ -39,4 +41,18 @@ public class Chance<T> {
 	public T get(T def) {
 		return random.nextFloat() <= chance ? object : def;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chance<?> chance1 = (Chance<?>) o;
+        return Float.compare(chance1.chance, chance) == 0 &&
+                Objects.equal(object, chance1.object);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(object, chance);
+    }
 }

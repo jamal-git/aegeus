@@ -1,5 +1,6 @@
 package com.aegeus.game.util;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,6 +21,7 @@ public class AegeusPlayerSerializer implements JsonSerializer<AgPlayer> {
         object.addProperty("xp", player.getXp());
         object.addProperty("soulpoints", player.getSoulpoints());
         object.addProperty("logins", player.getLogins()); //todo testing porpoises, remove
+//        object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
         return object;
     }
 }
