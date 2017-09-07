@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,41 +15,43 @@ import java.util.List;
  */
 public enum EnumCraftingMaterial {
     SKELETON_BONE("Skeleton Bone", EnumMaterialRarity.COMMON,
-            Arrays.asList("A mysterious white bone.", "Probably from a skeleton."),
+            Util.colorCodes("&7A mysterious white bone.", "&7Probably from a skeleton."),
             Material.BONE),
     RAGGED_CLOTH("Ragged Cloth", EnumMaterialRarity.COMMON,
-            Arrays.asList("This piece of cloth is well worn, but still durable.", "Useful in crafting clothing."),
-            Material.BONE),
+            Util.colorCodes("&7This piece of cloth is well worn, but still durable.", "&7Useful in crafting clothing."),
+            Material.LEATHER),
     TATTERED_PARCHMENT("Tattered Parchment", EnumMaterialRarity.UNCOMMON,
-            Arrays.asList("A heavily worn piece of paper."),
+            Util.colorCodes("&7A heavily worn piece of paper.", "&7Might have use in constructing books."),
             Material.PAPER),
     SUN_INGOT("Sun Ingot", EnumMaterialRarity.MYTHICAL,
-            Arrays.asList("The unmeasurable amount of power of the sun in a tangible form.", "This fabled ingot can be used in crafting very rare items."),
+            Util.colorCodes("&7The unmeasurable amount of power of the sun in a tangible form.", "&7This fabled ingot can be used in crafting very rare items."),
             Material.GOLD_INGOT){
         @Override
         public ItemStack getItem() {
             ItemStack stack = new ItemStack(getMaterial(), 1);
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(Util.colorCodes("&eSun Ingot"));
-            meta.getLore().addAll(getDescription());
+            meta.setLore(getDescription());
             meta.getLore().add(getRarity().getNameAndColor());
             meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            stack.setItemMeta(meta);
             return stack;
         }
     },
     MOON_INGOT("Moon Ingot", EnumMaterialRarity.MYTHICAL,
-            Arrays.asList("The essence of the moon in a tangible form.", "This fabled ingot can be used in crafting very rare items."),
+            Util.colorCodes("&7The essence of the moon in a tangible form.", "&7This fabled ingot can be used in crafting very rare items."),
             Material.IRON_INGOT){
         @Override
         public ItemStack getItem() {
             ItemStack stack = new ItemStack(getMaterial(), 1);
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(Util.colorCodes("&bMoon Ingot"));
-            meta.getLore().addAll(getDescription());
+            meta.setLore(getDescription());
             meta.getLore().add(getRarity().getNameAndColor());
             meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            stack.setItemMeta(meta);
             return stack;
         }
     };
@@ -86,8 +88,8 @@ public enum EnumCraftingMaterial {
     public ItemStack getItem()  {
         ItemStack stack = new ItemStack(getMaterial(), 1);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(getName());
-        List<String> lore = meta.getLore();
+        meta.setDisplayName(getRarity().getColor() + getName());
+        List<String> lore = new ArrayList<>();
         lore.addAll(getDescription());
         lore.add(getRarity().getNameAndColor());
         meta.setLore(lore);

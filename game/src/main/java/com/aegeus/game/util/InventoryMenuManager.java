@@ -1,6 +1,5 @@
 package com.aegeus.game.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashSet;
@@ -21,7 +20,6 @@ public class InventoryMenuManager {
     }
 
     public static InventoryBuilder getBuilderFromInventory(Inventory i)    {
-        Bukkit.getLogger().info(inventories.size() + "");
         for (InventoryBuilder inventory : inventories) {
             if(i.getHolder().equals(inventory.getInventory().getHolder()))  {
                 return inventory;

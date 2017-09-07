@@ -2,6 +2,11 @@ package com.aegeus.game.item;
 
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by Silvre on 9/1/2017.
  */
@@ -19,6 +24,17 @@ public enum EnumMaterialRarity {
     private ChatColor color;
     private String name;
 
+    public static Map<EnumMaterialRarity, Set<EnumCraftingMaterial>> materialRarityListMap = new HashMap<>();
+
+    static {
+        for(EnumMaterialRarity r : values()) {
+            materialRarityListMap.put(r, new HashSet<>());
+        }
+        for(EnumCraftingMaterial m : EnumCraftingMaterial.values()) {
+            materialRarityListMap.get(m.getRarity()).add(m);
+        }
+    }
+
     EnumMaterialRarity(ChatColor color, String name) {
         this.color = color;
         this.name = name;
@@ -34,5 +50,9 @@ public enum EnumMaterialRarity {
 
     public String getNameAndColor() {
         return color + name;
+    }
+
+    public static Set<EnumCraftingMaterial> getMaterialsByRarity(EnumMaterialRarity r)  {
+        return materialRarityListMap.get(r);
     }
 }

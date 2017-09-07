@@ -58,7 +58,7 @@ public class InventoryBuilder {
     }
 
     public void click(int slot, InventoryClickEvent e) {
-        if(slot < size && items[slot].getValue() != null)   {
+        if(slot < size && items[slot] != null && items[slot].getValue() != null)   {
             items[slot].getValue().run(e);
         }
     }

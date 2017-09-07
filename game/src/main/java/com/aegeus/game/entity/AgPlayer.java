@@ -3,6 +3,7 @@ package com.aegeus.game.entity;
 import com.aegeus.game.Alignment;
 import com.aegeus.game.Division;
 import com.aegeus.game.Legion;
+import com.aegeus.game.item.tool.CraftingCompendium;
 import com.aegeus.game.social.ChatChannel;
 import com.aegeus.game.social.Party;
 import com.aegeus.game.social.PartyManager;
@@ -27,6 +28,7 @@ public class AgPlayer extends AgLiving {
 	private Division division = null;
 	private Legion legion = Legion.FEROCIOUS;
 	private Spawner editSpawner = null;
+	private CraftingCompendium craftingCompendium = new CraftingCompendium();
 //	private Mount mount = null;
 //	private Story story = new Story(this);
 //	private BankListener bank = new BankListener(this);
@@ -63,6 +65,7 @@ public class AgPlayer extends AgLiving {
 		this.legion = other.legion;
 		this.replyTo = other.replyTo;
 		this.chatChannel = other.chatChannel;
+		this.craftingCompendium = other.craftingCompendium;
 	}
 
 	public AgPlayer(UUID uuid) {
@@ -181,6 +184,14 @@ public class AgPlayer extends AgLiving {
 
     public int getLogins() {
         return logins;
+    }
+
+    public CraftingCompendium getCraftingCompendium() {
+        return craftingCompendium;
+    }
+
+    public void setCraftingCompendium(CraftingCompendium craftingCompendium) {
+        this.craftingCompendium = craftingCompendium;
     }
 
     @Override

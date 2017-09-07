@@ -149,7 +149,6 @@ public class DungeonGenerator {
         int keysToPlace = (int) Math.ceil(numberOfSegments / 5.0);
         while(keysToPlace != 0) {
             int x,y;
-            //noinspection ControlFlowStatementWithoutBraces
             boolean success = false;
             for (int i = 0; i < 100; i++) {
                 if(maze[x = random.nextInt(arraySize)][y = random.nextInt(arraySize)].equalsIgnoreCase("0") && nearby(x, y, maze) == 1 && notNearbyStartOrExitOrKey(x, y, maze))  {

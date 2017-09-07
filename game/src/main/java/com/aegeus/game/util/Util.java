@@ -60,6 +60,14 @@ public class Util {
 		return s == null ? "" : ChatColor.translateAlternateColorCodes(c, s);
 	}
 
+	public static List<String> colorCodes(String... s) {
+	    List<String> arr = new ArrayList<>();
+        for (int i = 0; i < s.length; i++) {
+            arr.add(colorCodes(s[i], '&'));
+        }
+        return arr;
+    }
+
 	public static long calcMaxXP(int level, int tier) {
 		return Math.round(Math.pow(386 * level, 1.17) * (tier * 0.75));
 	}
@@ -344,6 +352,14 @@ public class Util {
         meta.setLore(Arrays.asList(Util.colorCodes("&7Store all of your crafting items"), Util.colorCodes("&7in one convenient item.")));
         stack.setItemMeta(meta);
         return stack;
+    }
+
+    public static ItemStack getGoBack() {
+	    ItemStack stack = new ItemStack(Material.BARRIER);
+	    ItemMeta meta = stack.getItemMeta();
+	    meta.setDisplayName(Util.colorCodes("&cGo Back"));
+	    stack.setItemMeta(meta);
+	    return stack;
     }
 
     public static void setDisplayName(ItemStack stack, String name) {
