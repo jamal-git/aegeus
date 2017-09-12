@@ -146,6 +146,7 @@ public class Aegeus extends JavaPlugin {
 	@Override
 	public void onDisable() {
         WorldManager.getInstance().deleteDungeons();
+        getOnlinePlayers().forEach(this::savePlayer);
 	    getLogger().info("AEGEUS disabled.");
 	}
 
@@ -160,6 +161,16 @@ public class Aegeus extends JavaPlugin {
 			info = put(p, new AgPlayer(info));
 		return (AgPlayer) info;
 	}
+
+	public List<AgPlayer> getOnlinePlayers() {
+	    List<AgPlayer> l = new ArrayList<>();
+	    for(AgEntity e : entities.values()) {
+	        if(e instanceof AgPlayer) {
+	            l.add((AgPlayer) e);
+            }
+        }
+        return l;
+    }
 
 	public AgLiving getLiving(LivingEntity e) {
 		AgEntity info = get(e);

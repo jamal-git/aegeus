@@ -136,7 +136,7 @@ public class ServerListener implements Listener {
         Party p = PartyManager.getInstance().getPartyFromPlayer(player);
         if(p != null) p.remove(player);
         parent.savePlayer(player);
-		e.setQuitMessage("");
+        e.setQuitMessage("");
 	}
 
 	@EventHandler

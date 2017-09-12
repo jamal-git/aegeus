@@ -147,7 +147,7 @@ public class CraftingCompendium {
             List<String> lore = meta.getLore();
             lore.add(Util.colorCodes("&7Display Item"));
             meta.setLore(lore);
-            meta.setDisplayName(Util.colorCodes(meta.getDisplayName() + ": " + e.getColor() + p.getCraftingCompendium().get(material)));
+            meta.setDisplayName(Util.colorCodes(meta.getDisplayName() + ": &f" +  + p.getCraftingCompendium().get(material)));
             stack.setItemMeta(meta);
             menu.setItem(i, stack);
         }
