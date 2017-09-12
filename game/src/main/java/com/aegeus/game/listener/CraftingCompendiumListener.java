@@ -37,14 +37,16 @@ public class CraftingCompendiumListener implements Listener {
         ItemStack stack = e.getItem().getItemStack();
         EnumCraftingMaterial item = null;
         for(EnumCraftingMaterial i : EnumCraftingMaterial.values()) {
-            if(i.getItem().isSimilar(stack))
+            System.out.println(i.name() + " " + i.getItem().isSimilar(stack));
+            if(i.getItem().isSimilar(stack)) {
                 item = i;
                 break;
+            }
         }
         if(item != null) {
             AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
             player.getCraftingCompendium().add(item, stack.getAmount());
-            player.sendMessage(Util.colorCodes("&6+" + stack.getAmount() + item.getName()));
+            player.sendMessage(Util.colorCodes("&6+" + stack.getAmount() + " " + item.getName()));
             e.setCancelled(true);
             e.getItem().remove();
         }
