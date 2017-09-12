@@ -37,7 +37,6 @@ public class CraftingCompendiumListener implements Listener {
         ItemStack stack = e.getItem().getItemStack();
         EnumCraftingMaterial item = null;
         for(EnumCraftingMaterial i : EnumCraftingMaterial.values()) {
-            System.out.println(i.name() + " " + i.getItem().isSimilar(stack));
             if(i.getItem().isSimilar(stack)) {
                 item = i;
                 break;

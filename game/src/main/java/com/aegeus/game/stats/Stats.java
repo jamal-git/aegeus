@@ -432,7 +432,6 @@ public abstract class Stats {
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
 		info.setDrops(drops);
-        System.out.println(info.getDrops());
 
 		if (!abils.isEmpty()) {
 			Collections.shuffle(abils);
