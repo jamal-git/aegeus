@@ -2,12 +2,17 @@ package com.aegeus.game.entity;
 
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.combat.CombatInfo;
+import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.util.Action;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.IntPoss;
 import com.aegeus.game.util.Util;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AgMonster extends AgLiving {
 	private String name;
@@ -18,6 +23,7 @@ public class AgMonster extends AgLiving {
 
 	private List<Action<CombatInfo>> onHit = new ArrayList<>();
 	private List<Action<CombatInfo>> onDamaged = new ArrayList<>();
+	private Map<EnumCraftingMaterial, Chance<IntPoss>> drops = new HashMap<>();
 
 	private Spawner origin = null;
 	private int tier = 0;
@@ -56,6 +62,7 @@ public class AgMonster extends AgLiving {
 		this.forcedHp = other.forcedHp;
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
+        this.drops.putAll(other.drops);
 	}
 
 	public String getName() {
@@ -169,4 +176,12 @@ public class AgMonster extends AgLiving {
 	public void setDmgMultiplier(float dmgMultiplier) {
 		this.dmgMultiplier = dmgMultiplier;
 	}
+
+    public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
+        return drops;
+    }
+
+    public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
+        this.drops = drops;
+    }
 }

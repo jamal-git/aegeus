@@ -15,6 +15,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum Tier {
 	CUSTOM(0, 0, "&f", "Custom", "Custom", "Custom Sword", "Custom Axe",
@@ -128,6 +130,11 @@ public enum Tier {
 					getDefArmor().block = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
 					getDefArmor().dodge = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
 					getDefArmor().reflect = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.04f);
+
+                    Map<EnumCraftingMaterial, Chance<IntPoss>> drops = getDrops() == null ? new HashMap<>() : getDrops();
+                    drops.put(EnumCraftingMaterial.SUN_INGOT, new Chance<>(new IntPoss(1), 1));
+                    drops.put(EnumCraftingMaterial.MOON_INGOT, new Chance<>(new IntPoss(1), 1));
+                    setDrops(drops);
 
 					ArmorPossible helmet = new ArmorPossible();
 					helmet.material = Material.CHAINMAIL_HELMET;

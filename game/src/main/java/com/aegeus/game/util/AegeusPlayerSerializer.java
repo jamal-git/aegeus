@@ -21,7 +21,7 @@ public class AegeusPlayerSerializer implements JsonSerializer<AgPlayer> {
         object.addProperty("xp", player.getXp());
         object.addProperty("soulpoints", player.getSoulpoints());
         object.addProperty("logins", player.getLogins()); //todo testing porpoises, remove
-//        object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
+        object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
         return object;
     }
 }

@@ -22,8 +22,8 @@ public class AegeusPlayerDeserializer implements JsonDeserializer<AgPlayer> {
         p.setXp(o.get("xp").getAsInt());
         p.setSoulpoints(o.get("soulpoints").getAsInt());
         p.setLogins(o.get("logins").getAsInt());
-//        p.setCraftingCompendium(Aegeus.GSON.fromJson(o.get("compendium"), new TypeToken<CraftingCompendium>(){}
-//        .getType()));
+        p.setCraftingCompendium(Aegeus.GSON.fromJson(o.get("compendium"), new TypeToken<CraftingCompendium>(){}
+        .getType()));
         return p;
     }
 }

@@ -7,6 +7,8 @@ import com.aegeus.game.commands.item.CommandRepair;
 import com.aegeus.game.commands.social.*;
 import com.aegeus.game.commands.world.CommandCreateDungeon;
 import com.aegeus.game.entity.*;
+import com.aegeus.game.item.EnumCraftingMaterial;
+import com.aegeus.game.item.EnumMaterialRarity;
 import com.aegeus.game.listener.*;
 import com.aegeus.game.util.AegeusPlayerDeserializer;
 import com.aegeus.game.util.AegeusPlayerSerializer;
@@ -110,6 +112,13 @@ public class Aegeus extends JavaPlugin {
 
 		// world
 		getCommand("createdungeon").setExecutor(new CommandCreateDungeon());
+
+        for(EnumMaterialRarity r : EnumMaterialRarity.values()) {
+            EnumMaterialRarity.materialRarityListMap.put(r, new HashSet<>());
+        }
+        for(EnumCraftingMaterial m : EnumCraftingMaterial.values()) {
+            EnumMaterialRarity.materialRarityListMap.get(m.getRarity()).add(m);
+        }
 
 		// Done, done, and done!
 		getLogger().info("Load complete.");

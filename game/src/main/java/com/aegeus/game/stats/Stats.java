@@ -4,6 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
+import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.Tier;
 import com.aegeus.game.item.tool.Armor;
@@ -49,6 +50,7 @@ public abstract class Stats {
 	private List<ArmorPossible> leggings = new ArrayList<>();
 	private List<ArmorPossible> boots = new ArrayList<>();
 	private List<WeaponPossible> weapons = new ArrayList<>();
+	private Map<EnumCraftingMaterial, Chance<IntPoss>> drops = new HashMap<>();
 
 	// Defaults
 	private ArmorPossible defArmor = new ArmorPossible(null);
@@ -126,7 +128,8 @@ public abstract class Stats {
 		this.weapons = other.weapons;
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
-	}
+        this.drops.putAll(other.drops);
+    }
 
 	public Stats getParent() {
 		return parent;
@@ -389,7 +392,15 @@ public abstract class Stats {
 		this.defWeapon = defWeapon;
 	}
 
-	// Generation methods
+    public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
+        return drops;
+    }
+
+    public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
+        this.drops = drops;
+    }
+
+    // Generation methods
 
 	public ItemStack applyGlow(ItemStack item) {
 		if (item != null && !item.getType().equals(Material.AIR))
@@ -420,6 +431,8 @@ public abstract class Stats {
 		info.setForcedHp(getForcedHp());
 		info.setHpMultiplier(getHpMultiplier());
 		info.setDmgMultiplier(getDmgMultiplier());
+		info.setDrops(drops);
+        System.out.println(info.getDrops());
 
 		if (!abils.isEmpty()) {
 			Collections.shuffle(abils);

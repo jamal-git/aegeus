@@ -3,7 +3,6 @@ package com.aegeus.game.item;
 import org.bukkit.ChatColor;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,15 +24,6 @@ public enum EnumMaterialRarity {
     private String name;
 
     public static Map<EnumMaterialRarity, Set<EnumCraftingMaterial>> materialRarityListMap = new HashMap<>();
-
-    static {
-        for(EnumMaterialRarity r : values()) {
-            materialRarityListMap.put(r, new HashSet<>());
-        }
-        for(EnumCraftingMaterial m : EnumCraftingMaterial.values()) {
-            materialRarityListMap.get(m.getRarity()).add(m);
-        }
-    }
 
     EnumMaterialRarity(ChatColor color, String name) {
         this.color = color;

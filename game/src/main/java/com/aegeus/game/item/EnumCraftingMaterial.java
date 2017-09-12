@@ -25,14 +25,16 @@ public enum EnumCraftingMaterial {
             Material.PAPER),
     SUN_INGOT("Sun Ingot", EnumMaterialRarity.MYTHICAL,
             Util.colorCodes("&7The unmeasurable amount of power of the sun in a tangible form.", "&7This fabled ingot can be used in crafting very rare items."),
-            Material.GOLD_INGOT){
+            Material.GOLD_INGOT) {
         @Override
         public ItemStack getItem() {
             ItemStack stack = new ItemStack(getMaterial(), 1);
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(Util.colorCodes("&eSun Ingot"));
-            meta.setLore(getDescription());
-            meta.getLore().add(getRarity().getNameAndColor());
+            List<String> lore = new ArrayList<>();
+            lore.addAll(getDescription());
+            lore.add(getRarity().getNameAndColor());
+            meta.setLore(lore);
             meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             stack.setItemMeta(meta);
@@ -47,8 +49,10 @@ public enum EnumCraftingMaterial {
             ItemStack stack = new ItemStack(getMaterial(), 1);
             ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(Util.colorCodes("&bMoon Ingot"));
-            meta.setLore(getDescription());
-            meta.getLore().add(getRarity().getNameAndColor());
+            List<String> lore = new ArrayList<>();
+            lore.addAll(getDescription());
+            lore.add(getRarity().getNameAndColor());
+            meta.setLore(lore);
             meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             stack.setItemMeta(meta);
@@ -61,6 +65,7 @@ public enum EnumCraftingMaterial {
     private EnumMaterialRarity rarity;
     private List<String> description;
     private Material material;
+    public static EnumCraftingMaterial[] items = values();
 
     EnumCraftingMaterial(String name, EnumMaterialRarity rarity, List<String> description, Material material)   {
         this.name = name;

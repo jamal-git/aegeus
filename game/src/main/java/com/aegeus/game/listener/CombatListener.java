@@ -7,9 +7,12 @@ import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.AgProjectile;
+import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Items;
 import com.aegeus.game.item.tool.Weapon;
 import com.aegeus.game.util.Action;
+import com.aegeus.game.util.Chance;
+import com.aegeus.game.util.IntPoss;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,6 +33,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatListener implements Listener {
@@ -66,6 +70,16 @@ public class CombatListener implements Listener {
 
 			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
 				entity.getWorld().dropItemNaturally(entity.getLocation(), Items.getGold(mInfo.getGold()));
+			for(EnumCraftingMaterial m : mInfo.getDrops().keySet()) {
+			    Map<EnumCraftingMaterial, Chance<IntPoss>> drops = mInfo.getDrops();
+                IntPoss chance = null;
+			    if((chance = drops.get(m).get()) != null) {
+			        ItemStack stack = m.getItem();
+			        stack.setAmount(chance.get());
+			        entity.getWorld().dropItemNaturally(entity.getLocation(), stack);
+			        //todo implement hologram above the item
+                }
+            }
 		}
 
 		if (info.getAttacker() instanceof Player) {
