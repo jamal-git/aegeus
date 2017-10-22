@@ -85,6 +85,7 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 		getServer().getPluginManager().registerEvents(new DungeonListener(this), this);
 		getServer().getPluginManager().registerEvents(new CraftingCompendiumListener(this), this);
+		getServer().getPluginManager().registerEvents(new BankListener(this), this);
 
 		// Register commands
 		getLogger().info("Registering commands...");
@@ -148,6 +149,7 @@ public class Aegeus extends JavaPlugin {
         WorldManager.getInstance().deleteDungeons();
         getOnlinePlayers().forEach(this::savePlayer);
 	    getLogger().info("AEGEUS disabled.");
+	    entities.keySet().forEach(Entity::remove);
 	}
 
 	public AgEntity get(Entity e) {

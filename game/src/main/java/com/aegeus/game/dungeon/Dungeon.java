@@ -60,7 +60,7 @@ public class Dungeon {
     private List<CuboidClipboard> keys = new ArrayList<>();
     private List<CuboidClipboard> exits = new ArrayList<>();
 
-    public Dungeon(Party p, Location l, String directory, int startExitDistance, World w, int arraySize, int numberOfSegments, int segmentSize) throws DungeonLoadingException, IOException, DataException {
+    public Dungeon(Party p, Location l, String directory, int startExitDistance, World w, int arraySize, int numberOfSegments, int segmentSize) throws IOException, DataException {
         setOrigin(l);
         System.out.println(p);
         keysLeft = (int) Math.ceil(numberOfSegments / 5.0);
@@ -146,13 +146,13 @@ public class Dungeon {
         parent.getServer().getScheduler().runTask(parent, () -> {
             try {
                 build(getOrigin());
-            } catch (DungeonLoadingException | MaxChangedBlocksException e) {
+            } catch (MaxChangedBlocksException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public void build(Location l) throws DungeonLoadingException, MaxChangedBlocksException {
+    public void build(Location l) throws  MaxChangedBlocksException {
         for (int i = 0; i < layout.length; i++) {
             for (int j = 0; j < layout.length; j++) {
                 world.loadChunk(l.getBlockX() + 16 * i, l.getBlockZ() + 16 * j, true);

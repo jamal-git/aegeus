@@ -62,8 +62,8 @@ public class Util {
 
 	public static List<String> colorCodes(String... s) {
 	    List<String> arr = new ArrayList<>();
-        for (int i = 0; i < s.length; i++) {
-            arr.add(colorCodes(s[i], '&'));
+        for (String value : s) {
+            arr.add(colorCodes(value, '&'));
         }
         return arr;
     }

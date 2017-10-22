@@ -52,11 +52,7 @@ public class CommandCreateDungeon implements CommandExecutor {
                 World w = new WorldCreator("dungeon" + WorldManager.getInstance().getWorlds().size()).environment(World.Environment.NORMAL).generateStructures(false).type(WorldType.FLAT).generatorSettings("1;0").createWorld();
                 Dungeon d = DungeonManager.getInstance().registerDungeon(new Dungeon(player.getParty(), w.getSpawnLocation().add(0, 64, 0), args[0], Integer.valueOf(args[1]), w, Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])));
                 WorldManager.getInstance().addWorld(w);
-            } catch (DungeonLoadingException e) {
-                e.printStackTrace();
-            } catch (DataException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (DungeonLoadingException | IOException | DataException e) {
                 e.printStackTrace();
             }
         });

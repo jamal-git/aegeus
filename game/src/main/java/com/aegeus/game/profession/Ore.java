@@ -7,17 +7,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public enum Ore {
-	RUTILE(Material.COAL_ORE, ChatColor.DARK_GRAY + "Rutile Ore", Arrays.asList(Util.colorCodes("&7A very dirty chunk of stone with traces of Rutile in it.")), 115, 30, ProfessionTier.BASIC, 3, 10),
-	BAUXITE(Material.REDSTONE_ORE, ChatColor.RED + "Bauxite Ore", Arrays.asList(Util.colorCodes("&7This chunk might prove useful for yielding Aluminium.")), 250, 50, ProfessionTier.IMPROVED, 5, 20),
-	IRON(Material.IRON_ORE, ChatColor.YELLOW + "Iron Ore", Arrays.asList(Util.colorCodes("&7Magnetite contains large amounts of Iron, useful in many machines and equipment.")), 350, 75, ProfessionTier.IMPROVED, 10, 30),
-	AZURITE(Material.LAPIS_ORE, ChatColor.BLUE + "Azurite Ore", Arrays.asList(Util.colorCodes("&7One of many minerals to contain copper, useful in manufacturing")), 770, 100, ProfessionTier.REINFORCED, 20, 50),
-	GOLD(Material.GOLD_ORE, ChatColor.GOLD + "Gold Ore", Arrays.asList(Util.colorCodes("&7This heavy ore contains gold, an excellent conductor in electronics.")), 950, 125, ProfessionTier.ELITE, 30, 90),
+	RUTILE(Material.COAL_ORE, ChatColor.DARK_GRAY + "Rutile Ore", Collections.singletonList(Util.colorCodes("&7A very dirty chunk of stone with traces of Rutile in it.")), 115, 30, ProfessionTier.BASIC, 3, 10),
+	BAUXITE(Material.REDSTONE_ORE, ChatColor.RED + "Bauxite Ore", Collections.singletonList(Util.colorCodes("&7This chunk might prove useful for yielding Aluminium.")), 250, 50, ProfessionTier.IMPROVED, 5, 20),
+	IRON(Material.IRON_ORE, ChatColor.YELLOW + "Iron Ore", Collections.singletonList(Util.colorCodes("&7Magnetite contains large amounts of Iron, useful in many machines and equipment.")), 350, 75, ProfessionTier.IMPROVED, 10, 30),
+	AZURITE(Material.LAPIS_ORE, ChatColor.BLUE + "Azurite Ore", Collections.singletonList(Util.colorCodes("&7One of many minerals to contain copper, useful in manufacturing")), 770, 100, ProfessionTier.REINFORCED, 20, 50),
+	GOLD(Material.GOLD_ORE, ChatColor.GOLD + "Gold Ore", Collections.singletonList(Util.colorCodes("&7This heavy ore contains gold, an excellent conductor in electronics.")), 950, 125, ProfessionTier.ELITE, 30, 90),
 	CRYSTAL(Material.DIAMOND_ORE, ChatColor.AQUA + "Unsorted Crystal Cluster", Arrays.asList(Util.colorCodes("&7An assortment of minerals and gemstones."), Util.colorCodes("&7You should probably refine it first.")), 1500, 300, ProfessionTier.ELITE, 60, 85),
-	VERIDIUM(Material.EMERALD_ORE, ChatColor.DARK_GREEN + "Veridium Ore", Arrays.asList(Util.colorCodes("&7The rarest of all minerals, only to be found in dangerous areas.")), 2100, 150, ProfessionTier.ULTIMATE, 90, 120);
+	VERIDIUM(Material.EMERALD_ORE, ChatColor.DARK_GREEN + "Veridium Ore", Collections.singletonList(Util.colorCodes("&7The rarest of all minerals, only to be found in dangerous areas.")), 2100, 150, ProfessionTier.ULTIMATE, 90, 120);
 
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Material oreType;

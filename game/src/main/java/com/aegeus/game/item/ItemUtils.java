@@ -2,7 +2,10 @@ package com.aegeus.game.item;
 
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemUtils {
 	public static NBTTagCompound getTag(ItemStack item) {
@@ -22,5 +25,14 @@ public class ItemUtils {
 
     public static void setDisplayItem(ItemStack item, boolean b)    {
 	    getTag(item).setBoolean("displayitem", b);
+    }
+
+    public static void setGlowing(ItemStack item, boolean setGlowing) {
+	    if(setGlowing) {
+	        ItemMeta meta = item.getItemMeta();
+	        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+	        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+	        item.setItemMeta(meta);
+        }
     }
 }

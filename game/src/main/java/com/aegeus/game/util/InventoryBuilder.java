@@ -1,5 +1,6 @@
 package com.aegeus.game.util;
 
+import com.google.common.base.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class InventoryBuilder {
     private InventoryHolder owner;
-    private Pair<ItemStack, InventoryHandler>[] items;
+    private Pair<ItemStack, InventoryHandler, Boolean>[] items;
     private int size = 36;
     private String title;
 
@@ -35,17 +36,17 @@ public class InventoryBuilder {
         return count;
     }
 
-    public InventoryBuilder setItem(int slot, ItemStack itemStack)    {
+    public InventoryBuilder setItem(int slot, ItemStack itemStack, boolean closeOnClick)    {
         if(slot < size)   {
-            items[slot] = new Pair<>(itemStack, null);
+            items[slot] = new Pair<>(itemStack, null, closeOnClick);
             return this;
         }
         else throw new RuntimeException("Invalid slot number.");
     }
 
-    public InventoryBuilder setItem(int slot, ItemStack itemStack, InventoryHandler handler)    {
+    public InventoryBuilder setItem(int slot, ItemStack itemStack, InventoryHandler handler, boolean closeOnClick)    {
         if(slot < size) {
-            items[slot] = new Pair<>(itemStack, handler);
+            items[slot] = new Pair<>(itemStack, handler, closeOnClick);
             return this;
         }
         else throw new RuntimeException("Invalid slot number.");
@@ -59,6 +60,10 @@ public class InventoryBuilder {
 
     public void click(int slot, InventoryClickEvent e) {
         if(slot < size && items[slot] != null && items[slot].getValue() != null)   {
+            if(items[slot].getHelperValue() == true) {
+                InventoryMenuManager.removeInventory(this);
+                e.getWhoClicked().closeInventory();
+            }
             items[slot].getValue().run(e);
         }
     }
@@ -84,13 +89,15 @@ public class InventoryBuilder {
         return i;
     }
 
-    public class Pair<K, V> {
+    private class Pair<K, V, H> {
         private K k;
         private V v;
+        private H h;
 
-        public Pair(K k, V v)   {
+        public Pair(K k, V v, H h)   {
             this.k = k;
             this.v = v;
+            this.h = h;
         }
 
         public K getKey() {
@@ -101,6 +108,10 @@ public class InventoryBuilder {
             return v;
         }
 
+        public H getHelperValue() {
+            return h;
+        }
+
         public void setKey(K k) {
             this.k = k;
         }
@@ -109,9 +120,23 @@ public class InventoryBuilder {
             this.v = v;
         }
 
+        public void setHelperValue(H h) {
+            this.h = h;
+        }
+
         @Override
-        public boolean equals(Object obj) {
-            return (obj instanceof Pair) && ((Pair) obj).getKey().equals(k) && ((Pair) obj).getValue().equals(v);
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair<?, ?, ?> pair = (Pair<?, ?, ?>) o;
+            return Objects.equal(k, pair.k) &&
+                    Objects.equal(v, pair.v) &&
+                    Objects.equal(h, pair.h);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(k, v, h);
         }
     }
 

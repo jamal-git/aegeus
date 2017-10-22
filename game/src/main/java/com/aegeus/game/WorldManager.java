@@ -42,9 +42,11 @@ public class WorldManager {
      */
     public boolean removeWorld(File path) {
         File[] files = path.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) removeWorld(file);
-            else file.delete();
+        if(files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) removeWorld(file);
+                else file.delete();
+            }
         }
         return path.delete();
     }

@@ -25,6 +25,7 @@ public class InventorytoBase64 {
 
 			// Write the size of the inventory
 			dataOutput.writeInt(inventory.getSize());
+			dataOutput.writeChars(inventory.getTitle());
 
 			// Save every element in the list
 			for (int i = 0; i < inventory.getSize(); i++) {
@@ -39,11 +40,11 @@ public class InventorytoBase64 {
 		}
 	}
 
-	public static Inventory fromBase64(String data, String name) throws IOException {
+	public static Inventory fromBase64(String data) throws IOException {
 		try {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
 			BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-			Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt(), name);
+			Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt(), dataInput.readUTF());
 
 			// Read the serialized inventory
 			for (int i = 0; i < inventory.getSize(); i++) {

@@ -70,66 +70,102 @@ public class CraftingCompendium {
         ItemStack common = new ItemStack(Material.STAINED_GLASS, 1, (byte) 0);
         Util.setDisplayName(common, EnumMaterialRarity.COMMON.getNameAndColor());
         b.setItem(0, common, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.COMMON, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        },true );
         ItemStack uncommon = new ItemStack(Material.STAINED_GLASS, 1, (byte) 5);
         Util.setDisplayName(uncommon, EnumMaterialRarity.UNCOMMON.getNameAndColor());
         b.setItem(1, uncommon, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.UNCOMMON, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack rare = new ItemStack(Material.STAINED_GLASS, 1, (byte) 3);
         Util.setDisplayName(rare, EnumMaterialRarity.RARE.getNameAndColor());
         b.setItem(2, rare, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.RARE, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack arcane = new ItemStack(Material.STAINED_GLASS, 1, (byte) 2);
         Util.setDisplayName(arcane, EnumMaterialRarity.ARCANE.getNameAndColor());
         b.setItem(3, arcane, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.ARCANE, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack unique = new ItemStack(Material.STAINED_GLASS, 1, (byte) 1);
         Util.setDisplayName(unique, EnumMaterialRarity.UNIQUE.getNameAndColor());
         b.setItem(4, unique, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.UNIQUE, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack divine = new ItemStack(Material.STAINED_GLASS, 1, (byte) 9);
         Util.setDisplayName(divine, EnumMaterialRarity.DIVINE.getNameAndColor());
         b.setItem(5, divine, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.DIVINE, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack celestial = new ItemStack(Material.STAINED_GLASS, 1, (byte) 14);
         Util.setDisplayName(celestial, EnumMaterialRarity.CELESTIAL.getNameAndColor());
         b.setItem(6, celestial, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.CELESTIAL, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack mythical = new ItemStack(Material.STAINED_GLASS, 1, (byte) 11);
         Util.setDisplayName(mythical, EnumMaterialRarity.MYTHICAL.getNameAndColor());
         b.setItem(7, mythical, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.MYTHICAL, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         ItemStack legendary = new ItemStack(Material.STAINED_GLASS, 1, (byte) 4);
         Util.setDisplayName(legendary, EnumMaterialRarity.LEGENDARY.getNameAndColor());
         b.setItem(8, legendary, (InventoryClickEvent e) -> {
+            e.setCancelled(true);
             InventoryBuilder submenu = getSubmenu(EnumMaterialRarity.LEGENDARY, p);
-            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> b.show(p.getPlayer()));
+            submenu.setItem(26, Util.getGoBack(), (InventoryClickEvent e1) -> {
+                e1.setCancelled(true);
+                b.show(p.getPlayer());
+            }, true);
             submenu.show(p.getPlayer());
-        });
+        }, true);
         return b;
     }
 
@@ -149,7 +185,7 @@ public class CraftingCompendium {
             meta.setLore(lore);
             meta.setDisplayName(Util.colorCodes(meta.getDisplayName() + ": &f" +  + p.getCraftingCompendium().get(material)));
             stack.setItemMeta(meta);
-            menu.setItem(i, stack);
+            menu.setItem(i, stack, e1 -> e1.setCancelled(true), false);
         }
         return menu;
     }

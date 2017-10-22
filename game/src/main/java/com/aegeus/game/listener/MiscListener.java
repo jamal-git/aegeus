@@ -55,9 +55,6 @@ public class MiscListener implements Listener {
         if(e.getClickedInventory() == null || e.getClickedInventory().getType() != InventoryType.CHEST) return;
         InventoryBuilder builder = null;
         if((builder = InventoryMenuManager.getBuilderFromInventory(e.getClickedInventory())) != null && builder.getInventory().getItem(e.getSlot()) != null)   {
-            e.setCancelled(true);
-            e.getWhoClicked().closeInventory();
-            InventoryMenuManager.removeInventory(builder);
             builder.click(e.getSlot(), e);
         }
     }

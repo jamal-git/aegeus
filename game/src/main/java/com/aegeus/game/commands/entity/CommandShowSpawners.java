@@ -2,14 +2,12 @@ package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.Spawner;
-import com.aegeus.game.util.InventoryBuilder;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Silvre on 7/5/2017.
@@ -23,9 +21,6 @@ public class CommandShowSpawners implements CommandExecutor {
 				//noinspection deprecation
 				p.sendBlockChange(s.getLocation(), Material.MOB_SPAWNER, (byte) 0);
 			p.sendMessage(Util.colorCodes("&7Showing all spawners."));
-            new InventoryBuilder(p, 9, "Fuck").setItem(0, new ItemStack(Material.COBBLESTONE, 64)).setOnClick(0, (e) -> {
-                    p.sendMessage(Util.colorCodes("&aFuck off"));
-            }).show(p);
 			return true;
 		}
 		return false;

@@ -42,7 +42,7 @@ public class MiningListener implements Listener {
 				Pickaxe pick = new Pickaxe(item);
 				Ore o = Ore.getOreByMaterial(b.getType());
 				if (o != null && o.isMinable(pick)) {
-					//Mined block is a registered ore and was mined with a pick, give do stuff.
+					//Mined block is a registered ore and was mined with a pick, do stuff.
 					b.setType(Material.STONE);
 					if (!o.sameTier(pick) || random.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
 						b.setType(Material.STONE);

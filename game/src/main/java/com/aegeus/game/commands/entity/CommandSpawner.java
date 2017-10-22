@@ -13,10 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class CommandSpawner implements CommandExecutor {
 	@Override
@@ -49,7 +46,7 @@ public class CommandSpawner implements CommandExecutor {
 				l = player.getLocation().getBlock().getLocation();
 			else if (args[1].equalsIgnoreCase("target"))
 				//Player wants the spawner to be at where they are looking at.
-				l = player.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100).getLocation();
+				l = player.getTargetBlock(new HashSet<Material>(Collections.singletonList(Material.AIR)), 100).getLocation();
 			else return false;
 			List<Stats> stats = new ArrayList<>();
 			//Parse spawner stats
@@ -83,7 +80,7 @@ public class CommandSpawner implements CommandExecutor {
 				l = player.getLocation().getBlock().getLocation();
 			} else if (args[1].equalsIgnoreCase("target")) {
 				//Remove at the block the player is currently looking at
-				l = player.getTargetBlock(new HashSet<Material>(Arrays.asList(Material.AIR)), 100).getLocation();
+				l = player.getTargetBlock(new HashSet<Material>(Collections.singletonList(Material.AIR)), 100).getLocation();
 
 			} else return false;
 			if (Aegeus.getInstance().getSpawner(l) != null) {
@@ -133,7 +130,7 @@ public class CommandSpawner implements CommandExecutor {
 		        return true;
             }
             else if(args[1].equalsIgnoreCase("target")) {
-		        Location target = player.getTargetBlock(new HashSet<>(Arrays.asList(Material.AIR)), 100).getLocation();
+		        Location target = player.getTargetBlock(new HashSet<>(Collections.singletonList(Material.AIR)), 100).getLocation();
 		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
 		            if(s.getLocation().equals(target))  {
 		                agPlayer.setEditSpawner(s);
