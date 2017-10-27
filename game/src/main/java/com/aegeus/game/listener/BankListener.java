@@ -27,9 +27,10 @@ public class BankListener implements Listener {
 
     @EventHandler
     public void onBankOpen(PlayerInteractEvent e) throws Exception {
-        if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.STONE) {
-            Bank b = new Bank(Aegeus.getInstance().getPlayer(e.getPlayer()), 54);
-            e.getPlayer().openInventory(b.getInventory(1));
+        if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.ENDER_CHEST) {
+            e.setCancelled(true);
+            Bank b = new Bank(plugin.getPlayer(e.getPlayer()), 135);
+            b.getInventory(1).show(e.getPlayer());
         }
     }
 }

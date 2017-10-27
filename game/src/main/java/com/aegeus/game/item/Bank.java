@@ -1,11 +1,13 @@
 package com.aegeus.game.item;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.util.InventoryBuilder;
 import com.aegeus.game.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -27,12 +29,12 @@ public class Bank {
         this.slots = slots;
         this.numPages  = (int) Math.ceil(slots / 45.0);
         for (int i = 1; i <= numPages; i++) {
-            pages.add(createPage(numPages > 1 ? i != numPages ? 45 : slots % 45 : slots, i, owner.getPlayer(), "Page " + i));
+            pages.add(createPage(numPages > 1 ? i != numPages ? 45 : slots - (45 * (i - 1)) : slots, i, owner.getPlayer(), "Page " + i));
         }
     }
 
-    public Inventory getInventory(int page) throws Exception {
-        if(page > pages.size()) throw new Exception("Invalid page number!");
+    public InventoryBuilder getInventory(int page) {
+        if(page > pages.size()) throw new RuntimeException("Invalid page number!");
         return pages.get(page - 1).getInventory();
     }
 
@@ -41,7 +43,7 @@ public class Bank {
     }
 
     public Page createPage(int size, int pageNumber, Player owner, String title) {
-        Inventory i = Bukkit.createInventory(owner, size + (getNumberOfPages() > 1 ? 9 : 0), title);
+        InventoryBuilder i = new InventoryBuilder(owner, size + (getNumberOfPages() > 1 ? 9 : 0), title);
         if(getNumberOfPages() > 1) {
             ItemStack pane = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 0);
             ItemUtils.setDisplayItem(pane, true);
@@ -76,15 +78,21 @@ public class Bank {
             }
             pageFlipNext.setItemMeta(pFNMeta);
 
-            i.setItem(i.getSize() - 9, pane);
-            i.setItem(i.getSize() - 8, pane);
-            i.setItem(i.getSize() - 7, pane);
-            i.setItem(i.getSize() - 6, pageFlipPrevious);
-            i.setItem(i.getSize() - 5, pane);
-            i.setItem(i.getSize() - 4, pageFlipNext);
-            i.setItem(i.getSize() - 3, pane);
-            i.setItem(i.getSize() - 2, pane);
-            i.setItem(i.getSize() - 1, pane);
+            i.setItem(i.getSize() - 9, pane, e1 -> e1.setCancelled(true), false);
+            i.setItem(i.getSize() - 8, pane, e1 -> e1.setCancelled(true), false);
+            i.setItem(i.getSize() - 7, pane, e1 -> e1.setCancelled(true), false);
+            i.setItem(i.getSize() - 6, pageFlipPrevious,
+                    pageFlipPrevious.getType() == Material.SPECTRAL_ARROW ? e1 -> {
+                        getInventory(pageNumber - 1).show((Player) e1.getWhoClicked());
+                    } : null, pageFlipPrevious.getType() == Material.SPECTRAL_ARROW) ;
+            i.setItem(i.getSize() - 5, pane, false);
+            i.setItem(i.getSize() - 4, pageFlipNext,
+                    pageFlipNext.getType() == Material.SPECTRAL_ARROW ? e1 -> {
+                        getInventory(pageNumber + 1).show((Player) e1.getWhoClicked());
+                    } : null, pageFlipNext.getType() == Material.SPECTRAL_ARROW);
+            i.setItem(i.getSize() - 3, pane, e1 -> Bukkit.getScheduler().scheduleSyncDelayedTask(Aegeus.getInstance(), () -> e1.setCancelled(true), 1L), false);
+            i.setItem(i.getSize() - 2, pane, e1 -> e1.setCancelled(true), false);
+            i.setItem(i.getSize() - 1, pane, e1 -> e1.setCancelled(true), false);
         }
         return new Page(size, pageNumber, i, this);
     }
@@ -92,9 +100,9 @@ public class Bank {
     public class Page {
         private int size = 9;
         private int pageNumber;
-        private Inventory inventory;
+        private InventoryBuilder inventory;
         private Bank origin;
-        public Page(int size, int pageNumber, Inventory inventory, Bank origin) {
+        public Page(int size, int pageNumber, InventoryBuilder inventory, Bank origin) {
             this.size = size;
             this.pageNumber = pageNumber;
             this.inventory = inventory;
@@ -113,7 +121,7 @@ public class Bank {
             return size;
         }
 
-        public Inventory getInventory() {
+        public InventoryBuilder getInventory() {
             return inventory;
         }
     }

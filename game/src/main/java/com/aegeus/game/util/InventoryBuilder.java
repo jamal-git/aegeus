@@ -1,5 +1,6 @@
 package com.aegeus.game.util;
 
+import com.aegeus.game.Aegeus;
 import com.google.common.base.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,6 +37,10 @@ public class InventoryBuilder {
         return count;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public InventoryBuilder setItem(int slot, ItemStack itemStack, boolean closeOnClick)    {
         if(slot < size)   {
             items[slot] = new Pair<>(itemStack, null, closeOnClick);
@@ -59,13 +64,15 @@ public class InventoryBuilder {
     }
 
     public void click(int slot, InventoryClickEvent e) {
-        if(slot < size && items[slot] != null && items[slot].getValue() != null)   {
-            if(items[slot].getHelperValue() == true) {
-                InventoryMenuManager.removeInventory(this);
-                e.getWhoClicked().closeInventory();
-            }
-            items[slot].getValue().run(e);
+        if(items[slot].getHelperValue()) {
+            InventoryMenuManager.removeInventory(this);
+            e.getWhoClicked().closeInventory();
         }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Aegeus.getInstance(), () -> {
+            if(slot < size && items[slot] != null && items[slot].getValue() != null)   {
+                items[slot].getValue().run(e);
+            }
+        }, 1L);
     }
 
     public void show(Player p)    {
