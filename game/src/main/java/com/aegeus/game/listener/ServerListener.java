@@ -39,9 +39,9 @@ public class ServerListener implements Listener {
 	// Login messages and initial player setup
 	private void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
-		if(!parent.contains(player) && parent.hasPlayerData(player))
-		    parent.loadPlayer(player);
-        AgPlayer info = parent.getPlayer(player);
+		if (!parent.contains(player) && parent.hasPlayerData(player))
+			parent.loadPlayer(player);
+		AgPlayer info = parent.getPlayer(player);
 		info.addLogins(1);
 		e.setJoinMessage("");
 		player.setHealthScaled(true);
@@ -133,10 +133,10 @@ public class ServerListener implements Listener {
 	// Clear user information and punish combat loggers
 	private void onLogout(PlayerQuitEvent e) {
 		AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
-        Party p = PartyManager.getInstance().getPartyFromPlayer(player);
-        if(p != null) p.remove(player);
-        parent.savePlayer(player);
-        e.setQuitMessage("");
+		Party p = PartyManager.getInstance().getPartyFromPlayer(player);
+		if (p != null) p.remove(player);
+		parent.savePlayer(player);
+		e.setQuitMessage("");
 	}
 
 	@EventHandler

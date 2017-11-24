@@ -181,35 +181,35 @@ public class ItemParser {
 		p = (Pickaxe) parseItem(p, args);
 		p = (Pickaxe) parseProfession(p, args);
 
-        for (String arg : args) {
-            try {
-                String[] pair = arg.split("=");
-                String key = pair[0];
-                String value = pair[1];
-                switch (key.toLowerCase()) {
-                    case "miningsuccess":
-                        p.setMiningSuccess(Float.valueOf(value));
-                        break;
-                    case "densefind":
-                        p.setDenseFind(Float.valueOf(value));
-                        break;
-                    case "densemultiplier":
-                        p.setDenseMultiplier(Integer.valueOf(value));
-                        break;
-                    case "doubleore":
-                        p.setDoubleOre(Float.valueOf(value));
-                        break;
-                    case "tripleore":
-                        p.setTripleOre(Float.valueOf(value));
-                        break;
-                    case "gemfind":
-                        p.setGemFind(Float.valueOf(value));
-                        break;
-                }
-            } catch (Exception fuckexceptions) {
-                fuckexceptions.printStackTrace();
-            }
-        }
+		for (String arg : args) {
+			try {
+				String[] pair = arg.split("=");
+				String key = pair[0];
+				String value = pair[1];
+				switch (key.toLowerCase()) {
+					case "miningsuccess":
+						p.setMiningSuccess(Float.valueOf(value));
+						break;
+					case "densefind":
+						p.setDenseFind(Float.valueOf(value));
+						break;
+					case "densemultiplier":
+						p.setDenseMultiplier(Integer.valueOf(value));
+						break;
+					case "doubleore":
+						p.setDoubleOre(Float.valueOf(value));
+						break;
+					case "tripleore":
+						p.setTripleOre(Float.valueOf(value));
+						break;
+					case "gemfind":
+						p.setGemFind(Float.valueOf(value));
+						break;
+				}
+			} catch (Exception fuckexceptions) {
+				fuckexceptions.printStackTrace();
+			}
+		}
 		return p;
 	}
 }

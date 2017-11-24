@@ -20,6 +20,7 @@ public class ListPoss<T> extends ArrayList<T> {
 		super(c);
 	}
 
+	@SafeVarargs
 	public ListPoss(T... ts) {
 		this(Arrays.asList(ts));
 	}

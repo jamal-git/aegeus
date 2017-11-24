@@ -25,25 +25,25 @@ public class CommandCreate implements CommandExecutor {
 			if (material == null) return false;
 
 			if (args[0].equalsIgnoreCase("armor"))
-			    //Armor
+				//Armor
 				player.getInventory().addItem(ItemParser.parseArmor(new Armor(material), args).build());
 			if (args[0].equalsIgnoreCase("weapon"))
-			    //Weapon
+				//Weapon
 				player.getInventory().addItem(ItemParser.parseWeapon(new Weapon(material), args).build());
 		} else if (args[0].equalsIgnoreCase("pickaxe")) {
-		    //Pickaxe
+			//Pickaxe
 			player.getInventory().addItem(ItemParser.parsePick(new Pickaxe(), args).build());
 		} else if (args[0].equalsIgnoreCase("enchant")) {
-		    //Enchant
+			//Enchant
 			int tier = Integer.parseInt(args[1]);
 			int type = Integer.parseInt(args[2]);
 			int amount = args.length < 4 ? 1 : Integer.parseInt(args[3]);
 
 			player.getInventory().addItem(new Enchant(tier, type, amount).build());
 		} else if (args[0].equalsIgnoreCase("cc")) {
-		    //Crafting Compendium
-		    player.getInventory().addItem(Util.getCraftingCompendium());
-        }
+			//Crafting Compendium
+			player.getInventory().addItem(Util.getCraftingCompendium());
+		}
 
 		return true;
 	}

@@ -54,6 +54,7 @@ public class AgMonster extends AgLiving {
 		this.abilChance = other.abilChance;
 		this.onHit = other.onHit;
 		this.onDamaged = other.onDamaged;
+		this.drops = other.drops;
 		this.origin = other.origin;
 		this.tier = other.tier;
 		this.chance = other.chance;
@@ -62,7 +63,6 @@ public class AgMonster extends AgLiving {
 		this.forcedHp = other.forcedHp;
 		this.hpMultiplier = other.hpMultiplier;
 		this.dmgMultiplier = other.dmgMultiplier;
-        this.drops.putAll(other.drops);
 	}
 
 	public String getName() {
@@ -177,11 +177,11 @@ public class AgMonster extends AgLiving {
 		this.dmgMultiplier = dmgMultiplier;
 	}
 
-    public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
-        return drops;
-    }
+	public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
+		return drops;
+	}
 
-    public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
-        this.drops = drops;
-    }
+	public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
+		this.drops = drops;
+	}
 }

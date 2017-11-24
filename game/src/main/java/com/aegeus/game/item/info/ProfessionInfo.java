@@ -11,11 +11,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Silvre on 7/1/2017.
- * Project: aegeus
- * If you are reading this - you can read this
- */
 public interface ProfessionInfo extends ItemInfo {
 	static <T extends ProfessionInfo> void impo(T t) {
 		NBTTagCompound info = getProfessionInfo(t.getItem());

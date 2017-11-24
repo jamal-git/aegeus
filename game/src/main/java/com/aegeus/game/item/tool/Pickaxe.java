@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by Silvre on 6/24/2017.
- */
 public class Pickaxe implements ProfessionInfo {
 
 	private static final double CONSTANT = 1.114;
@@ -195,20 +192,20 @@ public class Pickaxe implements ProfessionInfo {
 				}
 				switch (r.nextInt(j)) {
 					case 0: //MINING SUCCESS
-                        addRandomMiningSuccess();
+						addRandomMiningSuccess();
 						break;
 					case 1: //DOUBLE ORE
 						addRandomDoubleOre();
 						break;
 					case 2: //TRIPLE ORE
-                        addRandomTripleOre();
+						addRandomTripleOre();
 						break;
 					case 3: //GEM FIND
-                        addRandomGemFind();
+						addRandomGemFind();
 						break;
 					case 4: //DENSE MULTIPLIER
-                        addRandomDenseMultiplier();
-                        break;
+						addRandomDenseMultiplier();
+						break;
 					case 5: //DENSE FIND
 						addRandomDenseFind();
 						break;
@@ -221,52 +218,52 @@ public class Pickaxe implements ProfessionInfo {
 		return false;
 	}
 
-	public void addRandomMiningSuccess()    {
-        if (tier == ProfessionTier.IMPROVED) miningSuccess += (r.nextInt(2) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.REINFORCED) miningSuccess += (r.nextInt(4) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ELITE) miningSuccess += (r.nextInt(8) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ULTIMATE) miningSuccess += (r.nextInt(10) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.TRANSCENDENT) miningSuccess += (r.nextInt(15) + 1.0f) / 100.0f;
-    }
+	public void addRandomMiningSuccess() {
+		if (tier == ProfessionTier.IMPROVED) miningSuccess += (r.nextInt(2) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.REINFORCED) miningSuccess += (r.nextInt(4) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ELITE) miningSuccess += (r.nextInt(8) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ULTIMATE) miningSuccess += (r.nextInt(10) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.TRANSCENDENT) miningSuccess += (r.nextInt(15) + 1.0f) / 100.0f;
+	}
 
-    public void addRandomDoubleOre()    {
-        if (tier == ProfessionTier.IMPROVED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.REINFORCED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ELITE) doubleOre += (r.nextInt(5) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ULTIMATE) doubleOre += (r.nextInt(7) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.TRANSCENDENT) doubleOre += (r.nextInt(9) + 1.0f) / 100.0f;
-    }
+	public void addRandomDoubleOre() {
+		if (tier == ProfessionTier.IMPROVED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.REINFORCED) doubleOre += (r.nextInt(3) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ELITE) doubleOre += (r.nextInt(5) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ULTIMATE) doubleOre += (r.nextInt(7) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.TRANSCENDENT) doubleOre += (r.nextInt(9) + 1.0f) / 100.0f;
+	}
 
-    public void addRandomTripleOre()    {
-        if (tier == ProfessionTier.IMPROVED) tripleOre += (r.nextInt(1) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.REINFORCED) tripleOre += (r.nextInt(2) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ELITE) tripleOre += (r.nextInt(4) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ULTIMATE) tripleOre += (r.nextInt(5) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.TRANSCENDENT) tripleOre += (r.nextInt(7) + 1.0f) / 100.0f;
-    }
+	public void addRandomTripleOre() {
+		if (tier == ProfessionTier.IMPROVED) tripleOre += (r.nextInt(1) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.REINFORCED) tripleOre += (r.nextInt(2) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ELITE) tripleOre += (r.nextInt(4) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ULTIMATE) tripleOre += (r.nextInt(5) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.TRANSCENDENT) tripleOre += (r.nextInt(7) + 1.0f) / 100.0f;
+	}
 
-    public void addRandomGemFind()  {
-        if (tier == ProfessionTier.IMPROVED) gemFind += (r.nextInt(2) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.REINFORCED) gemFind += (r.nextInt(3) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ELITE) gemFind += (r.nextInt(5) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ULTIMATE) gemFind += (r.nextInt(7) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.TRANSCENDENT) gemFind += (r.nextInt(9) + 1.0f) / 100.0f;
-    }
+	public void addRandomGemFind() {
+		if (tier == ProfessionTier.IMPROVED) gemFind += (r.nextInt(2) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.REINFORCED) gemFind += (r.nextInt(3) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ELITE) gemFind += (r.nextInt(5) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ULTIMATE) gemFind += (r.nextInt(7) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.TRANSCENDENT) gemFind += (r.nextInt(9) + 1.0f) / 100.0f;
+	}
 
-    public void addRandomDenseMultiplier()  {
-        if (tier == ProfessionTier.ELITE) denseMultiplier += r.nextInt(3);
-        if (tier == ProfessionTier.ULTIMATE) denseMultiplier += r.nextInt(5);
-        if (tier == ProfessionTier.TRANSCENDENT) denseMultiplier += r.nextInt(7);
-        denseMultiplier++;
-        if(getDenseFind() == 0.00) addRandomDenseFind();
-    }
+	public void addRandomDenseMultiplier() {
+		if (tier == ProfessionTier.ELITE) denseMultiplier += r.nextInt(3);
+		if (tier == ProfessionTier.ULTIMATE) denseMultiplier += r.nextInt(5);
+		if (tier == ProfessionTier.TRANSCENDENT) denseMultiplier += r.nextInt(7);
+		denseMultiplier++;
+		if (getDenseFind() == 0.00) addRandomDenseFind();
+	}
 
-    public void addRandomDenseFind()    {
-        if (tier == ProfessionTier.ELITE) denseFind += (r.nextInt(2) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.ULTIMATE) denseFind += (r.nextInt(4) + 1.0f) / 100.0f;
-        if (tier == ProfessionTier.TRANSCENDENT) denseFind += (r.nextInt(5) + 1.0f) / 100.0f;
-        if(denseMultiplier == 0.00) addRandomDenseMultiplier();
-    }
+	public void addRandomDenseFind() {
+		if (tier == ProfessionTier.ELITE) denseFind += (r.nextInt(2) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.ULTIMATE) denseFind += (r.nextInt(4) + 1.0f) / 100.0f;
+		if (tier == ProfessionTier.TRANSCENDENT) denseFind += (r.nextInt(5) + 1.0f) / 100.0f;
+		if (denseMultiplier == 0.00) addRandomDenseMultiplier();
+	}
 
 	/*
 	 * Encapsulations

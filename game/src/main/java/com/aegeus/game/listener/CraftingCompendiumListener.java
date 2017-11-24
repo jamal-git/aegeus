@@ -12,42 +12,40 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Created by Team Tower Defense on 9/1/2017.
- */
 public class CraftingCompendiumListener implements Listener {
 
-    private Aegeus parent;
+	private Aegeus parent;
 
-    public CraftingCompendiumListener(Aegeus parent)    {
-        this.parent = parent;
-    }
-    @EventHandler
-    public void onRightClick(PlayerInteractEvent e) {
-        if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)    {
-            ItemStack stack = e.getItem();
-            if(stack != null && stack.isSimilar(Util.getCraftingCompendium()))  {
-                CraftingCompendium.getInventoryBuilder(e.getPlayer()).show(e.getPlayer());
-            }
-        }
-    }
+	public CraftingCompendiumListener(Aegeus parent) {
+		this.parent = parent;
+	}
 
-    @EventHandler
-    public void onItemPickup(PlayerPickupItemEvent e) {
-        ItemStack stack = e.getItem().getItemStack();
-        EnumCraftingMaterial item = null;
-        for(EnumCraftingMaterial i : EnumCraftingMaterial.values()) {
-            if(i.getItem().isSimilar(stack)) {
-                item = i;
-                break;
-            }
-        }
-        if(item != null) {
-            AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
-            player.getCraftingCompendium().add(item, stack.getAmount());
-            player.sendMessage(Util.colorCodes("&6+" + stack.getAmount() + " " + item.getName())); //todo make it look better
-            e.setCancelled(true);
-            e.getItem().remove();
-        }
-    }
+	@EventHandler
+	public void onRightClick(PlayerInteractEvent e) {
+		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			ItemStack stack = e.getItem();
+			if (stack != null && stack.isSimilar(Util.getCraftingCompendium())) {
+				CraftingCompendium.getInventoryBuilder(e.getPlayer()).show(e.getPlayer());
+			}
+		}
+	}
+
+	@EventHandler
+	public void onItemPickup(PlayerPickupItemEvent e) {
+		ItemStack stack = e.getItem().getItemStack();
+		EnumCraftingMaterial item = null;
+		for (EnumCraftingMaterial i : EnumCraftingMaterial.values()) {
+			if (i.getItem().isSimilar(stack)) {
+				item = i;
+				break;
+			}
+		}
+		if (item != null) {
+			AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
+			player.getCraftingCompendium().add(item, stack.getAmount());
+			player.sendMessage(Util.colorCodes("&6+" + stack.getAmount() + " " + item.getName())); //todo make it look better
+			e.setCancelled(true);
+			e.getItem().remove();
+		}
+	}
 }

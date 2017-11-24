@@ -46,7 +46,7 @@ public class CombatListener implements Listener {
 
 	@EventHandler
 	private void onDeath(EntityDeathEvent e) {
-	    e.getDrops().clear();
+		e.getDrops().clear();
 		LivingEntity entity = e.getEntity();
 		AgLiving info = parent.getLiving(entity);
 
@@ -70,16 +70,16 @@ public class CombatListener implements Listener {
 
 			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
 				entity.getWorld().dropItemNaturally(entity.getLocation(), Items.getGold(mInfo.getGold()));
-			for(EnumCraftingMaterial m : mInfo.getDrops().keySet()) {
-			    Map<EnumCraftingMaterial, Chance<IntPoss>> drops = mInfo.getDrops();
-                IntPoss chance = null;
-			    if((chance = drops.get(m).get()) != null) {
-			        ItemStack stack = m.getItem();
-			        stack.setAmount(chance.get());
-			        entity.getWorld().dropItemNaturally(entity.getLocation(), stack);
-			        //todo implement hologram above the item
-                }
-            }
+			for (EnumCraftingMaterial m : mInfo.getDrops().keySet()) {
+				Map<EnumCraftingMaterial, Chance<IntPoss>> drops = mInfo.getDrops();
+				IntPoss chance = drops.get(m).get();
+				if (chance != null) {
+					ItemStack stack = m.getItem();
+					stack.setAmount(chance.get());
+					entity.getWorld().dropItemNaturally(entity.getLocation(), stack);
+					//todo implement hologram above the item
+				}
+			}
 		}
 
 		if (info.getAttacker() instanceof Player) {
@@ -184,7 +184,7 @@ public class CombatListener implements Listener {
 
 			if (e.getDamage() > 0) {
 				lDamaged.getWorld().spawnParticle(Particle.BLOCK_CRACK, lDamaged.getLocation(),
-						110, 0.25, 0.8, 0.25, new MaterialData(Material.getMaterial(55)));
+						110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
 				lDamaged.damage(e.getDamage());
 				lDamaged.setLastDamage(e.getDamage());
 				lDamaged.setLastDamageCause(e);
