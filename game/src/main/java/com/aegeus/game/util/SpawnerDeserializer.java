@@ -11,11 +11,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Silvre on 7/4/2017.
- * Project: aegeus
- * If you are reading this - you can read this
- */
 public class SpawnerDeserializer implements JsonDeserializer<Spawner> {
 	@Override
 	public Spawner deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {

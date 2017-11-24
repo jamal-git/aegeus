@@ -16,7 +16,7 @@ public class Party {
 
 	public Party(AgPlayer p) {
 		add(p);
-    }
+	}
 
 	public LinkedList<AgPlayer> getMembers() {
 		return members;
@@ -27,9 +27,9 @@ public class Party {
 	}
 
 	public void setLeader(AgPlayer p) {
-	    if(getLeader().equals(p))   {
-	        p.sendMessage(Util.colorCodes("&cYou already are the party leader!"));
-        }
+		if (getLeader().equals(p)) {
+			p.sendMessage(Util.colorCodes("&cYou already are the party leader!"));
+		}
 		if (members.contains(p)) {
 			AgPlayer leader = getLeader();
 			members.remove(leader);
@@ -38,7 +38,7 @@ public class Party {
 
 			leader.getPlayer().sendMessage(Util.colorCodes("&aYou have promoted &f&l" + p.getPlayer().getName() + "&r&a as the party leader."));
 			p.getPlayer().sendMessage(Util.colorCodes("&aYou have been promoted to the &lPARTY LEADER&r&a."));
-            sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getDisplayName() + "&r&a has been promoted to party leader."), getLeader(), true);
+			sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getDisplayName() + "&r&a has been promoted to party leader."), getLeader(), true);
 		}
 	}
 
@@ -52,16 +52,16 @@ public class Party {
 	public void remove(AgPlayer p) {
 		if (members.contains(p)) {
 			members.remove(p);
-            if(members.size() > 0) {
-                for (AgPlayer m : members) {
-                    GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
-                    if (p.getPlayer().isOnline())
-                        GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
-                    m.getPlayer().sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getName() + "&a has left the party."));
-                }
-                getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou are now the party leader."));
-                sendMessage(Util.colorCodes("&f&l" + getLeader().getPlayer().getDisplayName() + "&r&a is now the leader."), getLeader(), true);
-            }
+			if (members.size() > 0) {
+				for (AgPlayer m : members) {
+					GlowAPI.setGlowing(m.getPlayer(), false, p.getPlayer());
+					if (p.getPlayer().isOnline())
+						GlowAPI.setGlowing(p.getPlayer(), false, m.getPlayer());
+					m.getPlayer().sendMessage(Util.colorCodes("&f&l" + p.getPlayer().getName() + "&a has left the party."));
+				}
+				getLeader().getPlayer().sendMessage(Util.colorCodes("&aYou are now the party leader."));
+				sendMessage(Util.colorCodes("&f&l" + getLeader().getPlayer().getDisplayName() + "&r&a is now the leader."), getLeader(), true);
+			}
 		}
 	}
 
@@ -72,28 +72,28 @@ public class Party {
 	public void sendMessage(String message, AgPlayer sender, boolean isCustom) {
 		for (Player p : members.stream().map(AgPlayer::getPlayer).collect(Collectors.toList())) {
 			if (!(sender != null && p.equals(sender.getPlayer())))
-				if(!isCustom)   p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
-			    else p.sendMessage(Util.colorCodes(message));
+				if (!isCustom) p.sendMessage(Util.colorCodes("&d" + p.getDisplayName() + "&7: " + message));
+				else p.sendMessage(Util.colorCodes(message));
 		}
 	}
 
-    public boolean isFull() {
-	    return members.size() >= 4;
-    }
+	public boolean isFull() {
+		return members.size() >= 4;
+	}
 
-    public boolean isInDungeon()    {
-	    return currentDungeon != null;
-    }
+	public boolean isInDungeon() {
+		return currentDungeon != null;
+	}
 
-    public void setCurrentDungeon(Dungeon currentDungeon) {
-        this.currentDungeon = currentDungeon;
-    }
+	public Dungeon getCurrentDungeon() {
+		return currentDungeon;
+	}
 
-    public Dungeon getCurrentDungeon() {
-        return currentDungeon;
-    }
+	public void setCurrentDungeon(Dungeon currentDungeon) {
+		this.currentDungeon = currentDungeon;
+	}
 
-    public void update() {
+	public void update() {
 		members.stream().map(AgPlayer::getPlayer).forEach(this::update);
 	}
 

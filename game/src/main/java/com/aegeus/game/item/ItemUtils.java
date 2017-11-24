@@ -20,19 +20,19 @@ public class ItemUtils {
 	}
 
 	public static boolean isDisplayItem(ItemStack item) {
-	    return getTag(item).hasKey("displayitem") && getTag(item).getBoolean("displayitem");
-    }
+		return getTag(item).hasKey("displayitem") && getTag(item).getBoolean("displayitem");
+	}
 
-    public static void setDisplayItem(ItemStack item, boolean b)    {
-	    getTag(item).setBoolean("displayitem", b);
-    }
+	public static void setDisplayItem(ItemStack item, boolean b) {
+		getTag(item).setBoolean("displayitem", b);
+	}
 
-    public static void setGlowing(ItemStack item, boolean setGlowing) {
-	    if(setGlowing) {
-	        ItemMeta meta = item.getItemMeta();
-	        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-	        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-	        item.setItemMeta(meta);
-        }
-    }
+	public static void setGlowing(ItemStack item, boolean setGlowing) {
+		if (setGlowing) {
+			ItemMeta meta = item.getItemMeta();
+			meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			item.setItemMeta(meta);
+		}
+	}
 }

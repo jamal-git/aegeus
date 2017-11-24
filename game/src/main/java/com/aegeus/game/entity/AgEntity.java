@@ -18,23 +18,23 @@ public class AgEntity {
 		return entity;
 	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AgEntity agEntity = (AgEntity) o;
-        return Objects.equal(entity, agEntity.entity);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AgEntity agEntity = (AgEntity) o;
+		return Objects.equal(entity, agEntity.entity);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(entity);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(entity);
+	}
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-                .add("entity", entity)
-                .toString();
-    }
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+				.add("entity", entity)
+				.toString();
+	}
 }

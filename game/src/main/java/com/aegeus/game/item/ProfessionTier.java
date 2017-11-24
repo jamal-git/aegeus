@@ -3,9 +3,6 @@ package com.aegeus.game.item;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-/**
- * Created by Silvre on 7/1/2017.
- */
 public enum ProfessionTier {
 	BASIC("Basic Pickaxe", "Basic Fishing Rod", Material.WOOD_PICKAXE, ChatColor.RED, 500),
 	IMPROVED("Improved Pickaxe", "Improved Fishing Rod", Material.STONE_PICKAXE, ChatColor.GREEN, 1000),

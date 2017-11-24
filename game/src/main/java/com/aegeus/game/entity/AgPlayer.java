@@ -22,7 +22,7 @@ public class AgPlayer extends AgLiving {
 	private int soulpoints = 0;
 
 	//temporary
-    private int logins = 0;
+	private int logins = 0;
 
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
@@ -60,12 +60,16 @@ public class AgPlayer extends AgLiving {
 		this.xp = other.xp;
 		this.soulpoints = other.soulpoints;
 
+		this.logins = other.logins;
+
 		this.alignment = other.alignment;
 		this.division = other.division;
 		this.legion = other.legion;
+		this.editSpawner = other.editSpawner;
+		this.craftingCompendium = other.craftingCompendium;
+
 		this.replyTo = other.replyTo;
 		this.chatChannel = other.chatChannel;
-		this.craftingCompendium = other.craftingCompendium;
 	}
 
 	public AgPlayer(UUID uuid) {
@@ -98,9 +102,9 @@ public class AgPlayer extends AgLiving {
 //		}
 //	}
 
-    public void sendMessage(String message) {
-	    getPlayer().sendMessage(message);
-    }
+	public void sendMessage(String message) {
+		getPlayer().sendMessage(message);
+	}
 
 	public int getLevel() {
 		return level;
@@ -158,62 +162,61 @@ public class AgPlayer extends AgLiving {
 		this.chatChannel = chatChannel;
 	}
 
-    public Spawner getEditSpawner() {
-        return editSpawner;
-    }
+	public Spawner getEditSpawner() {
+		return editSpawner;
+	}
 
-    public void setEditSpawner(Spawner editSpawner) {
-        this.editSpawner = editSpawner;
-    }
+	public void setEditSpawner(Spawner editSpawner) {
+		this.editSpawner = editSpawner;
+	}
 
-    public boolean isInParty()  {
-	    return PartyManager.getInstance().isInParty(this);
-    }
+	public boolean isInParty() {
+		return PartyManager.getInstance().isInParty(this);
+	}
 
-    public Party getParty() {
-	    return PartyManager.getInstance().getPartyFromPlayer(this);
-    }
+	public Party getParty() {
+		return PartyManager.getInstance().getPartyFromPlayer(this);
+	}
 
-    public void addLogins(int i) {
-	    logins += i;
-    }
+	public void addLogins(int i) {
+		logins += i;
+	}
 
-    public void setLogins(int i)    {
-	    logins = i;
-    }
+	public int getLogins() {
+		return logins;
+	}
 
-    public int getLogins() {
-        return logins;
-    }
+	public void setLogins(int i) {
+		logins = i;
+	}
 
-    public CraftingCompendium getCraftingCompendium() {
-        return craftingCompendium;
-    }
+	public CraftingCompendium getCraftingCompendium() {
+		return craftingCompendium;
+	}
 
-    public void setCraftingCompendium(CraftingCompendium craftingCompendium) {
-        this.craftingCompendium = craftingCompendium;
-    }
+	public void setCraftingCompendium(CraftingCompendium craftingCompendium) {
+		this.craftingCompendium = craftingCompendium;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof AgPlayer)) return false;
-        else return getPlayer().equals(((AgPlayer) o).getPlayer());
-    }
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof AgPlayer && getPlayer().equals(((AgPlayer) o).getPlayer());
+	}
 
-    @Override
-    public int hashCode() {
-        int result = player.hashCode();
-        result = 31 * result + (hpBar != null ? hpBar.hashCode() : 0);
-        result = 31 * result + level;
-        result = 31 * result + xp;
-        result = 31 * result + soulpoints;
-        result = 31 * result + logins;
-        result = 31 * result + (alignment != null ? alignment.hashCode() : 0);
-        result = 31 * result + (division != null ? division.hashCode() : 0);
-        result = 31 * result + (legion != null ? legion.hashCode() : 0);
-        result = 31 * result + editSpawner.hashCode();
-        result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
-        result = 31 * result + (chatChannel != null ? chatChannel.hashCode() : 0);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = player.hashCode();
+		result = 31 * result + (hpBar != null ? hpBar.hashCode() : 0);
+		result = 31 * result + level;
+		result = 31 * result + xp;
+		result = 31 * result + soulpoints;
+		result = 31 * result + logins;
+		result = 31 * result + (alignment != null ? alignment.hashCode() : 0);
+		result = 31 * result + (division != null ? division.hashCode() : 0);
+		result = 31 * result + (legion != null ? legion.hashCode() : 0);
+		result = 31 * result + editSpawner.hashCode();
+		result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
+		result = 31 * result + (chatChannel != null ? chatChannel.hashCode() : 0);
+		return result;
+	}
 }

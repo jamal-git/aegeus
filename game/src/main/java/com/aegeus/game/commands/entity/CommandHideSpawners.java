@@ -9,9 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Silvre on 7/5/2017.
- */
 public class CommandHideSpawners implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String st, String[] strings) {

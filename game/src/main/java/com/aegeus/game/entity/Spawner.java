@@ -89,16 +89,16 @@ public class Spawner {
 	 * @return
 	 */
 	public boolean canSpawn() {
-        return count < maxCount && location.getChunk().isLoaded() &&
+		return count < maxCount && location.getChunk().isLoaded() &&
 				location.getWorld().getDifficulty() != Difficulty.PEACEFUL &&
 				Util.getPlayersInRadius(location, 16, 16, 16).isEmpty();
 	}
 
-	public void delayCount()    {
-        currentDelay++;
-	    if((currentDelay %= delayCount) == 0 && canSpawn())
-            incrementCount().get().spawn(location, this);
-    }
+	public void delayCount() {
+		currentDelay++;
+		if ((currentDelay %= delayCount) == 0 && canSpawn())
+			incrementCount().get().spawn(location, this);
+	}
 
 	/**
 	 * Increment the count of monster spawned by this spawner
@@ -156,35 +156,32 @@ public class Spawner {
 		this.count = count;
 	}
 
-    public int getDelayCount() {
-        return delayCount;
-    }
+	public int getDelayCount() {
+		return delayCount;
+	}
 
-    public void setDelayCount(int delayCount) {
-        this.delayCount = delayCount;
-        currentDelay = delayCount - 1;
-    }
+	public void setDelayCount(int delayCount) {
+		this.delayCount = delayCount;
+		currentDelay = delayCount - 1;
+	}
 
-    public int getCurrentDelay()    {
-	    return currentDelay;
-    }
+	public int getCurrentDelay() {
+		return currentDelay;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof Spawner)) return false;
-        return ((Spawner) o).getLocation().equals(getLocation())
-                && ((Spawner) o).getMaxCount() == getMaxCount()
-                && ((Spawner) o).getDelayCount() == getDelayCount();
-    }
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Spawner && ((Spawner) o).getLocation().equals(getLocation()) && ((Spawner) o).getMaxCount() == getMaxCount() && ((Spawner) o).getDelayCount() == getDelayCount();
+	}
 
-    @Override
-    public int hashCode() {
-        int result = location.hashCode();
-        result = 31 * result + maxCount;
-        result = 31 * result + count;
-        result = 31 * result + currentDelay;
-        result = 31 * result + delayCount;
-        result = 31 * result + (list != null ? list.hashCode() : 0);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = location.hashCode();
+		result = 31 * result + maxCount;
+		result = 31 * result + count;
+		result = 31 * result + currentDelay;
+		result = 31 * result + delayCount;
+		result = 31 * result + (list != null ? list.hashCode() : 0);
+		return result;
+	}
 }

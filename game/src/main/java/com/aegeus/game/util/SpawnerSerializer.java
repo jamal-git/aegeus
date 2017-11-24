@@ -6,11 +6,6 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-/**
- * Created by Silvre on 7/4/2017.
- * Project: aegeus
- * If you are reading this - you can read this
- */
 public class SpawnerSerializer implements JsonSerializer<Spawner> {
 	@Override
 	public JsonElement serialize(Spawner spawner, Type type, JsonSerializationContext jsonSerializationContext) {

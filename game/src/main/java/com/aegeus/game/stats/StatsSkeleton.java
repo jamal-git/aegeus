@@ -21,8 +21,8 @@ public class StatsSkeleton extends Stats {
 	public void prepare() {
 		getNames().add("Skeleton");
 		getTypes().add(EntityType.SKELETON);
-        Map<EnumCraftingMaterial, Chance<IntPoss>> drops = (getDrops() == null ? new HashMap<>() : getDrops());
-        drops.put(EnumCraftingMaterial.SKELETON_BONE, new Chance<>(new IntPoss(1, 2), 1));
-        setDrops(drops);
+		Map<EnumCraftingMaterial, Chance<IntPoss>> drops = (getDrops() == null ? new HashMap<>() : getDrops());
+		drops.put(EnumCraftingMaterial.SKELETON_BONE, new Chance<>(new IntPoss(1, 2), 1));
+		setDrops(drops);
 	}
 }

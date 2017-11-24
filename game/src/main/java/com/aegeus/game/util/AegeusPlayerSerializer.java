@@ -9,19 +9,16 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by Silvre on 8/23/2017.
- */
 public class AegeusPlayerSerializer implements JsonSerializer<AgPlayer> {
-    @Override
-    public JsonElement serialize(AgPlayer player, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject object = new JsonObject();
-        object.addProperty("uuid", player.getPlayer().getUniqueId().toString());
-        object.addProperty("level", player.getLevel());
-        object.addProperty("xp", player.getXp());
-        object.addProperty("soulpoints", player.getSoulpoints());
-        object.addProperty("logins", player.getLogins()); //todo testing porpoises, remove
-        object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
-        return object;
-    }
+	@Override
+	public JsonElement serialize(AgPlayer player, Type type, JsonSerializationContext jsonSerializationContext) {
+		JsonObject object = new JsonObject();
+		object.addProperty("uuid", player.getPlayer().getUniqueId().toString());
+		object.addProperty("level", player.getLevel());
+		object.addProperty("xp", player.getXp());
+		object.addProperty("soulpoints", player.getSoulpoints());
+		object.addProperty("logins", player.getLogins()); //todo testing porpoises, remove
+		object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
+		return object;
+	}
 }

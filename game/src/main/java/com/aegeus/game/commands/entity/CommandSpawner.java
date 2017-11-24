@@ -23,7 +23,7 @@ public class CommandSpawner implements CommandExecutor {
 		if (!sender.hasPermission("aegeus.world")) return false;
 		List<Spawner> list = Aegeus.getInstance().getSpawners();
 		Player player = (Player) sender;
-        AgPlayer agPlayer = Aegeus.getInstance().getPlayer(player);
+		AgPlayer agPlayer = Aegeus.getInstance().getPlayer(player);
 		if (args[0].equalsIgnoreCase("show") && args.length == 1) {
 			//Show the player all the spawners using sendBlockChange
 			for (Spawner s : list)
@@ -115,122 +115,114 @@ public class CommandSpawner implements CommandExecutor {
 				Aegeus.getInstance().saveSpawners();
 				return true;
 			}
+		} else if (args[0].equalsIgnoreCase("select") && args.length == 2) {
+			if (args[1].equalsIgnoreCase("here")) {
+				Location target = player.getLocation().getBlock().getLocation();
+				for (Spawner s : Aegeus.getInstance().getSpawners()) {
+					if (s.getLocation().equals(target)) {
+						agPlayer.setEditSpawner(s);
+						agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
+						return true;
+					}
+				}
+				agPlayer.sendMessage(Util.colorCodes("&cThere is no spawner here!"));
+				return true;
+			} else if (args[1].equalsIgnoreCase("target")) {
+				Location target = player.getTargetBlock(new HashSet<Material>(Collections.singletonList(Material.AIR)), 100).getLocation();
+				for (Spawner s : Aegeus.getInstance().getSpawners()) {
+					if (s.getLocation().equals(target)) {
+						agPlayer.setEditSpawner(s);
+						agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
+						return true;
+					}
+				}
+				agPlayer.sendMessage(Util.colorCodes("&cThere is no spawner there!"));
+				return true;
+			}
+		} else if (args[0].equalsIgnoreCase("deselect") && args.length == 1) {
+			agPlayer.setEditSpawner(null);
+			agPlayer.sendMessage(Util.colorCodes("&7Deselected current spawner."));
+			return true;
+		} else if (args[0].equalsIgnoreCase("edit") && args.length == 3) {
+			if (agPlayer.getEditSpawner() == null) {
+				agPlayer.sendMessage(Util.colorCodes("&cYou dont have a spawner selected!"));
+			} else {
+				Spawner spawner = agPlayer.getEditSpawner();
+				switch (args[1]) {
+					case "delay":
+						spawner.setDelayCount(Integer.valueOf(args[2]));
+						agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set spawn delay to &e" + args[2] + "&a."));
+						break;
+					case "count":
+						spawner.setMaxCount(Integer.valueOf(args[2]));
+						agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set max spawn count to &e" + args[2] + "&a."));
+						break;
+					case "setStats":
+						List<Stats> stats = new ArrayList<>();
+						Arrays.stream(args[2].split(";")).map(x -> {
+							try {
+								String[] split = x.split(":");
+								Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
+								if (split.length >= 2) {
+									Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
+									return (Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance());
+								} else
+									return (Stats) clazz.newInstance();
+							} catch (InstantiationException | ClassNotFoundException | IllegalAccessException
+									| NoSuchMethodException | InvocationTargetException e) {
+								e.printStackTrace();
+							}
+							return null;
+						}).forEach(stats::add);
+						spawner.setList(stats);
+						agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set stats list."));
+						break;
+					case "addStat":
+						try {
+							String[] split = args[2].split(":");
+							Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
+							if (split.length >= 2) {
+								Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
+								spawner.add((Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()));
+							} else spawner.add((Stats) clazz.newInstance());
+							agPlayer.sendMessage(Util.colorCodes("&aSuccessfully added stat to spawner."));
+						} catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException
+								| NoSuchMethodException | InstantiationException e) {
+							e.printStackTrace();
+						}
+				}
+			}
+			Aegeus.getInstance().saveSpawners();
+			return true;
+		} else if (args[0].equalsIgnoreCase("info") && args.length == 1) {
+			if (agPlayer.getEditSpawner() == null) {
+				agPlayer.sendMessage(Util.colorCodes("&cYou don't have a spawner selected!"));
+			} else {
+				Spawner spawner = agPlayer.getEditSpawner();
+				Location l = spawner.getLocation();
+				agPlayer.sendMessage("");
+				agPlayer.sendMessage("");
+				agPlayer.sendMessage(Util.colorCodes("&3          -Spawner Info-          "));
+				agPlayer.sendMessage(Util.colorCodes("&3----------------------------------"));
+				agPlayer.sendMessage(Util.colorCodes("&3Memory Address: &a" + spawner.toString()));
+				agPlayer.sendMessage(Util.colorCodes("&3Coordinates: &a" + l.getX() + "&3, &a" + l.getY() + "&3, &a" + l.getZ()));
+				agPlayer.sendMessage(Util.colorCodes("&3Current Mob Count: &a" + spawner.getCount()));
+				agPlayer.sendMessage(Util.colorCodes("&3Max Mob Count: &a" + spawner.getMaxCount()));
+				agPlayer.sendMessage(Util.colorCodes("&3Respawn Delay: &a" + spawner.getDelayCount()));
+				agPlayer.sendMessage(Util.colorCodes("&3Current Delay Count: &a" + spawner.getCurrentDelay()));
+				agPlayer.sendMessage(Util.colorCodes("&3Spawnable Entities:"));
+				for (Stats s : spawner.getList()) {
+					if (s.getParent() != null)
+						agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName() + ":" + s.getParent().getClass().getSimpleName()));
+					else agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName()));
+				}
+				agPlayer.sendMessage(Util.colorCodes("&3----------------------------------"));
+				agPlayer.sendMessage("");
+				agPlayer.sendMessage("");
+			}
+			return true;
 		}
-		else if(args[0].equalsIgnoreCase("select") && args.length == 2) {
-		    if(args[1].equalsIgnoreCase("here"))    {
-		        Location target = player.getLocation().getBlock().getLocation();
-		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
-		            if(s.getLocation().equals(target))   {
-		                agPlayer.setEditSpawner(s);
-                        agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
-                        return true;
-                    }
-                }
-                agPlayer.sendMessage(Util.colorCodes("&cThere is no spawner here!"));
-		        return true;
-            }
-            else if(args[1].equalsIgnoreCase("target")) {
-		        Location target = player.getTargetBlock(new HashSet<>(Collections.singletonList(Material.AIR)), 100).getLocation();
-		        for(Spawner s : Aegeus.getInstance().getSpawners()) {
-		            if(s.getLocation().equals(target))  {
-		                agPlayer.setEditSpawner(s);
-		                agPlayer.sendMessage(Util.colorCodes("&7Selected spawner at " + target.getX() + ", " + target.getY() + ", " + target.getZ()));
-		                return true;
-                    }
-                }
-                agPlayer.sendMessage(Util.colorCodes("&cThere is no spawner there!"));
-		        return true;
-            }
-        }
-        else if(args[0].equalsIgnoreCase("deselect") && args.length == 1)   {
-		    agPlayer.setEditSpawner(null);
-		    agPlayer.sendMessage(Util.colorCodes("&7Deselected current spawner."));
-		    return true;
-        }
-        else if(args[0].equalsIgnoreCase("edit") && args.length == 3)   {
-		    if(agPlayer.getEditSpawner() == null)   {
-		        agPlayer.sendMessage(Util.colorCodes("&cYou dont have a spawner selected!"));
-            }
-            else    {
-		        Spawner spawner = agPlayer.getEditSpawner();
-		        switch(args[1]) {
-                    case "delay":
-                        spawner.setDelayCount(Integer.valueOf(args[2]));
-                        agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set spawn delay to &e" + args[2] + "&a."));
-                        break;
-                    case "count":
-                        spawner.setMaxCount(Integer.valueOf(args[2]));
-                        agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set max spawn count to &e" + args[2] + "&a."));
-                        break;
-                    case "setStats":
-                        List<Stats> stats = new ArrayList<>();
-                        Arrays.stream(args[2].split(";")).map(x -> {
-                            try {
-                                String[] split = x.split(":");
-                                Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
-                                if (split.length >= 2) {
-                                    Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
-                                    return (Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance());
-                                } else
-                                    return (Stats) clazz.newInstance();
-                            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException
-                                    | NoSuchMethodException | InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }).forEach(stats::add);
-                        spawner.setList(stats);
-                        agPlayer.sendMessage(Util.colorCodes("&aSuccessfully set stats list."));
-                        break;
-                    case "addStat":
-                        try {
-                            String[] split = args[2].split(":");
-                            Class clazz = Class.forName("com.aegeus.game.stats." + split[0]);
-                            if(split.length >= 2)   {
-                                Class inherit = Class.forName("com.aegeus.game.stats." + split[1]);
-                                spawner.add((Stats) clazz.getConstructor(Stats.class).newInstance((Stats) inherit.newInstance()));
-                            }
-                            else spawner.add((Stats) clazz.newInstance());
-                            agPlayer.sendMessage(Util.colorCodes("&aSuccessfully added stat to spawner."));
-                        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException
-                                    | NoSuchMethodException | InstantiationException e) {
-                            e.printStackTrace();
-                        }
-                }
-            }
-            Aegeus.getInstance().saveSpawners();
-            return true;
-        }
-        else if(args[0].equalsIgnoreCase("info") && args.length == 1)   {
-		    if(agPlayer.getEditSpawner() == null)   {
-		        agPlayer.sendMessage(Util.colorCodes("&cYou don't have a spawner selected!"));
-            }
-            else    {
-		        Spawner spawner = agPlayer.getEditSpawner();
-		        Location l = spawner.getLocation();
-		        agPlayer.sendMessage("");
-                agPlayer.sendMessage("");
-		        agPlayer.sendMessage(Util.colorCodes("&3          -Spawner Info-          "));
-		        agPlayer.sendMessage(Util.colorCodes("&3----------------------------------"));
-		        agPlayer.sendMessage(Util.colorCodes("&3Memory Address: &a" + spawner.toString()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Coordinates: &a" + l.getX() + "&3, &a" + l.getY() + "&3, &a" + l.getZ()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Current Mob Count: &a" + spawner.getCount()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Max Mob Count: &a" + spawner.getMaxCount()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Respawn Delay: &a" + spawner.getDelayCount()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Current Delay Count: &a" + spawner.getCurrentDelay()));
-		        agPlayer.sendMessage(Util.colorCodes("&3Spawnable Entities:"));
-		        for(Stats s : spawner.getList())    {
-		            if(s.getParent() != null)
-		                agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName() + ":" + s.getParent().getClass().getSimpleName()));
-		            else agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName()));
-                }
-                agPlayer.sendMessage(Util.colorCodes("&3----------------------------------"));
-                agPlayer.sendMessage("");
-                agPlayer.sendMessage("");
-            }
-            return true;
-        }
-        agPlayer.sendMessage(Util.colorCodes("&cInvalid arguments!"));
+		agPlayer.sendMessage(Util.colorCodes("&cInvalid arguments!"));
 		return false;
 	}
 }

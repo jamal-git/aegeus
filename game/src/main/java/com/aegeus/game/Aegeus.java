@@ -48,9 +48,9 @@ public class Aegeus extends JavaPlugin {
 		return instance;
 	}
 
-	public static WorldEditPlugin getWorldEdit()    {
-	    return worldedit;
-    }
+	public static WorldEditPlugin getWorldEdit() {
+		return worldedit;
+	}
 
 	@Override
 	public void onEnable() {
@@ -71,7 +71,7 @@ public class Aegeus extends JavaPlugin {
 		GSON = b.create();
 
 		//Register APIS
-        worldedit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+		worldedit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
 		// Register plugin events
 		getLogger().info("Registering event listeners...");
@@ -91,7 +91,7 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Registering commands...");
 
 		// entity
-        getCommand("mount").setExecutor(new CommandMount());
+		getCommand("mount").setExecutor(new CommandMount());
 		getCommand("mob").setExecutor(new CommandMob());
 		getCommand("spawner").setExecutor(new CommandSpawner());
 		getCommand("openentity").setExecutor(new CommandOpenEntity());
@@ -114,12 +114,12 @@ public class Aegeus extends JavaPlugin {
 		// world
 		getCommand("createdungeon").setExecutor(new CommandCreateDungeon());
 
-        for(EnumMaterialRarity r : EnumMaterialRarity.values()) {
-            EnumMaterialRarity.materialRarityListMap.put(r, new HashSet<>());
-        }
-        for(EnumCraftingMaterial m : EnumCraftingMaterial.values()) {
-            EnumMaterialRarity.materialRarityListMap.get(m.getRarity()).add(m);
-        }
+		for (EnumMaterialRarity r : EnumMaterialRarity.values()) {
+			EnumMaterialRarity.materialRarityListMap.put(r, new HashSet<>());
+		}
+		for (EnumCraftingMaterial m : EnumCraftingMaterial.values()) {
+			EnumMaterialRarity.materialRarityListMap.get(m.getRarity()).add(m);
+		}
 
 		// Done, done, and done!
 		getLogger().info("Load complete.");
@@ -130,13 +130,12 @@ public class Aegeus extends JavaPlugin {
 			// Load game data
 			getLogger().info("Loading game data...");
 
-            File playerFolder = new File(getDataFolder() + "/players/");
-            //create players folder if there isnt on in the aegeus subdirectory
-            if(!playerFolder.exists())  {
-                getLogger().info("Players folder does not exist, creating it...");
-                playerFolder.mkdir();
-            }
-            else getLogger().info("Players folder already exists, skipping...");
+			File playerFolder = new File(getDataFolder() + "/players/");
+			//create players folder if there isnt on in the aegeus subdirectory
+			if (!playerFolder.exists()) {
+				getLogger().info("Players folder does not exist, creating it...");
+				playerFolder.mkdir();
+			} else getLogger().info("Players folder already exists, skipping...");
 
 			loadSpawners();
 
@@ -146,10 +145,10 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-        WorldManager.getInstance().deleteDungeons();
-        getOnlinePlayers().forEach(this::savePlayer);
-	    getLogger().info("AEGEUS disabled.");
-	    entities.keySet().forEach(Entity::remove);
+		WorldManager.getInstance().deleteDungeons();
+		getOnlinePlayers().forEach(this::savePlayer);
+		getLogger().info("AEGEUS disabled.");
+		entities.keySet().forEach(Entity::remove);
 	}
 
 	public AgEntity get(Entity e) {
@@ -165,14 +164,14 @@ public class Aegeus extends JavaPlugin {
 	}
 
 	public List<AgPlayer> getOnlinePlayers() {
-	    List<AgPlayer> l = new ArrayList<>();
-	    for(AgEntity e : entities.values()) {
-	        if(e instanceof AgPlayer) {
-	            l.add((AgPlayer) e);
-            }
-        }
-        return l;
-    }
+		List<AgPlayer> l = new ArrayList<>();
+		for (AgEntity e : entities.values()) {
+			if (e instanceof AgPlayer) {
+				l.add((AgPlayer) e);
+			}
+		}
+		return l;
+	}
 
 	public AgLiving getLiving(LivingEntity e) {
 		AgEntity info = get(e);
@@ -268,28 +267,27 @@ public class Aegeus extends JavaPlugin {
 		}
 	}
 
-	public void savePlayer(AgPlayer p)  {
-        try(FileWriter fw = new FileWriter(getDataFolder() + "/players/" + p.getPlayer().getUniqueId() + ".json"))  {
-            GSON.toJson(p, fw);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	public void savePlayer(AgPlayer p) {
+		try (FileWriter fw = new FileWriter(getDataFolder() + "/players/" + p.getPlayer().getUniqueId() + ".json")) {
+			GSON.toJson(p, fw);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void loadPlayer(Player p)    {
-	    File f = new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json");
-	    if(f.exists())  {
-	        try {
-                entities.put(p, GSON.fromJson(new FileReader(f), new TypeToken<AgPlayer>() {
-                }.getType()));
-            }
-            catch (IOException e)   {
-	            e.printStackTrace();
-            }
-        }
-    }
+	public void loadPlayer(Player p) {
+		File f = new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json");
+		if (f.exists()) {
+			try {
+				entities.put(p, GSON.fromJson(new FileReader(f), new TypeToken<AgPlayer>() {
+				}.getType()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public boolean hasPlayerData(Player p)  {
-	    return new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json").exists();
-    }
+	public boolean hasPlayerData(Player p) {
+		return new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json").exists();
+	}
 }

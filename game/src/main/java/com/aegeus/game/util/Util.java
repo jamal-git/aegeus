@@ -61,12 +61,12 @@ public class Util {
 	}
 
 	public static List<String> colorCodes(String... s) {
-	    List<String> arr = new ArrayList<>();
-        for (String value : s) {
-            arr.add(colorCodes(value, '&'));
-        }
-        return arr;
-    }
+		List<String> arr = new ArrayList<>();
+		for (String value : s) {
+			arr.add(colorCodes(value, '&'));
+		}
+		return arr;
+	}
 
 	public static long calcMaxXP(int level, int tier) {
 		return Math.round(Math.pow(386 * level, 1.17) * (tier * 0.75));
@@ -214,8 +214,8 @@ public class Util {
 
 	public static void setBiteTime(FishHook hook, int time) {
 		try {
-			net.minecraft.server.v1_9_R1.EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
-			Field fishCatchTime = net.minecraft.server.v1_9_R1.EntityFishingHook.class.getDeclaredField("aw");
+			EntityFishingHook hookCopy = (EntityFishingHook) ((CraftEntity) hook).getHandle();
+			Field fishCatchTime = EntityFishingHook.class.getDeclaredField("aw");
 			fishCatchTime.setAccessible(true);
 			fishCatchTime.setInt(hookCopy, time);
 			fishCatchTime.setAccessible(false);
@@ -268,8 +268,8 @@ public class Util {
 	}
 
 	public static void setSpeed(Entity e, double speed) {
-        ((EntityLiving)((CraftEntity)e).getHandle()).getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-    }
+		((EntityLiving) ((CraftEntity) e).getHandle()).getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
+	}
 
 	public static boolean isSword(Material material) {
 		return material.toString().contains("_SWORD");
@@ -346,25 +346,25 @@ public class Util {
 	}
 
 	public static ItemStack getCraftingCompendium() {
-	    ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
-        ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(Util.colorCodes("&dCrafting Compendium"));
-        meta.setLore(Arrays.asList(Util.colorCodes("&7Store all of your crafting items"), Util.colorCodes("&7in one convenient item.")));
-        stack.setItemMeta(meta);
-        return stack;
-    }
+		ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
+		ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName(Util.colorCodes("&dCrafting Compendium"));
+		meta.setLore(Arrays.asList(Util.colorCodes("&7Store all of your crafting items"), Util.colorCodes("&7in one convenient item.")));
+		stack.setItemMeta(meta);
+		return stack;
+	}
 
-    public static ItemStack getGoBack() {
-	    ItemStack stack = new ItemStack(Material.BARRIER);
-	    ItemMeta meta = stack.getItemMeta();
-	    meta.setDisplayName(Util.colorCodes("&cGo Back"));
-	    stack.setItemMeta(meta);
-	    return stack;
-    }
+	public static ItemStack getGoBack() {
+		ItemStack stack = new ItemStack(Material.BARRIER);
+		ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName(Util.colorCodes("&cGo Back"));
+		stack.setItemMeta(meta);
+		return stack;
+	}
 
-    public static void setDisplayName(ItemStack stack, String name) {
-	    ItemMeta meta = stack.getItemMeta();
-	    meta.setDisplayName(name);
-	    stack.setItemMeta(meta);
-    }
+	public static void setDisplayName(ItemStack stack, String name) {
+		ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName(name);
+		stack.setItemMeta(meta);
+	}
 }

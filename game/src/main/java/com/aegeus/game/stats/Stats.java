@@ -128,8 +128,8 @@ public abstract class Stats {
 		this.weapons = other.weapons;
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
-        this.drops.putAll(other.drops);
-    }
+		this.drops.putAll(other.drops);
+	}
 
 	public Stats getParent() {
 		return parent;
@@ -392,15 +392,15 @@ public abstract class Stats {
 		this.defWeapon = defWeapon;
 	}
 
-    public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
-        return drops;
-    }
+	public Map<EnumCraftingMaterial, Chance<IntPoss>> getDrops() {
+		return drops;
+	}
 
-    public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
-        this.drops = drops;
-    }
+	public void setDrops(Map<EnumCraftingMaterial, Chance<IntPoss>> drops) {
+		this.drops = drops;
+	}
 
-    // Generation methods
+	// Generation methods
 
 	public ItemStack applyGlow(ItemStack item) {
 		if (item != null && !item.getType().equals(Material.AIR))
