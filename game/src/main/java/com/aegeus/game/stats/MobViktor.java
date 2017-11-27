@@ -4,6 +4,7 @@ import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.Rarity;
+import com.aegeus.game.stats.tier.impl.Mob;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.FloatPoss;
 import com.aegeus.game.util.IntPoss;
@@ -12,9 +13,8 @@ import org.bukkit.entity.EntityType;
 
 import java.util.Arrays;
 
-public class StatsViktor extends Stats {
-	@Override
-	public void prepare() {
+public class MobViktor extends Mob {
+	public MobViktor() {
 		setTier(5);
 		setChance(0.01f);
 		setDmgMultiplier(2.5f);
@@ -23,8 +23,8 @@ public class StatsViktor extends Stats {
 		setGenName(false);
 
 		getTypes().add(EntityType.SKELETON);
-
 		getNames().add("&e&lViktor the Conqueror");
+
 		setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
 				new AbilityTackle()));
 
@@ -68,5 +68,10 @@ public class StatsViktor extends Stats {
 		axe.pureDmg = new Chance<>(new IntPoss(6, 25), 0.75f);
 		axe.trueHearts = new Chance<>(new FloatPoss(0.01f, 0.07f), 0.47f);
 		getWeapons().add(axe);
+	}
+
+	@Override
+	public String getId() {
+		return "viktor";
 	}
 }

@@ -2,10 +2,7 @@ package com.aegeus.game.util;
 
 import com.google.common.base.Objects;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Chance<T> {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private T object;
 	private float chance = 1f;
 
@@ -39,7 +36,7 @@ public class Chance<T> {
 	}
 
 	public T get(T def) {
-		return random.nextFloat() <= chance ? object : def;
+		return Util.rFloat() <= chance ? object : def;
 	}
 
 	@Override

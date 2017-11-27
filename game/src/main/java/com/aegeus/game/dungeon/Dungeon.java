@@ -4,10 +4,10 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.dungeon.DungeonGenerator.Direction;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.item.Items;
+import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.item.tool.Enchant;
 import com.aegeus.game.social.Party;
-import com.aegeus.game.stats.StatsSkeleton;
-import com.aegeus.game.stats.StatsT3;
+import com.aegeus.game.stats.tier.impl.Mob;
 import com.aegeus.game.util.Util;
 import com.aegeus.game.util.exceptions.DungeonLoadingException;
 import com.sk89q.worldedit.CuboidClipboard;
@@ -31,7 +31,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -39,7 +38,6 @@ import java.util.zip.ZipFile;
 public class Dungeon {
 	private static transient Aegeus parent = Aegeus.getInstance();
 	String[][] layout;
-	private transient ThreadLocalRandom random = ThreadLocalRandom.current();
 	private transient WorldEditPlugin worldedit = Aegeus.getWorldEdit();
 	private transient EditSession editSession;
 	private transient int segmentSize = 5;
@@ -170,25 +168,25 @@ public class Dungeon {
 					}
 					switch (layout[i][j].charAt(1)) {
 						case 'S':
-							clipboard = starts.get(random.nextInt(starts.size()));
+							clipboard = starts.get(Util.rInt(starts.size()));
 							break;
 						case 'K':
-							clipboard = keys.get(random.nextInt(keys.size()));
+							clipboard = keys.get(Util.rInt(keys.size()));
 							break;
 						case 'E':
-							clipboard = exits.get(random.nextInt(keys.size()));
+							clipboard = exits.get(Util.rInt(keys.size()));
 							break;
 						case 'I':
-							clipboard = straights.get(random.nextInt(straights.size()));
+							clipboard = straights.get(Util.rInt(straights.size()));
 							break;
 						case 'T':
-							clipboard = turns.get(random.nextInt(turns.size()));
+							clipboard = turns.get(Util.rInt(turns.size()));
 							break;
 						case 'J':
-							clipboard = trijunctions.get(random.nextInt(trijunctions.size()));
+							clipboard = trijunctions.get(Util.rInt(trijunctions.size()));
 							break;
 						case 'Q':
-							clipboard = quadjunctions.get(random.nextInt(quadjunctions.size()));
+							clipboard = quadjunctions.get(Util.rInt(quadjunctions.size()));
 							break;
 						default:
 							throw new DungeonLoadingException("Shit mapping code, go look at this shit and fix it lol");
@@ -215,31 +213,31 @@ public class Dungeon {
 								for (int z = spot.getBlockZ() - getSegmentSize() / 2; z < spot.getZ() + getSegmentSize() / 2; z++) {
 									Block b = getWorld().getBlockAt(x, y, z);
 									if (b != null && b.getType() == Material.CHEST) {
-										if (random.nextFloat() <= 0.4) {
-											int item = random.nextInt(5);
+										if (Util.rFloat() <= 0.4) {
+											int item = Util.rInt(5);
 											if (item == 0)
-												((Chest) b.getState()).getInventory().addItem(new StatsT3().getHelmet().get(
-														Util.rarity(random.nextFloat())).build());
+												((Chest) b.getState()).getInventory().addItem(Tier.get(3).getHelmet().get(
+														Util.rarity(Util.rFloat())).build());
 											else if (item == 1)
-												((Chest) b.getState()).getInventory().addItem(new StatsT3().getChestplate().get(
-														Util.rarity(random.nextFloat())).build());
+												((Chest) b.getState()).getInventory().addItem(Tier.get(3).getChestplate().get(
+														Util.rarity(Util.rFloat())).build());
 											else if (item == 2)
-												((Chest) b.getState()).getInventory().addItem(new StatsT3().getLeggings().get(
-														Util.rarity(random.nextFloat())).build());
+												((Chest) b.getState()).getInventory().addItem(Tier.get(3).getLeggings().get(
+														Util.rarity(Util.rFloat())).build());
 											else if (item == 3)
-												((Chest) b.getState()).getInventory().addItem(new StatsT3().getBoots().get(
-														Util.rarity(random.nextFloat())).build());
+												((Chest) b.getState()).getInventory().addItem(Tier.get(3).getBoots().get(
+														Util.rarity(Util.rFloat())).build());
 											else if (item == 4)
-												((Chest) b.getState()).getInventory().addItem(new StatsT3().getWeapon().get(
-														Util.rarity(random.nextFloat())).build());
+												((Chest) b.getState()).getInventory().addItem(Tier.get(3).getWeapon().get(
+														Util.rarity(Util.rFloat())).build());
 										}
 
-										if (random.nextFloat() <= 0.2) {
-											((Chest) b.getState()).getInventory().addItem(new Enchant(3, random.nextInt(2)).build());
+										if (Util.rFloat() <= 0.2) {
+											((Chest) b.getState()).getInventory().addItem(new Enchant(3, Util.rInt(2)).build());
 										}
 
-										if (random.nextFloat() <= 0.7) {
-											((Chest) b.getState()).getInventory().addItem(Items.getGold(random.nextInt(1, 120)));
+										if (Util.rFloat() <= 0.7) {
+											((Chest) b.getState()).getInventory().addItem(Items.getGold(Util.rInt(1, 120)));
 										}
 									}
 								}
@@ -249,7 +247,7 @@ public class Dungeon {
 							for (int z = spot.getBlockZ() - getSegmentSize() / 2; z < spot.getZ() + getSegmentSize() / 2; z++) {
 								Block b = l.getWorld().getBlockAt(x, y, z);
 								if (b != null && b.getType() == Material.PUMPKIN) {
-									new StatsSkeleton(new StatsT3()).spawn(new Location(world, x, y, z));
+									Mob.get("skeleton", 3).spawn(new Location(world, x, y, z));
 									b.setType(Material.AIR);
 								}
 							}

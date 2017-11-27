@@ -1,18 +1,13 @@
 package com.aegeus.game.stats;
 
+import com.aegeus.game.stats.tier.impl.Mob;
+import com.aegeus.game.util.Util;
 import org.bukkit.entity.EntityType;
 
-public class StatsBandit extends Stats {
-	public StatsBandit() {
-		super();
-	}
-
-	public StatsBandit(Stats parent) {
-		super(parent);
-	}
-
+public class MobBandit extends Mob {
 	@Override
-	public void prepare() {
+	public void setup(Object... args) {
+		copy(Util.findTier(args));
 		getNames().add("Tired Bandit");
 		getNames().add("Old Bandit");
 		getNames().add("Young Bandit");
@@ -23,5 +18,10 @@ public class StatsBandit extends Stats {
 
 		getTypes().add(EntityType.ZOMBIE);
 		getTypes().add(EntityType.SKELETON);
+	}
+
+	@Override
+	public String getId() {
+		return "bandit";
 	}
 }

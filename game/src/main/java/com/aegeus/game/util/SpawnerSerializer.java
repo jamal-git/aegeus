@@ -17,13 +17,8 @@ public class SpawnerSerializer implements JsonSerializer<Spawner> {
 		o.addProperty("max", spawner.getMaxCount());
 		o.addProperty("delay", spawner.getDelayCount());
 		JsonArray stats = new JsonArray();
-		spawner.getList().stream().filter(Objects::nonNull).map(x -> {
-			if (x.getParent() != null)
-				return new JsonPrimitive(x.getClass().getCanonicalName()
-						+ ":" + x.getParent().getClass().getCanonicalName());
-			else
-				return new JsonPrimitive(x.getClass().getCanonicalName());
-		}).forEach(stats::add);
+		spawner.getList().stream().filter(Objects::nonNull).map(x ->
+				new JsonPrimitive(x.getClass().getCanonicalName())).forEach(stats::add);
 		o.add("list", stats);
 		return o;
 	}

@@ -8,10 +8,8 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Spawner {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Location location;
 	private int maxCount = 3;
 	private int count;
@@ -75,7 +73,7 @@ public class Spawner {
 	 * @return
 	 */
 	public Stats get() {
-		return list.size() < 2 ? list.get(0) : list.get(random.nextInt(list.size()));
+		return list.size() < 2 ? list.get(0) : list.get(Util.rInt(list.size()));
 	}
 
 	/**

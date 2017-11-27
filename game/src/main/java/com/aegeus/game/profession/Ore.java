@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public enum Ore {
 	RUTILE(Material.COAL_ORE, ChatColor.DARK_GRAY + "Rutile Ore", Collections.singletonList(Util.colorCodes("&7A very dirty chunk of stone with traces of Rutile in it.")), 115, 30, ProfessionTier.BASIC, 3, 10),
@@ -20,7 +19,6 @@ public enum Ore {
 	CRYSTAL(Material.DIAMOND_ORE, ChatColor.AQUA + "Unsorted Crystal Cluster", Arrays.asList(Util.colorCodes("&7An assortment of minerals and gemstones."), Util.colorCodes("&7You should probably refine it first.")), 1500, 300, ProfessionTier.ELITE, 60, 85),
 	VERIDIUM(Material.EMERALD_ORE, ChatColor.DARK_GREEN + "Veridium Ore", Collections.singletonList(Util.colorCodes("&7The rarest of all minerals, only to be found in dangerous areas.")), 2100, 150, ProfessionTier.ULTIMATE, 90, 120);
 
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Material oreType;
 	private final String displayName;
 	private final int maxXP, range, respawnTime, goldDrop;
@@ -105,10 +103,10 @@ public enum Ore {
 	}
 
 	public int getRandom() {
-		return maxXP - random.nextInt(range);
+		return maxXP - Util.rInt(range);
 	}
 
 	public int getRandomGold() {
-		return random.nextInt(goldDrop) + goldDrop / 2;
+		return Util.rInt(goldDrop) + goldDrop / 2;
 	}
 }

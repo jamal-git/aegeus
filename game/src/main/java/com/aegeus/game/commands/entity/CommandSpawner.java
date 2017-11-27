@@ -211,11 +211,8 @@ public class CommandSpawner implements CommandExecutor {
 				agPlayer.sendMessage(Util.colorCodes("&3Respawn Delay: &a" + spawner.getDelayCount()));
 				agPlayer.sendMessage(Util.colorCodes("&3Current Delay Count: &a" + spawner.getCurrentDelay()));
 				agPlayer.sendMessage(Util.colorCodes("&3Spawnable Entities:"));
-				for (Stats s : spawner.getList()) {
-					if (s.getParent() != null)
-						agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName() + ":" + s.getParent().getClass().getSimpleName()));
-					else agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName()));
-				}
+				for (Stats s : spawner.getList())
+					agPlayer.sendMessage(Util.colorCodes("      &e" + s.getClass().getSimpleName()));
 				agPlayer.sendMessage(Util.colorCodes("&3----------------------------------"));
 				agPlayer.sendMessage("");
 				agPlayer.sendMessage("");

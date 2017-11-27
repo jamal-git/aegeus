@@ -34,10 +34,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatListener implements Listener {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Aegeus parent;
 
 	public CombatListener(Aegeus parent) {
@@ -55,20 +53,20 @@ public class CombatListener implements Listener {
 
 			if (mInfo.getOrigin() != null) mInfo.getOrigin().decrementCount();
 
-			if (random.nextFloat() <= mInfo.getChance()) {
+			if (Util.rFloat() <= mInfo.getChance()) {
 				ItemStack mainHand = entity.getEquipment().getItemInMainHand();
-				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && random.nextFloat() <= 0.45f)
+				if (mainHand != null && !mainHand.getType().equals(Material.AIR) && Util.rFloat() <= 0.45f)
 					entity.getWorld().dropItemNaturally(entity.getLocation(), mainHand);
 				else if (entity.getEquipment().getArmorContents().length >= 1) {
 					List<ItemStack> items = new ArrayList<>();
 					Arrays.stream(entity.getEquipment().getArmorContents())
 							.filter(i -> !i.getType().equals(Material.AIR))
 							.forEach(items::add);
-					entity.getWorld().dropItemNaturally(entity.getLocation(), items.get(random.nextInt(items.size())));
+					entity.getWorld().dropItemNaturally(entity.getLocation(), items.get(Util.rInt(items.size())));
 				}
 			}
 
-			if (mInfo.getGold() > 0 && random.nextFloat() <= mInfo.getGoldChance())
+			if (mInfo.getGold() > 0 && Util.rFloat() <= mInfo.getGoldChance())
 				entity.getWorld().dropItemNaturally(entity.getLocation(), Items.getGold(mInfo.getGold()));
 			for (EnumCraftingMaterial m : mInfo.getDrops().keySet()) {
 				Map<EnumCraftingMaterial, Chance<IntPoss>> drops = mInfo.getDrops();
@@ -169,7 +167,7 @@ public class CombatListener implements Listener {
 			if (vInfo instanceof AgMonster) {
 				AgMonster mInfo = (AgMonster) vInfo;
 				mInfo.setOnDamaged(Action.loop(mInfo.getOnDamaged(), cInfo));
-				if (random.nextFloat() <= mInfo.getAbilChance()) CombatManager.useAbility(mInfo);
+				if (Util.rFloat() <= mInfo.getAbilChance()) CombatManager.useAbility(mInfo);
 			}
 
 			cInfo.getEffects().forEach(Runnable::run);

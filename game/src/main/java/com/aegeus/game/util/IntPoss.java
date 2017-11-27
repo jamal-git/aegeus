@@ -1,11 +1,8 @@
 package com.aegeus.game.util;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class IntPoss {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private int min = 0;
-	private int max = 1;
+	private int max = 0;
 
 	public IntPoss() {
 
@@ -22,7 +19,7 @@ public class IntPoss {
 	}
 
 	public int get() {
-		return min == max ? min : random.nextInt(min, max);
+		return min == max ? min : Util.rInt(min, max);
 	}
 
 	public int getMin() {

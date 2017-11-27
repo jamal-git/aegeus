@@ -1,9 +1,6 @@
 package com.aegeus.game.util;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class FloatPoss {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private float min = 0;
 	private float max = 0;
 
@@ -22,7 +19,7 @@ public class FloatPoss {
 	}
 
 	public float get() {
-		return min == max ? min : (random.nextFloat() * (max - min)) + min;
+		return min == max ? min : (Util.rFloat() * (max - min)) + min;
 	}
 
 	public float getMin() {

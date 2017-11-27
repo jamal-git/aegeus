@@ -1,13 +1,12 @@
 package com.aegeus.game.dungeon;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.util.Util;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DungeonGenerator {
-	private transient ThreadLocalRandom random = ThreadLocalRandom.current();
 	private transient Aegeus parent = Aegeus.getInstance();
 	private int arraySize;
 	private int numberOfSegments;
@@ -31,7 +30,7 @@ public class DungeonGenerator {
 			int sx = 0, sy = 0, ex = 0, ey = 0;
 			boolean solution = false;
 			for (int i = 0; i < 100; i++) {
-				if (Point2D.distance(sx = random.nextInt(arraySize), sy = random.nextInt(arraySize), ex = random.nextInt(arraySize), ey = random.nextInt(arraySize)) >= startExitDistance && sx != ex && sy != ey) {
+				if (Point2D.distance(sx = Util.rInt(arraySize), sy = Util.rInt(arraySize), ex = Util.rInt(arraySize), ey = Util.rInt(arraySize)) >= startExitDistance && sx != ex && sy != ey) {
 					solution = true;
 					break;
 				}
@@ -60,7 +59,7 @@ public class DungeonGenerator {
 			return false;
 		}
 		boolean pathFound = false;
-		switch (random.nextInt(4)) {
+		switch (Util.rInt(4)) {
 			case 0:
 				pathFound = dfsrecursive(x + 1, y, maze) || dfsrecursive(x - 1, y, maze) || dfsrecursive(x, y + 1, maze) || dfsrecursive(x, y - 1, maze);
 				break;
@@ -92,7 +91,7 @@ public class DungeonGenerator {
 //                {"0","0","0","0","0"},
 //                {"0","0","0","0","0"}};
 //        int sx, sy, ex, ey;
-//        while(Point2D.distance(sx = random.nextInt(7), sy = random.nextInt(7), ex = random.nextInt(7), ey = random.nextInt(7)) < length || sx == ex || sy == ey);
+//        while(Point2D.distance(sx = Util.rInt(7), sy = Util.rInt(7), ex = Util.rInt(7), ey = Util.rInt(7)) < length || sx == ex || sy == ey);
 //        maze[sx][sy] = "S";
 //        maze[ex][ey] = "E";
 //        List<Node> nodes = new ArrayList<>();
@@ -149,7 +148,7 @@ public class DungeonGenerator {
 			int x, y;
 			boolean success = false;
 			for (int i = 0; i < 100; i++) {
-				if (maze[x = random.nextInt(arraySize)][y = random.nextInt(arraySize)].equalsIgnoreCase("0") && nearby(x, y, maze) == 1 && notNearbyStartOrExitOrKey(x, y, maze)) {
+				if (maze[x = Util.rInt(arraySize)][y = Util.rInt(arraySize)].equalsIgnoreCase("0") && nearby(x, y, maze) == 1 && notNearbyStartOrExitOrKey(x, y, maze)) {
 					success = true;
 					maze[x][y] = "K";
 					break;

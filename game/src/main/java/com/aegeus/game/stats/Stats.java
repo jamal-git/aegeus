@@ -6,9 +6,10 @@ import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.item.Tier;
+import com.aegeus.game.item.Weight;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
+import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,16 +19,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class Stats {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
-
-	private final Stats parent;
-
 	private float chance = 1;
 	private int tier = 0;
 	private int forcedHp = -1;
@@ -44,7 +40,11 @@ public abstract class Stats {
 	private List<String> names = new ArrayList<>();
 	private List<EntityType> types = new ArrayList<>();
 	private List<Ability> abils = new ArrayList<>();
-	private IntPoss abilCount = null;
+	private IntPoss abilCount = new IntPoss();
+	private Supplier<Boolean> hasHelmet = () -> true;
+	private Supplier<Boolean> hasChestplate = () -> true;
+	private Supplier<Boolean> hasLeggings = () -> true;
+	private Supplier<Boolean> hasBoots = () -> true;
 	private List<ArmorPossible> helmets = new ArrayList<>();
 	private List<ArmorPossible> chestplates = new ArrayList<>();
 	private List<ArmorPossible> leggings = new ArrayList<>();
@@ -56,51 +56,9 @@ public abstract class Stats {
 	private ArmorPossible defArmor = new ArmorPossible(null);
 	private WeaponPossible defWeapon = new WeaponPossible(null);
 
-	/**
-	 * Creates an instance of Stats without a parent.
-	 */
-	public Stats() {
-		this(null);
-	}
+	public void setup(Object... args) {
 
-	/**
-	 * Creates an instance of Stats that copies a parent.
-	 *
-	 * @param parent The parent.
-	 */
-	@SuppressWarnings("IncompleteCopyConstructor")
-	public Stats(Stats parent) {
-		this.parent = parent;
-		if (parent != null) {
-			parent.prepare();
-			copy(parent);
-		}
-		prepare();
 	}
-
-	public static Stats fromName(String name) {
-		try {
-			return (Stats) Class.forName("com.aegeus.game.stats." + name).newInstance();
-		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-			return null;
-		}
-	}
-
-	public static Stats fromName(String name, String parentName) {
-		try {
-			Class stats = Class.forName("com.aegeus.game.stats." + name);
-			Class parent = Class.forName("com.aegeus.game.stats." + parentName);
-			return (Stats) stats.getConstructor(Stats.class).newInstance((Stats) parent.newInstance());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-				| NoSuchMethodException | InvocationTargetException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Prepares for usage.
-	 */
-	public abstract void prepare();
 
 	/**
 	 * Copies information from another Stats object.
@@ -121,6 +79,10 @@ public abstract class Stats {
 		this.types = other.types;
 		this.abils = other.abils;
 		this.abilCount = other.abilCount;
+		this.hasHelmet = other.hasHelmet;
+		this.hasChestplate = other.hasChestplate;
+		this.hasLeggings = other.hasLeggings;
+		this.hasBoots = other.hasBoots;
 		this.helmets = other.helmets;
 		this.chestplates = other.chestplates;
 		this.leggings = other.leggings;
@@ -129,10 +91,6 @@ public abstract class Stats {
 		this.defArmor = other.defArmor;
 		this.defWeapon = other.defWeapon;
 		this.drops.putAll(other.drops);
-	}
-
-	public Stats getParent() {
-		return parent;
 	}
 
 	public float getChance() {
@@ -153,10 +111,6 @@ public abstract class Stats {
 
 	public int getForcedHp() {
 		return forcedHp;
-	}
-
-	public void setForcedHp(int forcedHp) {
-		this.forcedHp = forcedHp;
 	}
 
 	public float getHpMultiplier() {
@@ -212,35 +166,39 @@ public abstract class Stats {
 	// Randomizers
 
 	public String getName() {
-		return names.isEmpty() ? null : names.size() == 1 ? names.get(0) :
-				names.get(random.nextInt(names.size()));
+		return names.isEmpty() ? null : names.get(Util.rInt(names.size()));
 	}
 
 	public EntityType getType() {
-		return types.isEmpty() ? EntityType.ZOMBIE : types.size() == 1 ? types.get(0) :
-				types.get(random.nextInt(types.size()));
+		return types.isEmpty() ? EntityType.ZOMBIE : types.get(Util.rInt(types.size()));
 	}
 
 	public ArmorPossible getHelmet() {
-		return helmets.isEmpty() ? defArmor : helmets.size() == 1 ? helmets.get(0) :
-				helmets.get(random.nextInt(helmets.size()));
+		return helmets.isEmpty() ? defArmor : helmets.get(Util.rInt(helmets.size()));
 	}
 
 	public ArmorPossible getHelmet(EntityType type) {
 		List<ArmorPossible> helmets = this.helmets.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type)).
 				collect(Collectors.toList());
-		return helmets.isEmpty() ? defArmor : helmets.size() == 1 ? helmets.get(0) :
-				helmets.get(random.nextInt(helmets.size()));
+		return helmets.isEmpty() ? defArmor : helmets.get(Util.rInt(helmets.size()));
+	}
+
+	public Supplier<Boolean> getHasHelmet() {
+		return hasHelmet;
+	}
+
+	public void setHasHelmet(Supplier<Boolean> s) {
+		hasHelmet = s;
 	}
 
 	public boolean hasHelmet() {
-		return true;
+		return getHasHelmet().get();
 	}
 
 	public ArmorPossible getChestplate() {
 		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
-				chestplates.get(random.nextInt(chestplates.size()));
+				chestplates.get(Util.rInt(chestplates.size()));
 	}
 
 	public ArmorPossible getChestplate(EntityType type) {
@@ -248,16 +206,24 @@ public abstract class Stats {
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
-				chestplates.get(random.nextInt(chestplates.size()));
+				chestplates.get(Util.rInt(chestplates.size()));
+	}
+
+	public Supplier<Boolean> getHasChestplate() {
+		return hasChestplate;
+	}
+
+	public void setHasChestplate(Supplier<Boolean> s) {
+		hasChestplate = s;
 	}
 
 	public boolean hasChestplate() {
-		return true;
+		return getHasChestplate().get();
 	}
 
 	public ArmorPossible getLeggings() {
 		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
-				leggings.get(random.nextInt(leggings.size()));
+				leggings.get(Util.rInt(leggings.size()));
 	}
 
 	public void setLeggings(List<ArmorPossible> leggings) {
@@ -269,16 +235,24 @@ public abstract class Stats {
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
-				leggings.get(random.nextInt(leggings.size()));
+				leggings.get(Util.rInt(leggings.size()));
+	}
+
+	public Supplier<Boolean> getHasLeggings() {
+		return () -> true;
+	}
+
+	public void setHasLeggings(Supplier<Boolean> s) {
+		hasLeggings = s;
 	}
 
 	public boolean hasLeggings() {
-		return true;
+		return hasLeggings.get();
 	}
 
 	public ArmorPossible getBoots() {
 		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
-				boots.get(random.nextInt(boots.size()));
+				boots.get(Util.rInt(boots.size()));
 	}
 
 	public void setBoots(List<ArmorPossible> boots) {
@@ -290,16 +264,24 @@ public abstract class Stats {
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
-				boots.get(random.nextInt(boots.size()));
+				boots.get(Util.rInt(boots.size()));
+	}
+
+	public Supplier<Boolean> getHasBoots() {
+		return () -> true;
+	}
+
+	public void setHasBoots(Supplier<Boolean> s) {
+		hasBoots = s;
 	}
 
 	public boolean hasBoots() {
-		return true;
+		return hasBoots.get();
 	}
 
 	public WeaponPossible getWeapon() {
 		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
-				weapons.get(random.nextInt(weapons.size()));
+				weapons.get(Util.rInt(weapons.size()));
 	}
 
 	public WeaponPossible getWeapon(EntityType type) {
@@ -307,7 +289,7 @@ public abstract class Stats {
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
-				weapons.get(random.nextInt(weapons.size()));
+				weapons.get(Util.rInt(weapons.size()));
 	}
 
 	public List<String> getNames() {
@@ -421,7 +403,10 @@ public abstract class Stats {
 		}
 
 		AgMonster info = Aegeus.getInstance().getMonster(entity);
-		info.setName(Tier.fromTier(tier).getColor() + Util.colorCodes(getName()));
+		info.setName(Tier.get(tier).getColor() + getName());
+
+		Aegeus.getInstance().getLogger().info(getNames().toString());
+
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
 
@@ -474,6 +459,7 @@ public abstract class Stats {
 		public EntityType[] allowedTypes = null;
 		public String name = "";
 		public Rarity rarity = null;
+		public int weight = Weight.MEDIUM;
 
 		public IntPoss dmg = new IntPoss(1);
 		public IntPoss range = new IntPoss();
@@ -497,6 +483,7 @@ public abstract class Stats {
 				this.allowedTypes = other.allowedTypes;
 				this.name = other.name;
 				this.rarity = other.rarity;
+				this.weight = other.weight;
 				this.dmg = other.dmg;
 				this.range = other.range;
 				this.pen = other.pen;
@@ -514,6 +501,7 @@ public abstract class Stats {
 			Weapon weapon = new Weapon(material);
 			weapon.setTier(tier);
 			weapon.setRarity(rarity != null ? rarity : Rarity.fromValue(f));
+			weapon.setWeight(weight);
 
 			int min = Math.round((dmg.getDiff() * f) + dmg.getMin());
 			int max = min + range.get();
@@ -597,7 +585,7 @@ public abstract class Stats {
 			FloatPoss physRes = this.physRes.get();
 			FloatPoss magRes = this.magRes.get();
 			if (physRes != null && magRes != null) {
-				if (random.nextBoolean()) armor.setPhysRes(physRes.get());
+				if (Util.rBool()) armor.setPhysRes(physRes.get());
 				else armor.setMagRes(magRes.get());
 			} else if (physRes != null)
 				armor.setPhysRes(physRes.get());

@@ -2,31 +2,9 @@ package com.aegeus.game;
 
 public enum Legion {
 	FEROCIOUS(0, "Ferocious"),
-	NIMBLE(1, "Nimble") {
-		private int stack;
-
-		public boolean stack() {
-			stack++;
-			return stack >= 4;
-		}
-
-		public void clearStacks() {
-			stack = 0;
-		}
-	},
+	NIMBLE(1, "Nimble"),
 	CRYPTIC(2, "Cryptic"),
-	DIVINE(3, "Divine") {
-		private int stack;
-
-		public boolean stack() {
-			stack++;
-			return stack >= 4;
-		}
-
-		public void clearStacks() {
-			stack = 0;
-		}
-	};
+	DIVINE(3, "Divine");
 
 	private final int id;
 	private final String name;

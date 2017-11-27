@@ -23,14 +23,16 @@ public class SpawnerListener implements Listener {
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent e) {
 		if (e.getMessage().equals("/difficulty 0") && e.getPlayer().isOp()) {
-			for (Spawner s : parent.getSpawners()) s.setCount(0);
+			for (Spawner s : parent.getSpawners())
+				s.setCount(0);
 		}
 	}
 
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent e) {
 		for (Spawner s : parent.getSpawners())
-			if (s.getLocation().getChunk().equals(e.getChunk())) s.setCount(0);
+			if (s.getLocation().getChunk().equals(e.getChunk()))
+				s.setCount(0);
 	}
 
 	@EventHandler

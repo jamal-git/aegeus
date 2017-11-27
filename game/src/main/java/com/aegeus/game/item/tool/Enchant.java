@@ -1,7 +1,7 @@
 package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.ItemUtils;
-import com.aegeus.game.item.Tier;
+import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
@@ -75,14 +75,14 @@ public class Enchant implements ItemInfo {
 	public ItemStack build() {
 		store();
 
-		Tier tier = Tier.fromTier(this.tier);
+		Tier tier = Tier.get(this.tier);
 		if (type == WEAPON) {
-			setName("&f&lEnchant:&7 " + tier.getColor() + tier.getWeapon() + " Weapon");
+			setName("&f&lEnchant:&7 " + tier.getColor() + tier.getName() + " Weapon");
 			setLore(new ArrayList<>());
 			addLore("&c+5% DMG");
 			addLore("&7&oWeapon will VANISH if enchant above +3 FAILS.");
 		} else if (type == ARMOR) {
-			setName("&f&lEnchant:&7 " + tier.getColor() + tier.getArmor() + " Armor");
+			setName("&f&lEnchant:&7 " + tier.getColor() + tier.getName() + " Armor");
 			setLore(new ArrayList<>());
 			addLore("&c+5% HP");
 			addLore("&c+5% HP REGEN");

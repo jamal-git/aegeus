@@ -26,10 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -125,17 +122,13 @@ public class Aegeus extends JavaPlugin {
 		getLogger().info("Load complete.");
 
 		// Post loading
-
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			// Load game data
 			getLogger().info("Loading game data...");
 
-			File playerFolder = new File(getDataFolder() + "/players/");
 			//create players folder if there isnt on in the aegeus subdirectory
-			if (!playerFolder.exists()) {
-				getLogger().info("Players folder does not exist, creating it...");
-				playerFolder.mkdir();
-			} else getLogger().info("Players folder already exists, skipping...");
+			if (!getPlayersFolder().mkdir())
+				getLogger().info("Created players folder.");
 
 			loadSpawners();
 
@@ -250,8 +243,12 @@ public class Aegeus extends JavaPlugin {
 		return entities.values();
 	}
 
+	public File getSpawnersFile() {
+		return new File(getDataFolder() + "/spawners.json");
+	}
+
 	public void saveSpawners() {
-		try (FileWriter fw = new FileWriter(getDataFolder() + "/spawners.json")) {
+		try (FileWriter fw = new FileWriter(getSpawnersFile())) {
 			GSON.toJson(spawners, fw);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -259,16 +256,27 @@ public class Aegeus extends JavaPlugin {
 	}
 
 	public void loadSpawners() {
-		try (FileReader fr = new FileReader(getDataFolder() + "/spawners.json")) {
-			spawners = GSON.fromJson(fr, new TypeToken<ArrayList<Spawner>>() {
+		try (FileReader fr = new FileReader(getSpawnersFile())) {
+			List<Spawner> spawners = GSON.fromJson(fr, new TypeToken<ArrayList<Spawner>>() {
 			}.getType());
+			if (spawners != null) this.spawners = spawners;
+		} catch (FileNotFoundException ignored) {
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public File getPlayersFolder() {
+		return new File(getDataFolder() + "/players");
+	}
+
+	public File getPlayerFile(Player p) {
+		return new File(getPlayersFolder() + "/" + p.getUniqueId());
+	}
+
 	public void savePlayer(AgPlayer p) {
-		try (FileWriter fw = new FileWriter(getDataFolder() + "/players/" + p.getPlayer().getUniqueId() + ".json")) {
+		try (FileWriter fw = new FileWriter(getPlayerFile(p.getPlayer()))) {
 			GSON.toJson(p, fw);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -276,14 +284,14 @@ public class Aegeus extends JavaPlugin {
 	}
 
 	public void loadPlayer(Player p) {
-		File f = new File(getDataFolder() + "/players/" + p.getUniqueId() + ".json");
-		if (f.exists()) {
-			try {
-				entities.put(p, GSON.fromJson(new FileReader(f), new TypeToken<AgPlayer>() {
-				}.getType()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try (FileReader fr = new FileReader(getPlayerFile(p))) {
+			AgPlayer player = GSON.fromJson(fr, new TypeToken<AgPlayer>() {
+			}.getType());
+			if (player != null) entities.put(p, player);
+		} catch (FileNotFoundException ignored) {
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

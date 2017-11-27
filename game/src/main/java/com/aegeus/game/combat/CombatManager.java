@@ -18,11 +18,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class CombatManager {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
-
 	public static CombatInfo get(LivingEntity victim, LivingEntity attacker, ItemStack tool) {
 		CombatInfo cInfo = new CombatInfo(victim, attacker);
 		AgLiving vInfo = Aegeus.getInstance().getLiving(victim);
@@ -62,14 +59,14 @@ public class CombatManager {
 						.map(Armor::new).count();
 				cInfo.addPhysDmg(weapon.getPureDmg() * (matches / 4));
 			}
-			if (weapon.getTrueHearts() > 0 && random.nextFloat() <= weapon.getTrueHearts()) {
+			if (weapon.getTrueHearts() > 0 && Util.rFloat() <= weapon.getTrueHearts()) {
 				cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier()));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
 				if (attacker instanceof Player)
 					attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
 			}
-			if (weapon.getBlind() > 0 && random.nextFloat() <= weapon.getBlind()) {
+			if (weapon.getBlind() > 0 && Util.rFloat() <= weapon.getBlind()) {
 				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1)));
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
@@ -81,7 +78,7 @@ public class CombatManager {
 			}
 
 			float critChance = Util.isAxe(tool.getType()) ? 0.05f : 0;
-			if (critChance > 0 && random.nextFloat() <= critChance) {
+			if (critChance > 0 && Util.rFloat() <= critChance) {
 				cInfo.multPhysDmg(1.75);
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT CRITICAL&c!&l ***"));
@@ -95,7 +92,7 @@ public class CombatManager {
 			if (cInfo.getHealing() > 0) cInfo.getEffects().add(() -> Util.heal(attacker, cInfo.getHealing()));
 		}
 
-		if (vInfo.getReflect() > 0 && random.nextFloat() <= vInfo.getReflect()) {
+		if (vInfo.getReflect() > 0 && Util.rFloat() <= vInfo.getReflect()) {
 			cInfo.setTarget(attacker);
 
 			//cInfo.addParticle(Particle.BLOCK_DUST, victim.getLocation(),
@@ -106,7 +103,7 @@ public class CombatManager {
 				attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT REFLECTED&c!&l ***"));
 			if (victim instanceof Player)
 				victim.sendMessage(Util.colorCodes("            &e&l*** REFLECTED&e!&l ***"));
-		} else if (vInfo.getDodge() > 0 && random.nextFloat() <= vInfo.getDodge()) {
+		} else if (vInfo.getDodge() > 0 && Util.rFloat() <= vInfo.getDodge()) {
 			cInfo.setPhysDmg(0);
 			cInfo.setKnockback(0);
 
@@ -118,7 +115,7 @@ public class CombatManager {
 				attacker.sendMessage(Util.colorCodes("            &c&l*** OPPONENT DODGED&c!&l ***"));
 			if (victim instanceof Player)
 				victim.sendMessage(Util.colorCodes("            &e&l*** DODGED&e!&l ***"));
-		} else if (vInfo.getBlock() > 0 && random.nextFloat() <= vInfo.getBlock()) {
+		} else if (vInfo.getBlock() > 0 && Util.rFloat() <= vInfo.getBlock()) {
 			cInfo.setPhysDmg(0);
 			cInfo.setMagDmg(0);
 
@@ -173,7 +170,7 @@ public class CombatManager {
 
 	public static void useAbility(AgMonster info) {
 		if (!info.getAbils().isEmpty() && info.getActiveAbil() == null) {
-			Ability ability = info.getAbils().get(random.nextInt(info.getAbils().size()));
+			Ability ability = info.getAbils().get(Util.rInt(info.getAbils().size()));
 			info.setActiveAbil(ability);
 			info.getEntity().getWorld().playSound(info.getEntity().getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 0.5f + (info.getTier() * 0.05f), 2);
 			info.getEntity().setCustomName(Util.colorCodes("&d&l" + ability.getName()));

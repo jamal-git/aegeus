@@ -8,10 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class CommandRoll implements CommandExecutor {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -25,7 +22,7 @@ public class CommandRoll implements CommandExecutor {
 		}
 
 		max = Math.min(100000, Math.max(1, max));
-		int roll = random.nextInt(max);
+		int roll = Util.rInt(max);
 		sender.sendMessage(Util.colorCodes("&7You rolled a(n) &f" + roll + "&7 out of &f" + max + "&7."));
 
 		if (sender instanceof Player) {

@@ -25,10 +25,8 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ServerListener implements Listener {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Aegeus parent;
 
 	public ServerListener(Aegeus parent) {

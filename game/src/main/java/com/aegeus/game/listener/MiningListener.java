@@ -17,10 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class MiningListener implements Listener {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Aegeus parent;
 
 	public MiningListener(Aegeus parent) {
@@ -44,29 +41,29 @@ public class MiningListener implements Listener {
 				if (o != null && o.isMinable(pick)) {
 					//Mined block is a registered ore and was mined with a pick, do stuff.
 					b.setType(Material.STONE);
-					if (!o.sameTier(pick) || random.nextInt(100) > 60 - pick.getLevel() % 20 * 2) {
+					if (!o.sameTier(pick) || Util.rInt(100) > 60 - pick.getLevel() % 20 * 2) {
 						b.setType(Material.STONE);
 						/*
 						ENCHANT PROCS!
                         */
 						int amount = 1;
 						boolean isDense = false;
-						if (pick.getDoubleOre() > 0 && random.nextDouble() <= pick.getDoubleOre()) {
+						if (pick.getDoubleOre() > 0 && Util.rDouble() <= pick.getDoubleOre()) {
 							//Triple ore proc
 							amount++;
 							p.sendMessage(Util.colorCodes("       &e&l*** DOUBLE ORE(x2) ***"));
 						}
-						if (pick.getTripleOre() > 0 && random.nextDouble() <= pick.getTripleOre()) {
+						if (pick.getTripleOre() > 0 && Util.rDouble() <= pick.getTripleOre()) {
 							//Triple ore proc
 							amount += 2;
 							p.sendMessage(Util.colorCodes("       &e&l*** TRIPLE ORE(x3) ***"));
 						}
-						if (pick.getDenseFind() > 0 && random.nextDouble() <= pick.getDenseFind()) {
+						if (pick.getDenseFind() > 0 && Util.rDouble() <= pick.getDenseFind()) {
 							//Dense find proc
 							isDense = true;
 							p.sendMessage(Util.colorCodes("       &e&l*** DENSE FIND ***"));
 						}
-						if (pick.getGemFind() > 0 && random.nextDouble() <= pick.getGemFind()) {
+						if (pick.getGemFind() > 0 && Util.rDouble() <= pick.getGemFind()) {
 							//Gem find proc
 							//Dense find and multiplier affects the amount of gold drop, logarithmically base 10.
 							int goldDrop = (int) (o.getRandomGold() * (isDense ? Math.max(Math.log(pick.getDenseMultiplier()), 1.5) : 1));

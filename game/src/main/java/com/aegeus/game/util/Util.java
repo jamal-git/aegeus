@@ -4,7 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
-import com.aegeus.game.item.Tier;
+import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import net.minecraft.server.v1_9_R1.EntityFishingHook;
@@ -37,6 +37,34 @@ import java.util.stream.Collectors;
 public class Util {
 	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
+	public static int rInt(int max) {
+		return random.nextInt(max);
+	}
+
+	public static int rInt(int min, int max) {
+		return random.nextInt(min, max);
+	}
+
+	public static float rFloat() {
+		return random.nextFloat();
+	}
+
+	public static float rFloat(float max) {
+		return random.nextFloat() * max;
+	}
+
+	public static float rFloat(float min, float max) {
+		return (random.nextFloat() * max) + min;
+	}
+
+	public static double rDouble() {
+		return random.nextDouble();
+	}
+
+	public static boolean rBool() {
+		return random.nextBoolean();
+	}
+
 	public static float rarity(float f) {
 
 		/*
@@ -46,10 +74,10 @@ public class Util {
 		99 - 100: 17%
 		 */
 
-		if (f < 0.73) return random.nextFloat() * 0.33f;
-		else if (f < 0.93) return (random.nextFloat() * 0.27f) + 0.33f;
-		else if (f < 0.99) return (random.nextFloat() * 0.23f) + 0.6f;
-		else return (random.nextFloat() * 0.17f) + 0.83f;
+		if (f < 0.73) return Util.rFloat() * 0.33f;
+		else if (f < 0.93) return (Util.rFloat() * 0.27f) + 0.33f;
+		else if (f < 0.99) return (Util.rFloat() * 0.23f) + 0.6f;
+		else return (Util.rFloat() * 0.17f) + 0.83f;
 	}
 
 	public static String colorCodes(String s) {
@@ -308,15 +336,13 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Weapon";
 
-		Tier t = Tier.fromTier(weapon.getTier());
+		Tier t = Tier.get(weapon.getTier());
 		String color = t.getColor();
 		Material m = weapon.getMaterial();
 
-		if (isSword(m)) name = t.getSword();
-		else if (isAxe(m)) name = t.getAxe();
-		else if (isSpade(m)) name = t.getPolearm();
-		else if (isHoe(m)) name = t.getStaff();
-		else if (m == Material.BOW) name = t.getBow();
+		if (isSword(m)) name = t.getName(Tier.SWORD_MED);
+		else if (isAxe(m)) name = t.getName(Tier.AXE_MED);
+		else if (m == Material.BOW) name = t.getName(Tier.BOW_MED);
 
 		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
 				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
@@ -327,7 +353,7 @@ public class Util {
 		List<String> suffix = new ArrayList<>();
 		String name = "Custom Armor";
 
-		Tier t = Tier.fromTier(armor.getTier());
+		Tier t = Tier.get(armor.getTier());
 		String color = t.getColor();
 		Material m = armor.getMaterial();
 
@@ -336,10 +362,10 @@ public class Util {
 		if (armor.getDodge() > 0)
 			prefix.add("Agile");
 
-		if (isHelmet(m)) name = t.getArmor() + " Helmet";
-		else if (isChestplate(m)) name = t.getArmor() + " Chestplate";
-		else if (isLeggings(m)) name = t.getArmor() + " Leggings";
-		else if (isBoots(m)) name = t.getArmor() + " Boots";
+		if (isHelmet(m)) name = t.getName() + " Helmet";
+		else if (isChestplate(m)) name = t.getName() + " Chestplate";
+		else if (isLeggings(m)) name = t.getName() + " Leggings";
+		else if (isBoots(m)) name = t.getName() + " Boots";
 
 		return color + (prefix.isEmpty() ? "" : String.join(" ", prefix) + " ")
 				+ name + (suffix.isEmpty() ? "" : " of " + String.join(" ", suffix));
@@ -366,5 +392,17 @@ public class Util {
 		ItemMeta meta = stack.getItemMeta();
 		meta.setDisplayName(name);
 		stack.setItemMeta(meta);
+	}
+
+	public static Tier findTier(Object[] args) {
+		if (args.length > 0) {
+			if (args[0] instanceof Tier)
+				return (Tier) args[0];
+			else if (args[0] instanceof Integer)
+				return Tier.get((int) args[0]);
+			else if (args[0] instanceof String)
+				return Tier.get(Integer.parseInt((String) args[0]));
+		}
+		return Tier.get(0);
 	}
 }

@@ -2,7 +2,7 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.item.Tier;
+import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.ItemInfo;
@@ -18,10 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	// Item Info
 	private ItemStack item;
@@ -42,6 +40,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	private int dura = 0;
 
 	// Weapon Stats
+	private int weight = 0;
 	private int minDmg = 0;
 	private int maxDmg = 0;
 	private float pen = 0;
@@ -55,7 +54,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 
 	public Weapon(Material material) {
 		item = new ItemStack(material);
-		setMaxDura(Tier.fromTier(tier).getWepDura());
+		setMaxDura(Tier.get(tier).getWepDura());
 	}
 
 	public Weapon(ItemStack item) {
@@ -86,6 +85,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		DuraInfo.impo(this);
 
 		NBTTagCompound info = getWeaponInfo(getItem());
+		weight = (info.hasKey("weight")) ? info.getInt("weight") : 0;
 		minDmg = (info.hasKey("minDmg")) ? info.getInt("minDmg") : 0;
 		maxDmg = (info.hasKey("maxDmg")) ? info.getInt("maxDmg") : 0;
 		pen = (info.hasKey("pen")) ? info.getFloat("pen") : 0;
@@ -106,6 +106,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		DuraInfo.store(this);
 
 		NBTTagCompound info = getWeaponInfo(item);
+		info.set("weight", new NBTTagInt(weight));
 		info.set("minDmg", new NBTTagInt(minDmg));
 		info.set("maxDmg", new NBTTagInt(maxDmg));
 		info.set("pen", new NBTTagFloat(pen));
@@ -221,7 +222,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	@Override
 	public void setTier(int tier) {
 		this.tier = tier;
-		setMaxDura(Tier.fromTier(tier).getWepDura());
+		setMaxDura(Tier.get(tier).getWepDura());
 	}
 
 	@Override
@@ -249,9 +250,13 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		return maxDura;
 	}
 
-	/*
-	Weapon Methods
-	 */
+	public int getWeight() {
+		return weight;
+	}
+
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
 
 	@Override
 	public void setMaxDura(int maxDura) {
@@ -271,7 +276,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	}
 
 	public int getDmg() {
-		return (getMinDmg() == getMaxDmg() ? getMinDmg() : random.nextInt(getMinDmg(), getMaxDmg() + 1)) + getLevelDmg();
+		return (getMinDmg() == getMaxDmg() ? getMinDmg() : Util.rInt(getMinDmg(), getMaxDmg() + 1)) + getLevelDmg();
 	}
 
 	public void setDmg(int minDmg, int maxDmg) {

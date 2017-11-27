@@ -19,10 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class EnchantListener implements Listener {
-	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 	private final Aegeus parent;
 
 	public EnchantListener(Aegeus parent) {
@@ -58,7 +55,7 @@ public class EnchantListener implements Listener {
 					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
-						if (weapon.getEnchant() < 3 || random.nextFloat() <= (1.01 - (weapon.getEnchant() / 12)) * 0.4) {
+						if (weapon.getEnchant() < 3 || Util.rFloat() <= (1.01 - (weapon.getEnchant() / 12)) * 0.4) {
 							weapon.setMinDmg((int) (Math.floor(weapon.getMinDmg() * 1.05f) + 1));
 							weapon.setMaxDmg((int) (Math.floor(weapon.getMaxDmg() * 1.05f) + 1));
 							weapon.addEnchant(1);
@@ -78,7 +75,7 @@ public class EnchantListener implements Listener {
 					else {
 						e.setCancelled(true);
 						e.setCursor(new ItemStack(Material.AIR));
-						if (armor.getEnchant() < 3 || random.nextFloat() <= (1.01 - (armor.getEnchant() / 12)) * 0.4) {
+						if (armor.getEnchant() < 3 || Util.rFloat() <= (1.01 - (armor.getEnchant() / 12)) * 0.4) {
 							armor.setHp((int) (Math.floor(armor.getHp() * 1.05f) + 1));
 							armor.setHpRegen((int) (Math.floor(armor.getHpRegen() * 1.05f) + 1));
 							armor.addEnchant(1);
