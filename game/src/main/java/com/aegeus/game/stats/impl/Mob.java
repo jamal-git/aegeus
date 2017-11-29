@@ -1,9 +1,8 @@
-package com.aegeus.game.stats.tier.impl;
+package com.aegeus.game.stats.impl;
 
 import com.aegeus.game.stats.MobBandit;
 import com.aegeus.game.stats.MobSkeleton;
 import com.aegeus.game.stats.MobViktor;
-import com.aegeus.game.stats.Stats;
 
 public abstract class Mob extends Stats {
 	public static Mob[] values() {

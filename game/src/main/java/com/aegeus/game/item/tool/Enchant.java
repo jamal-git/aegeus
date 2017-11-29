@@ -1,7 +1,7 @@
 package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.ItemUtils;
-import com.aegeus.game.stats.tier.impl.Tier;
+import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;

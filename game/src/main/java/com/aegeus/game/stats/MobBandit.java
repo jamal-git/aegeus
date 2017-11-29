@@ -1,6 +1,6 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.stats.tier.impl.Mob;
+import com.aegeus.game.stats.impl.Mob;
 import com.aegeus.game.util.Util;
 import org.bukkit.entity.EntityType;
 

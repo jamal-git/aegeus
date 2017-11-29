@@ -1,7 +1,7 @@
 package com.aegeus.game.util;
 
 import com.aegeus.game.entity.Spawner;
-import com.aegeus.game.stats.Stats;
+import com.aegeus.game.stats.impl.Stats;
 import com.google.gson.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

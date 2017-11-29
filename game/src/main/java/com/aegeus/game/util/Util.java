@@ -4,7 +4,7 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
-import com.aegeus.game.stats.tier.impl.Tier;
+import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
 import net.minecraft.server.v1_9_R1.EntityFishingHook;
@@ -194,7 +194,7 @@ public class Util {
 		info.getHpBar().setTitle(Util.colorCodes(
 				"&a" + Math.round(player.getHealth()) + " / " + Math.round(player.getMaxHealth()) + " &lHP"));
 
-		// Update party glow
+		// Update Party Glow
 		if (info.getParty() != null) info.getParty().update(player);
 	}
 

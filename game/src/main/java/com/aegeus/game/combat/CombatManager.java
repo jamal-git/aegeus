@@ -173,8 +173,8 @@ public class CombatManager {
 			Ability ability = info.getAbils().get(Util.rInt(info.getAbils().size()));
 			info.setActiveAbil(ability);
 			info.getEntity().getWorld().playSound(info.getEntity().getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 0.5f + (info.getTier() * 0.05f), 2);
-			info.getEntity().setCustomName(Util.colorCodes("&d&l" + ability.getName()));
 			ability.activate(info);
+			CombatManager.updateName(info.getEntity());
 		}
 	}
 

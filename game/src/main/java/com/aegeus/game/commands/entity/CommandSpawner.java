@@ -3,7 +3,7 @@ package com.aegeus.game.commands.entity;
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgPlayer;
 import com.aegeus.game.entity.Spawner;
-import com.aegeus.game.stats.Stats;
+import com.aegeus.game.stats.impl.Stats;
 import com.aegeus.game.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;

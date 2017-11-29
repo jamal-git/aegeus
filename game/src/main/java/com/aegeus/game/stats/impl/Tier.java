@@ -1,11 +1,10 @@
-package com.aegeus.game.stats.tier.impl;
+package com.aegeus.game.stats.impl;
 
 import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Weight;
-import com.aegeus.game.stats.Stats;
 import com.aegeus.game.util.*;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -87,7 +86,7 @@ public abstract class Tier extends Stats {
 				setHasLeggings(Util::rBool);
 				setHasBoots(Util::rBool);
 
-				getSpawnActions().add(new Action<LivingEntity>() {
+				getSpawnActs().add(new Action<LivingEntity>() {
 					@Override
 					public void activate(LivingEntity entity) {
 						if (entity.getType().equals(EntityType.SKELETON))
@@ -203,7 +202,7 @@ public abstract class Tier extends Stats {
 				setHasLeggings(Util::rBool);
 				setHasBoots(() -> true);
 
-				getSpawnActions().add(new Action<LivingEntity>() {
+				getSpawnActs().add(new Action<LivingEntity>() {
 					@Override
 					public void activate(LivingEntity entity) {
 						if (entity.getType().equals(EntityType.SKELETON))
@@ -324,7 +323,7 @@ public abstract class Tier extends Stats {
 				setHasLeggings(() -> true);
 				setHasBoots(Util::rBool);
 
-				getSpawnActions().add(new Action<LivingEntity>() {
+				getSpawnActs().add(new Action<LivingEntity>() {
 					@Override
 					public void activate(LivingEntity entity) {
 						if (!entity.getType().equals(EntityType.SKELETON))
@@ -440,7 +439,7 @@ public abstract class Tier extends Stats {
 				setHasLeggings(() -> true);
 				setHasBoots(() -> true);
 
-				getSpawnActions().add(new Action<LivingEntity>() {
+				getSpawnActs().add(new Action<LivingEntity>() {
 					@Override
 					public void activate(LivingEntity entity) {
 						if (entity.getType().equals(EntityType.SKELETON))
@@ -558,7 +557,7 @@ public abstract class Tier extends Stats {
 				setHasLeggings(() -> true);
 				setHasBoots(() -> true);
 
-				getSpawnActions().add(new Action<LivingEntity>() {
+				getSpawnActs().add(new Action<LivingEntity>() {
 					@Override
 					public void activate(LivingEntity entity) {
 						if (entity.getType().equals(EntityType.SKELETON))

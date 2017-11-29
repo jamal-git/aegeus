@@ -1,7 +1,8 @@
-package com.aegeus.game.stats;
+package com.aegeus.game.stats.impl;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.ability.Ability;
+import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.EnumCraftingMaterial;
@@ -9,7 +10,6 @@ import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.Weight;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
-import com.aegeus.game.stats.tier.impl.Tier;
 import com.aegeus.game.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,7 +34,9 @@ public abstract class Stats {
 	private boolean genName = false;
 
 	// Actions
-	private List<Action<LivingEntity>> spawnActions = new ArrayList<>();
+	private List<Action<LivingEntity>> spawnActs = new ArrayList<>();
+	private List<Action<CombatInfo>> hitActs = new ArrayList<>();
+	private List<Action<CombatInfo>> damagedActs = new ArrayList<>();
 
 	// Randomizers
 	private List<String> names = new ArrayList<>();
@@ -74,7 +76,9 @@ public abstract class Stats {
 		this.rarity = other.rarity;
 		this.glowing = other.glowing;
 		this.genName = other.genName;
-		this.spawnActions = other.spawnActions;
+		this.spawnActs = other.spawnActs;
+		this.hitActs = other.hitActs;
+		this.damagedActs = other.damagedActs;
 		this.names = other.names;
 		this.types = other.types;
 		this.abils = other.abils;
@@ -155,12 +159,28 @@ public abstract class Stats {
 
 	// Actions
 
-	public List<Action<LivingEntity>> getSpawnActions() {
-		return spawnActions;
+	public List<Action<LivingEntity>> getSpawnActs() {
+		return spawnActs;
 	}
 
-	public void setSpawnActions(List<Action<LivingEntity>> spawnActions) {
-		this.spawnActions = spawnActions;
+	public void setSpawnActs(List<Action<LivingEntity>> acts) {
+		spawnActs = acts;
+	}
+
+	public List<Action<CombatInfo>> getHitActs() {
+		return hitActs;
+	}
+
+	public void setHitActs(List<Action<CombatInfo>> acts) {
+		hitActs = acts;
+	}
+
+	public List<Action<CombatInfo>> getDamagedActs() {
+		return damagedActs;
+	}
+
+	public void setDamagedActs(List<Action<CombatInfo>> acts) {
+		damagedActs = acts;
 	}
 
 	// Randomizers
@@ -404,8 +424,8 @@ public abstract class Stats {
 
 		AgMonster info = Aegeus.getInstance().getMonster(entity);
 		info.setName(Tier.get(tier).getColor() + getName());
-
-		Aegeus.getInstance().getLogger().info(getNames().toString());
+		info.setOnHit(hitActs);
+		info.setOnDamaged(damagedActs);
 
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
@@ -449,7 +469,7 @@ public abstract class Stats {
 		Util.updateStats(entity);
 		entity.setHealth(entity.getMaxHealth());
 
-		spawnActions.forEach(a -> a.activate(entity));
+		spawnActs.forEach(a -> a.activate(entity));
 
 		return entity;
 	}

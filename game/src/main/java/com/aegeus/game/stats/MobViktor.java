@@ -1,22 +1,28 @@
 package com.aegeus.game.stats;
 
-import com.aegeus.game.ability.AbilityConcuss;
-import com.aegeus.game.ability.AbilityDetonate;
+import com.aegeus.game.Aegeus;
+import com.aegeus.game.ability.AbilityResolve;
 import com.aegeus.game.ability.AbilityTackle;
+import com.aegeus.game.combat.CombatInfo;
+import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.stats.tier.impl.Mob;
+import com.aegeus.game.stats.impl.Mob;
+import com.aegeus.game.util.Action;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.FloatPoss;
 import com.aegeus.game.util.IntPoss;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 
 public class MobViktor extends Mob {
 	public MobViktor() {
 		setTier(5);
-		setChance(0.01f);
+		setChance(0.18f);
 		setDmgMultiplier(2.5f);
 		setHpMultiplier(4);
 		setGlowing(true);
@@ -25,8 +31,30 @@ public class MobViktor extends Mob {
 		getTypes().add(EntityType.SKELETON);
 		getNames().add("&e&lViktor the Conqueror");
 
-		setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-				new AbilityTackle()));
+		getSpawnActs().add(new Action<LivingEntity>() {
+			@Override
+			public void activate(LivingEntity entity) {
+				entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999, 3));
+			}
+		});
+
+		getHitActs().add(new Action<CombatInfo>() {
+			@Override
+			public void activate(CombatInfo cInfo) {
+				AgMonster info = Aegeus.getInstance().getMonster(cInfo.getVictim());
+				info.setDmgMultiplier(5);
+				info.setName("&c&lViktor the Chaotic");
+			}
+
+			@Override
+			public boolean canActivate(CombatInfo info) {
+				LivingEntity entity = info.getVictim();
+				return entity.getHealth() < entity.getMaxHealth() * 0.35;
+			}
+		});
+
+		setAbils(Arrays.asList(new AbilityTackle(10), new AbilityResolve(6)));
+		setAbilCount(new IntPoss(2));
 
 		getDefArmor().rarity = Rarity.UNIQUE;
 		getDefArmor().hpRegen = new IntPoss(80, 120);

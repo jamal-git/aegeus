@@ -1,6 +1,6 @@
 package com.aegeus.game.entity;
 
-import com.aegeus.game.stats.Stats;
+import com.aegeus.game.stats.impl.Stats;
 import com.aegeus.game.util.Util;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;

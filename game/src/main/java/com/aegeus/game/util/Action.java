@@ -1,20 +1,17 @@
 package com.aegeus.game.util;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class Action<T> {
 	public static <T> List<Action<T>> loop(List<Action<T>> list, T input) {
-		List<Action<T>> newList = new ArrayList<>(list);
-		list.sort(Comparator.comparingInt(Action::getPriority));
-		list.forEach(a -> {
+		for (Action<T> a : new ArrayList<>(list)) {
 			if (a.canActivate(input)) {
 				a.activate(input);
-				if (a.removeOnActivate()) newList.remove(a);
+				list.removeIf(Action::removeOnActivate);
 			}
-		});
-		return newList;
+		}
+		return list;
 	}
 
 	public abstract void activate(T t);

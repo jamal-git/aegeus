@@ -1,7 +1,7 @@
 package com.aegeus.game.stats;
 
 import com.aegeus.game.item.EnumCraftingMaterial;
-import com.aegeus.game.stats.tier.impl.Mob;
+import com.aegeus.game.stats.impl.Mob;
 import com.aegeus.game.util.Chance;
 import com.aegeus.game.util.IntPoss;
 import com.aegeus.game.util.Util;

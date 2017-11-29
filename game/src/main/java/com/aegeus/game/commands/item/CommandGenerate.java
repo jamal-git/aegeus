@@ -1,8 +1,7 @@
 package com.aegeus.game.commands.item;
 
-import com.aegeus.game.Aegeus;
 import com.aegeus.game.commands.Executor;
-import com.aegeus.game.stats.tier.impl.Tier;
+import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,8 +20,6 @@ public class CommandGenerate implements Executor {
 
 		Player player = (Player) sender;
 		Tier tier = Tier.get(Integer.parseInt(args[0]));
-
-		Aegeus.getInstance().getLogger().info(tier.getName());
 
 		float min = args.length >= 3 ? Float.parseFloat(args[2]) : 0;
 		float max = args.length >= 4 ? Float.parseFloat(args[3]) : 1;

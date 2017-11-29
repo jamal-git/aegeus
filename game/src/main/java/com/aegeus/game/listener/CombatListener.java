@@ -200,7 +200,7 @@ public class CombatListener implements Listener {
 		if (damaged instanceof LivingEntity) {
 			LivingEntity lDamaged = (LivingEntity) damaged;
 
-			lDamaged.setMaximumNoDamageTicks(3);
+			lDamaged.setMaximumNoDamageTicks(6);
 			lDamaged.setNoDamageTicks(lDamaged.getMaximumNoDamageTicks());
 			lDamaged.setCustomNameVisible(true);
 

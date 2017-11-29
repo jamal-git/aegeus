@@ -2,7 +2,7 @@ package com.aegeus.game.item.tool;
 
 import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
-import com.aegeus.game.stats.tier.impl.Tier;
+import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.item.info.DuraInfo;
 import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.ItemInfo;

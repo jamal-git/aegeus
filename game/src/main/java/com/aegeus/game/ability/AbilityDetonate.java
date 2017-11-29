@@ -9,36 +9,43 @@ import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.stream.IntStream;
+
 public class AbilityDetonate extends Ability {
+	private int power = 0;
+
 	public AbilityDetonate() {
-		super("Detonate", "Creates an explosion that deals magic damage to nearby enemies.");
+		this(-1);
+	}
+
+	public AbilityDetonate(int power) {
+		super("Detonate", "Creates an explosion that deals true damage to nearby enemies.");
+		this.power = power;
 	}
 
 	@Override
 	public void activate(AgMonster info) {
-		for (int i = 0; i < 5; i++) {
-			int finalI = i;
-			Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
-				if (Aegeus.getInstance().contains(info)) {
-					LivingEntity entity = info.getEntity();
-					int dist = Math.round(1 + (info.getTier() * 0.2f));
-					entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_CREEPER_HURT, 1, 1);
-					entity.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, entity.getLocation(), 30 + (10 * info.getTier()), dist, dist, dist);
+		int power = this.power == -1 ? info.getTier() : this.power;
+		IntStream.range(0, 5).forEach(i -> Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () -> {
+			if (Aegeus.getInstance().contains(info)) {
+				LivingEntity entity = info.getEntity();
+				int dist = Math.round(1 + (power * 0.2f));
+				entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_CREEPER_HURT, 1, 1);
+				entity.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, entity.getLocation(), 30 + (10 * power), dist, dist, dist);
 
-					if (finalI == 4) {
-						entity.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 60 + (20 * info.getTier()), dist, dist, dist);
-						entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.7f, 1);
-						entity.getNearbyEntities(dist, dist, dist).stream().filter(e -> e instanceof Player)
-								.map(e -> (Player) e)
-								.forEach(e -> {
-									e.damage(e.getHealth() * (0.05 + (0.05 * info.getTier())));
-									Aegeus.getInstance().getPlayer(e).setAttacker(entity);
-								});
-						info.setActiveAbil(null);
-						CombatManager.updateName(info.getEntity());
-					}
+				if (i == 4) {
+					entity.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, entity.getLocation(), 60 + (20 * power), dist, dist, dist);
+					entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.7f, 1);
+					entity.getNearbyEntities(dist, dist, dist).stream().filter(e -> e instanceof Player)
+							.map(e -> (Player) e)
+							.forEach(e -> {
+								e.damage(e.getHealth() * (0.05 + (0.05 * power)));
+								Aegeus.getInstance().getPlayer(e).setAttacker(entity);
+							});
+					CombatManager.updateName(entity);
+					info.setActiveAbil(null);
 				}
-			}, i * 10);
-		}
+			}
+		}, i * 10));
 	}
 }

@@ -1,7 +1,7 @@
 package com.aegeus.game.commands.entity;
 
 import com.aegeus.game.commands.Executor;
-import com.aegeus.game.stats.tier.impl.Mob;
+import com.aegeus.game.stats.impl.Mob;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
