@@ -11,12 +11,9 @@ public class CommandGenerate implements Executor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof Player))
-			return deny(sender, "You must be a player to execute this command.");
-		if (!sender.hasPermission("aegeus.entity"))
-			return deny(sender, "&cYou do not have permission to do that.");
-		if (args.length < 2)
-			return deny(sender, "&c/generate <tier> <type> [min] [max]\n&fExample: /generate 3 chestplate");
+		if (!(sender instanceof Player)) return deny(sender, Executor.NOT_PLAYER);
+		if (!sender.hasPermission("aegeus.entity")) return deny(sender, Executor.INVALID_PERMS);
+		if (args.length < 2) return deny(sender, "&c/generate <tier> <type> [min] [max]\n&fExample: /generate 3 chestplate");
 
 		Player player = (Player) sender;
 		Tier tier = Tier.get(Integer.parseInt(args[0]));

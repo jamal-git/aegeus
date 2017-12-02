@@ -1,5 +1,6 @@
 package com.aegeus.game.entity;
 
+import com.aegeus.game.stats.impl.Mob;
 import com.aegeus.game.stats.impl.Stats;
 import com.aegeus.game.util.Util;
 import org.bukkit.Difficulty;
@@ -15,7 +16,7 @@ public class Spawner {
 	private int count;
 	private transient int currentDelay = 0;
 	private int delayCount = 1;
-	private List<Stats> list = new ArrayList<>();
+	private List<Mob> mobs = new ArrayList<>();
 
 	public Spawner(Location location) {
 		this.location = location;
@@ -35,45 +36,38 @@ public class Spawner {
 	 *
 	 * @return List of Stats
 	 */
-	public List<Stats> getList() {
-		return list;
+	public List<Mob> getMobs() {
+		return mobs;
 	}
 
 	/**
 	 * Overwrite the mobs this spawner can spawn.
 	 *
-	 * @param list of Stats this spawner will spawn
+	 * @param mobs of Stats this spawner will spawn
 	 */
-	public void setList(List<Stats> list) {
-		this.list = list;
+	public void setMobs(List<Mob> mobs) {
+		this.mobs = mobs;
 	}
 
 	/**
 	 * Set the types of mobs this spawner can spawn after clearing the original list
-	 *
-	 * @param stats
 	 */
-	public void set(Stats... stats) {
-		list.clear();
-		list.addAll(Arrays.asList(stats));
+	public void set(Mob... mobs) {
+		this.mobs = new ArrayList<>(Arrays.asList(mobs));
 	}
 
 	/**
 	 * Add another type of mob that can be spawned by this spawner.
-	 *
-	 * @param stats
 	 */
-	public void add(Stats... stats) {
-		list.addAll(Arrays.asList(stats));
+	public void add(Mob... mobs) {
+		this.mobs.addAll(Arrays.asList(mobs));
 	}
 
 	/**
 	 * Get a random Stats from the list of spawnable mobs from this spawner.
-	 *
-	 * @return
 	 */
 	public Stats get() {
-		return list.size() < 2 ? list.get(0) : list.get(Util.rInt(list.size()));
+		return mobs.get(Util.rInt(mobs.size()));
 	}
 
 	/**
@@ -83,8 +77,6 @@ public class Spawner {
 	 * Random chance OR there is no player in a 32 block radius
 	 * Basically it has to not be at max, players in area, and will occur when
 	 * players are far enough away or can happen very close with a small chance.
-	 *
-	 * @return
 	 */
 	public boolean canSpawn() {
 		return count < maxCount && location.getChunk().isLoaded() &&
@@ -179,7 +171,7 @@ public class Spawner {
 		result = 31 * result + count;
 		result = 31 * result + currentDelay;
 		result = 31 * result + delayCount;
-		result = 31 * result + (list != null ? list.hashCode() : 0);
+		result = 31 * result + (mobs != null ? mobs.hashCode() : 0);
 		return result;
 	}
 }
