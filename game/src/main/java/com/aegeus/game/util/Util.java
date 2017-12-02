@@ -4,12 +4,10 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.entity.AgPlayer;
-import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.item.tool.Armor;
 import com.aegeus.game.item.tool.Weapon;
-import net.minecraft.server.v1_9_R1.EntityFishingHook;
-import net.minecraft.server.v1_9_R1.EntityLiving;
-import net.minecraft.server.v1_9_R1.GenericAttributes;
+import com.aegeus.game.stats.impl.Tier;
+import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FishHook;
@@ -400,5 +399,12 @@ public class Util {
 				return Tier.get(Integer.parseInt((String) args[0]));
 		}
 		return Tier.get(0);
+	}
+
+	public static void sendActionbar(Player p, String message) {
+		IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" +
+				Util.colorCodes(message) + "\"}");
+		PacketPlayOutChat bar = new PacketPlayOutChat(icbc, (byte)2);
+		((CraftPlayer)p).getHandle().playerConnection.sendPacket(bar);
 	}
 }

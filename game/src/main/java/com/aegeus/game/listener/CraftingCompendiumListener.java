@@ -43,7 +43,8 @@ public class CraftingCompendiumListener implements Listener {
 		if (item != null) {
 			AgPlayer player = Aegeus.getInstance().getPlayer(e.getPlayer());
 			player.getCraftingCompendium().add(item, stack.getAmount());
-			player.sendMessage(Util.colorCodes("&6+" + stack.getAmount() + " " + item.getName())); //todo make it look better
+			Util.sendActionbar(e.getPlayer(), "&f+" + stack.getAmount() + " " + item.getName()
+					+ " (&l" + player.getCraftingCompendium().get(item) + "&f)");
 			e.setCancelled(true);
 			e.getItem().remove();
 		}
