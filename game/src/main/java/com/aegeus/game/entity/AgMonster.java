@@ -89,6 +89,10 @@ public class AgMonster extends AgLiving {
 		this.activeAbil = activeAbil;
 	}
 
+	public boolean hasActiveAbil() {
+		return activeAbil != null;
+	}
+
 	public float getAbilChance() {
 		return abilChance;
 	}

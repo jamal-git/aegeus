@@ -26,7 +26,7 @@ public class AgPlayer extends AgLiving {
 
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
-	private Legion legion = Legion.FEROCIOUS;
+	private Legion legion = null;
 	private Spawner editSpawner = null;
 	private CraftingCompendium craftingCompendium = new CraftingCompendium();
 //	private Mount mount = null;

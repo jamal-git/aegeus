@@ -20,7 +20,7 @@ public class CombatInfo {
 	private double physDmg = 0;
 	private double magDmg = 0;
 	private double healing = 0;
-	private double knockback = 0.12;
+	private double knockback = 0.17;
 
 	private List<Runnable> effects = new ArrayList<>();
 	private List<CombatSound> sounds = new ArrayList<>();

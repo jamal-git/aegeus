@@ -95,6 +95,9 @@ public class CombatManager {
 			if (cInfo.getHealing() > 0) cInfo.getEffects().add(() -> Util.heal(attacker, cInfo.getHealing()));
 		}
 
+		if (vInfo instanceof AgMonster && ((AgMonster) vInfo).hasActiveAbil())
+			cInfo.setKnockback(0);
+
 		if (vInfo.getReflect() > 0 && Util.rFloat() <= vInfo.getReflect()) {
 			cInfo.setTarget(attacker);
 

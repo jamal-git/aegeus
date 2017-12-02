@@ -2,6 +2,7 @@ package com.aegeus.game.stats.impl;
 
 import com.aegeus.game.ability.AbilityConcuss;
 import com.aegeus.game.ability.AbilityDetonate;
+import com.aegeus.game.ability.AbilityResolve;
 import com.aegeus.game.ability.AbilityTackle;
 import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Weight;
@@ -77,8 +78,8 @@ public abstract class Tier extends Stats {
 
 				setTier(1);
 				setChance(0.4f);
-				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-						new AbilityTackle()));
+				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityTackle(),
+						new AbilityResolve()));
 				setAbilCount(new IntPoss(1));
 				setGenName(true);
 				setHasHelmet(() -> true);
@@ -193,9 +194,9 @@ public abstract class Tier extends Stats {
 				setTier(2);
 				setChance(0.2f);
 				setHpMultiplier(1.1f);
-				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-						new AbilityTackle()));
-				setAbilCount(new IntPoss(1));
+				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityTackle(),
+						new AbilityResolve()));
+				setAbilCount(new IntPoss(1, 2));
 				setGenName(true);
 				setHasHelmet(() -> true);
 				setHasChestplate(Util::rBool);
@@ -315,8 +316,8 @@ public abstract class Tier extends Stats {
 				setChance(0.1f);
 				setHpMultiplier(1.2f);
 				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-						new AbilityTackle()));
-				setAbilCount(new IntPoss(1, 2));
+						new AbilityTackle(), new AbilityResolve()));
+				setAbilCount(new IntPoss(2));
 				setGenName(true);
 				setHasHelmet(() -> true);
 				setHasChestplate(() -> true);
@@ -431,7 +432,7 @@ public abstract class Tier extends Stats {
 				setChance(0.048f);
 				setHpMultiplier(1.3f);
 				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-						new AbilityTackle()));
+						new AbilityTackle(), new AbilityResolve()));
 				setAbilCount(new IntPoss(2, 3));
 				setGenName(true);
 				setHasHelmet(() -> true);
@@ -549,8 +550,8 @@ public abstract class Tier extends Stats {
 				setChance(0.036f);
 				setHpMultiplier(1.5f);
 				setAbils(Arrays.asList(new AbilityConcuss(), new AbilityDetonate(),
-						new AbilityTackle()));
-				setAbilCount(new IntPoss(3));
+						new AbilityTackle(), new AbilityResolve()));
+				setAbilCount(new IntPoss(2, 3));
 				setGenName(true);
 				setHasHelmet(() -> true);
 				setHasChestplate(() -> true);
