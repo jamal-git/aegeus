@@ -6,6 +6,11 @@ import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.util.Action;
 import org.bukkit.Sound;
 
+/**
+ * Concuss
+ *
+ * The next attack deals bonus magic damage and immediately grants another ability.
+ */
 public class AbilityConcuss extends Ability {
 	private int power = -1;
 

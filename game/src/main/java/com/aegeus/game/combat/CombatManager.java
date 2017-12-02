@@ -19,6 +19,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 
+/**
+ * Contains useful static methods relating to combat.
+ */
 public class CombatManager {
 	public static CombatInfo get(LivingEntity victim, LivingEntity attacker, ItemStack tool) {
 		CombatInfo cInfo = new CombatInfo(victim, attacker);

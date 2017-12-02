@@ -1,8 +1,8 @@
 package com.aegeus.game.social;
 
 public enum ChatChannel {
-	LOCAL(0, "Local"), // Nearby
-	GLOBAL(1, "Global"); // Users on the current server
+	LOCAL(0, "Local"), // Nearby players
+	GLOBAL(1, "Global"); // Players on the current server
 
 	private final int id;
 	private final String name;

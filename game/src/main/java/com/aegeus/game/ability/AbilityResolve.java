@@ -7,6 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 
+/**
+ * Resolve
+ *
+ * Grants bonus physical and magic resist for a short period of time.
+ */
 public class AbilityResolve extends Ability {
 	private int power = -1;
 

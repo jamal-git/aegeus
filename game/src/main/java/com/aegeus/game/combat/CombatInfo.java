@@ -1,5 +1,6 @@
 package com.aegeus.game.combat;
 
+import com.aegeus.game.listener.CombatListener;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
@@ -7,6 +8,10 @@ import org.bukkit.entity.LivingEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stores all the necessary information of two entities combating each other.
+ * An object of CombatInfo is created in {@link CombatListener}.
+ */
 public class CombatInfo {
 	private final LivingEntity victim;
 	private final LivingEntity attacker;

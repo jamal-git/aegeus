@@ -11,6 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.stream.IntStream;
 
+/**
+ * Detonate
+ *
+ * Creates an explosion that deals true damage to nearby enemies.
+ */
 public class AbilityDetonate extends Ability {
 	private int power = 0;
 

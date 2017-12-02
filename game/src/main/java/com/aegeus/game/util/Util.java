@@ -131,19 +131,15 @@ public class Util {
 				switch (pInfo.getLegion()) {
 					case FEROCIOUS: // Counter: Cryptic
 						// strength += (strength * 0.2);
-						// Critical strikes with a heavy melee weapon deal 20% bonus magic damage and heal for 20% of physical damage.
 						break;
 					case NIMBLE: // Counter: Divine
 						// dexterity += (dexterity * 0.2);
-						// After 4 attacks with a light melee weapon, the next attack deals bonus magic damage, equal to 30% of total damage.
 						break;
 					case CRYPTIC: // Counter: Nimble
 						// intellect += (intellect * 0.2);
-						// Attacking with a ranged weapon deals bonus magic damage equal to 0%-30% of damage dealt, increasing with distance.
 						break;
 					case DIVINE: // Counter: Ferocious
 						// vitality += (vitality * 0.2);
-						// Blocking attacks creates stacks of divinity, capping at 4. Each stack blocks 25% of magic damage. At 4 stacks, 25% of magic damage is reflected.
 						break;
 					default:
 						break;

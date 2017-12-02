@@ -7,6 +7,11 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ * Tackle
+ *
+ * The next attack deals bonus physical damage and blinds the enemy.
+ */
 public class AbilityTackle extends Ability {
 	private int power = 0;
 
