@@ -8,9 +8,9 @@ import com.aegeus.game.item.info.EquipmentInfo;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.LevelInfo;
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
-import net.minecraft.server.v1_9_R1.NBTTagFloat;
-import net.minecraft.server.v1_9_R1.NBTTagInt;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.NBTTagFloat;
+import net.minecraft.server.v1_10_R1.NBTTagInt;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +38,8 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	// Dura Info
 	private int maxDura = 0;
 	private int dura = 0;
+	private int maxReserves = 0;
+	private int reserves = 0;
 
 	// Weapon Stats
 	private int weight = 0;
@@ -55,6 +57,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	public Weapon(Material material) {
 		item = new ItemStack(material);
 		setMaxDura(Tier.get(tier).getWepDura());
+		setMaxReserves(Tier.get(tier).getReserves());
 	}
 
 	public Weapon(ItemStack item) {
@@ -140,6 +143,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 		if (trueHearts > 0) lore.add(Util.colorCodes("&cTRUE HEARTS: " + Math.round(trueHearts * 100) + "%"));
 		if (blind > 0) lore.add(Util.colorCodes("&cBLIND: " + Math.round(blind * 100) + "%"));
 		lore.addAll(EquipmentInfo.buildLore(this));
+		lore.addAll(DuraInfo.buildLore(this));
 		lore.addAll(LevelInfo.buildLore(this));
 		return lore;
 	}
@@ -223,6 +227,7 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	public void setTier(int tier) {
 		this.tier = tier;
 		setMaxDura(Tier.get(tier).getWepDura());
+		setMaxReserves(Tier.get(tier).getReserves());
 	}
 
 	@Override
@@ -248,6 +253,26 @@ public class Weapon implements EquipmentInfo, LevelInfo, DuraInfo {
 	@Override
 	public int getMaxDura() {
 		return maxDura;
+	}
+
+	@Override
+	public int getMaxReserves() {
+		return maxReserves;
+	}
+
+	@Override
+	public int getReserves() {
+		return reserves;
+	}
+
+	@Override
+	public void setMaxReserves(int maxReserves) {
+		this.maxReserves = maxReserves;
+	}
+
+	@Override
+	public void setReserves(int reserves) {
+		this.reserves = reserves;
 	}
 
 	public int getWeight() {

@@ -4,6 +4,7 @@ import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.entity.AgMonster;
 import com.aegeus.game.util.Action;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 /**
  * Tackle
@@ -28,7 +29,9 @@ public class AbilityTackle extends Ability {
 		info.getOnHit().add(new Action<CombatInfo>() {
 			@Override
 			public void activate(CombatInfo cInfo) {
-				cInfo.addPhysDmg(10 + (power * 40));
+				boolean block = cInfo.getVictim() instanceof Player
+						&& ((Player) cInfo.getVictim()).isHandRaised();
+				cInfo.multPhysDmg((1 + (power / 6)) / (block ? 4 : 1));
 				cInfo.addSound(cInfo.getTarget().getLocation(), Sound.ENTITY_WITHER_HURT, 0.7f, 0.7f);
 				info.setActiveAbil(null);
 			}

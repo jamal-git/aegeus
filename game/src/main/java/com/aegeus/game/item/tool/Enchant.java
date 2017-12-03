@@ -4,7 +4,7 @@ import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.stats.impl.Tier;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

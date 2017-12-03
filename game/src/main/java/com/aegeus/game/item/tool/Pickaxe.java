@@ -5,9 +5,9 @@ import com.aegeus.game.item.ProfessionTier;
 import com.aegeus.game.item.info.ItemInfo;
 import com.aegeus.game.item.info.ProfessionInfo;
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
-import net.minecraft.server.v1_9_R1.NBTTagFloat;
-import net.minecraft.server.v1_9_R1.NBTTagInt;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.NBTTagFloat;
+import net.minecraft.server.v1_10_R1.NBTTagInt;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

@@ -14,6 +14,8 @@ public class DuraImpl implements DuraInfo {
 
 	private int maxDura = 0;
 	private int dura = 0;
+	private int maxReserves = 0;
+	private int reserves = 0;
 
 	public DuraImpl(ItemStack item) {
 		this.item = item;
@@ -55,6 +57,26 @@ public class DuraImpl implements DuraInfo {
 	@Override
 	public void setDura(int dura) {
 		this.dura = dura;
+	}
+
+	@Override
+	public int getMaxReserves() {
+		return maxReserves;
+	}
+
+	@Override
+	public void setMaxReserves(int maxReserves) {
+		this.maxReserves = maxReserves;
+	}
+
+	@Override
+	public int getReserves() {
+		return reserves;
+	}
+
+	@Override
+	public void setReserves(int reserves) {
+		this.reserves = reserves;
 	}
 
 	@Override

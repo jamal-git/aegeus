@@ -58,6 +58,11 @@ public abstract class Tier extends Stats {
 			}
 
 			@Override
+			public int getReserves() {
+				return 0;
+			}
+
+			@Override
 			public Map<String, String> getNameMap() {
 				return new HashMap<>();
 			}
@@ -170,6 +175,11 @@ public abstract class Tier extends Stats {
 			@Override
 			public int getArmorDura() {
 				return 750;
+			}
+
+			@Override
+			public int getReserves() {
+				return 100;
 			}
 
 			@Override
@@ -294,6 +304,11 @@ public abstract class Tier extends Stats {
 			}
 
 			@Override
+			public int getReserves() {
+				return 200;
+			}
+
+			@Override
 			public Map<String, String> getNameMap() {
 				return nameMap;
 			}
@@ -407,6 +422,11 @@ public abstract class Tier extends Stats {
 			@Override
 			public int getArmorDura() {
 				return 1830;
+			}
+
+			@Override
+			public int getReserves() {
+				return 300;
 			}
 
 			@Override
@@ -528,6 +548,11 @@ public abstract class Tier extends Stats {
 			}
 
 			@Override
+			public int getReserves() {
+				return 400;
+			}
+
+			@Override
 			public Map<String, String> getNameMap() {
 				return nameMap;
 			}
@@ -646,6 +671,11 @@ public abstract class Tier extends Stats {
 			}
 
 			@Override
+			public int getReserves() {
+				return 500;
+			}
+
+			@Override
 			public Map<String, String> getNameMap() {
 				return nameMap;
 			}
@@ -669,6 +699,8 @@ public abstract class Tier extends Stats {
 	public abstract int getWepDura();
 
 	public abstract int getArmorDura();
+
+	public abstract int getReserves();
 
 	public abstract Map<String, String> getNameMap();
 

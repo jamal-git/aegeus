@@ -37,52 +37,54 @@ public class CombatManager {
 			if (attacker instanceof Player) weaponDura((Player) attacker, weapon);
 			if (victim instanceof Player) armorDura((Player) victim);
 
-			cInfo.setPhysDmg(weapon.getDmg());
+			cInfo.setPhysDmg(weapon.getDmg() * (weapon.isInReserve() ? 0.5f : 1));
 
-			if (weapon.getFireDmg() > 0) {
-				cInfo.addMagDmg(weapon.getFireDmg());
-				cInfo.addEffect(() -> victim.setFireTicks(38 + (weapon.getTier() * 7)));
-			}
+			if (!weapon.isInReserve()) {
+				if (weapon.getFireDmg() > 0) {
+					cInfo.addMagDmg(weapon.getFireDmg());
+					cInfo.addEffect(() -> victim.setFireTicks(38 + (weapon.getTier() * 7)));
+				}
 
-			if (weapon.getIceDmg() > 0) {
-				cInfo.addMagDmg(weapon.getIceDmg());
-				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(
-						PotionEffectType.SLOW, 10 + (weapon.getTier() * 5), 1)));
-				cInfo.addSound(cInfo.getTarget().getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
-			}
+				if (weapon.getIceDmg() > 0) {
+					cInfo.addMagDmg(weapon.getIceDmg());
+					cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(
+							PotionEffectType.SLOW, 10 + (weapon.getTier() * 5), 1)));
+					cInfo.addSound(cInfo.getTarget().getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
+				}
 
-			if (weapon.getPoisonDmg() > 0) {
-				cInfo.addMagDmg(weapon.getPoisonDmg());
-				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1)));
-				cInfo.addSound(victim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
-			}
-			if (weapon.getPureDmg() > 0) {
-				int matches = (int) Arrays.stream(victim.getEquipment().getArmorContents())
-						.filter(i -> i != null && !i.getType().equals(Material.AIR) && Armor.hasArmorInfo(i))
-						.map(Armor::new).count();
-				cInfo.addPhysDmg(weapon.getPureDmg() * (matches / 4));
-			}
-			if (weapon.getTrueHearts() > 0 && Util.rFloat() <= weapon.getTrueHearts()) {
-				cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier()));
-				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
-				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
-			}
-			if (weapon.getBlind() > 0 && Util.rFloat() <= weapon.getBlind()) {
-				cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1)));
-				if (victim instanceof Player)
-					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
-				if (attacker instanceof Player)
-					attacker.sendMessage(Util.colorCodes("            &e&l*** BLINDNESS&e!&l ***"));
-			}
-			if (weapon.getLifeSteal() > 0) {
-				cInfo.addHealing(cInfo.getPhysDmg() * weapon.getLifeSteal());
+				if (weapon.getPoisonDmg() > 0) {
+					cInfo.addMagDmg(weapon.getPoisonDmg());
+					cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 30 + (weapon.getTier() * 12), 1)));
+					cInfo.addSound(victim.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
+				}
+				if (weapon.getPureDmg() > 0) {
+					int matches = (int) Arrays.stream(victim.getEquipment().getArmorContents())
+							.filter(i -> i != null && !i.getType().equals(Material.AIR) && Armor.hasArmorInfo(i))
+							.map(Armor::new).count();
+					cInfo.addPhysDmg(weapon.getPureDmg() * (matches / 4));
+				}
+				if (weapon.getTrueHearts() > 0 && Util.rFloat() <= weapon.getTrueHearts()) {
+					cInfo.addPhysDmg(victim.getMaxHealth() * (0.01 * weapon.getTier()));
+					if (victim instanceof Player)
+						victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT TRUE HEARTS&c!&l ***"));
+					if (attacker instanceof Player)
+						attacker.sendMessage(Util.colorCodes("            &e&l*** TRUE HEARTS&e!&l ***"));
+				}
+				if (weapon.getBlind() > 0 && Util.rFloat() <= weapon.getBlind()) {
+					cInfo.addEffect(() -> victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 12 + (weapon.getTier() * 6), 1)));
+					if (victim instanceof Player)
+						victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT BLINDNESS&c!&l ***"));
+					if (attacker instanceof Player)
+						attacker.sendMessage(Util.colorCodes("            &e&l*** BLINDNESS&e!&l ***"));
+				}
+				if (weapon.getLifeSteal() > 0) {
+					cInfo.addHealing(cInfo.getPhysDmg() * weapon.getLifeSteal());
+				}
 			}
 
 			float critChance = Util.isAxe(tool.getType()) ? 0.05f : 0;
 			if (critChance > 0 && Util.rFloat() <= critChance) {
-				cInfo.multPhysDmg(1.75);
+				cInfo.multPhysDmg(1.5);
 				if (victim instanceof Player)
 					victim.sendMessage(Util.colorCodes("            &c&l*** OPPONENT CRITICAL&c!&l ***"));
 				if (attacker instanceof Player)
@@ -94,9 +96,6 @@ public class CombatManager {
 
 			if (cInfo.getHealing() > 0) cInfo.getEffects().add(() -> Util.heal(attacker, cInfo.getHealing()));
 		}
-
-		if (vInfo instanceof AgMonster && ((AgMonster) vInfo).hasActiveAbil())
-			cInfo.setKnockback(0);
 
 		if (vInfo.getReflect() > 0 && Util.rFloat() <= vInfo.getReflect()) {
 			cInfo.setTarget(attacker);
@@ -138,15 +137,32 @@ public class CombatManager {
 		return cInfo;
 	}
 
+	// TODO clean durability methods, potentially move them?
+
 	public static void weaponDura(Player player, Weapon weapon) {
 		if (weapon.getMaxDura() > 0) {
 			for (int i = 0; i < player.getInventory().getSize(); i++) {
 				ItemStack item = player.getInventory().getItem(i);
 				if (item != null && item.equals(weapon.getItem())) {
-					weapon.subtractDura(1);
-					if (weapon.getDura() <= 0)
-						player.getInventory().setItem(i, new ItemStack(Material.AIR));
-					else
+					if (weapon.getDura() > 0) {
+						weapon.subDura(1);
+						if (weapon.getDura() <= 0) {
+							if (weapon.getReserves() > 0)
+								player.sendMessage(Util.colorCodes("&7Your " + item.getItemMeta().getDisplayName() + "&7 is now in &lRESERVE&7."));
+							else {
+								player.sendMessage(Util.colorCodes("&cYour " + item.getItemMeta().getDisplayName() + "&c has perished."));
+								player.getInventory().setItem(i, new ItemStack(Material.AIR));
+							}
+						}
+					} else if (weapon.getMaxReserves() > 0 && weapon.getReserves() > 0) {
+						weapon.subReserves(1);
+						if (weapon.getReserves() <= 0) {
+							player.sendMessage(Util.colorCodes("&cYour " + item.getItemMeta().getDisplayName() + "&c has perished."));
+							player.getInventory().setItem(i, new ItemStack(Material.AIR));
+						}
+					}
+
+					if (weapon.getDura() > 0 || weapon.getReserves() > 0)
 						player.getInventory().setItem(i, weapon.build());
 				}
 			}
@@ -154,19 +170,33 @@ public class CombatManager {
 	}
 
 	public static void armorDura(Player player) {
-		player.getInventory().setHelmet(armorDura(player.getInventory().getHelmet()));
-		player.getInventory().setChestplate(armorDura(player.getInventory().getChestplate()));
-		player.getInventory().setLeggings(armorDura(player.getInventory().getLeggings()));
-		player.getInventory().setBoots(armorDura(player.getInventory().getBoots()));
+		player.getInventory().setHelmet(armorDura(player, player.getInventory().getHelmet()));
+		player.getInventory().setChestplate(armorDura(player, player.getInventory().getChestplate()));
+		player.getInventory().setLeggings(armorDura(player, player.getInventory().getLeggings()));
+		player.getInventory().setBoots(armorDura(player, player.getInventory().getBoots()));
 	}
 
-	public static ItemStack armorDura(ItemStack item) {
+	public static ItemStack armorDura(Player player, ItemStack item) {
 		if (item != null && Armor.hasArmorInfo(item)) {
 			Armor armor = new Armor(item);
 			if (armor.getMaxDura() > 0) {
-				armor.subtractDura(1);
-				if (armor.getDura() <= 0)
-					return new ItemStack(Material.AIR);
+				if (armor.getDura() > 0) {
+					armor.subDura(1);
+					if (armor.getDura() <= 0) {
+						if (armor.getReserves() > 0)
+							player.sendMessage(Util.colorCodes("&7Your " + item.getItemMeta().getDisplayName() + "&7 is now in &lRESERVE&7."));
+						else {
+							player.sendMessage(Util.colorCodes("&cYour " + item.getItemMeta().getDisplayName() + "&c has perished."));
+							return new ItemStack(Material.AIR);
+						}
+					}
+				} else if (armor.getMaxReserves() > 0 && armor.getReserves() > 0) {
+					armor.subReserves(1);
+					if (armor.getReserves() <= 0) {
+						player.sendMessage(Util.colorCodes("&cYour " + item.getItemMeta().getDisplayName() + "&c has perished."));
+						return new ItemStack(Material.AIR);
+					}
+				}
 			}
 			return armor.build();
 		}

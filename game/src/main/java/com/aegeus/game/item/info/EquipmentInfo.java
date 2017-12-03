@@ -3,7 +3,7 @@ package com.aegeus.game.item.info;
 import com.aegeus.game.item.ItemUtils;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

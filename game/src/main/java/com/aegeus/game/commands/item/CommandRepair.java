@@ -24,10 +24,12 @@ public class CommandRepair implements CommandExecutor {
 			if (Weapon.hasWeaponInfo(tool)) {
 				Weapon weapon = new Weapon(tool);
 				weapon.setDura(weapon.getMaxDura());
+				weapon.setReserves(weapon.getMaxReserves());
 				player.getInventory().setItemInMainHand(weapon.build());
 			} else if (Armor.hasArmorInfo(tool)) {
 				Armor armor = new Armor(tool);
 				armor.setDura(armor.getMaxDura());
+				armor.setReserves(armor.getMaxReserves());
 				player.getInventory().setItemInMainHand(armor.build());
 			}
 		}

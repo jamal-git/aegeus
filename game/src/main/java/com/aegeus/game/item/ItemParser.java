@@ -79,6 +79,10 @@ public class ItemParser {
 					info.setMaxDura(Integer.parseInt(value));
 				else if (key.equalsIgnoreCase("dura"))
 					info.setDura(Integer.parseInt(value));
+				else if (key.equalsIgnoreCase("maxreserves"))
+					info.setMaxReserves(Integer.parseInt(value));
+				else if (key.equalsIgnoreCase("reserves"))
+					info.setReserves(Integer.parseInt(value));
 
 			} catch (Exception ignored) {
 			}
