@@ -27,7 +27,6 @@ public class AgPlayer extends AgLiving {
 	private Alignment alignment = Alignment.LAWFUL;
 	private Division division = null;
 	private Legion legion = null;
-	private Spawner editSpawner = null;
 	private CraftingCompendium craftingCompendium = new CraftingCompendium();
 //	private Mount mount = null;
 //	private Story story = new Story(this);
@@ -65,7 +64,6 @@ public class AgPlayer extends AgLiving {
 		this.alignment = other.alignment;
 		this.division = other.division;
 		this.legion = other.legion;
-		this.editSpawner = other.editSpawner;
 		this.craftingCompendium = other.craftingCompendium;
 
 		this.replyTo = other.replyTo;
@@ -162,14 +160,6 @@ public class AgPlayer extends AgLiving {
 		this.chatChannel = chatChannel;
 	}
 
-	public Spawner getEditSpawner() {
-		return editSpawner;
-	}
-
-	public void setEditSpawner(Spawner editSpawner) {
-		this.editSpawner = editSpawner;
-	}
-
 	public boolean isInParty() {
 		return PartyManager.getInstance().isInParty(this);
 	}
@@ -214,7 +204,6 @@ public class AgPlayer extends AgLiving {
 		result = 31 * result + (alignment != null ? alignment.hashCode() : 0);
 		result = 31 * result + (division != null ? division.hashCode() : 0);
 		result = 31 * result + (legion != null ? legion.hashCode() : 0);
-		result = 31 * result + editSpawner.hashCode();
 		result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
 		result = 31 * result + (chatChannel != null ? chatChannel.hashCode() : 0);
 		return result;

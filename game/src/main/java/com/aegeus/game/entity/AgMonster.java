@@ -25,7 +25,6 @@ public class AgMonster extends AgLiving {
 	private List<Action<CombatInfo>> onDamaged = new ArrayList<>();
 	private Map<EnumCraftingMaterial, Chance<IntPoss>> drops = new HashMap<>();
 
-	private Spawner origin = null;
 	private int tier = 0;
 	private float chance = 0;
 	private int gold = 0;
@@ -55,7 +54,6 @@ public class AgMonster extends AgLiving {
 		this.onHit = other.onHit;
 		this.onDamaged = other.onDamaged;
 		this.drops = other.drops;
-		this.origin = other.origin;
 		this.tier = other.tier;
 		this.chance = other.chance;
 		this.gold = other.gold;
@@ -115,14 +113,6 @@ public class AgMonster extends AgLiving {
 
 	public void setOnDamaged(List<Action<CombatInfo>> onDamaged) {
 		this.onDamaged = onDamaged;
-	}
-
-	public Spawner getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(Spawner origin) {
-		this.origin = origin;
 	}
 
 	public int getTier() {

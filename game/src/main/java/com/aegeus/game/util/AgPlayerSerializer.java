@@ -10,7 +10,19 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
-public class AegeusPlayerDeserializer implements JsonDeserializer<AgPlayer> {
+public class AgPlayerSerializer implements JsonSerializer<AgPlayer>, JsonDeserializer<AgPlayer> {
+	@Override
+	public JsonElement serialize(AgPlayer player, Type type, JsonSerializationContext jsonSerializationContext) {
+		JsonObject object = new JsonObject();
+		object.addProperty("uuid", player.getPlayer().getUniqueId().toString());
+		object.addProperty("level", player.getLevel());
+		object.addProperty("xp", player.getXp());
+		object.addProperty("soulpoints", player.getSoulpoints());
+		object.addProperty("logins", player.getLogins()); //todo testing porpoises, remove
+		object.add("compendium", Aegeus.GSON.toJsonTree(player.getCraftingCompendium()));
+		return object;
+	}
+
 	@Override
 	public AgPlayer deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 		JsonObject o = jsonElement.getAsJsonObject();

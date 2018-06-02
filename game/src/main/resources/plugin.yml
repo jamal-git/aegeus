@@ -10,10 +10,6 @@ commands:
     mount:
     mob:
     openentity:
-    hidespawners:
-    showspawners:
-    spawner:
-      aliases: spawners
 
     # social
     global:

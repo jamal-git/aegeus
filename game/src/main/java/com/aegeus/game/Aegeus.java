@@ -10,10 +10,7 @@ import com.aegeus.game.entity.*;
 import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.EnumMaterialRarity;
 import com.aegeus.game.listener.*;
-import com.aegeus.game.util.AegeusPlayerDeserializer;
-import com.aegeus.game.util.AegeusPlayerSerializer;
-import com.aegeus.game.util.SpawnerDeserializer;
-import com.aegeus.game.util.SpawnerSerializer;
+import com.aegeus.game.util.AgPlayerSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +36,6 @@ public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
 	private static WorldEditPlugin worldedit;
 	private final Map<Entity, AgEntity> entities = new HashMap<>();
-	private List<Spawner> spawners = new ArrayList<>();
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -61,10 +57,7 @@ public class Aegeus extends JavaPlugin {
 		// LOaDin uP GsOn SeriAliZiNg aNd DeseriAlizinG adapters!
 		GsonBuilder b = new GsonBuilder();
 		b.setPrettyPrinting();
-		b.registerTypeAdapter(Spawner.class, new SpawnerSerializer());
-		b.registerTypeAdapter(Spawner.class, new SpawnerDeserializer());
-		b.registerTypeAdapter(AgPlayer.class, new AegeusPlayerSerializer());
-		b.registerTypeAdapter(AgPlayer.class, new AegeusPlayerDeserializer());
+		b.registerTypeAdapter(AgPlayer.class, new AgPlayerSerializer());
 		GSON = b.create();
 
 		//Register APIS
@@ -77,7 +70,6 @@ public class Aegeus extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new CombatListener(this), this);
 		getServer().getPluginManager().registerEvents(new EnchantListener(this), this);
 		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
-		getServer().getPluginManager().registerEvents(new SpawnerListener(this), this);
 		getServer().getPluginManager().registerEvents(new StatsListener(this), this);
 		getServer().getPluginManager().registerEvents(new MiningListener(this), this);
 		getServer().getPluginManager().registerEvents(new DungeonListener(this), this);
@@ -90,10 +82,7 @@ public class Aegeus extends JavaPlugin {
 		// entity
 		getCommand("mount").setExecutor(new CommandMount());
 		getCommand("mob").setExecutor(new CommandMob());
-		getCommand("spawner").setExecutor(new CommandSpawner());
 		getCommand("openentity").setExecutor(new CommandOpenEntity());
-		getCommand("showspawners").setExecutor(new CommandShowSpawners());
-		getCommand("hidespawners").setExecutor(new CommandHideSpawners());
 
 		// item
 		getCommand("create").setExecutor(new CommandCreate());
@@ -129,8 +118,6 @@ public class Aegeus extends JavaPlugin {
 			//create players folder if there isnt on in the aegeus subdirectory
 			if (!getPlayersFolder().mkdir())
 				getLogger().info("Created players folder.");
-
-			loadSpawners();
 
 			getLogger().info("Post-load complete.");
 		});
@@ -216,55 +203,12 @@ public class Aegeus extends JavaPlugin {
 		return entities.get(e);
 	}
 
-	public Spawner getSpawner(Location location) {
-		return spawners.stream().filter(s -> s.getLocation().equals(location))
-				.findAny().orElse(null);
-	}
-
-	public void addSpawner(Spawner spawner) {
-		spawners.add(spawner);
-		saveSpawners();
-	}
-
-	public void removeSpawner(Location location) {
-		spawners.remove(getSpawner(location));
-		saveSpawners();
-	}
-
-	public List<Spawner> getSpawners() {
-		return spawners;
-	}
-
 	public Map<Entity, AgEntity> getEntityMap() {
 		return entities;
 	}
 
 	public Collection<AgEntity> getEntities() {
 		return entities.values();
-	}
-
-	public File getSpawnersFile() {
-		return new File(getDataFolder() + "/spawners.json");
-	}
-
-	public void saveSpawners() {
-		try (FileWriter fw = new FileWriter(getSpawnersFile())) {
-			GSON.toJson(spawners, fw);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loadSpawners() {
-		try (FileReader fr = new FileReader(getSpawnersFile())) {
-			List<Spawner> spawners = GSON.fromJson(fr, new TypeToken<ArrayList<Spawner>>() {
-			}.getType());
-			if (spawners != null) this.spawners = spawners;
-		} catch (FileNotFoundException ignored) {
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public File getPlayersFolder() {

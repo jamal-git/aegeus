@@ -4,7 +4,6 @@ import com.aegeus.game.Aegeus;
 import com.aegeus.game.ability.Ability;
 import com.aegeus.game.combat.CombatInfo;
 import com.aegeus.game.entity.AgMonster;
-import com.aegeus.game.entity.Spawner;
 import com.aegeus.game.item.EnumCraftingMaterial;
 import com.aegeus.game.item.Rarity;
 import com.aegeus.game.item.Weight;
@@ -411,10 +410,6 @@ public abstract class Stats {
 	}
 
 	public LivingEntity spawn(Location location) {
-		return spawn(location, null);
-	}
-
-	public LivingEntity spawn(Location location, Spawner origin) {
 		LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location, getType());
 		entity.setRemoveWhenFarAway(false);
 		if (entity.getType().equals(EntityType.ZOMBIE)) {
@@ -430,7 +425,6 @@ public abstract class Stats {
 		entity.setCustomName(info.getName());
 		entity.setCustomNameVisible(true);
 
-		info.setOrigin(origin);
 		info.setTier(getTier());
 		info.setChance(getChance());
 		info.setForcedHp(getForcedHp());
