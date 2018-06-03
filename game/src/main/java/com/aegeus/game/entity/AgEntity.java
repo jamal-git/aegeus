@@ -33,8 +33,6 @@ public class AgEntity {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-				.add("entity", entity)
-				.toString();
+		return entity.toString();
 	}
 }

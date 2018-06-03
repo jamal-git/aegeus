@@ -177,9 +177,7 @@ public class CraftingCompendium {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-				.add("items", items)
-				.toString();
+		return items.toString();
 	}
 
 	@Override
