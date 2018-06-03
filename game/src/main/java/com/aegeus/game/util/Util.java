@@ -126,23 +126,6 @@ public class Util {
 		if (entity instanceof Player) {
 			AgPlayer pInfo = Aegeus.getInstance().getPlayer((Player) entity);
 			hp += 100;
-			if (pInfo.getLegion() != null)
-				switch (pInfo.getLegion()) {
-					case FEROCIOUS: // Counter: Cryptic
-						// strength += (strength * 0.2);
-						break;
-					case NIMBLE: // Counter: Divine
-						// dexterity += (dexterity * 0.2);
-						break;
-					case CRYPTIC: // Counter: Nimble
-						// intellect += (intellect * 0.2);
-						break;
-					case DIVINE: // Counter: Ferocious
-						// vitality += (vitality * 0.2);
-						break;
-					default:
-						break;
-				}
 		}
 
 		if (info instanceof AgMonster) {

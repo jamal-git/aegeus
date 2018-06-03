@@ -1,8 +1,6 @@
 package com.aegeus.game.entity;
 
 import com.aegeus.game.Alignment;
-import com.aegeus.game.Division;
-import com.aegeus.game.Legion;
 import com.aegeus.game.item.tool.CraftingCompendium;
 import com.aegeus.game.social.ChatChannel;
 import com.aegeus.game.social.Party;
@@ -25,8 +23,6 @@ public class AgPlayer extends AgLiving {
 	private int logins = 0;
 
 	private Alignment alignment = Alignment.LAWFUL;
-	private Division division = null;
-	private Legion legion = null;
 	private CraftingCompendium craftingCompendium = new CraftingCompendium();
 //	private Mount mount = null;
 //	private Story story = new Story(this);
@@ -62,8 +58,6 @@ public class AgPlayer extends AgLiving {
 		this.logins = other.logins;
 
 		this.alignment = other.alignment;
-		this.division = other.division;
-		this.legion = other.legion;
 		this.craftingCompendium = other.craftingCompendium;
 
 		this.replyTo = other.replyTo;
@@ -128,22 +122,6 @@ public class AgPlayer extends AgLiving {
 		this.soulpoints = soulpoints;
 	}
 
-	public Division getDivision() {
-		return division;
-	}
-
-	public void setDivision(Division division) {
-		this.division = division;
-	}
-
-	public Legion getLegion() {
-		return legion;
-	}
-
-	public void setLegion(Legion legion) {
-		this.legion = legion;
-	}
-
 	public Player getReplyTo() {
 		return replyTo;
 	}
@@ -202,8 +180,6 @@ public class AgPlayer extends AgLiving {
 		result = 31 * result + soulpoints;
 		result = 31 * result + logins;
 		result = 31 * result + (alignment != null ? alignment.hashCode() : 0);
-		result = 31 * result + (division != null ? division.hashCode() : 0);
-		result = 31 * result + (legion != null ? legion.hashCode() : 0);
 		result = 31 * result + (replyTo != null ? replyTo.hashCode() : 0);
 		result = 31 * result + (chatChannel != null ? chatChannel.hashCode() : 0);
 		return result;
