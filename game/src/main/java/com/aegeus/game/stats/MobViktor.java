@@ -62,31 +62,31 @@ public class MobViktor extends Mob {
 		getDefArmor().block = new Chance<>(new FloatPoss(0.06f, 0.11f), 0.67f);
 
 		getHelmets().clear();
-		ArmorPossible helmet = new ArmorPossible();
+		ArmorPoss helmet = new ArmorPoss();
 		helmet.material = Material.JACK_O_LANTERN;
 		helmet.name = "&eViktor's Bloody Mask";
 		helmet.hp = new IntPoss(2115, 2760);
 		getHelmets().add(helmet);
 
-		ArmorPossible chestplate = new ArmorPossible();
+		ArmorPoss chestplate = new ArmorPoss();
 		chestplate.material = Material.GOLD_CHESTPLATE;
 		chestplate.name = "&eViktor's Chestplate";
 		chestplate.hp = new IntPoss(3490, 4140);
 		getChestplates().add(chestplate);
 
-		ArmorPossible leggings = new ArmorPossible();
+		ArmorPoss leggings = new ArmorPoss();
 		leggings.material = Material.GOLD_LEGGINGS;
 		leggings.name = "&eViktor's Leggings";
 		leggings.hp = new IntPoss(3490, 4140);
 		getAllLeggings().add(leggings);
 
-		ArmorPossible boots = new ArmorPossible();
+		ArmorPoss boots = new ArmorPoss();
 		boots.material = Material.GOLD_BOOTS;
 		boots.name = "&eViktor's Boots";
 		boots.hp = new IntPoss(2115, 2760);
 		getAllBoots().add(boots);
 
-		WeaponPossible axe = new WeaponPossible();
+		WeaponPoss axe = new WeaponPoss();
 		axe.material = Material.GOLD_AXE;
 		axe.name = "&eViktor's Axe";
 		axe.rarity = Rarity.UNIQUE;

@@ -107,22 +107,22 @@ public abstract class Tier extends Stats {
 				getDefArmor().dodge = new Chance<>(new FloatPoss(0.01f, 0.02f), 0.02f);
 				getDefArmor().reflect = new Chance<>(new FloatPoss(0.01f, 0.02f), 0.02f);
 
-				ArmorPossible helmet = new ArmorPossible();
+				ArmorPoss helmet = new ArmorPoss();
 				helmet.material = Material.LEATHER_HELMET;
 				helmet.hp = new IntPoss(16, 64);
 				getHelmets().add(helmet);
 
-				ArmorPossible chestplate = new ArmorPossible();
+				ArmorPoss chestplate = new ArmorPoss();
 				chestplate.material = Material.LEATHER_CHESTPLATE;
 				chestplate.hp = new IntPoss(24, 96);
 				getChestplates().add(chestplate);
 
-				ArmorPossible leggings = new ArmorPossible();
+				ArmorPoss leggings = new ArmorPoss();
 				leggings.material = Material.LEATHER_LEGGINGS;
 				leggings.hp = new IntPoss(24, 96);
 				getAllLeggings().add(leggings);
 
-				ArmorPossible boots = new ArmorPossible();
+				ArmorPoss boots = new ArmorPoss();
 				boots.material = Material.LEATHER_BOOTS;
 				boots.hp = new IntPoss(16, 64);
 				getAllBoots().add(boots);
@@ -137,19 +137,19 @@ public abstract class Tier extends Stats {
 				getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.03f), 0.05f);
 				getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.12f), 0.05f);
 
-				WeaponPossible sword = new WeaponPossible();
+				WeaponPoss sword = new WeaponPoss();
 				sword.material = Material.WOOD_SWORD;
 				sword.dmg = new IntPoss(1, 12);
 				sword.range = new IntPoss(0, 5);
 				getWeapons().add(sword);
 
-				WeaponPossible axe = new WeaponPossible();
+				WeaponPoss axe = new WeaponPoss();
 				axe.material = Material.WOOD_AXE;
 				axe.dmg = new IntPoss(1, 13);
 				axe.range = new IntPoss(0, 4);
 				getWeapons().add(axe);
 
-				WeaponPossible bow = new WeaponPossible();
+				WeaponPoss bow = new WeaponPoss();
 				bow.material = Material.BOW;
 				bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
 				bow.dmg = new IntPoss(1, 13);
@@ -233,22 +233,22 @@ public abstract class Tier extends Stats {
 				drops.put(EnumCraftingMaterial.MOON_INGOT, new Chance<>(new IntPoss(1), 1));
 				setDrops(drops);
 
-				ArmorPossible helmet = new ArmorPossible();
+				ArmorPoss helmet = new ArmorPoss();
 				helmet.material = Material.CHAINMAIL_HELMET;
 				helmet.hp = new IntPoss(46, 170);
 				getHelmets().add(helmet);
 
-				ArmorPossible chestplate = new ArmorPossible();
+				ArmorPoss chestplate = new ArmorPoss();
 				chestplate.material = Material.CHAINMAIL_CHESTPLATE;
 				chestplate.hp = new IntPoss(69, 255);
 				getChestplates().add(chestplate);
 
-				ArmorPossible leggings = new ArmorPossible();
+				ArmorPoss leggings = new ArmorPoss();
 				leggings.material = Material.CHAINMAIL_LEGGINGS;
 				leggings.hp = new IntPoss(69, 255);
 				getAllLeggings().add(leggings);
 
-				ArmorPossible boots = new ArmorPossible();
+				ArmorPoss boots = new ArmorPoss();
 				boots.material = Material.CHAINMAIL_BOOTS;
 				boots.hp = new IntPoss(46, 170);
 				getAllBoots().add(boots);
@@ -263,19 +263,19 @@ public abstract class Tier extends Stats {
 				getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.04f), 0.05f);
 				getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.14f), 0.05f);
 
-				WeaponPossible sword = new WeaponPossible();
+				WeaponPoss sword = new WeaponPoss();
 				sword.material = Material.STONE_SWORD;
 				sword.dmg = new IntPoss(10, 30);
 				sword.range = new IntPoss(0, 10);
 				getWeapons().add(sword);
 
-				WeaponPossible axe = new WeaponPossible();
+				WeaponPoss axe = new WeaponPoss();
 				axe.material = Material.STONE_AXE;
 				axe.dmg = new IntPoss(11, 35);
 				axe.range = new IntPoss(0, 8);
 				getWeapons().add(axe);
 
-				WeaponPossible bow = new WeaponPossible();
+				WeaponPoss bow = new WeaponPoss();
 				bow.material = Material.BOW;
 				bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
 				bow.dmg = new IntPoss(11, 35);
@@ -354,22 +354,22 @@ public abstract class Tier extends Stats {
 				getDefArmor().dodge = new Chance<>(new FloatPoss(0.01f, 0.06f), 0.06f);
 				getDefArmor().reflect = new Chance<>(new FloatPoss(0.01f, 0.06f), 0.06f);
 
-				ArmorPossible helmet = new ArmorPossible();
+				ArmorPoss helmet = new ArmorPoss();
 				helmet.material = Material.IRON_HELMET;
 				helmet.hp = new IntPoss(150, 564);
 				getHelmets().add(helmet);
 
-				ArmorPossible chestplate = new ArmorPossible();
+				ArmorPoss chestplate = new ArmorPoss();
 				chestplate.material = Material.IRON_CHESTPLATE;
 				chestplate.hp = new IntPoss(225, 846);
 				getChestplates().add(chestplate);
 
-				ArmorPossible leggings = new ArmorPossible();
+				ArmorPoss leggings = new ArmorPoss();
 				leggings.material = Material.IRON_LEGGINGS;
 				leggings.hp = new IntPoss(225, 846);
 				getAllLeggings().add(leggings);
 
-				ArmorPossible boots = new ArmorPossible();
+				ArmorPoss boots = new ArmorPoss();
 				boots.material = Material.IRON_BOOTS;
 				boots.hp = new IntPoss(150, 564);
 				getAllBoots().add(boots);
@@ -384,19 +384,19 @@ public abstract class Tier extends Stats {
 				getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.05f), 0.05f);
 				getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.16f), 0.05f);
 
-				WeaponPossible sword = new WeaponPossible();
+				WeaponPoss sword = new WeaponPoss();
 				sword.material = Material.IRON_SWORD;
 				sword.dmg = new IntPoss(21, 68);
 				sword.range = new IntPoss(0, 40);
 				getWeapons().add(sword);
 
-				WeaponPossible axe = new WeaponPossible();
+				WeaponPoss axe = new WeaponPoss();
 				axe.material = Material.IRON_AXE;
 				axe.dmg = new IntPoss(23, 70);
 				axe.range = new IntPoss(0, 37);
 				getWeapons().add(axe);
 
-				WeaponPossible bow = new WeaponPossible();
+				WeaponPoss bow = new WeaponPoss();
 				bow.material = Material.BOW;
 				bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
 				bow.dmg = new IntPoss(23, 70);
@@ -477,22 +477,22 @@ public abstract class Tier extends Stats {
 				getDefArmor().dodge = new Chance<>(new FloatPoss(0.01f, 0.1f), 0.08f);
 				getDefArmor().reflect = new Chance<>(new FloatPoss(0.01f, 0.1f), 0.08f);
 
-				ArmorPossible helmet = new ArmorPossible();
+				ArmorPoss helmet = new ArmorPoss();
 				helmet.material = Material.DIAMOND_HELMET;
 				helmet.hp = new IntPoss(524, 1920);
 				getHelmets().add(helmet);
 
-				ArmorPossible chestplate = new ArmorPossible();
+				ArmorPoss chestplate = new ArmorPoss();
 				chestplate.material = Material.DIAMOND_CHESTPLATE;
 				chestplate.hp = new IntPoss(786, 2880);
 				getChestplates().add(chestplate);
 
-				ArmorPossible leggings = new ArmorPossible();
+				ArmorPoss leggings = new ArmorPoss();
 				leggings.material = Material.DIAMOND_LEGGINGS;
 				leggings.hp = new IntPoss(786, 2880);
 				getAllLeggings().add(leggings);
 
-				ArmorPossible boots = new ArmorPossible();
+				ArmorPoss boots = new ArmorPoss();
 				boots.material = Material.DIAMOND_BOOTS;
 				boots.hp = new IntPoss(524, 1920);
 				getAllBoots().add(boots);
@@ -507,19 +507,19 @@ public abstract class Tier extends Stats {
 				getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.06f), 0.05f);
 				getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.18f), 0.05f);
 
-				WeaponPossible sword = new WeaponPossible();
+				WeaponPoss sword = new WeaponPoss();
 				sword.material = Material.DIAMOND_SWORD;
 				sword.dmg = new IntPoss(90, 160);
 				sword.range = new IntPoss(0, 46);
 				getWeapons().add(sword);
 
-				WeaponPossible axe = new WeaponPossible();
+				WeaponPoss axe = new WeaponPoss();
 				axe.material = Material.DIAMOND_AXE;
 				axe.dmg = new IntPoss(94, 172);
 				axe.range = new IntPoss(0, 42);
 				getWeapons().add(axe);
 
-				WeaponPossible bow = new WeaponPossible();
+				WeaponPoss bow = new WeaponPoss();
 				bow.material = Material.BOW;
 				bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
 				bow.dmg = new IntPoss(94, 172);
@@ -600,22 +600,22 @@ public abstract class Tier extends Stats {
 				getDefArmor().dodge = new Chance<>(new FloatPoss(0.02f, 0.12f), 0.1f);
 				getDefArmor().reflect = new Chance<>(new FloatPoss(0.02f, 0.12f), 0.1f);
 
-				ArmorPossible helmet = new ArmorPossible();
+				ArmorPoss helmet = new ArmorPoss();
 				helmet.material = Material.GOLD_HELMET;
 				helmet.hp = new IntPoss(868, 2760);
 				getHelmets().add(helmet);
 
-				ArmorPossible chestplate = new ArmorPossible();
+				ArmorPoss chestplate = new ArmorPoss();
 				chestplate.material = Material.GOLD_CHESTPLATE;
 				chestplate.hp = new IntPoss(1302, 4140);
 				getChestplates().add(chestplate);
 
-				ArmorPossible leggings = new ArmorPossible();
+				ArmorPoss leggings = new ArmorPoss();
 				leggings.material = Material.GOLD_LEGGINGS;
 				leggings.hp = new IntPoss(1302, 4140);
 				getAllLeggings().add(leggings);
 
-				ArmorPossible boots = new ArmorPossible();
+				ArmorPoss boots = new ArmorPoss();
 				boots.material = Material.GOLD_BOOTS;
 				boots.hp = new IntPoss(868, 2760);
 				getAllBoots().add(boots);
@@ -630,19 +630,19 @@ public abstract class Tier extends Stats {
 				getDefWeapon().trueHearts = new Chance<>(new FloatPoss(0.01f, 0.07f), 0.05f);
 				getDefWeapon().blind = new Chance<>(new FloatPoss(0.01f, 0.2f), 0.05f);
 
-				WeaponPossible sword = new WeaponPossible();
+				WeaponPoss sword = new WeaponPoss();
 				sword.material = Material.GOLD_SWORD;
 				sword.dmg = new IntPoss(120, 330);
 				sword.range = new IntPoss(0, 80);
 				getWeapons().add(sword);
 
-				WeaponPossible axe = new WeaponPossible();
+				WeaponPoss axe = new WeaponPoss();
 				axe.material = Material.GOLD_AXE;
 				axe.dmg = new IntPoss(130, 340);
 				axe.range = new IntPoss(0, 75);
 				getWeapons().add(axe);
 
-				WeaponPossible bow = new WeaponPossible();
+				WeaponPoss bow = new WeaponPoss();
 				bow.material = Material.BOW;
 				bow.allowedTypes = new EntityType[]{EntityType.SKELETON};
 				bow.dmg = new IntPoss(130, 340);

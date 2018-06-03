@@ -13,10 +13,6 @@ public class PartyManager {
 	private List<Party> parties = Collections.synchronizedList(new ArrayList<>());
 	private HashMap<AgPlayer, Party> invites = new HashMap<>();
 
-	public PartyManager() {
-		//lol singleton xd
-	}
-
 	public static PartyManager getInstance() {
 		return instance != null ? instance : (instance = new PartyManager());
 	}

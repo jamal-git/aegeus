@@ -46,16 +46,16 @@ public abstract class Stats {
 	private Supplier<Boolean> hasChestplate = () -> true;
 	private Supplier<Boolean> hasLeggings = () -> true;
 	private Supplier<Boolean> hasBoots = () -> true;
-	private List<ArmorPossible> helmets = new ArrayList<>();
-	private List<ArmorPossible> chestplates = new ArrayList<>();
-	private List<ArmorPossible> leggings = new ArrayList<>();
-	private List<ArmorPossible> boots = new ArrayList<>();
-	private List<WeaponPossible> weapons = new ArrayList<>();
+	private List<ArmorPoss> helmets = new ArrayList<>();
+	private List<ArmorPoss> chestplates = new ArrayList<>();
+	private List<ArmorPoss> leggings = new ArrayList<>();
+	private List<ArmorPoss> boots = new ArrayList<>();
+	private List<WeaponPoss> weapons = new ArrayList<>();
 	private Map<EnumCraftingMaterial, Chance<IntPoss>> drops = new HashMap<>();
 
 	// Defaults
-	private ArmorPossible defArmor = new ArmorPossible(null);
-	private WeaponPossible defWeapon = new WeaponPossible(null);
+	private ArmorPoss defArmor = new ArmorPoss(null);
+	private WeaponPoss defWeapon = new WeaponPoss(null);
 
 	public void setup(Object... args) {
 
@@ -192,12 +192,12 @@ public abstract class Stats {
 		return types.isEmpty() ? EntityType.ZOMBIE : types.get(Util.rInt(types.size()));
 	}
 
-	public ArmorPossible getHelmet() {
+	public ArmorPoss getHelmet() {
 		return helmets.isEmpty() ? defArmor : helmets.get(Util.rInt(helmets.size()));
 	}
 
-	public ArmorPossible getHelmet(EntityType type) {
-		List<ArmorPossible> helmets = this.helmets.stream().filter(i ->
+	public ArmorPoss getHelmet(EntityType type) {
+		List<ArmorPoss> helmets = this.helmets.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type)).
 				collect(Collectors.toList());
 		return helmets.isEmpty() ? defArmor : helmets.get(Util.rInt(helmets.size()));
@@ -215,13 +215,13 @@ public abstract class Stats {
 		return getHasHelmet().get();
 	}
 
-	public ArmorPossible getChestplate() {
+	public ArmorPoss getChestplate() {
 		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
 				chestplates.get(Util.rInt(chestplates.size()));
 	}
 
-	public ArmorPossible getChestplate(EntityType type) {
-		List<ArmorPossible> chestplates = this.chestplates.stream().filter(i ->
+	public ArmorPoss getChestplate(EntityType type) {
+		List<ArmorPoss> chestplates = this.chestplates.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return chestplates.isEmpty() ? defArmor : chestplates.size() == 1 ? chestplates.get(0) :
@@ -240,17 +240,17 @@ public abstract class Stats {
 		return getHasChestplate().get();
 	}
 
-	public ArmorPossible getLeggings() {
+	public ArmorPoss getLeggings() {
 		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
 				leggings.get(Util.rInt(leggings.size()));
 	}
 
-	public void setLeggings(List<ArmorPossible> leggings) {
+	public void setLeggings(List<ArmorPoss> leggings) {
 		this.leggings = leggings;
 	}
 
-	public ArmorPossible getLeggings(EntityType type) {
-		List<ArmorPossible> leggings = this.leggings.stream().filter(i ->
+	public ArmorPoss getLeggings(EntityType type) {
+		List<ArmorPoss> leggings = this.leggings.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return leggings.isEmpty() ? defArmor : leggings.size() == 1 ? leggings.get(0) :
@@ -269,17 +269,17 @@ public abstract class Stats {
 		return hasLeggings.get();
 	}
 
-	public ArmorPossible getBoots() {
+	public ArmorPoss getBoots() {
 		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
 				boots.get(Util.rInt(boots.size()));
 	}
 
-	public void setBoots(List<ArmorPossible> boots) {
+	public void setBoots(List<ArmorPoss> boots) {
 		this.boots = boots;
 	}
 
-	public ArmorPossible getBoots(EntityType type) {
-		List<ArmorPossible> boots = this.boots.stream().filter(i ->
+	public ArmorPoss getBoots(EntityType type) {
+		List<ArmorPoss> boots = this.boots.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return boots.isEmpty() ? defArmor : boots.size() == 1 ? boots.get(0) :
@@ -298,13 +298,13 @@ public abstract class Stats {
 		return hasBoots.get();
 	}
 
-	public WeaponPossible getWeapon() {
+	public WeaponPoss getWeapon() {
 		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
 				weapons.get(Util.rInt(weapons.size()));
 	}
 
-	public WeaponPossible getWeapon(EntityType type) {
-		List<WeaponPossible> weapons = this.weapons.stream().filter(i ->
+	public WeaponPoss getWeapon(EntityType type) {
+		List<WeaponPoss> weapons = this.weapons.stream().filter(i ->
 				i.allowedTypes == null || Arrays.asList(i.allowedTypes).contains(type))
 				.collect(Collectors.toList());
 		return weapons.isEmpty() ? defWeapon : weapons.size() == 1 ? weapons.get(0) :
@@ -343,53 +343,53 @@ public abstract class Stats {
 		this.abilCount = abilCount;
 	}
 
-	public List<ArmorPossible> getHelmets() {
+	public List<ArmorPoss> getHelmets() {
 		return helmets;
 	}
 
-	public void setHelmets(List<ArmorPossible> helmets) {
+	public void setHelmets(List<ArmorPoss> helmets) {
 		this.helmets = helmets;
 	}
 
-	public List<ArmorPossible> getChestplates() {
+	public List<ArmorPoss> getChestplates() {
 		return chestplates;
 	}
 
-	public void setChestplates(List<ArmorPossible> chestplates) {
+	public void setChestplates(List<ArmorPoss> chestplates) {
 		this.chestplates = chestplates;
 	}
 
-	public List<ArmorPossible> getAllLeggings() {
+	public List<ArmorPoss> getAllLeggings() {
 		return leggings;
 	}
 
-	public List<ArmorPossible> getAllBoots() {
+	public List<ArmorPoss> getAllBoots() {
 		return boots;
 	}
 
 	// Defaults
 
-	public List<WeaponPossible> getWeapons() {
+	public List<WeaponPoss> getWeapons() {
 		return weapons;
 	}
 
-	public void setWeapons(List<WeaponPossible> weapons) {
+	public void setWeapons(List<WeaponPoss> weapons) {
 		this.weapons = weapons;
 	}
 
-	public ArmorPossible getDefArmor() {
+	public ArmorPoss getDefArmor() {
 		return defArmor;
 	}
 
-	public void setDefArmor(ArmorPossible defArmor) {
+	public void setDefArmor(ArmorPoss defArmor) {
 		this.defArmor = defArmor;
 	}
 
-	public WeaponPossible getDefWeapon() {
+	public WeaponPoss getDefWeapon() {
 		return defWeapon;
 	}
 
-	public void setDefWeapon(WeaponPossible defWeapon) {
+	public void setDefWeapon(WeaponPoss defWeapon) {
 		this.defWeapon = defWeapon;
 	}
 
@@ -468,7 +468,7 @@ public abstract class Stats {
 		return entity;
 	}
 
-	public class WeaponPossible {
+	public class WeaponPoss {
 		public Material material = Material.WOOD_SWORD;
 		public EntityType[] allowedTypes = null;
 		public String name = "";
@@ -487,11 +487,11 @@ public abstract class Stats {
 		public Chance<FloatPoss> trueHearts = new Chance<>();
 		public Chance<FloatPoss> blind = new Chance<>();
 
-		public WeaponPossible() {
+		public WeaponPoss() {
 			this(defWeapon);
 		}
 
-		public WeaponPossible(WeaponPossible other) {
+		public WeaponPoss(WeaponPoss other) {
 			if (other != null) {
 				this.material = other.material;
 				this.allowedTypes = other.allowedTypes;
@@ -553,7 +553,7 @@ public abstract class Stats {
 		}
 	}
 
-	public class ArmorPossible {
+	public class ArmorPoss {
 		public Material material = Material.LEATHER_HELMET;
 		public EntityType[] allowedTypes = null;
 		public String name = "";
@@ -568,11 +568,11 @@ public abstract class Stats {
 		public Chance<FloatPoss> dodge = new Chance<>();
 		public Chance<FloatPoss> reflect = new Chance<>();
 
-		public ArmorPossible() {
+		public ArmorPoss() {
 			this(defArmor);
 		}
 
-		public ArmorPossible(ArmorPossible other) {
+		public ArmorPoss(ArmorPoss other) {
 			if (other != null) {
 				this.material = other.material;
 				this.allowedTypes = other.allowedTypes;
