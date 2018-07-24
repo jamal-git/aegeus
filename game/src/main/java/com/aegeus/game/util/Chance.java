@@ -4,22 +4,17 @@ import com.google.common.base.Objects;
 
 public class Chance<T> {
 	private T object;
-	private float chance = 1f;
-
-	public Chance() {
-
-	}
+	private T def;
+	private float chance;
 
 	public Chance(T object, float chance) {
 		this.object = object;
 		this.chance = chance;
 	}
 
-	public float getChance() {
-		return chance;
-	}
-
-	public void setChance(float chance) {
+	public Chance(T object, T def, float chance) {
+		this.object = object;
+		this.def = def;
 		this.chance = chance;
 	}
 
@@ -31,25 +26,42 @@ public class Chance<T> {
 		this.object = object;
 	}
 
+	public T getDefault() {
+		return def;
+	}
+
+	public void setDefault(T def) {
+		this.def = def;
+	}
+
+	public float getChance() {
+		return chance;
+	}
+
+	public void setChance(float chance) {
+		this.chance = Util.clamp(chance, 0, 1);
+	}
+
 	public T get() {
-		return get(null);
-	}
-
-	public T get(T def) {
-		return Util.rFloat() <= chance ? object : def;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Chance<?> chance1 = (Chance<?>) o;
-		return Float.compare(chance1.chance, chance) == 0 &&
-				Objects.equal(object, chance1.object);
+		return chance == 1 ? object : Util.randFloat() <= chance ? object : def;
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(object, chance);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && obj instanceof Chance
+				&& Objects.equal(object, ((Chance) obj).object);
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this)
+				.add("object", object)
+				.add("chance", chance)
+				.toString();
 	}
 }

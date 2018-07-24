@@ -1,13 +1,11 @@
-name: AEGEUS
+name: Aegeus
 version: dev
-description: We need a boat.
-depend: [GlowAPI, WorldEdit]
-authors: [VarusMain, Silvre]
+description: We need a bigger boat.
+authors: [oopsjpeg, Silvre]
 main: com.aegeus.game.Aegeus
 
 commands:
     # entity
-    mount:
     mob:
     openentity:
 
@@ -16,20 +14,11 @@ commands:
       aliases: gl
     message:
       aliases: m
-    party:
-      aliases: p
-    chatchannel:
-      aliases: cc
-    roll:
     broadcast:
       aliases: bc
-
-    # world
-    createdungeon:
 
     # item
     create:
       aliases: cr
     generate:
       aliases: gen
-    repair:

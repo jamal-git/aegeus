@@ -1,6 +1,5 @@
 package com.aegeus.game.entity;
 
-import com.google.common.base.Objects;
 import org.bukkit.entity.Entity;
 
 public class AgEntity {
@@ -10,25 +9,19 @@ public class AgEntity {
 		this.entity = entity;
 	}
 
-	public AgEntity(AgEntity other) {
-		this.entity = other.entity;
-	}
-
 	public Entity getEntity() {
 		return entity;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		AgEntity agEntity = (AgEntity) o;
-		return Objects.equal(entity, agEntity.entity);
+	public int hashCode() {
+		return entity.hashCode();
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hashCode(entity);
+	public boolean equals(Object obj) {
+		return obj != null && obj instanceof AgEntity
+				&& entity.equals(((AgEntity) obj).getEntity());
 	}
 
 	@Override

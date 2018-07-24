@@ -1,12 +1,3 @@
-target/
-dependency-reduced-pom.xml
-
-*.jar
-*.iml
-
 .idea/
-.settings/
-.floo
-.flooignore
-.project
-.classpath
+target/
+*.iml
