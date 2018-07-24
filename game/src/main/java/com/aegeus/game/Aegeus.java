@@ -13,7 +13,10 @@ import java.util.List;
 
 public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
+
 	private final List<AgEntity> entities = new ArrayList<>();
+
+	private MongoMaster mongo;
 
 	public static Aegeus getInstance() {
 		return instance;
@@ -25,7 +28,7 @@ public class Aegeus extends JavaPlugin {
 		instance = this;
 
 		// wooOOOOOOOOO, loading up!
-		getLogger().info("AEGEUS enabling...");
+		getLogger().info("Aegeus is enabling...");
 		saveDefaultConfig();
 
 		// Register plugin events
@@ -39,14 +42,27 @@ public class Aegeus extends JavaPlugin {
 
 		// Post loading
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			// Load resources from mongo
+			getLogger().info("Loading resources from database...");
+			openMongo();
+			mongo.loadTiersConfig();
+
+			// Ultra done!
 			getLogger().info("Post-load complete.");
 		});
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().info("AEGEUS disabled.");
 		entities.forEach(this::remove);
+		getLogger().info("Aegeus is disabled.");
+	}
+
+	public void openMongo() {
+		// Connect to the mongo server
+		mongo = new MongoMaster(getConfig().getString("mongo"));
+		// Disconnect the mongo client when shutting down
+		Runtime.getRuntime().addShutdownHook(new Thread(mongo::close));
 	}
 
 	public List<AgEntity> getEntities() {
