@@ -4,17 +4,10 @@ import com.google.common.base.Objects;
 
 public class Chance<T> {
 	private T object;
-	private T def;
 	private float chance;
 
 	public Chance(T object, float chance) {
 		this.object = object;
-		this.chance = chance;
-	}
-
-	public Chance(T object, T def, float chance) {
-		this.object = object;
-		this.def = def;
 		this.chance = chance;
 	}
 
@@ -26,14 +19,6 @@ public class Chance<T> {
 		this.object = object;
 	}
 
-	public T getDefault() {
-		return def;
-	}
-
-	public void setDefault(T def) {
-		this.def = def;
-	}
-
 	public float getChance() {
 		return chance;
 	}
@@ -42,8 +27,12 @@ public class Chance<T> {
 		this.chance = Util.clamp(chance, 0, 1);
 	}
 
-	public T get() {
+	public T get(T def) {
 		return chance == 1 ? object : Util.randFloat() <= chance ? object : def;
+	}
+
+	public T get() {
+		return get(null);
 	}
 
 	@Override
