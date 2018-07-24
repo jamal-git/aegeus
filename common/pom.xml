@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.aegeus</groupId>
+		<groupId>com.oopsjpeg</groupId>
 		<artifactId>aegeus</artifactId>
 		<version>0.0.1</version>
 	</parent>

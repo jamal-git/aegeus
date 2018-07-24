@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.aegeus</groupId>
+		<groupId>com.oopsjpeg</groupId>
 		<artifactId>aegeus</artifactId>
 		<version>0.0.1</version>
 	</parent>
@@ -14,6 +14,54 @@
 	<packaging>jar</packaging>
 
 	<name>Aegeus Game</name>
+
+	<build>
+		<finalName>aegeus-${artifactId}-${version}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>org.mongodb</include>
+								</includes>
+							</artifactSet>
+							<outputFile>${build.finalName}.jar</outputFile>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>elmakers-repo</id>
+			<url>http://maven.elmakers.com/repository/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
