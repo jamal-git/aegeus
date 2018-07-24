@@ -1,5 +1,6 @@
 package com.aegeus.game.item.util;
 
+import com.aegeus.game.util.Util;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemUtils {
 	public static NBTTagCompound getTag(ItemStack item) {
@@ -32,6 +34,12 @@ public class ItemUtils {
 		return isNothing(m) ? "Nothing" : CraftItemStack.asNMSCopy(new ItemStack(m)).getName();
 	}
 
+	public static void setName(ItemStack i, String name) {
+		ItemMeta meta = i.getItemMeta();
+		meta.setDisplayName(Util.colorCodes(name));
+		i.setItemMeta(meta);
+	}
+
 	public static List<String> getLore(ItemStack i) {
 		return i == null || i.getItemMeta() == null || i.getItemMeta().getLore() == null
 				? new ArrayList<>() : i.getItemMeta().getLore();
@@ -39,12 +47,12 @@ public class ItemUtils {
 
 	public static void setLore(ItemStack i, List<String> lore) {
 		ItemMeta meta = i.getItemMeta();
-		meta.setLore(lore);
+		meta.setLore(lore.stream().map(Util::colorCodes).collect(Collectors.toList()));
 		i.setItemMeta(meta);
 	}
 
 	public static void setLore(ItemStack i, String... lore) {
-		setLore(i, Arrays.asList(lore));
+		setLore(i, Arrays.stream(lore).map(Util::colorCodes).collect(Collectors.toList()));
 	}
 
 	public static boolean isNothing(Material m) {
@@ -89,12 +97,6 @@ public class ItemUtils {
 
 	public static void setDisplayItem(ItemStack i, boolean b) {
 		getTag(i).setBoolean("display_item", b);
-	}
-
-	public static void setDisplayName(ItemStack i, String name) {
-		ItemMeta meta = i.getItemMeta();
-		meta.setDisplayName(name);
-		i.setItemMeta(meta);
 	}
 
 	public static boolean isGlowing(ItemStack i) {
