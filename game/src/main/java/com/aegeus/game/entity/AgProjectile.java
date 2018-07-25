@@ -4,23 +4,21 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 
 public class AgProjectile extends AgEntity {
-	private final Projectile projectile;
-	private ItemStack launcher;
+	private ItemStack item;
 
 	public AgProjectile(Projectile projectile) {
 		super(projectile);
-		this.projectile = projectile;
 	}
 
 	public Projectile getProjectile() {
-		return projectile;
+		return (Projectile) getEntity();
 	}
 
-	public ItemStack getLauncher() {
-		return launcher;
+	public ItemStack getItem() {
+		return item;
 	}
 
-	public void setLauncher(ItemStack launcher) {
-		this.launcher = launcher;
+	public void setItem(ItemStack item) {
+		this.item = item;
 	}
 }

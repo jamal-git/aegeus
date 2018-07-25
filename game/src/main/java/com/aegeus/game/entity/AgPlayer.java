@@ -4,33 +4,21 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 public class AgPlayer extends AgLiving {
-	private final Player player;
-	private BossBar hpBar;
-
-	private Player replyTo;
+	private BossBar healthBar;
 
 	public AgPlayer(Player player) {
 		super(player);
-		this.player = player;
 	}
 
 	public Player getPlayer() {
-		return player;
+		return (Player) getEntity();
 	}
 
-	public BossBar getHpBar() {
-		return hpBar;
+	public BossBar getHealthBar() {
+		return healthBar;
 	}
 
-	public void setHpBar(BossBar hpBar) {
-		this.hpBar = hpBar;
-	}
-
-	public Player getReplyTo() {
-		return replyTo;
-	}
-
-	public void setReplyTo(Player replyTo) {
-		this.replyTo = replyTo;
+	public void setHealthBar(BossBar healthBar) {
+		this.healthBar = healthBar;
 	}
 }

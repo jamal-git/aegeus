@@ -1,6 +1,5 @@
 package com.aegeus.game.entity;
 
-import com.aegeus.game.util.Util;
 import org.bukkit.entity.LivingEntity;
 
 public class AgMonster extends AgLiving {
@@ -15,6 +14,6 @@ public class AgMonster extends AgLiving {
 	}
 
 	public void setName(String name) {
-		this.name = Util.colorCodes(name);
+		this.name = name;
 	}
 }

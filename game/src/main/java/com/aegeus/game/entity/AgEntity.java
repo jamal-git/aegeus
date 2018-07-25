@@ -20,8 +20,7 @@ public class AgEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && obj instanceof AgEntity
-				&& entity.equals(((AgEntity) obj).getEntity());
+		return entity.equals(obj);
 	}
 
 	@Override
