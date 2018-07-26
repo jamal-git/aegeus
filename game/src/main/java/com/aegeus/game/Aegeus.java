@@ -1,6 +1,7 @@
 package com.aegeus.game;
 
 import com.aegeus.game.entity.*;
+import com.aegeus.game.listener.CombatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -33,6 +34,7 @@ public class Aegeus extends JavaPlugin {
 
 		// Register plugin events
 		getLogger().info("Registering event listeners...");
+		getServer().getPluginManager().registerEvents(new CombatListener(), this);
 
 		// Register commands
 		getLogger().info("Registering commands...");
