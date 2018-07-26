@@ -1,4 +1,4 @@
-package com.aegeus.game.commands.util;
+package com.aegeus.game.command.util;
 
 import com.aegeus.game.util.Util;
 import org.bukkit.command.CommandExecutor;

@@ -1,4 +1,4 @@
-package com.aegeus.game.item.util;
+package com.aegeus.game.item;
 
 import java.util.HashMap;
 import java.util.Map;

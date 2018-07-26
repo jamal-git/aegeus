@@ -1,5 +1,6 @@
-package com.aegeus.game.item.util;
+package com.aegeus.game.item;
 
+import com.aegeus.game.item.util.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

@@ -1,49 +1,48 @@
-package com.aegeus.game.item;
+package com.aegeus.game.item.impl;
 
+import com.aegeus.game.item.Tiers;
+import com.aegeus.game.item.trait.Repairable;
+import com.aegeus.game.item.trait.Tierable;
 import com.aegeus.game.item.util.ItemUtils;
-import com.aegeus.game.item.util.Tiers;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Armor extends Item implements Tiered, Repairable {
+public class Weapon implements Tierable, Repairable {
+	private final ItemStack item;
 	private int tier = 0;
 	private int dura = 0;
 
-	private int hp = 1;
-
-	public Armor(ItemStack i) {
-		super(i);
-	}
-
-	@Override
-	public void load() {
-		NBTTagCompound tag = ItemUtils.getTag(item);
-		hp = tag.getInt("hp");
+	public Weapon(ItemStack item) {
+		this.item = item;
 	}
 
 	@Override
 	public void save() {
+		Tierable.super.save();
+		Repairable.super.save();
 		NBTTagCompound tag = ItemUtils.getTag(item);
-		tag.setInt("hp", hp);
 		ItemUtils.setTag(item, tag);
+	}
+
+	@Override
+	public void load() {
+		Tierable.super.load();
+		Repairable.super.load();
+		NBTTagCompound tag = ItemUtils.getTag(item);
 	}
 
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = new ArrayList<>();
-		lore.add("&7HP: &c+" + hp);
 		return lore;
 	}
 
-	public int getHp() {
-		return hp;
-	}
-
-	public void setHp(int hp) {
-		this.hp = hp;
+	@Override
+	public ItemStack getItem() {
+		return item;
 	}
 
 	@Override
@@ -68,21 +67,6 @@ public class Armor extends Item implements Tiered, Repairable {
 
 	@Override
 	public int getMaxDura() {
-		return Tiers.Durability.armor(tier);
-	}
-
-	@Override
-	public int hashCode() {
-		return item.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return item.equals(obj);
-	}
-
-	@Override
-	public String toString() {
-		return item.toString();
+		return Tiers.Durability.weapon(getTier());
 	}
 }

@@ -1,6 +1,6 @@
 package com.aegeus.game;
 
-import com.aegeus.game.item.util.Tiers;
+import com.aegeus.game.item.Tiers;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -20,8 +20,12 @@ public class MongoMaster extends MongoClient {
 	public void loadTiersConfig() {
 		Document doc = configs.find(Filters.eq("_id", "tiers")).first();
 
-		Document dura = (Document) doc.get("dura");
-		Tiers.Durability.setArmor((Map<Integer, Integer>) dura.get("armor"));
-		Tiers.Durability.setWeapon((Map<Integer, Integer>) dura.get("weapon"));
+		if (doc != null) {
+			Document dura = (Document) doc.get("dura");
+			if (dura != null) {
+				Tiers.Durability.setArmor((Map<Integer, Integer>) dura.get("armor"));
+				Tiers.Durability.setWeapon((Map<Integer, Integer>) dura.get("weapon"));
+			}
+		}
 	}
 }
