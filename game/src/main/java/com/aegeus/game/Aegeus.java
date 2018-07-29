@@ -43,12 +43,10 @@ public class Aegeus extends JavaPlugin {
 		// Post loading
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			// Load resources from mongo
-			getLogger().info("Loading resources from database...");
 			openMongo();
 			mongo.loadTiersConfig();
-
 			// Ultra done!
-			getLogger().info("Post-load complete.");
+			getLogger().info("Post-load completed.");
 		});
 	}
 
@@ -60,10 +58,12 @@ public class Aegeus extends JavaPlugin {
 	}
 
 	public void openMongo() {
+		getLogger().info("Loading database...");
 		// Connect to the mongo server
 		mongo = new MongoMaster(getConfig().getString("mongo"));
 		// Disconnect the mongo client when shutting down
 		Runtime.getRuntime().addShutdownHook(new Thread(mongo::close));
+		getLogger().info("Loaded database.");
 	}
 
 	public EntityBox getEntities() {

@@ -60,7 +60,7 @@ public class CombatListener implements Listener {
 					if (!(attacker instanceof Player) || entities.getPlayer((Player) attacker).attack()) {
 						if (ItemManager.exists(tool) && ItemManager.is(tool, ItemWeapon.IDENTITY)) {
 							ItemWeapon weapon = (ItemWeapon) ItemManager.get(tool);
-							damage = Util.randInt(weapon.getMinDmg(), weapon.getMaxDmg());
+							damage = Util.randInt(weapon.getMinDMG(), weapon.getMaxDMG());
 						}
 
 						// Shows a damage effect

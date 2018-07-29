@@ -12,7 +12,7 @@ public class CreateCommand implements Executor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 		ItemWeapon weapon = new ItemWeapon(Material.DIAMOND_AXE);
-		weapon.setDmg(100, 200);
+		weapon.setDMG(100, 200);
 		((Player) sender).getInventory().addItem(weapon.build());
 		return true;
 	}

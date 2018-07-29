@@ -62,23 +62,23 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 		return Tiers.Durability.weapon(getTier());
 	}
 
-	public int getMinDmg() {
+	public int getMinDMG() {
 		return minDmg;
 	}
 
-	public void setMinDmg(int minDmg) {
+	public void setMinDMG(int minDmg) {
 		this.minDmg = minDmg;
 	}
 
-	public int getMaxDmg() {
+	public int getMaxDMG() {
 		return maxDmg;
 	}
 
-	public void setMaxDmg(int maxDmg) {
+	public void setMaxDMG(int maxDmg) {
 		this.maxDmg = maxDmg;
 	}
 
-	public void setDmg(int min, int max) {
+	public void setDMG(int min, int max) {
 		minDmg = min;
 		maxDmg = max;
 	}

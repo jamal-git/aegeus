@@ -13,6 +13,8 @@ import java.util.List;
 public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 	public static final String IDENTITY = "armor";
 
+	private int hp = 1;
+
 	public ItemArmor(ItemStack item) {
 		super(item);
 	}
@@ -23,12 +25,15 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 
 	@Override
 	public NBTTagCompound load() {
-		return super.load();
+		NBTTagCompound tag = super.load();
+		hp = tag.getInt("hp");
+		return tag;
 	}
 
 	@Override
 	public NBTTagCompound save() {
 		NBTTagCompound tag = super.save();
+		tag.setInt("hp", hp);
 		return tag;
 	}
 
@@ -39,7 +44,9 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 
 	@Override
 	public List<String> buildLore() {
-		return super.buildLore();
+		List<String> lore = super.buildLore();
+		lore.add("&7HP: &c+" + hp);
+		return lore;
 	}
 
 	@Override
@@ -50,5 +57,13 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 	@Override
 	public String getIdentity() {
 		return IDENTITY;
+	}
+
+	public int getHP() {
+		return hp;
+	}
+
+	public void setHP(int hp) {
+		this.hp = hp;
 	}
 }
