@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 
 public class AgEntity {
 	private final Entity entity;
+	private String name = "";
 
 	public AgEntity(Entity entity) {
 		this.entity = entity;
@@ -13,18 +14,11 @@ public class AgEntity {
 		return entity;
 	}
 
-	@Override
-	public int hashCode() {
-		return entity.hashCode();
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		return entity.equals(obj);
-	}
-
-	@Override
-	public String toString() {
-		return entity.toString();
+	public void setName(String name) {
+		this.name = name;
 	}
 }

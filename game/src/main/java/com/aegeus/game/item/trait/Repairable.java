@@ -1,15 +1,20 @@
 package com.aegeus.game.item.trait;
 
-import com.aegeus.game.item.util.Item;
 import com.aegeus.game.item.util.ItemUtils;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public interface Repairable extends Item {
-	int getDura();
+public interface Repairable extends ItemTrait {
+	default int getDura() {
+		return ItemUtils.getTag(getItem()).getInt("dura");
+	}
 
-	void setDura(int dura);
+	default void setDura(int dura) {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInt("dura", dura);
+		ItemUtils.setTag(getItem(), tag);
+	}
 
 	int getMaxDura();
 
@@ -19,18 +24,5 @@ public interface Repairable extends Item {
 
 	default int display(Material m) {
 		return (getDura() / getMaxDura()) * (m.getMaxDurability() - 1);
-	}
-
-	@Override
-	default void load() {
-		NBTTagCompound tag = ItemUtils.getTag(getItem());
-		setDura(tag.getInt("dura"));
-	}
-
-	@Override
-	default void save() {
-		NBTTagCompound tag = ItemUtils.getTag(getItem());
-		tag.setInt("dura", getDura());
-		ItemUtils.setTag(getItem(), tag);
 	}
 }

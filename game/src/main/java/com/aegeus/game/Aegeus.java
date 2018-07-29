@@ -1,21 +1,16 @@
 package com.aegeus.game;
 
-import com.aegeus.game.entity.*;
+import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.util.EntityBox;
 import com.aegeus.game.listener.CombatListener;
+import com.aegeus.game.listener.ItemListener;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Aegeus extends JavaPlugin {
 	private static Aegeus instance;
 
-	private final List<AgEntity> entities = new ArrayList<>();
+	private final EntityBox entities = new EntityBox();
 
 	private MongoMaster mongo;
 
@@ -35,12 +30,13 @@ public class Aegeus extends JavaPlugin {
 		// Register plugin events
 		getLogger().info("Registering event listeners...");
 		getServer().getPluginManager().registerEvents(new CombatListener(), this);
+		getServer().getPluginManager().registerEvents(new ItemListener(), this);
 
 		// Register commands
 		getLogger().info("Registering commands...");
 
 		// Done, done, and done!
-		getLogger().info("Load complete.");
+		getLogger().info("Aegeus is enabled.");
 
 		// Post loading
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -56,7 +52,8 @@ public class Aegeus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		entities.forEach(this::remove);
+		for (AgEntity e : getEntities())
+			e.getEntity().remove();
 		getLogger().info("Aegeus is disabled.");
 	}
 
@@ -67,38 +64,7 @@ public class Aegeus extends JavaPlugin {
 		Runtime.getRuntime().addShutdownHook(new Thread(mongo::close));
 	}
 
-	public List<AgEntity> getEntities() {
+	public EntityBox getEntities() {
 		return entities;
-	}
-
-	public AgEntity get(Entity e) {
-		if (!entities.contains(e))
-			entities.add(new AgEntity(e));
-		return entities.get(entities.indexOf(e));
-	}
-
-	public AgPlayer getPlayer(Player p) {
-		return (AgPlayer) get(p);
-	}
-
-	public AgLiving getLiving(LivingEntity e) {
-		return (AgLiving) get(e);
-	}
-
-	public AgMonster getMonster(LivingEntity e) {
-		return (AgMonster) get(e);
-	}
-
-	public AgProjectile getProjectile(Projectile p) {
-		return (AgProjectile) get(p);
-	}
-
-	public void remove(Entity e) {
-		e.remove();
-		entities.remove(e);
-	}
-
-	public void remove(AgEntity e) {
-		remove(e.getEntity());
 	}
 }

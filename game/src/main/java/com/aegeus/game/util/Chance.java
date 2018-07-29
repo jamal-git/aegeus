@@ -1,7 +1,5 @@
 package com.aegeus.game.util;
 
-import com.google.common.base.Objects;
-
 public class Chance<T> {
 	private T object;
 	private float chance;
@@ -33,24 +31,5 @@ public class Chance<T> {
 
 	public T get() {
 		return get(null);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(object, chance);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj != null && obj instanceof Chance
-				&& Objects.equal(object, ((Chance) obj).object);
-	}
-
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this)
-				.add("object", object)
-				.add("chance", chance)
-				.toString();
 	}
 }

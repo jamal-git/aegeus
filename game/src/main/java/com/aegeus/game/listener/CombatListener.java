@@ -1,5 +1,6 @@
 package com.aegeus.game.listener;
 
+import com.aegeus.game.Aegeus;
 import com.aegeus.game.entity.util.EntityUtils;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
@@ -31,25 +32,30 @@ public class CombatListener implements Listener {
 				LivingEntity victim = (LivingEntity) edbee.getEntity();
 				LivingEntity attacker = (LivingEntity) edbee.getDamager();
 
-				// Shows a damage effect
-				victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
-						110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
-				// Apply the damage and mimic what the event changes
-				victim.damage(damage);
-				victim.setLastDamage(damage);
-				victim.setLastDamageCause(edbee);
-				// Set the victim's no damage ticks
-				victim.setMaximumNoDamageTicks(9);
-				victim.setNoDamageTicks(0);
+				// If the attacker is a player, make sure they can attack, otherwise continue
+				if (!(attacker instanceof Player) || Aegeus.getInstance()
+						.getEntities().getPlayer((Player) attacker).attack()) {
 
-				// Apply knockback to the victim
-				Vector vec = attacker.getLocation().getDirection().multiply(0.09);
-				if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.4);
-				victim.setVelocity(vec);
+					// Shows a damage effect
+					victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
+							110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
+					// Apply the damage and mimic what the event changes
+					victim.damage(damage);
+					victim.setLastDamage(damage);
+					victim.setLastDamageCause(edbee);
+					// Set the victim's no damage ticks (different from player hit ticks)
+					victim.setMaximumNoDamageTicks(5);
+					victim.setNoDamageTicks(5);
 
-				// Send attacker game text to attacker
-				if (attacker instanceof Player)
-					attacker.sendMessage(attacker((Player) attacker, victim, damage));
+					// Apply knockback to the victim
+					Vector vec = attacker.getLocation().getDirection().multiply(0.09);
+					if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.33);
+					victim.setVelocity(vec);
+
+					// Send attacker game text to attacker
+					if (attacker instanceof Player)
+						attacker.sendMessage(attacker((Player) attacker, victim, damage));
+				}
 			}
 		}
 

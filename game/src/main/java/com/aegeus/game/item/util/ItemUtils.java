@@ -16,101 +16,89 @@ import java.util.stream.Collectors;
 
 public class ItemUtils {
 	public static NBTTagCompound getTag(ItemStack item) {
+		if (isNothing(item)) return null;
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
-		return (nmsStack.getTag() != null) ? nmsStack.getTag() : new NBTTagCompound();
+		return nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
 	}
 
 	public static ItemStack setTag(ItemStack item, NBTTagCompound tag) {
+		if (isNothing(item)) return null;
 		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		nmsStack.setTag(tag);
 		return CraftItemStack.asBukkitCopy(nmsStack);
 	}
 
-	public static String getName(ItemStack i) {
-		return isNothing(i.getType()) ? "Nothing" : CraftItemStack.asNMSCopy(i).getName();
+	public static String getName(ItemStack item) {
+		return isNothing(item) ? "Nothing" : CraftItemStack.asNMSCopy(item).getName();
 	}
 
-	public static String getName(Material m) {
-		return isNothing(m) ? "Nothing" : CraftItemStack.asNMSCopy(new ItemStack(m)).getName();
+	public static void setName(ItemStack item, String name) {
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(name);
+		item.setItemMeta(meta);
 	}
 
-	public static void setName(ItemStack i, String name) {
-		ItemMeta meta = i.getItemMeta();
-		meta.setDisplayName(Util.colorCodes(name));
-		i.setItemMeta(meta);
+	public static List<String> getLore(ItemStack item) {
+		return isNothing(item) ? new ArrayList<>() : item.getItemMeta().getLore();
 	}
 
-	public static List<String> getLore(ItemStack i) {
-		return i == null || i.getItemMeta() == null || i.getItemMeta().getLore() == null
-				? new ArrayList<>() : i.getItemMeta().getLore();
-	}
-
-	public static void setLore(ItemStack i, List<String> lore) {
-		ItemMeta meta = i.getItemMeta();
+	public static void setLore(ItemStack item, List<String> lore) {
+		ItemMeta meta = item.getItemMeta();
 		meta.setLore(lore.stream().map(Util::colorCodes).collect(Collectors.toList()));
-		i.setItemMeta(meta);
+		item.setItemMeta(meta);
 	}
 
-	public static void setLore(ItemStack i, String... lore) {
-		setLore(i, Arrays.stream(lore).map(Util::colorCodes).collect(Collectors.toList()));
+	public static void setLore(ItemStack item, String... lore) {
+		setLore(item, Arrays.asList(lore));
 	}
 
-	public static boolean isNothing(Material m) {
-		return m == null | m == Material.AIR;
+	public static boolean isNothing(ItemStack i) {
+		return i == null || i.getType() == Material.AIR;
 	}
 
 	public static boolean isSword(Material m) {
-		return m != null && m.name().contains("_SWORD");
+		return m.name().contains("_SWORD");
 	}
 
 	public static boolean isAxe(Material m) {
-		return m != null && m.name().contains("_AXE");
+		return m.name().contains("_AXE");
 	}
 
 	public static boolean isSpade(Material m) {
-		return m != null && m.name().contains("_SPADE");
+		return m.name().contains("_SPADE");
 	}
 
 	public static boolean isHoe(Material m) {
-		return m != null && m.name().contains("_HOE");
+		return m.name().contains("_HOE");
 	}
 
 	public static boolean isHelmet(Material m) {
-		return m != null && m.name().contains("_HELMET");
+		return m.name().contains("_HELMET");
 	}
 
 	public static boolean isChestplate(Material m) {
-		return m != null && m.name().contains("_CHESTPLATE");
+		return m.name().contains("_CHESTPLATE");
 	}
 
 	public static boolean isLeggings(Material m) {
-		return m != null && m.name().contains("_LEGGINGS");
+		return m.name().contains("_LEGGINGS");
 	}
 
 	public static boolean isBoots(Material m) {
-		return m != null && m.name().contains("_BOOTS");
-	}
-
-	public static boolean isDisplayItem(ItemStack i) {
-		return getTag(i).hasKey("display_item") && getTag(i).getBoolean("display_item");
-	}
-
-	public static void setDisplayItem(ItemStack i, boolean b) {
-		getTag(i).setBoolean("display_item", b);
+		return m.name().contains("_BOOTS");
 	}
 
 	public static boolean isGlowing(ItemStack i) {
-		ItemMeta meta = i.getItemMeta();
-		return meta.getEnchantLevel(Enchantment.ARROW_INFINITE) >= 1;
+		return !isNothing(i) && i.getItemMeta().getEnchantLevel(Enchantment.ARROW_INFINITE) >= 1;
 	}
 
-	public static void setGlowing(ItemStack i, boolean glowing) {
-		ItemMeta meta = i.getItemMeta();
+	public static void setGlowing(ItemStack item, boolean glowing) {
+		ItemMeta meta = item.getItemMeta();
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		if (glowing)
-			meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-		else
-			meta.removeEnchant(Enchantment.ARROW_INFINITE);
-		i.setItemMeta(meta);
+
+		if (glowing) meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+		else meta.removeEnchant(Enchantment.ARROW_INFINITE);
+
+		item.setItemMeta(meta);
 	}
 }
