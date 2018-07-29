@@ -1,5 +1,6 @@
 package com.aegeus.game;
 
+import com.aegeus.game.command.CreateCommand;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.util.EntityBox;
 import com.aegeus.game.listener.CombatListener;
@@ -34,6 +35,7 @@ public class Aegeus extends JavaPlugin {
 
 		// Register commands
 		getLogger().info("Registering commands...");
+		getCommand("create").setExecutor(new CreateCommand());
 
 		// Done, done, and done!
 		getLogger().info("Aegeus is enabled.");

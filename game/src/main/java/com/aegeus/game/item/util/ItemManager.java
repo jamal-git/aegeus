@@ -10,12 +10,23 @@ public class ItemManager {
 		return !ItemUtils.isNothing(item) && ItemUtils.getTag(item).hasKey("identity");
 	}
 
+	public static String identity(ItemStack item) {
+		return exists(item) ? ItemUtils.getTag(item).getString("identity") : "";
+	}
+
+	public static boolean is(ItemStack item, String identity) {
+		return exists(item) && ItemUtils.getTag(item).getString("identity").equalsIgnoreCase(identity);
+	}
+
 	public static ItemWrapper get(ItemStack item) {
-		switch (ItemUtils.getTag(item).getString("identity")) {
-			case ItemWeapon.IDENTITY: return new ItemWeapon(item);
-			case ItemArmor.IDENTITY: return new ItemArmor(item);
-			case ItemOrb.IDENTITY: return new ItemOrb(item);
+		ItemWrapper info;
+		switch (identity(item)) {
+			case ItemWeapon.IDENTITY: info = new ItemWeapon(item); break;
+			case ItemArmor.IDENTITY: info = new ItemArmor(item); break;
+			case ItemOrb.IDENTITY: info = new ItemOrb(item); break;
 			default: return null;
 		}
+		info.load();
+		return info;
 	}
 }

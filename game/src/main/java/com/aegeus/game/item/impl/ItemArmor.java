@@ -22,8 +22,8 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 	}
 
 	@Override
-	public void load() {
-		super.load();
+	public NBTTagCompound load() {
+		return super.load();
 	}
 
 	@Override

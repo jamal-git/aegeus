@@ -1,22 +1,29 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.util.EntityBox;
 import com.aegeus.game.entity.util.EntityUtils;
+import com.aegeus.game.item.impl.ItemWeapon;
+import com.aegeus.game.item.util.ItemManager;
 import com.aegeus.game.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 public class CombatListener implements Listener {
 	private static final String indent = "            ";
+
+	private final EntityBox entities = Aegeus.getInstance().getEntities();
 
 	@EventHandler
 	private void onDamage(EntityDamageEvent ede) {
@@ -26,35 +33,56 @@ public class CombatListener implements Listener {
 		// Check for entity vs. entity
 		if (ede instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent edbee = (EntityDamageByEntityEvent) ede;
-			if (entity instanceof LivingEntity && edbee.getDamager() instanceof LivingEntity) {
+			if (entity instanceof LivingEntity) {
 				// Cancel the event, use custom damage when dealing with E vs E
 				ede.setCancelled(true);
 				LivingEntity victim = (LivingEntity) edbee.getEntity();
-				LivingEntity attacker = (LivingEntity) edbee.getDamager();
 
-				// If the attacker is a player, make sure they can attack, otherwise continue
-				if (!(attacker instanceof Player) || Aegeus.getInstance()
-						.getEntities().getPlayer((Player) attacker).attack()) {
+				// Determine whether or not the attacker was a projectile
+				LivingEntity attacker = null;
+				ItemStack tool = null;
+				if (edbee.getDamager() instanceof LivingEntity) {
+					// Set the var to the attacker
+					attacker = (LivingEntity) edbee.getDamager();
+					tool = attacker.getEquipment().getItemInMainHand();
+				} else if (edbee.getCause() == EntityDamageEvent.DamageCause.PROJECTILE
+						&& ((Projectile) edbee.getDamager()).getShooter() instanceof LivingEntity) {
+					// Set the var to the projectile's shooter
+					Projectile projectile = (Projectile) edbee.getDamager();
+					attacker = (LivingEntity) projectile.getShooter();
+					tool = entities.contains(projectile)
+							? entities.getProjectile(projectile).getItem()
+							: attacker.getEquipment().getItemInMainHand();
+				}
 
-					// Shows a damage effect
-					victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
-							110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
-					// Apply the damage and mimic what the event changes
-					victim.damage(damage);
-					victim.setLastDamage(damage);
-					victim.setLastDamageCause(edbee);
-					// Set the victim's no damage ticks (different from player hit ticks)
-					victim.setMaximumNoDamageTicks(5);
-					victim.setNoDamageTicks(5);
+				if (attacker != null) {
+					// If the attacker is a player, make sure they can attack, otherwise continue
+					if (!(attacker instanceof Player) || entities.getPlayer((Player) attacker).attack()) {
+						if (ItemManager.exists(tool) && ItemManager.is(tool, ItemWeapon.IDENTITY)) {
+							ItemWeapon weapon = (ItemWeapon) ItemManager.get(tool);
+							damage = Util.randInt(weapon.getMinDmg(), weapon.getMaxDmg());
+						}
 
-					// Apply knockback to the victim
-					Vector vec = attacker.getLocation().getDirection().multiply(0.09);
-					if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.33);
-					victim.setVelocity(vec);
+						// Shows a damage effect
+						victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
+								110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
+						// Apply the damage and mimic what the event changes
+						victim.damage(damage);
+						victim.setLastDamage(damage);
+						victim.setLastDamageCause(edbee);
+						// Set the victim's no damage ticks (different from player hit ticks)
+						victim.setMaximumNoDamageTicks(5);
+						victim.setNoDamageTicks(5);
 
-					// Send attacker game text to attacker
-					if (attacker instanceof Player)
-						attacker.sendMessage(attacker((Player) attacker, victim, damage));
+						// Apply knock back to the victim
+						Vector vec = attacker.getLocation().getDirection().multiply(0.09);
+						if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.33);
+						victim.setVelocity(vec);
+
+						// Send attacker game text to attacker
+						if (attacker instanceof Player)
+							attacker.sendMessage(attacker((Player) attacker, victim, damage));
+					}
 				}
 			}
 		}

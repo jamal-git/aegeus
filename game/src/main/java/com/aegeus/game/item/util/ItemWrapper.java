@@ -13,7 +13,6 @@ public abstract class ItemWrapper {
 
 	public ItemWrapper(ItemStack item) {
 		this.item = item;
-		load();
 	}
 
 	public ItemWrapper(Material material) {
@@ -30,7 +29,9 @@ public abstract class ItemWrapper {
 
 	public abstract String getIdentity();
 
-	public void load() {}
+	public NBTTagCompound load() {
+		return ItemUtils.getTag(item);
+	}
 
 	public NBTTagCompound save() {
 		NBTTagCompound tag = ItemUtils.getTag(item);
@@ -39,10 +40,10 @@ public abstract class ItemWrapper {
 	}
 
 	public ItemStack build() {
-		setItem(ItemUtils.setTag(item, save()));
-		if (!buildName().isEmpty()) ItemUtils.setName(getItem(), buildName());
-		if (!buildLore().isEmpty()) ItemUtils.setLore(getItem(), buildLore());
-		return getItem();
+		item = ItemUtils.setTag(item, save());
+		if (!buildName().isEmpty()) ItemUtils.setName(item, buildName());
+		if (!buildLore().isEmpty()) ItemUtils.setLore(item, buildLore());
+		return item;
 	}
 
 	public String buildName() {
@@ -57,4 +58,13 @@ public abstract class ItemWrapper {
 
 	}
 
+	@Override
+	public int hashCode() {
+		return item.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return item.toString();
+	}
 }

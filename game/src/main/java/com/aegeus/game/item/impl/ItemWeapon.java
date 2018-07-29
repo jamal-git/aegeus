@@ -13,6 +13,9 @@ import java.util.List;
 public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 	public static final String IDENTITY = "weapon";
 
+	private int minDmg = 1;
+	private int maxDmg = 1;
+
 	public ItemWeapon(ItemStack item) {
 		super(item);
 	}
@@ -22,13 +25,18 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 	}
 
 	@Override
-	public void load() {
-		super.load();
+	public NBTTagCompound load() {
+		NBTTagCompound tag = super.load();
+		minDmg = tag.getInt("min_dmg");
+		maxDmg = tag.getInt("max_dmg");
+		return tag;
 	}
 
 	@Override
 	public NBTTagCompound save() {
 		NBTTagCompound tag = super.save();
+		tag.setInt("min_dmg", minDmg);
+		tag.setInt("max_dmg", maxDmg);
 		return tag;
 	}
 
@@ -39,7 +47,14 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 
 	@Override
 	public List<String> buildLore() {
-		return super.buildLore();
+		List<String> lore = super.buildLore();
+		lore.add("&7DMG: &c" + minDmg + " - " + maxDmg);
+		return lore;
+	}
+
+	@Override
+	public String getIdentity() {
+		return IDENTITY;
 	}
 
 	@Override
@@ -47,8 +62,24 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 		return Tiers.Durability.weapon(getTier());
 	}
 
-	@Override
-	public String getIdentity() {
-		return IDENTITY;
+	public int getMinDmg() {
+		return minDmg;
+	}
+
+	public void setMinDmg(int minDmg) {
+		this.minDmg = minDmg;
+	}
+
+	public int getMaxDmg() {
+		return maxDmg;
+	}
+
+	public void setMaxDmg(int maxDmg) {
+		this.maxDmg = maxDmg;
+	}
+
+	public void setDmg(int min, int max) {
+		minDmg = min;
+		maxDmg = max;
 	}
 }
