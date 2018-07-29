@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class PlayerListener implements Listener {
 	@EventHandler
 	private void onJoin(PlayerJoinEvent event) {
-		event.getPlayer().setHealthScale(10);
+		event.getPlayer().setHealthScale(20);
 		EntityUtils.update(event.getPlayer());
 	}
 
