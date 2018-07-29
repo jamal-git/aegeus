@@ -4,6 +4,7 @@ import com.aegeus.game.item.Tiers;
 import com.aegeus.game.item.trait.Repairable;
 import com.aegeus.game.item.trait.Tierable;
 import com.aegeus.game.item.util.ItemWrapper;
+import com.aegeus.game.util.IntRange;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,8 +14,7 @@ import java.util.List;
 public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 	public static final String IDENTITY = "weapon";
 
-	private int minDmg = 1;
-	private int maxDmg = 1;
+	private IntRange dmg = new IntRange(1);
 
 	public ItemWeapon(ItemStack item) {
 		super(item);
@@ -27,16 +27,16 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 	@Override
 	public NBTTagCompound load() {
 		NBTTagCompound tag = super.load();
-		minDmg = tag.getInt("min_dmg");
-		maxDmg = tag.getInt("max_dmg");
+		dmg.setMin(tag.getInt("dmg_min"));
+		dmg.setMax(tag.getInt("dmg_max"));
 		return tag;
 	}
 
 	@Override
 	public NBTTagCompound save() {
 		NBTTagCompound tag = super.save();
-		tag.setInt("min_dmg", minDmg);
-		tag.setInt("max_dmg", maxDmg);
+		tag.setInt("dmg_min", dmg.getMin());
+		tag.setInt("dmg_max", dmg.getMax());
 		return tag;
 	}
 
@@ -48,7 +48,7 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 	@Override
 	public List<String> buildLore() {
 		List<String> lore = super.buildLore();
-		lore.add("&7DMG: &c" + minDmg + " - " + maxDmg);
+		lore.add("&7DMG: &c" + dmg.getMin() + " - " + dmg.getMax());
 		return lore;
 	}
 
@@ -59,27 +59,35 @@ public class ItemWeapon extends ItemWrapper implements Tierable, Repairable {
 
 	@Override
 	public int getMaxDura() {
-		return Tiers.Durability.weapon(getTier());
+		return Tiers.Dura.weapon(getTier());
 	}
 
 	public int getMinDMG() {
-		return minDmg;
+		return dmg.getMin();
 	}
 
-	public void setMinDMG(int minDmg) {
-		this.minDmg = minDmg;
+	public void setMinDMG(int min) {
+		dmg.setMin(Math.max(0, min));
 	}
 
 	public int getMaxDMG() {
-		return maxDmg;
+		return dmg.getMax();
 	}
 
-	public void setMaxDMG(int maxDmg) {
-		this.maxDmg = maxDmg;
+	public void setMaxDMG(int max) {
+		dmg.setMax(Math.max(0, max));
+	}
+
+	public int getDMG() {
+		return dmg.get();
+	}
+
+	public void setDMG(IntRange dmg) {
+		this.dmg = dmg;
 	}
 
 	public void setDMG(int min, int max) {
-		minDmg = min;
-		maxDmg = max;
+		dmg.setMin(min);
+		dmg.setMax(max);
 	}
 }

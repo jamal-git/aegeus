@@ -51,7 +51,7 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 
 	@Override
 	public int getMaxDura() {
-		return Tiers.Durability.armor(getTier());
+		return Tiers.Dura.armor(getTier());
 	}
 
 	@Override

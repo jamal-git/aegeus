@@ -71,6 +71,7 @@ public class CombatListener implements Listener {
 						victim.damage(damage);
 						victim.setLastDamage(damage);
 						victim.setLastDamageCause(edbee);
+						victim.setHealth(Math.max(0, victim.getHealth()));
 						// Set the victim's no damage ticks (different from player hit ticks)
 						victim.setMaximumNoDamageTicks(5);
 						victim.setNoDamageTicks(5);
@@ -95,12 +96,12 @@ public class CombatListener implements Listener {
 
 	private String victim(Player victim, int damage) {
 		return Util.colorCodes(indent + "&c-" + damage + " &lHP" + "&8 [&7"
-				+ (int) Math.ceil(victim.getHealth() - damage) + "&8]");
+				+ (int) Math.ceil(victim.getHealth()) + "&8]");
 	}
 
 	private String attacker(Player attacker, LivingEntity victim, int damage) {
 		return Util.colorCodes(indent + "&e" + damage + " &lDMG&8 >> "
 				+ "&f" + EntityUtils.getName(victim) + "&8 [&7"
-				+ (int) Math.ceil(victim.getHealth() - damage) + "&8]");
+				+ (int) Math.ceil(victim.getHealth()) + "&8]");
 	}
 }
