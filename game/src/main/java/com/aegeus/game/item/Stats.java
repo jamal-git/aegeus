@@ -41,7 +41,7 @@ public class Stats {
 		public ItemWeapon get(float f) {
 			ItemWeapon weapon = new ItemWeapon(material);
 			weapon.setMinDMG((int) (dmg.getMin() + ((dmg.getMax() - dmg.getMin()) * f)));
-			weapon.setMaxDMG(weapon.getMinDMG() + range.get());
+			weapon.setMaxDMG(Math.min(dmg.getMax(), weapon.getMinDMG() + range.get()));
 			return weapon;
 		}
 	}

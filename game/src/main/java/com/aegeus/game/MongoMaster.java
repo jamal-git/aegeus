@@ -44,7 +44,7 @@ public class MongoMaster extends MongoClient {
 					stats.setWeapons(weapons.stream().map(docWep -> new Stats.Weapon(
 							Material.getMaterial(docWep.getString("material")),
 							new IntRange(docWep.getInteger("min_dmg"), docWep.getInteger("max_dmg")),
-							new IntRange(docWep.getInteger("range"))))
+							new IntRange(0, docWep.getInteger("range"))))
 							.collect(Collectors.toList()));
 
 					return stats;
