@@ -1,6 +1,7 @@
 package com.aegeus.game.item.util;
 
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,6 +14,10 @@ public abstract class ItemWrapper {
 	public ItemWrapper(ItemStack item) {
 		this.item = item;
 		load();
+	}
+
+	public ItemWrapper(Material material) {
+		this.item = new ItemStack(material);
 	}
 
 	public ItemStack getItem() {

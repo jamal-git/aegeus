@@ -5,6 +5,7 @@ import com.aegeus.game.item.trait.Repairable;
 import com.aegeus.game.item.trait.Tierable;
 import com.aegeus.game.item.util.ItemWrapper;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -14,6 +15,10 @@ public class ItemArmor extends ItemWrapper implements Tierable, Repairable {
 
 	public ItemArmor(ItemStack item) {
 		super(item);
+	}
+
+	public ItemArmor(Material material) {
+		super(material);
 	}
 
 	@Override
