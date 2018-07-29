@@ -4,7 +4,7 @@ import com.aegeus.game.item.Tiers;
 import com.aegeus.game.item.trait.Repairable;
 import com.aegeus.game.item.trait.Tierable;
 import com.aegeus.game.item.util.ItemWrapper;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

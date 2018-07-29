@@ -4,7 +4,7 @@ import com.aegeus.game.command.CreateCommand;
 import com.aegeus.game.entity.AgEntity;
 import com.aegeus.game.entity.util.EntityBox;
 import com.aegeus.game.listener.CombatListener;
-import com.aegeus.game.listener.ItemListener;
+import com.aegeus.game.listener.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,7 +31,7 @@ public class Aegeus extends JavaPlugin {
 		// Register plugin events
 		getLogger().info("Registering event listeners...");
 		getServer().getPluginManager().registerEvents(new CombatListener(), this);
-		getServer().getPluginManager().registerEvents(new ItemListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
 		// Register commands
 		getLogger().info("Registering commands...");

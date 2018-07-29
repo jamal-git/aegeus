@@ -58,14 +58,15 @@ public class CombatListener implements Listener {
 				if (attacker != null) {
 					// If the attacker is a player, make sure they can attack, otherwise continue
 					if (!(attacker instanceof Player) || entities.getPlayer((Player) attacker).attack()) {
-						if (ItemManager.exists(tool) && ItemManager.is(tool, ItemWeapon.IDENTITY)) {
+						if (ItemManager.is(tool, ItemWeapon.IDENTITY)) {
 							ItemWeapon weapon = (ItemWeapon) ItemManager.get(tool);
 							damage = Util.randInt(weapon.getMinDMG(), weapon.getMaxDMG());
 						}
 
 						// Shows a damage effect
 						victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
-								110, 0.25, 0.8, 0.25, new MaterialData(Material.REDSTONE_WIRE));
+								110, victim.getWidth(), victim.getEyeHeight(), victim.getWidth(),
+								new MaterialData(Material.REDSTONE_WIRE));
 						// Apply the damage and mimic what the event changes
 						victim.damage(damage);
 						victim.setLastDamage(damage);
@@ -88,18 +89,18 @@ public class CombatListener implements Listener {
 		}
 
 		// Send victim game text to victim
-		if (entity instanceof Player)
+		if (entity.getLastDamageCause() != ede && entity instanceof Player)
 			entity.sendMessage(victim((Player) entity, damage));
 	}
 
 	private String victim(Player victim, int damage) {
 		return Util.colorCodes(indent + "&c-" + damage + " &lHP" + "&8 [&7"
-				+ (int) Math.ceil(victim.getHealth()) + "&8]");
+				+ (int) Math.ceil(victim.getHealth() - damage) + "&8]");
 	}
 
 	private String attacker(Player attacker, LivingEntity victim, int damage) {
 		return Util.colorCodes(indent + "&e" + damage + " &lDMG&8 >> "
 				+ "&f" + EntityUtils.getName(victim) + "&8 [&7"
-				+ (int) Math.ceil(victim.getHealth()) + "&8]");
+				+ (int) Math.ceil(victim.getHealth() - damage) + "&8]");
 	}
 }

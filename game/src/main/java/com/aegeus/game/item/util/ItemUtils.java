@@ -1,9 +1,9 @@
 package com.aegeus.game.item.util;
 
 import com.aegeus.game.util.Util;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 public class ItemUtils {
 	public static NBTTagCompound getTag(ItemStack item) {
 		if (isNothing(item)) return null;
-		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		return nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
 	}
 
 	public static ItemStack setTag(ItemStack item, NBTTagCompound tag) {
 		if (isNothing(item)) return null;
-		net.minecraft.server.v1_10_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
 		nmsStack.setTag(tag);
 		return CraftItemStack.asBukkitCopy(nmsStack);
 	}

@@ -2,7 +2,7 @@ package com.aegeus.game.item.impl;
 
 import com.aegeus.game.Aegeus;
 import com.aegeus.game.item.util.ItemWrapper;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
