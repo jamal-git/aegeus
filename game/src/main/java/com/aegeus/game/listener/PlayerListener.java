@@ -12,30 +12,30 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerListener implements Listener {
 	@EventHandler
-	private void onJoin(PlayerJoinEvent event) {
-		event.getPlayer().setHealthScale(20);
-		EntityUtils.update(event.getPlayer());
+	private void onJoin(PlayerJoinEvent evt) {
+		evt.getPlayer().setHealthScale(20);
+		EntityUtils.update(evt.getPlayer());
 	}
 
 	@EventHandler
-	private void onRespawn(PlayerRespawnEvent event) {
-		EntityUtils.update(event.getPlayer());
+	private void onRespawn(PlayerRespawnEvent evt) {
+		EntityUtils.update(evt.getPlayer());
 	}
 
 	@EventHandler
-	private void on(PlayerInteractEvent event) {
-		if (ItemManager.is(event.getItem(), ItemArmor.IDENTITY))
-			EntityUtils.update(event.getPlayer());
+	private void on(PlayerInteractEvent evt) {
+		if (ItemManager.is(evt.getItem(), ItemArmor.IDENTITY))
+			EntityUtils.update(evt.getPlayer());
 	}
 
 	@EventHandler
-	private void onInvClick(InventoryClickEvent event) {
-		if (ItemManager.exists(event.getCursor()))
-			ItemManager.get(event.getCursor()).onInvClick(event);
+	private void onInvClick(InventoryClickEvent evt) {
+		if (ItemManager.exists(evt.getCursor()))
+			ItemManager.get(evt.getCursor()).onInvClick(evt);
 
-		if (ItemManager.exists(event.getCurrentItem()))
-			ItemManager.get(event.getCurrentItem()).onInvClick(event);
+		if (ItemManager.exists(evt.getCurrentItem()))
+			ItemManager.get(evt.getCurrentItem()).onInvClick(evt);
 
-		EntityUtils.update(event.getWhoClicked());
+		EntityUtils.update(evt.getWhoClicked());
 	}
 }

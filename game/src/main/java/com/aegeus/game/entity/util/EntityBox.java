@@ -1,6 +1,9 @@
 package com.aegeus.game.entity.util;
 
-import com.aegeus.game.entity.*;
+import com.aegeus.game.entity.AgEntity;
+import com.aegeus.game.entity.AgLiving;
+import com.aegeus.game.entity.AgPlayer;
+import com.aegeus.game.entity.AgProjectile;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,12 +25,6 @@ public class EntityBox extends ArrayList<AgEntity> {
 		return (AgPlayer) get(player);
 	}
 
-	public AgMonster getMonster(LivingEntity entity) {
-		if (!(get(entity) instanceof AgMonster))
-			add(new AgMonster(entity));
-		return (AgMonster) get(entity);
-	}
-
 	public AgProjectile getProjectile(Projectile projectile) {
 		return (AgProjectile) get(projectile);
 	}
@@ -40,7 +37,7 @@ public class EntityBox extends ArrayList<AgEntity> {
 		return entity;
 	}
 
-	public AgEntity resolve(Entity entity) {
+	private AgEntity resolve(Entity entity) {
 		if (entity instanceof Player)
 			return new AgPlayer((Player) entity);
 		else if (entity instanceof Projectile)
@@ -52,5 +49,18 @@ public class EntityBox extends ArrayList<AgEntity> {
 
 	public boolean contains(Entity entity) {
 		return stream().map(AgEntity::getEntity).filter(e -> e.equals(entity)).count() >= 1;
+	}
+
+	public ArrayList<AgEntity> clean() {
+		for (AgEntity e : new ArrayList<>(this))
+			if (e == null || e.getEntity() == null) remove(e);
+		return this;
+	}
+
+	@Override
+	public boolean remove(Object o) {
+		if (o instanceof AgEntity)
+			((AgEntity) o).getEntity().remove();
+		return super.remove(o);
 	}
 }

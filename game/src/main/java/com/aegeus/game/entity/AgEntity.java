@@ -1,17 +1,20 @@
 package com.aegeus.game.entity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 
+import java.util.UUID;
+
 public class AgEntity {
-	private final Entity entity;
+	protected UUID uuid;
 	private String name = "";
 
 	public AgEntity(Entity entity) {
-		this.entity = entity;
+		uuid = entity.getUniqueId();
 	}
 
 	public Entity getEntity() {
-		return entity;
+		return Bukkit.getEntity(uuid);
 	}
 
 	public String getName() {

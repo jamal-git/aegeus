@@ -34,7 +34,7 @@ public class ItemUtils {
 
 	public static void setName(ItemStack item, String name) {
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
+		meta.setDisplayName(Util.colorCodes(name));
 		item.setItemMeta(meta);
 	}
 

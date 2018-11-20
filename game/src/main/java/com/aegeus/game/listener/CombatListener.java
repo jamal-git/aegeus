@@ -1,11 +1,13 @@
 package com.aegeus.game.listener;
 
 import com.aegeus.game.Aegeus;
+import com.aegeus.game.entity.AgLiving;
 import com.aegeus.game.entity.util.EntityBox;
 import com.aegeus.game.entity.util.EntityUtils;
 import com.aegeus.game.item.impl.ItemWeapon;
 import com.aegeus.game.item.util.ItemManager;
 import com.aegeus.game.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
@@ -16,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
@@ -24,6 +27,17 @@ public class CombatListener implements Listener {
 	private static final String indent = "            ";
 
 	private final EntityBox entities = Aegeus.getInstance().getEntities();
+
+	@EventHandler
+	private void onDeath(EntityDeathEvent ede) {
+		if (ede.getEntity() instanceof Player) return;
+		AgLiving info = entities.getLiving(ede.getEntity());
+		if (info.getDrops().isEmpty()) return;
+
+		info.die();
+		Bukkit.getScheduler().runTaskLater(Aegeus.getInstance(), () ->
+				Aegeus.getInstance().getEntities().remove(info), 600);
+	}
 
 	@EventHandler
 	private void onDamage(EntityDamageEvent ede) {
@@ -55,7 +69,8 @@ public class CombatListener implements Listener {
 							: attacker.getEquipment().getItemInMainHand();
 				}
 
-				if (attacker != null) {
+				AgLiving aInfo = entities.getLiving(attacker);
+				if (attacker != null && !aInfo.isDead() && !aInfo.isTrapped()) {
 					// If the attacker is a player, make sure they can attack, otherwise continue
 					if (!(attacker instanceof Player) || entities.getPlayer((Player) attacker).attack()) {
 						if (ItemManager.is(tool, ItemWeapon.IDENTITY)) {
@@ -65,8 +80,8 @@ public class CombatListener implements Listener {
 
 						// Shows a damage effect
 						victim.getWorld().spawnParticle(Particle.BLOCK_CRACK, victim.getLocation(),
-								110, victim.getWidth(), victim.getEyeHeight(), victim.getWidth(),
-								new MaterialData(Material.REDSTONE_WIRE));
+								100, victim.getWidth() / 2, victim.getHeight() / 2, victim.getWidth() / 2,
+								new MaterialData(Material.REDSTONE_BLOCK));
 						// Apply the damage and mimic what the event changes
 						victim.damage(damage);
 						victim.setLastDamage(damage);
@@ -77,9 +92,11 @@ public class CombatListener implements Listener {
 						victim.setNoDamageTicks(5);
 
 						// Apply knock back to the victim
-						Vector vec = attacker.getLocation().getDirection().multiply(0.09);
-						if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.33);
-						victim.setVelocity(vec);
+						if (!entities.getLiving(victim).isTrapped()) {
+							Vector vec = attacker.getLocation().getDirection().multiply(0.09);
+							if (victim.isOnGround()) vec.setY(victim.getVelocity().getY() + 0.33);
+							victim.setVelocity(vec);
+						}
 
 						// Send attacker game text to attacker
 						if (attacker instanceof Player)
@@ -89,8 +106,10 @@ public class CombatListener implements Listener {
 			}
 		}
 
+		if (ede.isCancelled()) damage = 0;
+
 		// Send victim game text to victim
-		if (entity.getLastDamageCause() != ede && entity instanceof Player)
+		if (damage > 0 && entity.getLastDamageCause() != ede && entity instanceof Player)
 			entity.sendMessage(victim((Player) entity, damage));
 	}
 

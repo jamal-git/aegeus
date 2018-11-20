@@ -1,7 +1,6 @@
 package com.aegeus.game.item.util;
 
 import com.aegeus.game.item.impl.ItemArmor;
-import com.aegeus.game.item.impl.ItemOrb;
 import com.aegeus.game.item.impl.ItemWeapon;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,9 +20,10 @@ public class ItemManager {
 	public static ItemWrapper get(ItemStack item) {
 		ItemWrapper info;
 		switch (identity(item)) {
-			case ItemWeapon.IDENTITY: info = new ItemWeapon(item); break;
-			case ItemArmor.IDENTITY: info = new ItemArmor(item); break;
-			case ItemOrb.IDENTITY: info = new ItemOrb(item); break;
+			case ItemWeapon.IDENTITY: info = new ItemWeapon(item);
+				break;
+			case ItemArmor.IDENTITY: info = new ItemArmor(item);
+				break;
 			default: return null;
 		}
 		info.load();
