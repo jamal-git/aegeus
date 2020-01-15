@@ -1,0 +1,22 @@
+name: Aegeus
+main: com.aegeus.game.Aegeus
+version: DEV
+api-version: "1.14"
+
+commands:
+    # entity
+    mob:
+    openentity:
+    spawner:
+    heal:
+
+    # social
+    message:
+      aliases: m
+    broadcast:
+      aliases: bc
+    roll:
+
+    # item
+    create:
+      aliases: cr

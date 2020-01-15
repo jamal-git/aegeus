@@ -1,2 +1,2 @@
 # Aegeus
-Hey, that's pretty good!!
+space boats sold separately
